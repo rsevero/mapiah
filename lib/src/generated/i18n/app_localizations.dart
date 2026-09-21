@@ -5434,6 +5434,24 @@ abstract class AppLocalizations {
   /// **'Failed to load file'**
   String get textEditorTabLoadFailedMessage;
 
+  /// The label for the save as button/menu entry on a thconfig/.th text-editor tab. Used on: TH2FileTabsPage
+  ///
+  /// In en, this message translates to:
+  /// **'Save as (Shift+Ctrl+S)'**
+  String get textEditorTabSaveAs;
+
+  /// The title for the save as file picker dialog on a thconfig/.th text-editor tab. Used on: THTextEditorControllerBase.saveAs
+  ///
+  /// In en, this message translates to:
+  /// **'Save file as'**
+  String get textEditorTabSaveAsDialogTitle;
+
+  /// Error shown when a text-editor Save As destination is already a project node or an open tab. Used on: TH2FileTabsPage
+  ///
+  /// In en, this message translates to:
+  /// **'This path is already open or already part of the project.'**
+  String get textEditorTabSaveAsDestinationCollision;
+
   /// Diagnostic shown when a project cannot be opened. Used on: THProjectController.openProject
   ///
   /// In en, this message translates to:
@@ -5451,6 +5469,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to save {path}: {error}'**
   String thProjectSaveFailed(Object path, Object error);
+
+  /// Diagnostic shown when Save As cannot write the destination file or rebuild the project around it. Used on: THProjectController.saveTextProjectFileAs
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save {path} as {destination}: {error}'**
+  String thProjectSaveAsFailed(Object path, Object destination, Object error);
 
   /// Title of the multi-file search sidebar view. Used on: THProjectSearchWidget
   ///

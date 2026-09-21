@@ -524,6 +524,8 @@ Phase 8.5 was carved out of the Phase 9 plan: the project-controller lifecycle/s
 
 ### Phase 10: Save As for `thconfig` and `.th` Files
 
+See [the Phase 10 plan](2026-09-15-therion-project-parsing-phase10-save-as.md).
+
 - Add `THTextEditorController.saveAs()` and a typed `THProjectController.saveTextProjectFileAs(...)` operation. The text editor owns the file-picker interaction; the project controller owns validation, serialization, path/reference migration, reparsing, and the explicit success/failure result. A cancelled picker returns without changing disk, controller identity, dirty state, tab order, selection, or project state.
 - Allow a `thconfig` file to keep any filename or extension, matching Therion's configuration-file rules. Require `.th` for a `THDataFileNode`, appending it when the chosen filename has no extension. Canonicalize the destination before collision checks; choosing the current path delegates to normal Save, while choosing a path already represented by another project node or open tab is rejected with a localized error instead of merging controllers.
 - Flush the editor debounce and project reparse queues before constructing the Save As snapshot. Serialize the exact accepted content revision through `THConfigFileWriter` or `THFileWriter`; a stale completion must not rename a tab, clear a newer dirty revision, or mutate a replacement project.

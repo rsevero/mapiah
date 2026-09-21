@@ -2931,6 +2931,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get textEditorTabLoadFailedMessage => 'Falha ao carregar o arquivo';
 
   @override
+  String get textEditorTabSaveAs => 'Salvar como (Shift+Ctrl+S)';
+
+  @override
+  String get textEditorTabSaveAsDialogTitle => 'Salvar arquivo como';
+
+  @override
+  String get textEditorTabSaveAsDestinationCollision =>
+      'Este caminho já está aberto ou já faz parte do projeto.';
+
+  @override
   String thProjectOpenFailed(Object error) {
     return 'Falha ao abrir o projeto: $error';
   }
@@ -2943,6 +2953,11 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String thProjectSaveFailed(Object path, Object error) {
     return 'Falha ao salvar $path: $error';
+  }
+
+  @override
+  String thProjectSaveAsFailed(Object path, Object destination, Object error) {
+    return 'Falha ao salvar $path como $destination: $error';
   }
 
   @override

@@ -1,8 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui' show TextRange;
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart' show FocusNode, visibleForTesting;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_text_editor_fold_aux.dart';
@@ -11,8 +15,10 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/controllers/th_project_reparse_flush_result.dart';
 import 'package:mapiah/src/controllers/th_text_file_revert_result.dart';
+import 'package:mapiah/src/controllers/th_text_file_save_as_result.dart';
 import 'package:mapiah/src/controllers/th_text_file_save_result.dart';
 import 'package:mapiah/src/controllers/th_text_project_content_snapshot.dart';
+import 'package:mapiah/src/elements/th_project/th_data_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_parse_error.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
@@ -43,13 +49,47 @@ enum THTextEditorLoadState { notLoaded, loading, loaded, failed }
 /// delayed callback checks that identity against the project controller before
 /// mutating either the editor buffer or project state; loading the same path
 /// under a newer epoch requires a fresh controller instance.
+/// The Save As file-picker boundary, injected so tests can fake the OS
+/// picker without touching platform channels. Mirrors
+/// `THProjectControllerOperations`'s constructor-injection pattern.
+typedef THSaveAsFilePickerOperation =
+    Future<Uri?> Function({
+      required String dialogTitle,
+      required String fileName,
+      String? initialDirectory,
+      required FileType type,
+      List<String>? allowedExtensions,
+    });
+
 abstract class THTextEditorControllerBase
     with Store
     implements THTextEditorControllerHandle {
   final THProjectController _projectController;
 
-  THTextEditorControllerBase({THProjectController? projectController})
-    : _projectController = projectController ?? mpLocator.thProjectController;
+  final THSaveAsFilePickerOperation _saveAsFilePicker;
+
+  THTextEditorControllerBase({
+    THProjectController? projectController,
+    THSaveAsFilePickerOperation? saveAsFilePicker,
+  }) : _projectController = projectController ?? mpLocator.thProjectController,
+       _saveAsFilePicker = saveAsFilePicker ?? _defaultSaveAsFilePicker;
+
+  static Future<Uri?> _defaultSaveAsFilePicker({
+    required String dialogTitle,
+    required String fileName,
+    String? initialDirectory,
+    required FileType type,
+    List<String>? allowedExtensions,
+  }) {
+    return FilePicker.saveFile(
+      dialogTitle: dialogTitle,
+      fileName: fileName,
+      initialDirectory: initialDirectory,
+      type: type,
+      allowedExtensions: allowedExtensions,
+      bytes: Uint8List(0),
+    );
+  }
 
   @observable
   String canonicalPath = '';
@@ -531,6 +571,217 @@ abstract class THTextEditorControllerBase
         THTextFileSaveStatus.projectChangedBeforeWrite) {
       lastOperationRejectedByProjectChange = true;
     }
+  }
+
+  /// Saves this tab's content to a user-chosen destination. Flushes both
+  /// debounce layers first; a stale flush aborts before any picker opens. A
+  /// cancelled picker changes nothing (disk, controller identity, dirty
+  /// state, tab order) and returns [THTextFileSaveAsStatus.cancelled].
+  /// Choosing the current path delegates to [save]. A project-tracked
+  /// source delegates the graph-aware move to
+  /// `THProjectController.saveTextProjectFileAs`; an untracked/standalone
+  /// source (no project, or a path outside the loaded project) falls back
+  /// to a plain disk write with no directive rewriting, since there is no
+  /// project graph to keep consistent.
+  @action
+  Future<THTextFileSaveAsResult> saveAs() async {
+    final THProjectReparseFlushResult flush = await flushPendingReparse();
+
+    if (!flush.canProceedToSave) {
+      if (flush.status == THProjectReparseFlushStatus.projectChanged) {
+        lastOperationRejectedByProjectChange = true;
+      }
+
+      return THTextFileSaveAsResult(
+        oldCanonicalPath: canonicalPath,
+        newCanonicalPath: canonicalPath,
+        projectEpoch: _ownedProjectEpoch ?? -1,
+        requestedRevision: observedRevision,
+        writtenRevision: null,
+        status: switch (flush.status) {
+          THProjectReparseFlushStatus.projectChanged =>
+            THTextFileSaveAsStatus.projectChangedBeforeWrite,
+          THProjectReparseFlushStatus.superseded =>
+            THTextFileSaveAsStatus.supersededBeforeWrite,
+          _ => THTextFileSaveAsStatus.reparseFailed,
+        },
+        isRootChange: false,
+      );
+    }
+
+    final bool isDataShaped = isProjectBound
+        ? (_projectController.nodeByCanonicalPath(canonicalPath)
+              is THDataFileNode)
+        : (p.extension(canonicalPath).toLowerCase() == '.th');
+
+    final String? initialDirectory =
+        mpLocator.mpGeneralController.lastAccessedDirectory.isEmpty
+        ? (canonicalPath.isEmpty ? null : p.dirname(canonicalPath))
+        : mpLocator.mpGeneralController.lastAccessedDirectory;
+    final String initialFileName = canonicalPath.isEmpty
+        ? 'untitled'
+        : p.basename(canonicalPath);
+
+    final Uri? savedFileUri = await _saveAsFilePicker(
+      dialogTitle:
+          mpLocator.appLocalizations.textEditorTabSaveAsDialogTitle,
+      fileName: initialFileName,
+      initialDirectory: initialDirectory,
+      type: isDataShaped ? FileType.custom : FileType.any,
+      allowedExtensions: isDataShaped ? const <String>['th'] : null,
+    );
+    final String? pickedPath = savedFileUri?.toFilePath();
+
+    if (pickedPath == null) {
+      return THTextFileSaveAsResult(
+        oldCanonicalPath: canonicalPath,
+        newCanonicalPath: canonicalPath,
+        projectEpoch: _ownedProjectEpoch ?? -1,
+        requestedRevision: observedRevision,
+        writtenRevision: null,
+        status: THTextFileSaveAsStatus.cancelled,
+        isRootChange: false,
+      );
+    }
+
+    final String extendedPath =
+        (isDataShaped && p.extension(pickedPath).isEmpty)
+        ? '$pickedPath.th'
+        : pickedPath;
+    final String destination = THProjectPathResolver.canonicalize(
+      p.absolute(extendedPath),
+    );
+
+    mpLocator.mpGeneralController.lastAccessedDirectory = p.dirname(
+      destination,
+    );
+
+    if (destination == canonicalPath) {
+      final THTextFileSaveResult saveResult = await save();
+
+      return THTextFileSaveAsResult(
+        oldCanonicalPath: canonicalPath,
+        newCanonicalPath: canonicalPath,
+        projectEpoch: saveResult.projectEpoch,
+        requestedRevision: saveResult.requestedRevision,
+        writtenRevision: saveResult.writtenRevision,
+        status: _mapSaveStatusToSaveAsStatus(saveResult.status),
+        isRootChange: false,
+      );
+    }
+
+    if (!isProjectBound) {
+      return _saveAsUntracked(destination);
+    }
+
+    final int capturedEpoch = _ownedProjectEpoch!;
+    final String capturedRoot = _ownedRootPath!;
+    final int requestedRevision = observedRevision;
+
+    final THTextFileSaveAsResult result = await _projectController
+        .saveTextProjectFileAs(
+          oldCanonicalPath: canonicalPath,
+          newCanonicalPath: destination,
+          requestedRevision: requestedRevision,
+          expectedProjectEpoch: capturedEpoch,
+          expectedRootPath: capturedRoot,
+        );
+
+    if (result.isComplete) {
+      mpLocator.mpGeneralController.renameFileController(
+        oldFilename: canonicalPath,
+        newFilename: result.newCanonicalPath,
+      );
+
+      canonicalPath = result.newCanonicalPath;
+
+      // Non-root Save As stays within the same project identity; a root
+      // Save As keeps the same epoch but must refresh the owned root path,
+      // since root identity is (epoch, rootPath) and rootPath moved.
+      if (result.isRootChange) {
+        _ownedRootPath = _projectController.rootConfigPath;
+      }
+
+      observedRevision = result.writtenRevision!;
+      isDirty = false;
+    } else if ((result.status ==
+            THTextFileSaveAsStatus.projectChangedBeforeWrite) ||
+        (result.status == THTextFileSaveAsStatus.writtenAfterProjectChange)) {
+      lastOperationRejectedByProjectChange = true;
+    }
+
+    return result;
+  }
+
+  THTextFileSaveAsStatus _mapSaveStatusToSaveAsStatus(
+    THTextFileSaveStatus status,
+  ) {
+    return switch (status) {
+      THTextFileSaveStatus.saved ||
+      THTextFileSaveStatus.alreadySaved => THTextFileSaveAsStatus.saved,
+      THTextFileSaveStatus.supersededBeforeWrite ||
+      THTextFileSaveStatus.savedButSuperseded =>
+        THTextFileSaveAsStatus.supersededBeforeWrite,
+      THTextFileSaveStatus.projectChangedBeforeWrite =>
+        THTextFileSaveAsStatus.projectChangedBeforeWrite,
+      THTextFileSaveStatus.writtenAfterProjectChange =>
+        THTextFileSaveAsStatus.writtenAfterProjectChange,
+      THTextFileSaveStatus.reparseFailed =>
+        THTextFileSaveAsStatus.reparseFailed,
+      THTextFileSaveStatus.unknownPath => THTextFileSaveAsStatus.unknownPath,
+      THTextFileSaveStatus.unsupportedNode =>
+        THTextFileSaveAsStatus.unsupportedNode,
+      THTextFileSaveStatus.serializationFailed =>
+        THTextFileSaveAsStatus.serializationFailed,
+      THTextFileSaveStatus.writeFailed => THTextFileSaveAsStatus.writeFailed,
+    };
+  }
+
+  /// §5.6 fallback for a source with no project-tracked identity: a plain
+  /// disk write plus a local identity update, with no directive rewriting
+  /// (there is no project graph entry to rewrite and no dependents to
+  /// retarget).
+  Future<THTextFileSaveAsResult> _saveAsUntracked(String destination) async {
+    try {
+      await File(
+        destination,
+      ).writeAsBytes(Uint8List.fromList(utf8.encode(content)));
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        '[THTextEditorController] saveAs untracked write failed for $destination',
+        error: error,
+        stackTrace: stackTrace,
+      );
+
+      return THTextFileSaveAsResult(
+        oldCanonicalPath: canonicalPath,
+        newCanonicalPath: destination,
+        projectEpoch: -1,
+        requestedRevision: observedRevision,
+        writtenRevision: null,
+        status: THTextFileSaveAsStatus.writeFailed,
+        isRootChange: false,
+      );
+    }
+
+    final String previousCanonicalPath = canonicalPath;
+
+    mpLocator.mpGeneralController.renameFileController(
+      oldFilename: previousCanonicalPath,
+      newFilename: destination,
+    );
+    canonicalPath = destination;
+    isDirty = false;
+
+    return THTextFileSaveAsResult(
+      oldCanonicalPath: previousCanonicalPath,
+      newCanonicalPath: destination,
+      projectEpoch: -1,
+      requestedRevision: observedRevision,
+      writtenRevision: observedRevision,
+      status: THTextFileSaveAsStatus.saved,
+      isRootChange: false,
+    );
   }
 
   @action

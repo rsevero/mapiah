@@ -4531,6 +4531,21 @@
     "description": "Shown in a text-editor tab when its file fails to load (e.g. deleted after the project tree loaded). Used on: THTextEditorTabBodyWidget",
     "type": "text"
   },
+  "textEditorTabSaveAs": "Save as (Shift+Ctrl+S)",
+  "@textEditorTabSaveAs": {
+    "description": "The label for the save as button/menu entry on a thconfig/.th text-editor tab. Used on: TH2FileTabsPage",
+    "type": "text"
+  },
+  "textEditorTabSaveAsDialogTitle": "Save file as",
+  "@textEditorTabSaveAsDialogTitle": {
+    "description": "The title for the save as file picker dialog on a thconfig/.th text-editor tab. Used on: THTextEditorControllerBase.saveAs",
+    "type": "text"
+  },
+  "textEditorTabSaveAsDestinationCollision": "This path is already open or already part of the project.",
+  "@textEditorTabSaveAsDestinationCollision": {
+    "description": "Error shown when a text-editor Save As destination is already a project node or an open tab. Used on: TH2FileTabsPage",
+    "type": "text"
+  },
   "thProjectOpenFailed": "Failed to open project: {error}",
   "@thProjectOpenFailed": {
     "description": "Diagnostic shown when a project cannot be opened. Used on: THProjectController.openProject",
@@ -4553,6 +4568,16 @@
     "type": "text",
     "placeholders": {
       "path": {},
+      "error": {}
+    }
+  },
+  "thProjectSaveAsFailed": "Failed to save {path} as {destination}: {error}",
+  "@thProjectSaveAsFailed": {
+    "description": "Diagnostic shown when Save As cannot write the destination file or rebuild the project around it. Used on: THProjectController.saveTextProjectFileAs",
+    "type": "text",
+    "placeholders": {
+      "path": {},
+      "destination": {},
       "error": {}
     }
   },

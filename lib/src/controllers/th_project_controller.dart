@@ -9,6 +9,7 @@ import 'package:mapiah/src/controllers/th_project_controller_operations.dart';
 import 'package:mapiah/src/controllers/th_project_reparse_aux.dart';
 import 'package:mapiah/src/controllers/th_project_reparse_flush_result.dart';
 import 'package:mapiah/src/controllers/th_text_file_revert_result.dart';
+import 'package:mapiah/src/controllers/th_text_file_save_as_result.dart';
 import 'package:mapiah/src/controllers/th_text_file_save_result.dart';
 import 'package:mapiah/src/controllers/th_text_project_content_snapshot.dart';
 import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
@@ -17,6 +18,9 @@ import 'package:mapiah/src/elements/th_project/th_data_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_parse_error.dart';
+import 'package:mapiah/src/mp_file_read_write/th_config_file_writer.dart';
+import 'package:mapiah/src/mp_file_read_write/th_directive_rewrite_aux.dart';
+import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
 import 'package:mobx/mobx.dart';
@@ -1082,6 +1086,379 @@ abstract class THProjectControllerBase with Store {
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Save As
+  // ---------------------------------------------------------------------------
+
+  /// Moves a writable text (config/data) file to [newCanonicalPath], keeping
+  /// the project graph meaning-preserving: this file's own relative
+  /// `source`/`input`/`import` directives are rewritten to keep resolving to
+  /// their pre-move targets, and every currently loaded file with an
+  /// incoming reference to [oldCanonicalPath] is rewritten to reach the new
+  /// location. The old file is retained on disk untouched (copy semantics);
+  /// rewritten referencing files become dirty and are saved only through the
+  /// normal Save/Save All path. Mirrors [saveTextProjectFile]'s validation
+  /// discipline; does not itself flush pending edits (the caller must, per
+  /// [saveTextProjectFile]'s own contract).
+  @action
+  Future<THTextFileSaveAsResult> saveTextProjectFileAs({
+    required String oldCanonicalPath,
+    required String newCanonicalPath,
+    required int requestedRevision,
+    required int expectedProjectEpoch,
+    required String expectedRootPath,
+  }) async {
+    final String oldPath = THProjectPathResolver.canonicalize(
+      p.absolute(oldCanonicalPath),
+    );
+    final String newPath = THProjectPathResolver.canonicalize(
+      p.absolute(newCanonicalPath),
+    );
+    final bool isRootChange = oldPath == rootConfigPath;
+
+    THTextFileSaveAsResult make(
+      THTextFileSaveAsStatus status, {
+      int? writtenRevision,
+    }) {
+      return THTextFileSaveAsResult(
+        oldCanonicalPath: oldPath,
+        newCanonicalPath: newPath,
+        projectEpoch: expectedProjectEpoch,
+        requestedRevision: requestedRevision,
+        writtenRevision: writtenRevision,
+        status: status,
+        isRootChange: isRootChange,
+      );
+    }
+
+    if (!_isCurrent(expectedProjectEpoch, expectedRootPath)) {
+      return make(THTextFileSaveAsStatus.projectChangedBeforeWrite);
+    }
+
+    final THProjectFileNode? node = _nodesByCanonicalPath[oldPath];
+    if (node == null) {
+      return make(THTextFileSaveAsStatus.unknownPath);
+    }
+    if ((node is! THConfigFileNode) && (node is! THDataFileNode)) {
+      return make(THTextFileSaveAsStatus.unsupportedNode);
+    }
+
+    if (_parsedRevision[oldPath] != requestedRevision) {
+      return make(THTextFileSaveAsStatus.reparseFailed);
+    }
+
+    final int? currentRevision = _currentRevision[oldPath];
+    if ((currentRevision != null) && (currentRevision != requestedRevision)) {
+      return make(THTextFileSaveAsStatus.supersededBeforeWrite);
+    }
+
+    if (_hasSaveAsDestinationCollision(newPath)) {
+      projectErrors.add(
+        THProjectParseError(
+          message: mpLocator
+              .appLocalizations
+              .textEditorTabSaveAsDestinationCollision,
+          severity: THProjectParseErrorSeverity.error,
+          filePath: oldPath,
+          lineNumber: 0,
+        ),
+      );
+
+      return make(THTextFileSaveAsStatus.destinationCollision);
+    }
+
+    final _THSaveAsRewritePlan plan;
+    try {
+      plan = await _buildSaveAsRewritePlan(
+        node: node,
+        oldPath: oldPath,
+        newPath: newPath,
+      );
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        '[THProjectController] saveTextProjectFileAs rewrite/serialize failed for $oldPath -> $newPath',
+        error: error,
+        stackTrace: stackTrace,
+      );
+
+      return make(THTextFileSaveAsStatus.serializationFailed);
+    }
+
+    if (!_isCurrent(expectedProjectEpoch, expectedRootPath)) {
+      return make(THTextFileSaveAsStatus.projectChangedBeforeWrite);
+    }
+
+    try {
+      await _operations.writeBytes(newPath, plan.destinationBytes);
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        '[THProjectController] saveTextProjectFileAs write failed for $newPath',
+        error: error,
+        stackTrace: stackTrace,
+      );
+
+      if (_isCurrent(expectedProjectEpoch, expectedRootPath)) {
+        projectErrors.add(
+          THProjectParseError(
+            message: mpLocator.appLocalizations.thProjectSaveAsFailed(
+              oldPath,
+              newPath,
+              '$error',
+            ),
+            severity: THProjectParseErrorSeverity.error,
+            filePath: oldPath,
+            lineNumber: 0,
+          ),
+        );
+      }
+
+      return make(THTextFileSaveAsStatus.writeFailed);
+    }
+
+    if (!_isCurrent(expectedProjectEpoch, expectedRootPath)) {
+      return make(
+        THTextFileSaveAsStatus.writtenAfterProjectChange,
+        writtenRevision: requestedRevision,
+      );
+    }
+
+    final Map<String, THProjectContentOverride> overrides =
+        Map<String, THProjectContentOverride>.of(_buildOverrideMap())
+          ..remove(oldPath)
+          ..[newPath] = THProjectContentOverride(
+            content: plan.destinationContent,
+            revision: 0,
+          );
+
+    for (final MapEntry<String, String> entry
+        in plan.dependentRewrittenContent.entries) {
+      overrides[entry.key] = THProjectContentOverride(
+        content: entry.value,
+        revision: _currentRevision[entry.key] ?? 0,
+      );
+    }
+
+    final THProjectLoadResult loadResult;
+    try {
+      loadResult = await _operations.loadProject(
+        isRootChange ? newPath : rootConfigPath,
+        expectedShape: _rootForcedConfigShape ? THProjectShape.config : null,
+        contentOverrides: Map<String, THProjectContentOverride>.unmodifiable(
+          overrides,
+        ),
+      );
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        '[THProjectController] saveTextProjectFileAs rebuild failed for $oldPath -> $newPath',
+        error: error,
+        stackTrace: stackTrace,
+      );
+
+      if (_isCurrent(expectedProjectEpoch, expectedRootPath)) {
+        projectErrors.add(
+          THProjectParseError(
+            message: mpLocator.appLocalizations.thProjectSaveAsFailed(
+              oldPath,
+              newPath,
+              '$error',
+            ),
+            severity: THProjectParseErrorSeverity.error,
+            filePath: oldPath,
+            lineNumber: 0,
+          ),
+        );
+      }
+
+      return make(THTextFileSaveAsStatus.rebuildFailed);
+    }
+
+    if (!_isCurrent(expectedProjectEpoch, expectedRootPath)) {
+      return make(
+        THTextFileSaveAsStatus.writtenAfterProjectChange,
+        writtenRevision: requestedRevision,
+      );
+    }
+
+    if (isRootChange) {
+      rootConfigPath = newPath;
+    }
+
+    _applyDirtyPreservingReparseResult(loadResult, overridesUsed: overrides);
+
+    // The rebuild's dirty-preserving pass above may have re-marked
+    // [oldPath] dirty from its still-present pending record (it no longer
+    // has a node in the rebuilt tree); retire its bookkeeping now that the
+    // move has committed. MobX action batching means no observer sees the
+    // transient state in between.
+    _allocationCounter.remove(oldPath);
+    _currentRevision.remove(oldPath);
+    _parsedRevision.remove(oldPath);
+    _pendingContent.remove(oldPath);
+    dirtyFilePaths.remove(oldPath);
+    fileContentsCache.remove(oldPath);
+
+    // Make every rewritten dependent visibly dirty, exactly like a normal
+    // edit; the user still saves it explicitly through Save/Save All.
+    for (final MapEntry<String, String> entry
+        in plan.dependentRewrittenContent.entries) {
+      registerTextContentChange(
+        canonicalPath: entry.key,
+        content: entry.value,
+        expectedProjectEpoch: _projectEpoch,
+        expectedRootPath: rootConfigPath,
+      );
+    }
+
+    return make(
+      THTextFileSaveAsStatus.saved,
+      writtenRevision: requestedRevision,
+    );
+  }
+
+  bool _hasSaveAsDestinationCollision(String canonicalPath) {
+    if (_nodesByCanonicalPath.containsKey(canonicalPath)) {
+      return true;
+    }
+
+    if (mpLocator.mpGeneralController.getTextEditorControllerIfExists(
+          canonicalPath,
+        ) !=
+        null) {
+      return true;
+    }
+
+    if (mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
+          canonicalPath,
+        ) !=
+        null) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /// Builds the destination bytes/content for the moved file (its own
+  /// relative directives rewritten against its new directory) and the
+  /// rewritten content for every dependent that references [oldPath] (its
+  /// matching directive(s) retargeted at [newPath]). Operates on freshly
+  /// shallow-parsed copies of each file's *effective* (pending-if-dirty)
+  /// content, never on the live tree's nodes, so nothing is mutated before
+  /// the caller has decided to commit.
+  Future<_THSaveAsRewritePlan> _buildSaveAsRewritePlan({
+    required THProjectFileNode node,
+    required String oldPath,
+    required String newPath,
+  }) async {
+    final THProjectShape ownShape = (node is THConfigFileNode)
+        ? THProjectShape.config
+        : THProjectShape.data;
+
+    final THProjectFileNode ownParsedNode = await _operations.parseFileContent(
+      canonicalPath: oldPath,
+      content: fileContentsCache[oldPath] ?? '',
+      shape: ownShape,
+      sourceFilePath: oldPath,
+      lineNumber: 0,
+    );
+
+    final Uint8List destinationBytes;
+    final String destinationContent;
+
+    if (ownParsedNode is THConfigFileNode) {
+      THDirectiveRewriteAux.rewriteOwnOutgoingConfigDirectives(
+        configFile: ownParsedNode.configFile,
+        oldAbsolutePath: oldPath,
+        newAbsolutePath: newPath,
+      );
+
+      destinationContent = THConfigFileWriter().serialize(
+        ownParsedNode.configFile,
+      );
+      destinationBytes = THConfigFileWriter().serializeToBytes(
+        ownParsedNode.configFile,
+      );
+    } else if (ownParsedNode is THDataFileNode) {
+      THDirectiveRewriteAux.rewriteOwnOutgoingDataDirectives(
+        dataFile: ownParsedNode.dataFile,
+        oldAbsolutePath: oldPath,
+        newAbsolutePath: newPath,
+      );
+
+      destinationContent = THFileWriter().serialize(ownParsedNode.dataFile);
+      destinationBytes = THFileWriter().serializeToBytes(
+        ownParsedNode.dataFile,
+      );
+    } else {
+      throw StateError(
+        'THProjectController: unsupported node type '
+        '${ownParsedNode.runtimeType} for Save As rewrite.',
+      );
+    }
+
+    final Map<String, String> dependentRewrittenContent = <String, String>{};
+
+    for (final String dependentPath in dependentsOf(oldPath)) {
+      final THProjectFileNode? dependentNode =
+          _nodesByCanonicalPath[dependentPath];
+
+      if ((dependentNode is! THConfigFileNode) &&
+          (dependentNode is! THDataFileNode)) {
+        continue;
+      }
+
+      final THProjectShape dependentShape = (dependentNode is THConfigFileNode)
+          ? THProjectShape.config
+          : THProjectShape.data;
+
+      final THProjectFileNode dependentParsedNode = await _operations
+          .parseFileContent(
+            canonicalPath: dependentPath,
+            content: fileContentsCache[dependentPath] ?? '',
+            shape: dependentShape,
+            sourceFilePath: dependentPath,
+            lineNumber: 0,
+          );
+
+      final int rewrittenCount;
+      final String rewrittenContent;
+
+      if (dependentParsedNode is THConfigFileNode) {
+        rewrittenCount = THDirectiveRewriteAux.rewriteIncomingConfigDirectives(
+          dependentConfigFile: dependentParsedNode.configFile,
+          dependentAbsolutePath: dependentPath,
+          oldTargetCanonicalPath: oldPath,
+          newTargetCanonicalPath: newPath,
+        );
+        rewrittenContent = THConfigFileWriter().serialize(
+          dependentParsedNode.configFile,
+        );
+      } else {
+        final THDataFileNode dataDependentNode =
+            dependentParsedNode as THDataFileNode;
+
+        rewrittenCount = THDirectiveRewriteAux.rewriteIncomingDataDirectives(
+          dependentDataFile: dataDependentNode.dataFile,
+          dependentAbsolutePath: dependentPath,
+          oldTargetCanonicalPath: oldPath,
+          newTargetCanonicalPath: newPath,
+        );
+        rewrittenContent = THFileWriter().serialize(
+          dataDependentNode.dataFile,
+        );
+      }
+
+      if (rewrittenCount > 0) {
+        dependentRewrittenContent[dependentPath] = rewrittenContent;
+      }
+    }
+
+    return _THSaveAsRewritePlan(
+      destinationBytes: destinationBytes,
+      destinationContent: destinationContent,
+      dependentRewrittenContent: dependentRewrittenContent,
+    );
+  }
+
   /// Generic per-file save. Returns a sealed text/TH2/rejected result.
   @action
   Future<THProjectFileSaveResult> saveProjectFile(String filePath) async {
@@ -1532,6 +1909,25 @@ abstract class THProjectControllerBase with Store {
 
     _reparseTimers.clear();
   }
+}
+
+/// Staged, unmutated result of [THProjectControllerBase._buildSaveAsRewritePlan]:
+/// what to write to the destination, and what content each affected
+/// dependent should be rebuilt/registered with.
+class _THSaveAsRewritePlan {
+  final Uint8List destinationBytes;
+
+  final String destinationContent;
+
+  /// Rewritten content per dependent canonical path; only entries where at
+  /// least one directive was actually rewritten.
+  final Map<String, String> dependentRewrittenContent;
+
+  const _THSaveAsRewritePlan({
+    required this.destinationBytes,
+    required this.destinationContent,
+    required this.dependentRewrittenContent,
+  });
 }
 
 class _SaveDescriptor {

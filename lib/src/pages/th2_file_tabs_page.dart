@@ -348,9 +348,15 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
               }
 
               final String activeFilename = openFileOrder[activeTabIndex];
-              final TH2FileEditController? controller = mpLocator
-                  .mpGeneralController
-                  .getTH2FileEditControllerIfExists(activeFilename);
+              final bool isTH2 = isTH2Tab(activeFilename);
+              final TH2FileEditController? controller = isTH2
+                  ? mpLocator.mpGeneralController
+                        .getTH2FileEditControllerIfExists(activeFilename)
+                  : null;
+              final THTextEditorController? textController = isTH2
+                  ? null
+                  : mpLocator.mpGeneralController
+                        .getTextEditorControllerIfExists(activeFilename);
 
               return Row(
                 children: <Widget>[
@@ -371,8 +377,12 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                       Icons.save_as_outlined,
                       color: colorScheme.onSecondaryContainer,
                     ),
-                    onPressed: () => controller?.saveAsTH2File(),
-                    tooltip: appLocalizations.th2FileEditPageSaveAs,
+                    onPressed: isTH2
+                        ? () => controller?.saveAsTH2File()
+                        : () => unawaited(textController?.saveAs()),
+                    tooltip: isTH2
+                        ? appLocalizations.th2FileEditPageSaveAs
+                        : appLocalizations.textEditorTabSaveAs,
                   ),
                 ],
               );
@@ -585,6 +595,8 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     return Observer(
       builder: (BuildContext context) {
         final TH2FileEditController? controller = _getActiveController();
+        final THTextEditorController? textController =
+            _getActiveTextEditorController();
         final bool therionAvailable = mpSettingsController.isTherionAvailable;
         final bool hasOpenProject =
             mpLocator.thProjectController.rootConfigPath.isNotEmpty;
@@ -601,7 +613,11 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
           onSelected: _handleOverflowMenuAction,
           itemBuilder: (BuildContext context) =>
               <PopupMenuEntry<_TH2FileTabsAction>>[
-                ..._buildFileMenuEntries(appLocalizations, controller),
+                ..._buildFileMenuEntries(
+                  appLocalizations,
+                  controller,
+                  textController,
+                ),
                 const PopupMenuDivider(),
                 ..._buildTherionMenuEntries(appLocalizations, hasOpenProject),
                 const PopupMenuDivider(),
@@ -612,10 +628,15 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     );
   }
 
-  /// Creates the file-related entries for the compact app bar menu.
+  /// Creates the file-related entries for the compact app bar menu. [controller]
+  /// backs the active tab when it is a `.th2` tab; [textController] backs it
+  /// when it is a `thconfig`/`.th` text-editor tab. Regular Save stays
+  /// TH2-only here (unchanged by Phase 10); Save As routes to whichever
+  /// controller is non-null.
   List<PopupMenuEntry<_TH2FileTabsAction>> _buildFileMenuEntries(
     AppLocalizations appLocalizations,
     TH2FileEditController? controller,
+    THTextEditorController? textController,
   ) {
     return <PopupMenuEntry<_TH2FileTabsAction>>[
       _overflowMenuItem(
@@ -625,8 +646,10 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       ),
       _overflowMenuItem(
         action: _TH2FileTabsAction.saveAs,
-        label: appLocalizations.th2FileEditPageSaveAs,
-        enabled: controller != null,
+        label: (controller != null)
+            ? appLocalizations.th2FileEditPageSaveAs
+            : appLocalizations.textEditorTabSaveAs,
+        enabled: (controller != null) || (textController != null),
       ),
     ];
   }
@@ -704,16 +727,40 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     );
   }
 
+  /// Returns the active text-editor controller when the active tab is a
+  /// `thconfig`/`.th` text-editor tab.
+  THTextEditorController? _getActiveTextEditorController() {
+    final List<String> openFileOrder =
+        mpLocator.mpGeneralController.openFileOrder;
+    final int activeTabIndex = mpLocator.mpGeneralController.activeTabIndex;
+
+    if (openFileOrder.isEmpty ||
+        (activeTabIndex < 0) ||
+        (activeTabIndex >= openFileOrder.length)) {
+      return null;
+    }
+
+    return mpLocator.mpGeneralController.getTextEditorControllerIfExists(
+      openFileOrder[activeTabIndex],
+    );
+  }
+
   /// Runs the action selected from the compact file editor app bar menu.
   void _handleOverflowMenuAction(_TH2FileTabsAction action) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
     final TH2FileEditController? controller = _getActiveController();
+    final THTextEditorController? textController =
+        _getActiveTextEditorController();
 
     switch (action) {
       case _TH2FileTabsAction.save:
         controller?.saveTH2File();
       case _TH2FileTabsAction.saveAs:
-        controller?.saveAsTH2File();
+        if (controller != null) {
+          controller.saveAsTH2File();
+        } else {
+          unawaited(textController?.saveAs());
+        }
       case _TH2FileTabsAction.runTherion:
         _rerunTherionForOpenProject();
       case _TH2FileTabsAction.closeProject:
@@ -972,22 +1019,12 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
             LogicalKeyboardKey.keyS,
             control: true,
             shift: true,
-          ): () {
-            final TH2FileEditController? controller =
-                _getActiveTH2FileEditController(generalController);
-
-            controller?.saveAsTH2File();
-          },
+          ): () => _saveActiveTabAs(generalController),
           const SingleActivator(
             LogicalKeyboardKey.keyS,
             meta: true,
             shift: true,
-          ): () {
-            final TH2FileEditController? controller =
-                _getActiveTH2FileEditController(generalController);
-
-            controller?.saveAsTH2File();
-          },
+          ): () => _saveActiveTabAs(generalController),
           // Help
           const SingleActivator(LogicalKeyboardKey.f1): () =>
               MPDialogAux.showHelpDialog(
@@ -1062,26 +1099,34 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
     return rerunTherionForOpenProject(context);
   }
 
-  TH2FileEditController? _getActiveTH2FileEditController(
-    MPGeneralController generalController,
-  ) {
+  /// Save As for the active tab's `Ctrl/Cmd+Shift+S` binding, routing to
+  /// whichever controller type backs it.
+  void _saveActiveTabAs(MPGeneralController generalController) {
     final List<String> openFileOrder = generalController.openFileOrder;
     final int activeTabIndex = generalController.activeTabIndex;
 
     if (openFileOrder.isEmpty ||
         (activeTabIndex < 0) ||
         (activeTabIndex >= openFileOrder.length)) {
-      return null;
+      return;
     }
 
     final String activeFilename = openFileOrder[activeTabIndex];
 
-    return generalController.getTH2FileEditControllerIfExists(activeFilename);
+    if (isTH2Tab(activeFilename)) {
+      generalController
+          .getTH2FileEditControllerIfExists(activeFilename)
+          ?.saveAsTH2File();
+    } else {
+      unawaited(
+        generalController
+            .getTextEditorControllerIfExists(activeFilename)
+            ?.saveAs(),
+      );
+    }
   }
 
-  /// Saves whichever controller type backs the active tab. Save As has no
-  /// text-editor equivalent, so it stays TH2-only (see its own bindings
-  /// above).
+  /// Saves whichever controller type backs the active tab.
   Future<void> _saveActiveTab(MPGeneralController generalController) async {
     final List<String> openFileOrder = generalController.openFileOrder;
     final int activeTabIndex = generalController.activeTabIndex;

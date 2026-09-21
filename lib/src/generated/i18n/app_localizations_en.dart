@@ -2902,6 +2902,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get textEditorTabLoadFailedMessage => 'Failed to load file';
 
   @override
+  String get textEditorTabSaveAs => 'Save as (Shift+Ctrl+S)';
+
+  @override
+  String get textEditorTabSaveAsDialogTitle => 'Save file as';
+
+  @override
+  String get textEditorTabSaveAsDestinationCollision =>
+      'This path is already open or already part of the project.';
+
+  @override
   String thProjectOpenFailed(Object error) {
     return 'Failed to open project: $error';
   }
@@ -2914,6 +2924,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String thProjectSaveFailed(Object path, Object error) {
     return 'Failed to save $path: $error';
+  }
+
+  @override
+  String thProjectSaveAsFailed(Object path, Object destination, Object error) {
+    return 'Failed to save $path as $destination: $error';
   }
 
   @override

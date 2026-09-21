@@ -82,7 +82,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Restringir um novo nó ao ângulo de snap ao desenhar                                           | Shift+clique                             |
 | Rodar o Therion                                                                               | T                                        |
 | Salvar arquivo                                                                                | Ctrl+S                                   |
-| Salvar arquivo como                                                                           | Ctrl+Shift+S                             |
+| Salvar arquivo como (aba de desenho `.th2` ou aba de texto `thconfig`/`.th`)                  | Ctrl+Shift+S                             |
 | Separar a definição do próximo ponto de controle do xTherion cúbico suave ao desenhar         | Alt+arrastar após iniciar o arrasto      |
 | Selecionar nada                                                                               | Esc                                      |
 | Selecionar tudo                                                                               | Ctrl+A                                   |

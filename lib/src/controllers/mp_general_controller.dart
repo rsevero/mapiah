@@ -400,6 +400,14 @@ abstract class MPGeneralControllerBase with Store {
     return createdController;
   }
 
+  /// Migrates a tab's registry entry (and, in [_openFileOrder], its display
+  /// position — hence active index/selection, since [_activeTabIndex] is an
+  /// index into that list, not a filename) from [oldFilename] to
+  /// [newFilename]. Used by both `TH2FileEditController.saveAsTH2File` and
+  /// `THTextEditorController.saveAs`. The same controller *instance* moves
+  /// to its new map key — it is never disposed or recreated — so any
+  /// per-controller state (cursor/fold/scroll/find, overlay windows) is
+  /// preserved automatically.
   void renameFileController({
     required String oldFilename,
     required String newFilename,
@@ -413,6 +421,13 @@ abstract class MPGeneralControllerBase with Store {
       )!;
 
       _t2hFileEditControllers[normalizedNewFilename] = controller;
+    }
+
+    if (_textEditorControllers.containsKey(normalizedOldFilename)) {
+      final THTextEditorController controller = _textEditorControllers
+          .remove(normalizedOldFilename)!;
+
+      _textEditorControllers[normalizedNewFilename] = controller;
     }
 
     final int index = _openFileOrder.indexOf(normalizedOldFilename);
