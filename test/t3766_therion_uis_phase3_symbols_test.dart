@@ -12,12 +12,14 @@ import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
+import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/painters/helpers/mp_directional_curve_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_water_flow_intermittent_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_ceiling_meander_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_ceiling_step_line_decorator.dart';
@@ -226,6 +228,8 @@ void main() {
     const MPSymbolUnit symbolUnit = MPSymbolUnit(
       canvasScale: 1,
       devicePixelRatio: 1,
+      scrapLengthUnitsPerPoint: 1,
+      scrapLengthUnitType: THLengthUnitType.meter,
     );
 
     test('pit decorator draws ticks without crashing', () {
@@ -685,6 +689,11 @@ void main() {
           '2025-05-24-point_narrow-end.th2',
         );
 
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_VisualizationMethod,
+          MPTH2EditVisualizationMethod.mapiahPlaceholder,
+        );
+
         expect(
           th2Controller.visualController.getLineDecorator(THLineType.pit),
           isNull,
@@ -754,12 +763,15 @@ void main() {
           ),
           isA<MPWaterFlowPermanentLineDecorator>(),
         );
+        // UIS has no `l_waterflow_intermittent_UIS` macro at all, so even
+        // under `therionUIS` this falls through to thTrans.mp's real
+        // default (SKBB) rather than staying unrendered.
         expect(
           th2Controller.visualController.getLineDecorator(
             THLineType.waterFlow,
             subtype: 'intermittent',
           ),
-          isNull,
+          isA<MPWaterFlowIntermittentSKBBLineDecorator>(),
         );
       },
     );

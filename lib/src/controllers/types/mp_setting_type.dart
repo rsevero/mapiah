@@ -119,6 +119,29 @@ enum MPSettingID {
     MPSettingID.TH2Edit_VisualizationMethod:
         MPSettingEnumDefinitionImpl<MPTH2EditVisualizationMethod>(
           enumValues: MPTH2EditVisualizationMethod.values,
+          explicitDefaultValue: MPTH2EditVisualizationMethod.therionDefault,
+          // AUT/SBE/BCRA/NSS/NZSS/ASF have their enum values and dispatch
+          // plumbing in place (Phase 4A), but no set-specific symbol
+          // rendering implemented yet, so under the thTrans.mp-default
+          // dispatch (Phase 5a) they currently render exactly the same as
+          // `therionDefault` — every symbol falls straight through to
+          // thTrans.mp's own default set — hidden from the settings
+          // dropdown until each set gets its own rendering, rather than
+          // offering an option that looks identical to another one today;
+          // enable them here one by one as they're actually implemented.
+          enabledPredicate: (MPTH2EditVisualizationMethod value) =>
+              switch (value) {
+                MPTH2EditVisualizationMethod.mapiahPlaceholder ||
+                MPTH2EditVisualizationMethod.therionDefault ||
+                MPTH2EditVisualizationMethod.therionUIS ||
+                MPTH2EditVisualizationMethod.therionSKBB ||
+                MPTH2EditVisualizationMethod.therionAUT => true,
+                MPTH2EditVisualizationMethod.therionSBE ||
+                MPTH2EditVisualizationMethod.therionBCRA ||
+                MPTH2EditVisualizationMethod.therionNSS ||
+                MPTH2EditVisualizationMethod.therionNZSS ||
+                MPTH2EditVisualizationMethod.therionASF => false,
+              },
           parser: (String storedValue) {
             try {
               return MPTH2EditVisualizationMethod.values.byName(storedValue);
@@ -132,9 +155,33 @@ enum MPSettingID {
                   case MPTH2EditVisualizationMethod.mapiahPlaceholder:
                     return appLocalizations
                         .mpSettingsEnumVisualizationMethodMapiahPlaceholder;
+                  case MPTH2EditVisualizationMethod.therionDefault:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionDefault;
                   case MPTH2EditVisualizationMethod.therionUIS:
                     return appLocalizations
                         .mpSettingsEnumVisualizationMethodTherionUIS;
+                  case MPTH2EditVisualizationMethod.therionAUT:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionAUT;
+                  case MPTH2EditVisualizationMethod.therionSBE:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionSBE;
+                  case MPTH2EditVisualizationMethod.therionSKBB:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionSKBB;
+                  case MPTH2EditVisualizationMethod.therionBCRA:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionBCRA;
+                  case MPTH2EditVisualizationMethod.therionNSS:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionNSS;
+                  case MPTH2EditVisualizationMethod.therionNZSS:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionNZSS;
+                  case MPTH2EditVisualizationMethod.therionASF:
+                    return appLocalizations
+                        .mpSettingsEnumVisualizationMethodTherionASF;
                 }
               },
         ),

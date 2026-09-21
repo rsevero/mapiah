@@ -444,4 +444,4 @@ Each set follows the same three-phase pattern (simple → medium → complex) wi
 
 1. **Symbol size calibration**: What is the canonical `u` value in screen pixels at 1:500 scale? This determines how Therion's `0.4u` measurements map to Flutter canvas units.
 2. **Color support**: Therion supports per-symbol color overrides (CMYK/RGB). Should Mapiah support this from Phase 1, or start with fixed UIS colors? Answer: Just use UIS colors.
-3. **Symbol set fallback chain**: When a symbol is missing in the selected set, Therion falls back to UIS. Should Mapiah implement this same chain from Phase 4, or require explicit UIS as baseline? Answer: Implement this same chain from Phase 4.
+3. **Symbol set fallback chain**: When a symbol is missing in the selected set, Therion falls back to `thTrans.mp`'s default assignment, not necessarily UIS. Should Mapiah implement this same chain from Phase 4, or require explicit UIS as baseline? Answer: Implement Therion's `thTrans.mp` default plus `symbol-set <set>` override semantics from Phase 4, with UIS as the last-resort implementation fallback only.

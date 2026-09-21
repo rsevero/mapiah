@@ -18,6 +18,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_th2_edit_visualization_method.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
@@ -169,6 +170,11 @@ void main() {
         );
         final THPoint point = th2Controller.th2File.getPoints().single;
 
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_VisualizationMethod,
+          MPTH2EditVisualizationMethod.mapiahPlaceholder,
+        );
+
         final placeholderPaint = th2Controller.visualController
             .getDefaultPointPaint(point);
 
@@ -297,7 +303,12 @@ void main() {
         canvas: canvas,
         position: Offset.zero,
         pointPaint: THPointPaint(labelPaint: labelPaint, fill: Paint()),
-        symbolUnit: const MPSymbolUnit(canvasScale: 1, devicePixelRatio: 1),
+        symbolUnit: const MPSymbolUnit(
+          canvasScale: 1,
+          devicePixelRatio: 1,
+          scrapLengthUnitsPerPoint: 1,
+          scrapLengthUnitType: THLengthUnitType.meter,
+        ),
       );
 
       final ui.Picture picture = recorder.endRecording();
@@ -371,6 +382,8 @@ void main() {
       const MPSymbolUnit symbolUnit = MPSymbolUnit(
         canvasScale: 1,
         devicePixelRatio: 1,
+        scrapLengthUnitsPerPoint: 1,
+        scrapLengthUnitType: THLengthUnitType.meter,
       );
 
       MPLabelPaint paintFor(MPLabelData data) => MPLabelPaint(

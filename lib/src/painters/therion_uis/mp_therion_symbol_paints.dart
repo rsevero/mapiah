@@ -189,4 +189,134 @@ final Map<MPTherionPointSymbol, MPTherionSymbolPaint> mpTherionSymbolPaints = {
     border: THPaint.thPaint3,
     fill: THPaint.thPaint1003,
   ),
+
+  // SKBB (Phase 4B): border/fill borrowed from each point type's
+  // placeholder paint (mp_visual_controller.dart's pointTypePaints), kept
+  // only where the p_*_SKBB macro actually thdraw/thfill's.
+  MPTherionPointSymbol.anchorSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.boreholeSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint7,
+    fill: THPaint.thPaint1007,
+  ),
+  MPTherionPointSymbol.bridgeSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.campSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.cavePearlSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint12,
+  ),
+  MPTherionPointSymbol.claySKBB: MPTherionSymbolPaint(border: THPaint.thPaint1),
+  MPTherionPointSymbol.fixedLadderSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.gradientSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint1,
+  ),
+  MPTherionPointSymbol.handrailSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.noEquipmentSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint0,
+    fill: THPaint.thPaint1000,
+  ),
+  MPTherionPointSymbol.ropeLadderSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.ropeSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.sinkSKBB: MPTherionSymbolPaint(border: THPaint.thPaint3),
+  MPTherionPointSymbol.snowSKBB: MPTherionSymbolPaint(border: THPaint.thPaint6),
+  MPTherionPointSymbol.springSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint3,
+  ),
+  MPTherionPointSymbol.stationPaintedSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint4,
+  ),
+  MPTherionPointSymbol.stepsSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+  MPTherionPointSymbol.traverseSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint1,
+  ),
+  MPTherionPointSymbol.viaFerrataSKBB: MPTherionSymbolPaint(
+    border: THPaint.thPaint10,
+  ),
+
+  // AUT (Phase 4C) — colors borrowed from each point type's placeholder
+  // paint, same convention as UIS/SKBB above.
+  MPTherionPointSymbol.airDraughtAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint9,
+    fill: THPaint.thPaint9,
+  ),
+  MPTherionPointSymbol.blocksAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint1,
+  ),
+  MPTherionPointSymbol.breakdownChokeAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint1,
+  ),
+  MPTherionPointSymbol.clayAUT: MPTherionSymbolPaint(border: THPaint.thPaint1),
+  MPTherionPointSymbol.clayChokeAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint1,
+  ),
+  MPTherionPointSymbol.clayTreeAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint5,
+  ),
+  MPTherionPointSymbol.crystalAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint12,
+  ),
+  MPTherionPointSymbol.debrisAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint1,
+  ),
+  MPTherionPointSymbol.entranceAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint2,
+    fill: THPaint.thPaint1002,
+  ),
+  MPTherionPointSymbol.gradientAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint1,
+    fill: THPaint.thPaint1001,
+  ),
+  MPTherionPointSymbol.iceAUT: MPTherionSymbolPaint(border: THPaint.thPaint6),
+  MPTherionPointSymbol.icePillarAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint6,
+    fill: THPaint.thPaint1006,
+  ),
+  MPTherionPointSymbol.iceStalactiteAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint6,
+  ),
+  MPTherionPointSymbol.iceStalagmiteAUT: MPTherionSymbolPaint(
+    fill: THPaint.thPaint1006,
+  ),
+  MPTherionPointSymbol.pebblesAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint1,
+  ),
+  MPTherionPointSymbol.pillarAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint11,
+    fill: THPaint.thPaint1011,
+  ),
+  MPTherionPointSymbol.sandAUT: MPTherionSymbolPaint(border: THPaint.thPaint1),
+  MPTherionPointSymbol.sinkAUT: MPTherionSymbolPaint(border: THPaint.thPaint3),
+  MPTherionPointSymbol.springAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint3,
+  ),
+  MPTherionPointSymbol.stalactiteAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint13,
+  ),
+  MPTherionPointSymbol.stalagmiteAUT: MPTherionSymbolPaint(
+    fill: THPaint.thPaint1013,
+  ),
+  MPTherionPointSymbol.stationTemporaryAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint4,
+  ),
+  MPTherionPointSymbol.stationFixedASF: MPTherionSymbolPaint(
+    border: THPaint.thPaint4,
+  ),
+  MPTherionPointSymbol.waterAUT: MPTherionSymbolPaint(
+    border: THPaint.thPaint3,
+    fill: THPaint.thPaint1003,
+  ),
 };

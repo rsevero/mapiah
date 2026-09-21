@@ -1,18 +1,25 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 
-import 'dart:ui';
 
+import 'dart:ui';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_tick_aux.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
+import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 
 /// Ports `l_ceilingmeander_UIS`: a "ladder rung" of two radial ticks plus two
 /// crossbars straddling the line, stamped at the center of each `0.8u`
 /// segment.
 class MPCeilingMeanderLineDecorator extends MPLineDecorator {
-  const MPCeilingMeanderLineDecorator();
+  /// Distance (in `u`) from the line to the crossbar/inner tick end. `0.2`
+  /// (the default) reproduces `l_ceilingmeander_UIS`'s `0.2u..0.3u` radial
+  /// ticks exactly; `l_ceilingmeander_SKBB` uses `0.1u..0.2u` instead.
+  final double nearUnits;
+
+  const MPCeilingMeanderLineDecorator({this.nearUnits = 0.2});
 
   @override
   void decorate({
@@ -22,6 +29,10 @@ class MPCeilingMeanderLineDecorator extends MPLineDecorator {
     required MPSymbolUnit symbolUnit,
     required bool isReversed,
     int mpID = 0,
+    List<THLinePainterLineSegment>? lineSegments,
+    bool showBorder = false,
+    THOptionChoicesArrowPositionType arrowHead =
+        THOptionChoicesArrowPositionType.end,
   }) {
     final double u = symbolUnit.canvasValue;
     final Path rungs = Path();
@@ -39,29 +50,31 @@ class MPCeilingMeanderLineDecorator extends MPLineDecorator {
 
         final Offset direction = tangent / tangentLength;
         final Offset perpendicular = Offset(-direction.dy, direction.dx);
-        // Radial ticks span 0.2u..0.3u from the line; crossbars are 0.4u
-        // long, centered on the 0.2u radial point.
-        final Offset near = perpendicular * (0.2 * u);
+        // Radial ticks (stems) span nearUnits..(nearUnits+0.1)u from the
+        // line. The 0.4u crossbar always sits 0.2u out from the line, matching
+        // Therion: for `l_ceilingmeander_UIS` (nearUnits 0.2) that is the
+        // stem's inner end, for `l_ceilingmeander_SKBB` (nearUnits 0.1) its
+        // outer end.
+        final Offset near = perpendicular * (nearUnits * u);
         final Offset radialSpan = perpendicular * (0.1 * u);
+        final Offset crossbarRadial = perpendicular * (0.2 * u);
         final Offset along = direction * (0.2 * u);
 
         void addRung(double sign) {
           final Offset radial = near * sign;
-          final Offset span = radialSpan * sign;
+          final Offset far = radial + radialSpan * sign;
+          final Offset crossbar = crossbarRadial * sign;
 
           rungs
             ..moveTo((position + radial).dx, (position + radial).dy)
-            ..lineTo(
-              (position + radial + span).dx,
-              (position + radial + span).dy,
-            )
+            ..lineTo((position + far).dx, (position + far).dy)
             ..moveTo(
-              (position + radial + along).dx,
-              (position + radial + along).dy,
+              (position + crossbar + along).dx,
+              (position + crossbar + along).dy,
             )
             ..lineTo(
-              (position + radial - along).dx,
-              (position + radial - along).dy,
+              (position + crossbar - along).dx,
+              (position + crossbar - along).dy,
             );
         }
 

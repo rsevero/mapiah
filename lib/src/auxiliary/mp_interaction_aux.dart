@@ -11,7 +11,7 @@ import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/painters/helpers/mp_label_painter.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_therion_point_symbols_uis.dart';
+import 'package:mapiah/src/painters/therion_common/mp_therion_symbol_registry.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_symbol_paints.dart';
 import 'package:mapiah/src/painters/types/mp_point_shape_type.dart';
 import 'package:mapiah/src/painters/types/mp_therion_point_symbol.dart';
@@ -268,7 +268,8 @@ class MPInteractionAux {
   /// Draws a Therion symbol: highlight halos still use a plain circle at
   /// [THPointPaint.radius] (a symbol-shaped halo isn't meaningful for
   /// arbitrary custom paths), while the actual fill/border passes dispatch
-  /// to the faithful [MPTherionPointSymbolsUIS] drawing.
+  /// to the faithful set-aware symbol drawing resolved via
+  /// [getTherionPointDrawMethod].
   static void _drawTherionPoint({
     required Canvas canvas,
     required Offset position,
@@ -294,11 +295,11 @@ class MPInteractionAux {
       }
     }
 
-    final void Function(Canvas, Offset, double, MPTherionSymbolPaint)
-    drawMethod = MPTherionPointSymbolsUIS.drawMethods[therionSymbol]!;
     final MPTherionSymbolPaint symbolPaint =
         mpTherionSymbolPaints[therionSymbol]!;
     final double u = symbolUnit.canvasValue;
+    final MPTherionScaleAwarePointDrawMethod? scaleAwareDrawMethod =
+        getTherionScaleAwarePointDrawMethod(therionSymbol);
 
     canvas.save();
     canvas.translate(position.dx, position.dy);
@@ -308,7 +309,20 @@ class MPInteractionAux {
     canvas.scale(1, -1);
     canvas.rotate(pointPaint.rotation);
 
-    drawMethod(canvas, Offset.zero, u, symbolPaint);
+    if (scaleAwareDrawMethod != null) {
+      scaleAwareDrawMethod(
+        canvas,
+        Offset.zero,
+        u,
+        symbolUnit.oneMeterInLocalUnits,
+        symbolPaint,
+      );
+    } else {
+      final void Function(Canvas, Offset, double, MPTherionSymbolPaint)
+      drawMethod = getTherionPointDrawMethod(therionSymbol)!;
+
+      drawMethod(canvas, Offset.zero, u, symbolPaint);
+    }
 
     canvas.restore();
   }

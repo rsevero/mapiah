@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 
-/// Therion UIS point symbols implemented as faithful vector drawings, one
-/// value per `p_*_UIS` MetaPost macro ported to Dart.
+/// Therion point symbols implemented as faithful vector drawings, one value
+/// per `p_*_<SET>` MetaPost macro ported to Dart (UIS first, then each
+/// additional set as it's ported).
 enum MPTherionPointSymbol {
   airDraughtSummerUIS,
   airDraughtUIS,
@@ -57,4 +58,53 @@ enum MPTherionPointSymbol {
   waterFlowPaleoUIS,
   waterFlowPermanentUIS,
   waterUIS,
+
+  // SKBB (Phase 4B)
+  anchorSKBB,
+  boreholeSKBB,
+  bridgeSKBB,
+  campSKBB,
+  cavePearlSKBB,
+  claySKBB,
+  fixedLadderSKBB,
+  gradientSKBB,
+  handrailSKBB,
+  noEquipmentSKBB,
+  ropeLadderSKBB,
+  ropeSKBB,
+  sinkSKBB,
+  snowSKBB,
+  springSKBB,
+  stationPaintedSKBB,
+  stepsSKBB,
+  traverseSKBB,
+  viaFerrataSKBB,
+
+  // AUT (Phase 4C)
+  airDraughtAUT,
+  blocksAUT,
+  breakdownChokeAUT,
+  clayAUT,
+  clayChokeAUT,
+  clayTreeAUT,
+  crystalAUT,
+  debrisAUT,
+  entranceAUT,
+  gradientAUT,
+  iceAUT,
+  icePillarAUT,
+  iceStalactiteAUT,
+  iceStalagmiteAUT,
+  pebblesAUT,
+  pillarAUT,
+  sandAUT,
+  sinkAUT,
+  springAUT,
+  stalactiteAUT,
+  stalagmiteAUT,
+  stationTemporaryAUT,
+  // `p_station_fixed_ASF`, reached via AUT's `let p_station_fixed_AUT =
+  // p_station_painted_AUT = p_station_fixed_ASF` aliases.
+  stationFixedASF,
+  waterAUT,
 }

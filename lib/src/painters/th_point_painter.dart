@@ -33,6 +33,9 @@ class THPointPainter extends CustomPainter {
       symbolUnit: MPSymbolUnit(
         canvasScale: th2FileEditController.canvasScale,
         devicePixelRatio: th2FileEditController.devicePixelRatio,
+        scrapLengthUnitsPerPoint:
+            th2FileEditController.scrapLengthUnitsPerPoint,
+        scrapLengthUnitType: th2FileEditController.scrapLengthUnitType,
       ),
     );
   }

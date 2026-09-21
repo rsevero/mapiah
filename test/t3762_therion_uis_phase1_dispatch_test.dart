@@ -13,6 +13,7 @@ import 'package:mapiah/src/elements/types/th_area_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
+import 'package:mapiah/src/painters/therion_skbb/mp_survey_surface_skbb_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_gradient_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_therion_area_paints.dart';
@@ -98,6 +99,11 @@ void main() {
 
         expect(point.pointType, THPointType.narrowEnd);
 
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_VisualizationMethod,
+          MPTH2EditVisualizationMethod.mapiahPlaceholder,
+        );
+
         final placeholderPaint = th2Controller.visualController
             .getUnselectedPointPaint(point: point, isFromActiveScrap: true);
 
@@ -120,6 +126,11 @@ void main() {
       () async {
         final TH2FileEditController th2Controller = await loadController(
           '2025-05-24-point_narrow-end.th2',
+        );
+
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_VisualizationMethod,
+          MPTH2EditVisualizationMethod.mapiahPlaceholder,
         );
 
         final placeholderAreaPaint = th2Controller.visualController
@@ -179,6 +190,11 @@ void main() {
           '2025-05-24-point_narrow-end.th2',
         );
 
+        mpLocator.mpSettingsController.setEnum(
+          MPSettingID.TH2Edit_VisualizationMethod,
+          MPTH2EditVisualizationMethod.mapiahPlaceholder,
+        );
+
         expect(
           th2Controller.visualController.getLineDecorator(THLineType.gradient),
           isNull,
@@ -208,12 +224,16 @@ void main() {
           ),
           isA<MPSurveyCaveLineDecorator>(),
         );
+        // UIS has no `l_survey_surface_UIS` macro at all, so even under
+        // `therionUIS` this falls through to thTrans.mp's real default
+        // (SKBB) rather than staying unrendered — matching Therion's own
+        // `symbol-set UIS` behavior.
         expect(
           th2Controller.visualController.getLineDecorator(
             THLineType.survey,
             subtype: 'surface',
           ),
-          isNull,
+          isA<MPSurveySurfaceSKBBLineDecorator>(),
         );
       },
     );

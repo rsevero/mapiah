@@ -76,7 +76,7 @@ Controla o comportamento ao criar um novo segmento de linha clicando e arrastand
 Ao desenhar com qualquer um dos métodos, o último nó criado também pode ser ajustado com _Seta_, _Shift+Seta_, _Alt+Seta_ e _Alt+Shift+Seta_.
 
 ### Método de visualização
-Seleciona como os símbolos de pontos, linhas e áreas TH2 são desenhados. **Marcador do Mapiah** preserva a renderização geométrica existente e é o padrão. **Therion UIS** usa o conjunto de símbolos UIS fiel já implementado.
+Seleciona como os símbolos de pontos, linhas e áreas TH2 são desenhados. **Therion (padrão)** renderiza exatamente o que uma execução real do Therion sem a opção de layout `symbol-set` produz (a tabela de tradução padrão `thTrans.mp` do próprio Therion) e é o padrão para novas instalações e reinicializações de configurações. **Therion UIS** é o equivalente do Mapiah à opção de layout `symbol-set UIS` do Therion: substitui o padrão por UIS onde existir um símbolo UIS, mantendo o padrão do `thTrans.mp` em vigor em todos os outros casos. **Marcador do Mapiah** preserva a renderização geométrica existente em vez de qualquer conjunto de símbolos do Therion.
 
 ### Mostrar marcas de direção em linhas não selecionadas
 Quando ativado, as marcas de direção são desenhadas em todas as linhas do croqui ativo, independentemente da seleção. Quando desativado (padrão), apenas as linhas selecionadas mostram marcas de direção. Também pode ser alternado com **Ctrl+Alt+R**.

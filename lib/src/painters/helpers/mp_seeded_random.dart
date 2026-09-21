@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:mapiah/src/constants/mp_constants.dart';
 
@@ -24,6 +25,16 @@ class MPSeededRandom {
     final double magnitude = math.sqrt(-2.0 * math.log(first));
 
     return magnitude * math.cos(mp360DegreesInRad * second);
+  }
+
+  /// Approximates MetaPost's `randomized d`: displaces by a distance
+  /// uniformly distributed in `[0, magnitude]`, in a uniformly random
+  /// direction.
+  Offset randomizedOffset(double magnitude) {
+    final double distance = nextDouble() * magnitude;
+    final double angle = nextDouble() * mp360DegreesInRad;
+
+    return Offset(distance * math.cos(angle), distance * math.sin(angle));
   }
 
   static int _mixSeed(int mpID, int salt) {

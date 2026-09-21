@@ -42,11 +42,11 @@ void main() {
         settingsController.getEnumWithDefault(
           MPSettingID.TH2Edit_VisualizationMethod,
         ),
-        MPTH2EditVisualizationMethod.mapiahPlaceholder,
+        MPTH2EditVisualizationMethod.therionDefault,
       );
       expect(
         settingsController.tH2EditVisualizationMethod,
-        MPTH2EditVisualizationMethod.mapiahPlaceholder,
+        MPTH2EditVisualizationMethod.therionDefault,
       );
     });
 
@@ -192,6 +192,47 @@ void main() {
         ),
         'Marcador do Mapiah',
       );
+    });
+
+    test(
+      'only enables visualization methods with set-specific rendering '
+      'implemented',
+      () {
+        final MPSettingEnumDefinition enumDefinition =
+            MPSettingID.TH2Edit_VisualizationMethod.enumDefinition();
+
+        for (final MPTH2EditVisualizationMethod value
+            in MPTH2EditVisualizationMethod.values) {
+          final bool expectedEnabled = switch (value) {
+            MPTH2EditVisualizationMethod.mapiahPlaceholder ||
+            MPTH2EditVisualizationMethod.therionDefault ||
+            MPTH2EditVisualizationMethod.therionUIS ||
+            MPTH2EditVisualizationMethod.therionSKBB ||
+            MPTH2EditVisualizationMethod.therionAUT => true,
+            MPTH2EditVisualizationMethod.therionSBE ||
+            MPTH2EditVisualizationMethod.therionBCRA ||
+            MPTH2EditVisualizationMethod.therionNSS ||
+            MPTH2EditVisualizationMethod.therionNZSS ||
+            MPTH2EditVisualizationMethod.therionASF => false,
+          };
+
+          expect(
+            enumDefinition.isEnabled(value),
+            expectedEnabled,
+            reason: value.name,
+          );
+        }
+      },
+    );
+
+    test('other enumeration settings stay enabled by default', () {
+      final MPSettingEnumDefinition enumDefinition =
+          MPSettingID.TH2Edit_NewLineCreationMethod.enumDefinition();
+
+      for (final MPNewLineCreationMethod value
+          in MPNewLineCreationMethod.values) {
+        expect(enumDefinition.isEnabled(value), isTrue, reason: value.name);
+      }
     });
   });
 }

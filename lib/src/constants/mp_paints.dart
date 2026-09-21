@@ -211,6 +211,16 @@ class THPaint {
     ..strokeCap = StrokeCap.round
     ..style = PaintingStyle.stroke;
 
+  /// MetaPost's literal `red` (`(1,0,0)`), used by Therion itself as an
+  /// "unimplemented"/error indicator in a handful of macros (e.g. `l_u`,
+  /// `l_ropeladder_SKBB`, `l_viaferrata_SKBB`) — distinct from every
+  /// numbered `thPaintN`, none of which is pure red.
+  static final thPaintMetaPostRed = Paint()
+    ..color = Color(0xFFFF0000)
+    ..strokeWidth = 4
+    ..strokeCap = StrokeCap.round
+    ..style = PaintingStyle.stroke;
+
   static final thPaintXVIGridLine = Paint()
     ..color = Color(0xff00d0d0)
     ..strokeWidth = 1

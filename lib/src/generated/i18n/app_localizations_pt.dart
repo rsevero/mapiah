@@ -974,6 +974,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'Marcador do Mapiah';
 
   @override
+  String get mpSettingsEnumVisualizationMethodTherionDefault =>
+      'Therion (padrão)';
+
+  @override
   String get mpSettingsEnumVisualizationMethodTherionUIS => 'Therion UIS';
 
   @override

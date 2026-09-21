@@ -1,0 +1,5 @@
+encoding utf-8
+
+survey therion_default_showcase_SRV -title "Therion Default Symbol Set Showcase"
+  input therion_default_showcase.th2
+endsurvey

@@ -221,8 +221,19 @@ class THLinePainter extends CustomPainter {
       }
     }
 
+    final MPSymbolUnit symbolUnit = MPSymbolUnit(
+      canvasScale: th2FileEditController.canvasScale,
+      devicePixelRatio: th2FileEditController.devicePixelRatio,
+      scrapLengthUnitsPerPoint: th2FileEditController.scrapLengthUnitsPerPoint,
+      scrapLengthUnitType: th2FileEditController.scrapLengthUnitType,
+    );
     final Path basePath =
-        lineDecorator?.buildBasePath(path: path, vertices: vertices) ?? path;
+        lineDecorator?.buildBasePath(
+          path: path,
+          vertices: vertices,
+          symbolUnit: symbolUnit,
+        ) ??
+        path;
 
     if (lineDecorator == null) {
       if (linePaint.fillPaint != null) {
@@ -275,12 +286,12 @@ class THLinePainter extends CustomPainter {
       canvas: canvas,
       path: basePath,
       color: lineDecoratorColor!,
-      symbolUnit: MPSymbolUnit(
-        canvasScale: th2FileEditController.canvasScale,
-        devicePixelRatio: th2FileEditController.devicePixelRatio,
-      ),
+      symbolUnit: symbolUnit,
       isReversed: lineInfo.isReversed,
       mpID: lineInfo.mpID,
+      lineSegments: lineSegmentsMap.values.toList(),
+      showBorder: lineInfo.slopeBorderOn,
+      arrowHead: lineInfo.arrowHead,
     );
 
     if (showLinePoints) {

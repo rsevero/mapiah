@@ -10,6 +10,7 @@ import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
+import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/types/th_point_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_survey_cave_line_decorator.dart';
@@ -216,6 +217,8 @@ void main() {
           symbolUnit: const MPSymbolUnit(
             canvasScale: 1,
             devicePixelRatio: 1,
+            scrapLengthUnitsPerPoint: 1,
+            scrapLengthUnitType: THLengthUnitType.meter,
           ),
         );
 
@@ -257,6 +260,12 @@ void main() {
       final Path segmentedPath = decorator.buildBasePath(
         path: curvedPath,
         vertices: const <Offset>[Offset(0, 0), Offset(30, 0)],
+        symbolUnit: const MPSymbolUnit(
+          canvasScale: 1,
+          devicePixelRatio: 1,
+          scrapLengthUnitsPerPoint: 1,
+          scrapLengthUnitType: THLengthUnitType.meter,
+        ),
       );
       final PathMetric metric = segmentedPath.computeMetrics().single;
 
@@ -272,6 +281,8 @@ void main() {
         symbolUnit: const MPSymbolUnit(
           canvasScale: 1,
           devicePixelRatio: 1,
+          scrapLengthUnitsPerPoint: 1,
+          scrapLengthUnitType: THLengthUnitType.meter,
         ),
         isReversed: false,
       );
@@ -298,6 +309,8 @@ void main() {
               symbolUnit: const MPSymbolUnit(
                 canvasScale: 1,
                 devicePixelRatio: 1,
+                scrapLengthUnitsPerPoint: 1,
+                scrapLengthUnitType: THLengthUnitType.meter,
               ),
               isReversed: false,
             );

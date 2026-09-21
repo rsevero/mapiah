@@ -9,6 +9,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
 import 'package:mapiah/src/painters/therion_uis/mp_area_pattern_tiles.dart';
@@ -172,6 +173,24 @@ void main() {
               MPTherionPointSymbol.waterFlowPaleoUIS,
               MPTherionPointSymbol.waterFlowPermanentUIS,
               MPTherionPointSymbol.waterUIS,
+              // Phase 4B SKBB: p_borehole_SKBB thfill's its inner circle,
+              // p_noequipment_SKBB thfill's its warning triangle.
+              MPTherionPointSymbol.boreholeSKBB,
+              MPTherionPointSymbol.noEquipmentSKBB,
+              // Phase 4C AUT: p_airdraught_AUT/p_gradient_AUT thfill their
+              // arrowhead triangle, p_entrance_AUT thfills its shaded
+              // triangle, p_stalagmite_AUT/p_icestalagmite_AUT/
+              // p_pillar_AUT/p_icepillar_AUT thfill a circle, and
+              // p_water_AUT thfills its pattern hatch (same as
+              // p_water_UIS).
+              MPTherionPointSymbol.airDraughtAUT,
+              MPTherionPointSymbol.entranceAUT,
+              MPTherionPointSymbol.gradientAUT,
+              MPTherionPointSymbol.icePillarAUT,
+              MPTherionPointSymbol.iceStalagmiteAUT,
+              MPTherionPointSymbol.pillarAUT,
+              MPTherionPointSymbol.stalagmiteAUT,
+              MPTherionPointSymbol.waterAUT,
             };
 
         for (final MPTherionPointSymbol symbol
@@ -205,11 +224,11 @@ void main() {
 
     test(
       'mpTherionLineColors has exactly one entry per decorator-covered '
-      'THLineType',
+      'THLineType (UIS or SKBB-only)',
       () {
         // Mirrors MPVisualControllerBase.getLineDecorator's switch: every
         // THLineType a line decorator exists for, and no others.
-        const Set<THLineType> decoratedLineTypes = <THLineType>{
+        const Set<THLineType> uisDecoratedLineTypes = <THLineType>{
           THLineType.ceilingMeander,
           THLineType.ceilingStep,
           THLineType.chimney,
@@ -224,8 +243,30 @@ void main() {
           THLineType.survey,
           THLineType.waterFlow,
         };
+        // These have no UIS decorator/macro of their own (Therion aliases
+        // their set-neutral macro straight to the SKBB definition, or —
+        // for `wall` — the placeholder covers UIS while SKBB subtypes get
+        // real decorators), so their color entry is used only by the
+        // SKBB-specific decorators sharing this same map; see
+        // mpTherionLineColors' own doc comment.
+        const Set<THLineType> skbbOnlyDecoratedLineTypes = <THLineType>{
+          THLineType.arrow,
+          THLineType.border,
+          THLineType.fixedLadder,
+          THLineType.handrail,
+          THLineType.mapConnection,
+          THLineType.rope,
+          THLineType.ropeLadder,
+          THLineType.slope,
+          THLineType.steps,
+          THLineType.viaFerrata,
+          THLineType.wall,
+        };
 
-        expect(mpTherionLineColors.keys.toSet(), decoratedLineTypes);
+        expect(
+          mpTherionLineColors.keys.toSet(),
+          uisDecoratedLineTypes.union(skbbOnlyDecoratedLineTypes),
+        );
       },
     );
 
@@ -260,6 +301,8 @@ void main() {
               symbolUnit: const MPSymbolUnit(
                 canvasScale: 1 / 3,
                 devicePixelRatio: 1,
+                scrapLengthUnitsPerPoint: 1,
+                scrapLengthUnitType: THLengthUnitType.meter,
               ),
               isReversed: false,
             );

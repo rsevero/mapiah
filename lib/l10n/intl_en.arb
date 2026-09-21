@@ -1507,6 +1507,7 @@
     "type": "text"
   },
   "mpSettingsEnumVisualizationMethodMapiahPlaceholder": "Mapiah placeholder",
+  "mpSettingsEnumVisualizationMethodTherionDefault": "Therion (default)",
   "mpSettingsEnumVisualizationMethodTherionUIS": "Therion UIS",
   "mpSettingsEnumVisualizationMethodTherionAUT": "Therion AUT",
   "mpSettingsEnumVisualizationMethodTherionSBE": "Therion SBE",

@@ -12,6 +12,14 @@ abstract class MPSettingEnumDefinition {
   String storedValue(Enum value);
 
   String localizedLabel(AppLocalizations appLocalizations, Enum value);
+
+  /// Whether [value] should be offered in the settings UI (e.g. to hide
+  /// a not-yet-implemented option from the dropdown without removing it
+  /// from the enum itself). Doesn't affect an already-stored setting
+  /// still using a disabled value — that value keeps taking effect; this
+  /// only affects whether the dropdown lets a user pick it going
+  /// forward.
+  bool isEnabled(Enum value);
 }
 
 class MPSettingEnumDefinitionImpl<T extends Enum>
@@ -21,12 +29,14 @@ class MPSettingEnumDefinitionImpl<T extends Enum>
   final T? Function(String storedValue) parser;
   final String Function(AppLocalizations appLocalizations, T value)
   localizedLabelBuilder;
+  final bool Function(T value)? enabledPredicate;
 
   MPSettingEnumDefinitionImpl({
     required this.enumValues,
     required this.parser,
     required this.localizedLabelBuilder,
     this.explicitDefaultValue,
+    this.enabledPredicate,
   });
 
   @override
@@ -52,6 +62,13 @@ class MPSettingEnumDefinitionImpl<T extends Enum>
     final T typedValue = _castValue(value);
 
     return localizedLabelBuilder(appLocalizations, typedValue);
+  }
+
+  @override
+  bool isEnabled(Enum value) {
+    final T typedValue = _castValue(value);
+
+    return enabledPredicate?.call(typedValue) ?? true;
   }
 
   T _castValue(Enum value) {

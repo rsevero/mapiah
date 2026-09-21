@@ -13,7 +13,6 @@ import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/types/th_line_type.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
 import 'package:mapiah/src/painters/th_line_painter.dart';
-import 'package:mapiah/src/painters/therion_uis/mp_therion_line_paints.dart';
 import 'package:mapiah/src/widgets/auxiliary/th_line_painter_line_info.dart';
 
 mixin MPLinePaintingMixin {
@@ -49,10 +48,17 @@ mixin MPLinePaintingMixin {
         lineEndpointsMap[lineSegmentMPID] = lineSegment;
       }
 
+      final double? lSize = MPCommandOptionAux.getLSize(lineSegment);
+      final double? orientation = MPCommandOptionAux.getOrientation(
+        lineSegment,
+      );
+
       if (isFirst) {
         lineSegmentsMap[lineSegmentMPID] = THLinePainterStraightLineSegment(
           x: lineSegment.x,
           y: lineSegment.y,
+          lSize: lSize,
+          orientation: orientation,
         );
         isFirst = false;
         continue;
@@ -68,11 +74,15 @@ mixin MPLinePaintingMixin {
                 controlPoint1Y: lineSegment.controlPoint1Y,
                 controlPoint2X: lineSegment.controlPoint2X,
                 controlPoint2Y: lineSegment.controlPoint2Y,
+                lSize: lSize,
+                orientation: orientation,
               );
         case THStraightLineSegment _:
           lineSegmentsMap[lineSegmentMPID] = THLinePainterStraightLineSegment(
             x: lineSegment.x,
             y: lineSegment.y,
+            lSize: lSize,
+            orientation: orientation,
           );
       }
     }
@@ -164,7 +174,10 @@ mixin MPLinePaintingMixin {
           lineType,
           subtype: subtype,
         ),
-        lineDecoratorColor: mpTherionLineColors[lineType],
+        lineDecoratorColor: visualController.getLineDecoratorColor(
+          lineType,
+          subtype: subtype,
+        ),
         th2FileEditController: th2FileEditController,
       );
 
@@ -238,7 +251,10 @@ mixin MPLinePaintingMixin {
               lineType,
               subtype: subtype,
             ),
-            lineDecoratorColor: mpTherionLineColors[lineType],
+            lineDecoratorColor: visualController.getLineDecoratorColor(
+              lineType,
+              subtype: subtype,
+            ),
             th2FileEditController: th2FileEditController,
           ),
         );

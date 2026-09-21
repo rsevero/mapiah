@@ -159,7 +159,11 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
           ),
         );
       case MPSettingType.enumeration:
-        final List<Enum> enumValues = type.enumDefinition().values;
+        final List<Enum> enumValues = type
+            .enumDefinition()
+            .values
+            .where(type.enumDefinition().isEnabled)
+            .toList();
         final Enum defaultValue = type.enumDefinition().defaultValue;
         final Enum currentValue = enumValues.contains(_draftValues[type])
             ? _draftValues[type] as Enum
