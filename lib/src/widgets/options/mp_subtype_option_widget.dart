@@ -216,8 +216,8 @@ class _MPSubtypeOptionWidgetState extends State<MPSubtypeOptionWidget>
         List<String> orderedOptions = options.keys.toList();
         orderedOptions.sort((a, b) {
           return MPTextToUser.compareStringsUsingLocale(
-            MPTextToUser.getSubtypeAsString(a),
-            MPTextToUser.getSubtypeAsString(b),
+            options[a]!,
+            options[b]!,
           );
         });
 
