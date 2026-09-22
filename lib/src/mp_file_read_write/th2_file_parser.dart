@@ -2584,6 +2584,14 @@ class TH2FileParser {
         }
     }
 
+    /// NUL characters have no legitimate use in a .th2 file and have been
+    /// observed embedded in files written by other tools (e.g. from a
+    /// mis-decoded UTF-16 source), where every real character ends up
+    /// preceded by a stray NUL byte. They break editing of the resulting
+    /// string values in the UI, so discard them here rather than carrying
+    /// them all the way into the parsed model.
+    fileContentDecoded = fileContentDecoded.replaceAll('\u0000', '');
+
     return fileContentDecoded;
   }
 

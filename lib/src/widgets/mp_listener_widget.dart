@@ -3,6 +3,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_overlay_window_controller.dart';
@@ -199,6 +200,18 @@ class MPListenerWidgetState extends State<MPListenerWidget> {
         focusNode: _focusNode,
         onKeyEvent: (node, event) {
           final bool isArrowKey = _isArrowKey(event.logicalKey);
+
+          /// A text field elsewhere (e.g. an option's text/mark/title
+          /// editor) can hold keyboard focus while this Focus node's
+          /// ancestor still receives the bubbled, unhandled key event.
+          /// Canvas/state-machine shortcuts must not fire in that case, or
+          /// every keystroke that happens to match a shortcut letter (e.g.
+          /// "o", re-toggling the very options window being edited) would
+          /// also run its canvas side effect and clobber the in-progress
+          /// edit.
+          if (MPInteractionAux.isTextInputFocused()) {
+            return KeyEventResult.ignored;
+          }
 
           if (event is KeyDownEvent) {
             logicalKeyPressed = event.logicalKey;

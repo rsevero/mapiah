@@ -273,6 +273,7 @@ class _MPTextTypeOptionWidgetState extends State<MPTextTypeOptionWidget>
                     controller: _textController,
                     focusNode: _textTextFieldFocusNode,
                     autofocus: true,
+                    selectAllOnFocus: false,
                     errorText: _warningMessage,
                     keyboardType: TextInputType.text,
                     onChanged: (String value) {

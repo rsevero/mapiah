@@ -74,6 +74,18 @@ class MPInteractionAux {
         pressed.contains(LogicalKeyboardKey.shiftRight);
   }
 
+  /// Whether the currently focused widget is a text-editing field (e.g. a
+  /// thconfig editor, an option's text field, a search box, a rename
+  /// dialog), so that global, unmodified single-letter shortcuts should not
+  /// fire and swallow the keystroke instead of letting it reach the field.
+  static bool isTextInputFocused() {
+    final BuildContext? focusedContext =
+        FocusManager.instance.primaryFocus?.context;
+
+    return focusedContext != null &&
+        focusedContext.findAncestorWidgetOfExactType<EditableText>() != null;
+  }
+
   static Set<LogicalKeyboardKey> _logicalKeysPressed() {
     return debugPressedKeysOverride ??
         HardwareKeyboard.instance.logicalKeysPressed;

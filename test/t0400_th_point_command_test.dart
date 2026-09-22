@@ -1147,10 +1147,23 @@ scrap extranotesSP -projection plan -scale [ -128 -128 698.865 -128 0 0 \
 endscrap
 ''',
       },
+      {
+        'file': '2026-09-22-002-point_with_null_chars_in_text_option.th2',
+        'length': 4,
+        'encoding': 'UTF-8',
+        'asFile': r'''encoding UTF-8
+scrap test
+  point 822 9012 label -text TBCM
+endscrap
+''',
+        'quoted_content': 'TBCM',
+      },
     ];
 
     for (var success in successes) {
       test(success, () async {
+        mpLocator.mpGeneralController.reset();
+
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
@@ -1158,6 +1171,17 @@ endscrap
         expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
+
+        if (success.containsKey('quoted_content')) {
+          final THPoint point = file.pointByMPID(3);
+
+          expect(
+            (point.getOption(THCommandOptionType.text) as THTextCommandOption)
+                .text
+                .content,
+            success['quoted_content'],
+          );
+        }
 
         final asFile = writer.serialize(file);
         expect(asFile, success['asFile']);

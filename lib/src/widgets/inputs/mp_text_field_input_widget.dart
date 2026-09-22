@@ -13,6 +13,7 @@ class MPTextFieldInputWidget extends StatelessWidget {
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final bool autofocus;
+  final bool selectAllOnFocus;
   final String labelText;
   final String? hintText;
   final ValueChanged<String>? onChanged;
@@ -27,6 +28,7 @@ class MPTextFieldInputWidget extends StatelessWidget {
     this.keyboardType,
     this.inputFormatters,
     this.autofocus = false,
+    this.selectAllOnFocus = true,
     this.onChanged,
   });
 
@@ -56,6 +58,7 @@ class MPTextFieldInputWidget extends StatelessWidget {
           keyboardType: keyboardType,
           inputFormatters: inputFormatters,
           autofocus: true,
+          selectAllOnFocus: selectAllOnFocus,
           focusNode: focusNode,
           decoration: InputDecoration(
             labelText: labelText,
