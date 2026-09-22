@@ -1497,6 +1497,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
 
     _th2FileEditController.execute(toggleAllCommand);
+    _th2FileEditController.optionEditController.updateOptionStateMap();
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerEditLineRedraw();
   }
@@ -1553,6 +1554,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
 
     _th2FileEditController.execute(toggleAllCommand);
+    _th2FileEditController.optionEditController.updateOptionStateMap();
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerEditLineRedraw();
   }
@@ -1612,6 +1614,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
 
     _th2FileEditController.execute(toggleAllCommand);
+    _th2FileEditController.optionEditController.updateOptionStateMap();
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerEditLineRedraw();
   }
@@ -1652,6 +1655,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
         );
 
     _th2FileEditController.execute(toggleAllCommand);
+    _th2FileEditController.optionEditController.updateOptionStateMap();
     _th2FileEditController.triggerSelectedElementsRedraw();
     _th2FileEditController.triggerEditLineRedraw();
   }

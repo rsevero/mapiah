@@ -70,6 +70,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
     _updateOptionsStateMaps(selectedElements);
     _th2FileEditController.triggerOptionsListRedraw();
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   void updateElementOptionMapByMPID(int mpID) {
@@ -84,6 +85,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
     _updateOptionsStateMaps([element]);
 
     _th2FileEditController.triggerOptionsListRedraw();
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   void updateElementOptionMapForLineSegments() {
@@ -106,6 +108,7 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
     _updateOptionsStateMaps(selectedLineSegments);
 
     _th2FileEditController.triggerOptionsListRedraw();
+    _th2FileEditController.stateController.updateStatusBarMessage();
   }
 
   void _updateOptionsStateMaps(Iterable<THHasOptionsMixin> selectedElements) {
