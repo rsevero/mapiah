@@ -106,9 +106,14 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   Widget _buildEditor(String heroPrefix) {
     final Widget editorStack = Stack(
       children: [
-        TH2FileWidget(
-          key: th2FileEditController.getTH2FileWidgetGlobalKey(),
-          th2FileEditController: th2FileEditController,
+        // Canvas painters draw pan/zoom-transformed content without
+        // bounds; clip so it never spills over neighboring areas like the
+        // project sidebar.
+        ClipRect(
+          child: TH2FileWidget(
+            key: th2FileEditController.getTH2FileWidgetGlobalKey(),
+            th2FileEditController: th2FileEditController,
+          ),
         ),
         TH2FileEditStateActionButtonsWidget(
           heroPrefix: heroPrefix,
