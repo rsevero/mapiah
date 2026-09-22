@@ -584,7 +584,41 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       ),
     );
 
-    return _withShortcuts(scaffold);
+    return _withShortcuts(
+      Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerDown: _closeOverlayWindowsOnClickOutsideDrawingArea,
+        child: scaffold,
+      ),
+    );
+  }
+
+  /// Closes the overlay windows opened over the active drawing area when the
+  /// pointer goes down anywhere else in the page (app bar, tabs, project tree,
+  /// status bar...). Clicks on the overlay windows themselves never reach this
+  /// listener as they live in the root overlay above this page.
+  void _closeOverlayWindowsOnClickOutsideDrawingArea(PointerDownEvent event) {
+    final TH2FileEditController? controller = _getActiveController();
+
+    if (controller == null) {
+      return;
+    }
+
+    final RenderObject? renderObject = controller
+        .getTH2FileWidgetGlobalKey()
+        .currentContext
+        ?.findRenderObject();
+
+    if ((renderObject is RenderBox) && renderObject.hasSize) {
+      final Offset localPosition = renderObject.globalToLocal(event.position);
+
+      if (renderObject.paintBounds.contains(localPosition)) {
+        return;
+      }
+    }
+
+    controller.overlayWindowController
+        .performCloseOverlayWindowsOnOutsideClick();
   }
 
   /// Builds the compact menu used when the file editor app bar is narrow.

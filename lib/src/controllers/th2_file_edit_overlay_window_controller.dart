@@ -358,6 +358,24 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     }
   }
 
+  /// Closes every overlay window opened over the drawing area. Called when
+  /// the user clicks anywhere in the page outside the drawing area.
+  void performCloseOverlayWindowsOnOutsideClick() {
+    if (_overlayWindows.isEmpty) {
+      return;
+    }
+
+    if (getIsOverlayWindowShown(MPWindowType.changeImage) &&
+        _th2FileEditController
+            .stateController
+            .state
+            .keepOverlayOpenOnCanvasClick) {
+      _th2FileEditController.stateController.clearImageOperationState();
+    }
+
+    clearOverlayWindows();
+  }
+
   @action
   void performToggleShowPLATypeOverlayWindow({
     required Offset outerAnchorPosition,
