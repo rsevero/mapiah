@@ -36,6 +36,11 @@
   * On Windows (and other desktop platforms), closing Mapiah via the window's close button, taskbar control, or Alt+F4/Ctrl+F4 no longer leaves the window visibly frozen on screen for several seconds before it vanishes; the window is now hidden right after its placement is persisted, so the Flutter engine's shutdown happens invisibly in the background afterward instead of behind a still-visible, unresponsive window. [reported by CaverBruce]
   * The project-tree Open project action now always treats the selected file as a `thconfig` root, including files with arbitrary extensions or no extension. Project shape detection also now recognizes `.thconfig`-suffixed filenames, so showcase configs such as `therion_uis_showcase.thconfig` load their `source`/`input` tree instead of being misdetected as `.th` data files. Added parser and controller regression coverage.
 * Infrastructure maintenance:
+  * Revised the Phase 3 read-only sidebar plan for #32 after another validation against the code:
+    * Its first step now adds the Phase 1 and Phase 2 tests that were planned but never written (`t3939`, `t3940`, `t2462`, `t3941` and the Phase 2 lifecycle tests), before any Phase 3 change.
+    * A failed tab load removes its controller after the frame instead of during a build, so the new controller-registry signal cannot trigger Flutter's "markNeedsBuild() called during build" assertion.
+    * Reload replaces a controller in a single action, so observers never see the file without a controller.
+    * Documented the workspace rebuild cost of observing controller replacement, the context menu's local pointer position, and removed an outdated note about Windows image-path lowercasing, which is already fixed.
   * Revised the Phase 3 read-only sidebar plan again after validating it against the code:
     * A load that finishes after its controller was disposed commits nothing and registers no reactions.
     * Closing a TH2 tab keeps its controller tab-less while its tree row is expanded and it has no unsaved changes, so the tree keeps its state and a failed load is not retried automatically.
