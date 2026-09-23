@@ -167,6 +167,7 @@
 
   * Refined the Phase 3 TH2 element-tree sidebar plan for #32: default expansion includes non-TH2 nodes through the shallowest TH2 depth while leaving TH2 files collapsed; deferred loads revalidate project lifecycle, membership, expansion and filtering before starting; and open tabs recreate their body state when Reload replaces the controller. Added corresponding regression criteria and error handling requirements for both Reload entry points. These are planning changes only.
   * Refined the Phase 3 TH2 sidebar plan for #32: Reload completion must not reopen or activate tabs after tab closure, project transitions or a newer Reload, with regression criteria for these lifecycle cases. EN/PT help updates are required in Phase 3 as an explicit exception to the parent plan assigning documentation to Phase 6.
+  * Refined the Phase 3 TH2 sidebar plan for #32: corrected the MobX rationale (generated setters auto-wrap writes outside actions, so single-action load commits are about consistency, not write-policy assertions) and replaced two tests that could not fail; documented that `load()` only parses into the controller registered at its path; `isTH2FileRowExpanded` and deferred-load revalidation use the existing `THProjectController.nodeByCanonicalPath`; a tree tap first leaves the canvas mode as the Select tool does; and element rows react to the first tap immediately, with a second tap only adding the tab opening and zoom. These are planning changes only.
 
 ## 0.4.4 - 2026-08-23 - The Cave Rescue release
 * Highlights:

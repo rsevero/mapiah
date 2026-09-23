@@ -62,9 +62,11 @@ Phase 2 already added the observable `isLoading`/`structureRevision` signals, co
    - `bool isBroken` becomes `@readonly bool _isBroken = false;`.
    - `List<TH2FileProblem> problems` becomes `@readonly List<TH2FileProblem> _problems = const <TH2FileProblem>[];`. It is always replaced by a new unmodifiable list, never mutated in place. `TH2FileProblemKind.parseError` entries produced by `TH2FileParser._addError` remain part of this list; parser error strings returned separately for the existing error dialog are not a second tree diagnostic source.
 
-   The public read names (`isFileLoaded`, `isBroken`, `problems`) stay the same, so existing field reads need no renaming. Tab controller replacement is handled separately in §3.4. Every write happens inside an action. MobX's default `observed` write policy asserts in debug builds and tests when an observed field is written outside an action, and the tree observes these fields, so two existing writes need changes:
-   - `_preParseInitialize` becomes `@action`. It sets `_isLoading = true` and runs synchronously inside `load()`. When `ensureTH2FileLoaded` (§5) loads a controller the tree `Observer` has already read, that write would otherwise happen outside an action.
-   - `saveAsTH2File` is `async` and is not an action, so its `_isFileLoaded = true` moves into a small private `@action` (for example `_markLoadedAfterSaveAs()`) called at the same point.
+   The public read names (`isFileLoaded`, `isBroken`, `problems`) stay the same, so existing field reads need no renaming. Tab controller replacement is handled separately in §3.4.
+
+   **Writes outside actions do not assert, but they are not batched.** In MobX 2.7.0, a generated setter for an `@observable`/`@readonly` field calls `Atom.reportWrite`, which goes through `conditionallyRunInAction`. Outside a batch, that wraps the single write in its own action *before* `enforceWritePolicy` runs (`mobx-2.7.0/lib/src/core/context_extensions.dart`). A write outside an action therefore never triggers the `observed` write-policy assertion. Today's code already writes the observed `_isLoading` outside actions without failing. What such a write does do is end its own one-write action, so reactions run immediately after it, before the next write. Consistency, not the assertion, is why multi-field transitions go through one action (item 2). For the same reason, these two existing writes become actions:
+   - `_preParseInitialize` becomes `@action`, so `_isLoading = true` and the `errorMessages` reset form one transition.
+   - `saveAsTH2File` is `async` and is not an action, so its `_isFileLoaded = true` and the following `setFilename` move into a small private `@action` (for example `_markLoadedAfterSaveAs()`) called at the same point.
 
 2. **Load results are committed in one action, with the revision bump last.** The existing Phase 2 load path runs `_finalFilePreparations` (which resets `_isLoading`), bumps `structureRevision`, and only then marks the file loaded, while `problems`/`isBroken` are assigned earlier in `_loadOnce`. The bump therefore fires, but a synchronous reaction to it still sees `isFileLoaded == false`. The part of `_loadOnce` after `await parser.parse(...)` moves into one `@action` method that sets `_problems`, `_isBroken`, runs `_finalFilePreparations`, sets `_isFileLoaded = true`, and calls `bumpStructureRevision()` last. Observers then see one consistent transition from loading to loaded, valid or broken. Preserve the existing Phase 2 revision semantics: one load-time bump, one bump per relevant edit/undo/redo, and no bump per parsed element.
 
@@ -79,7 +81,7 @@ Phase 2 already added the observable `isLoading`/`structureRevision` signals, co
 
    Consequences for the tree:
    - Resolve the controller in build with `getTH2FileEditControllerIfExists(path)` every time. Never cache a controller reference in a row or widget, because `reloadTH2File` disposes the old instance.
-   - Never create a controller inside an `Observer` build, because that writes an observable during a derivation. The lazy-load request (§5) runs from the chevron handler or a post-frame callback.
+   - Never create a controller inside an `Observer` build. MobX itself allows the write (it forbids writes only inside computeds, not inside reactions such as an `Observer` build), but the resulting `th2ControllersRevision` bump fails Flutter's build assertion, as the next bullet explains. The lazy-load request (§5) runs from the chevron handler or a post-frame callback.
    - More generally, no registry change may happen while any widget is building. The bump runs the `Observer`s that read `th2ControllersRevision` (the tab-content `Observer` of §3.4 and the tree), and marking them for rebuild during another widget's build fails Flutter's debug assertion ("setState() or markNeedsBuild() called during build") whenever that widget is not their descendant. The existing load-failure path does exactly this and is changed in §3.4.
 
    **Reload completion must preserve current lifecycle ownership.** The existing `reloadTH2File` remembers `wasOpen` and calls `addFileTab` after `await controller.load()`. Remove that post-load call and its `wasOpen` snapshot: replacing a controller does not remove its tab, and the §3.4 observer already updates an open tab. Reload must neither reopen a tab closed during loading nor activate a tab after the user switches away. A tab-less Reload remains tab-less.
@@ -102,6 +104,7 @@ Phase 2 already added the observable `isLoading`/`structureRevision` signals, co
    - The load-commit action (item 2) checks `_disposed` first. If the controller is disposed, it writes no field, registers no reaction, does not bump `structureRevision`, and only returns the result so the future completes.
    - The load-error action (item 4) does the same: a disposed controller does not set `_loadError` or `_isLoading`. `load()` still rethrows, and `ensureTH2FileLoaded` already catches the error.
    - The parser may keep writing into the disposed controller's own `TH2File` until the parse ends. Nothing reads that file afterwards, so this is harmless.
+   - **`load()` works only on the registered controller.** `TH2FileParser.parse` is not handed a controller. It resolves its target synchronously, before its first `await`, through `getTH2FileEditController(filename: …, forceNewController: false)`. `load()` therefore parses into whatever controller is registered at that path when it starts. Every Phase 3 path respects this: the tab builder, `ensureTH2FileLoaded` (§5) and `reloadTH2File` all call `load()` on the controller they just read from, or created in, the registry, with no `await` in between. A parse already running keeps the controller it captured, so a Reload or disposal that happens during the parse is handled by the guards above. Never call `load()` on a controller that is not currently registered at its path: the parser would create a new registry entry and fill that one instead.
 
 7. **Subtype edits bump `structureRevision`.** A subtype is stored as a `THSubtypeCommandOption`, and today `executeSetOptionToElement` and `executeRemoveOptionFromElement` in `th2_file_edit_element_edit_controller.dart` bump the revision only for `THCommandOptionType.id`. A subtype changed on its own, for example from the options panel, would therefore leave the row label and the label cache (§7) stale. Both methods also bump for `THCommandOptionType.subtype`. A type-and-subtype edit made through the type commands then bumps more than once inside one command; this is harmless because rows rebuild on the next frame. The rule in item 2 still holds: no bump per parsed element, because `bumpStructureRevision` does nothing while `isLoading`.
 
@@ -111,7 +114,18 @@ Closing a TH2 tab calls `TH2FileEditController.close()`, which disposes the cont
 
 **Rule.** When a TH2 tab closes, its controller is kept, tab-less, if all of these are true:
 
-- the file is a TH2 file of the open project, and the id of its `TH2FileNode` is in `expandedNodeIds`. This is asked through a new `THProjectTreeUIController.isTH2FileRowExpanded(String canonicalPath)`, which returns `false` when there is no project or no `TH2FileNode` with that `absolutePath`;
+- the file is a TH2 file of the open project, and the id of its `TH2FileNode` is in `expandedNodeIds`. This is asked through a new `THProjectTreeUIController.isTH2FileRowExpanded(String canonicalPath)`, which returns `false` when there is no project or no `TH2FileNode` with that `absolutePath`. It uses the existing public index `THProjectController.nodeByCanonicalPath`, whose keys are canonical paths (§3.1 item 5) and which already holds `TH2FileNode`s, so no tree walk and no new project-controller API are needed:
+
+  ```dart
+  bool isTH2FileRowExpanded(String canonicalPath) {
+    final THProjectFileNode? node =
+        _projectController.nodeByCanonicalPath(canonicalPath);
+
+    return (node is TH2FileNode) && expandedNodeIds.contains(node.id);
+  }
+  ```
+
+  `_clearProjectState` clears the index, so with no project the lookup returns `null` and the answer is `false`. While `reloadProject` is parsing, the index still describes the outgoing tree, like `projectRootNode`. Any controller kept during that transition is disposed right afterwards by `disposeTablessTH2Controllers`;
 - the controller has no unsaved changes (`!enableSaveButton`, the same value that drives dirty mirroring);
 - it is not a new, never-saved file (`mpNewFilePrefix…`).
 
@@ -255,7 +269,7 @@ Load triggering mechanism:
 
 - Flattening stays pure. While building rows, the callback adds the path of each file that needs a load to a per-build set. It never creates a controller or calls `load()`, because doing so inside the `Observer` build would write observables during a derivation (§3.1).
 - After the build, if that set is not empty, `THProjectTreeWidget` schedules one post-frame callback, capturing the project's `projectEpoch` and `rootConfigPath` along with the candidate paths. Capturing the epoch is required even when the root path stays the same, because Reload and closing/reopening the same project start a new lifecycle.
-- **Revalidate before loading.** For each candidate, immediately before calling `MPGeneralController.ensureTH2FileLoaded(path)`, check that the widget's build context is still mounted, the captured epoch and root path still match the current project, a project root exists, `isParsing` is false, and `filterText` is empty. Resolve the path against the current project tree: it must still belong to a `TH2FileNode`, that node must still be in `expandedNodeIds`, and its project ancestors must still be expanded so the row remains visible. Resolve the current controller again and skip it if it is loaded, loading or has `loadError`. Failed checks simply discard the candidate; they never create a controller or schedule a retry. There must be no `await` between these checks and the load request.
+- **Revalidate before loading.** For each candidate, immediately before calling `MPGeneralController.ensureTH2FileLoaded(path)`, check that the widget's build context is still mounted, the captured epoch and root path still match the current project, a project root exists, `isParsing` is false, and `filterText` is empty. Resolve the path against the current project tree: it must still belong to a `TH2FileNode`, that node must still be in `expandedNodeIds`, and its project ancestors must still be expanded so the row remains visible. The first two checks are `isTH2FileRowExpanded(path)` (§3.2). For the third, get the node with `nodeByCanonicalPath(path)` and follow its `parent` chain up to the root, as `expandAncestorsOf` does, requiring every ancestor to be in `expandedNodeIds`. Resolve the current controller again and skip it if it is loaded, loading or has `loadError`. Failed checks simply discard the candidate; they never create a controller or schedule a retry. There must be no `await` between these checks and the load request.
 - The tree `Observer` reads `projectEpoch`, `isParsing` and the existing tree/filter/expansion signals, so a current build can schedule fresh candidates when the project finishes parsing, a row becomes visible again or filtering ends. An obsolete callback cannot recreate controllers after project cleanup. The chevron handler may request a load directly only when expanding and only through the same eligibility checks, using the current project lifecycle.
 - `ensureTH2FileLoaded(path)` gets or creates the controller with `getTH2FileEditController(filename: path)`. If that controller is neither loaded nor loading and has no `loadError`, it calls `load()` without awaiting it. It catches the rethrown error so the unawaited future never surfaces as an unhandled async error; `loadError` already records it. It does nothing else: no `addFileTab`, no tab activation, no project-node selection, no dirty state. Because `load()` caches its future and the controller is found by path, calling it any number of times causes at most one parse per controller instance.
 - The next rebuild sees either the new controller with `isLoading == true` or a loaded one, so the path is not scheduled again. A failed load sets `loadError`, so the path is not scheduled again and the load is never retried automatically. Retrying is the explicit Reload path (§3.1 item 4).
@@ -364,10 +378,18 @@ Filtering inside a file extends the rule the project tree already has and tests 
 
 **Single source of truth.** Each file's element-row highlight is that file's own `TH2FileEditController.selectionController` selection. This is true whether or not the file has a tab. The tree keeps no selection or highlight state of its own for element rows. A tree tap therefore writes the same selection the canvas uses, and a tab that opens later shows exactly what the tree showed.
 
-Every tap on a PLA element row of a loaded valid file first applies the selection to that file's controller:
+Every tap on a PLA element row of a loaded valid file first applies the selection to that file's controller. A tree tap does exactly what pressing the canvas Select tool and then clicking the element does, whatever mode the file's state machine is in:
 
-1. `setActiveScrapByChildElement(element)`;
-2. `selectionController.setSelectedElements(<THElement>[element], setState: true)`. This clears the previous selection of that file and moves its state machine to the non-empty-selection state, the same way programmatic selection works elsewhere.
+1. `stateController.onButtonPressed(MPButtonType.select)`. The file leaves its current mode exactly as the Select tool makes it leave: the base state handles that button with `selectionController.setSelectionState()`, and the current state's `onStateExit` cleans up. Going through the button path, rather than setting the state directly, also applies any state-specific override of the Select button. This step runs first, so no exit hook can clear the new selection.
+2. `setActiveScrapByChildElement(element)`;
+3. `selectionController.setSelectedElements(<THElement>[element], setState: true)`. This clears the previous selection of that file and moves its state machine to the non-empty-selection state, the same way programmatic selection works elsewhere.
+
+**Leaving the current mode:**
+
+- **Add line or area.** Leaving the mode calls `finalizeNewLineCreation` or `finalizeNewAreaCreation`. These only clear the in-progress state and refresh derived state. The segments were already committed as commands while the user drew, so ending the creation adds no command and no undo entry.
+- **Edit single line, image operations and element rotate** already have exit hooks for a transition to a selection state.
+- **Drag states need no guard.** The moving-elements, moving-control-point, selection-window and rotate drags exist only while the mouse button is held down on the canvas, so a tree click cannot happen during one.
+- **Tab-less controllers are safe.** An in-progress line or area already has undo entries, so its file is dirty, and §3.2 never keeps a dirty controller tab-less. A tab-less controller, whether kept by §3.2 or loaded by the tree, is at most in an idle creation mode with nothing pending, and leaving that mode changes nothing.
 
 Then, depending on the file and the gesture:
 
@@ -375,10 +397,19 @@ Then, depending on the file and the gesture:
 - **Open file, double tap:** as a single tap, then `requestZoomToFit(MPZoomToFitType.selection)` (see below).
 - **Tab-less file, single tap:** apply the selection only. No tab is opened or activated, and nothing is dirtied. The row is highlighted because the highlight reads the controller's selection.
 - **Tab-less file, double tap:** apply the selection, `addFileTab(path)` to open and activate the tab, then `requestZoomToFit(MPZoomToFitType.selection)`. The new tab shows the selection and the correct active scrap from its first frame.
+
+**Tap and double-tap detection.** Every double-tap result above is the single-tap result plus extra steps. The first tap can therefore act at once, and the second tap only adds to it; nothing is ever undone.
+
+- Element rows register only `onTap`, never `onDoubleTap`. With both registered, Flutter holds every single tap until `kDoubleTapTimeout` (300 ms) has passed, which would make every ordinary click in the tree feel slow.
+- Each tap first checks whether it completes a double tap: the previous tap was on the same row id, less than `kDoubleTapTimeout` ago, and within `kDoubleTapSlop` of this tap's position. The tracker (row id, time, position) is kept in one small helper shared by the tree, so two quick taps on different rows are never taken as a double tap, including after the rows rebuild.
+- **The first tap** runs the whole single-tap work immediately: the three steps above, plus `addFileTab(path)` for an open file.
+- **The second tap** runs only the extra steps: `addFileTab(path)` when the file is tab-less, then `requestZoomToFit(MPZoomToFitType.selection)`. It does not repeat the Select-tool transition or the selection, so nothing is repainted without need. It then resets the tracker, so a third tap starts a new sequence.
+- **What the user sees.** For a tab-less file, the canvas appears once, already zoomed to the selection, because the pending zoom applies on the new tab's first layout. For an open file, the selection appears at the current viewport and the zoom follows on the second tap. This is a visible two-step, not a flicker: nothing reverts, and canvas double-clicks and file managers behave the same way.
+- If the element no longer exists or its file is no longer loaded and valid when the second tap arrives, the second tap does nothing. For example, a Reload finished between the two taps.
 - **A row in a broken, loading or load-error state** never attempts selection.
 - **Scrap rows** only highlight when the active scrap changes, through `setActiveScrap`. Selecting a whole scrap from the tree is out of scope for this phase.
 
-Selection is not a data change: it creates no command and does not affect dirty state.
+Selection is not a data change: it creates no command and does not affect dirty state. A tap may end an in-progress line or area creation, exactly as the Select tool does, but that adds no command either (see "Leaving the current mode").
 
 **Zooming a tab that may not have a size yet.** Right after `addFileTab`, the new tab's `TH2FileWidget` has not been laid out. `_screenSize` is still unset, and on its first layout the `LayoutBuilder` calls `zoomToFit(MPZoomToFitType.file)` while `canvasScaleTranslationUndefined` is true. That would override any selection zoom made earlier. `TH2FileEditController` therefore gets `requestZoomToFit(MPZoomToFitType type)`:
 
@@ -518,10 +549,11 @@ Do not edit generated `.g.dart` files manually. If the MobX watch process regene
 - A MobX `reaction` on `isFileLoaded` fires once when a valid load completes, and once when a broken load completes. In the broken case `isBroken` is `true` and `problems` is non-empty when the reaction runs.
 - A broken file whose parser reports a `parseError` exposes that diagnostic in `problems`, the broken count and the tooltip exactly once; parser-error strings returned for the existing tab error dialog are not double-counted.
 - A `reaction` on `structureRevision` fires once per load and sees `isFileLoaded == true` and the final `isBroken`/`problems` values.
+- Tests that count `th2ControllersRevision` changes read the value right before and right after the action under test, never from a fixed initial value. `TH2FileParser.parse` defaults to `forceNewController: true`, and many existing tests call it directly or call `getTH2FileEditController`. Each of those calls creates or replaces a controller and so bumps the revision. This is harmless, and those tests need no change.
 - `th2ControllersRevision` changes when `getTH2FileEditController` creates a controller, `removeFileController` removes one, `renameFileController` moves one, `disposeTablessTH2Controllers` disposes one, and `reloadTH2File` replaces one. It does not change when `getTH2FileEditController` returns an existing controller.
 - A reaction that reads `getTH2FileEditControllerIfExists(path)` re-runs after the controller for `path` is created, reloaded or removed.
-- Save As still leaves `isFileLoaded == true` with no MobX action-policy error.
-- Calling `load()` on an existing, unloaded controller while a reaction observes its `isLoading` raises no MobX action-policy assertion.
+- Save As of a new file leaves `isFileLoaded == true`. A reaction on `isFileLoaded` runs once for the Save As transition and already sees the new `th2File.filename` and the updated current scrap name.
+- Calling `load()` on an existing, unloaded controller while a reaction observes its `isLoading` runs that reaction once for the pre-parse transition.
 - A controller disposed while its load is still running (for example by `disposeTablessTH2Controllers`) commits nothing when the parse ends: `isFileLoaded`, `isBroken`, `problems` and `structureRevision` are unchanged, and no reaction is registered after disposal. The same holds when the load throws after disposal: `loadError` stays `null`, and the rethrown error is not unhandled.
 - Setting or removing only a subtype option bumps `structureRevision` once, and so does undoing it. Changing another non-id option does not bump it.
 - When `_loadOnce` throws (for example through an injected failing parse or initialization step):
@@ -596,8 +628,15 @@ Do not edit generated `.g.dart` files manually. If the MobX watch process regene
 - A tab whose load throws while its file row is collapsed (or with no project open) shows the error dialog once, removes the failed controller after the frame, closes the tab, and raises no "markNeedsBuild() called during build" assertion. The existing `t3203` cases stay green.
 - A load that throws shows exactly one load-error row, schedules no further load requests across rebuilds, and offers Reload. Reload then shows the real state (element rows or broken). Opening that file's tab still shows the existing load-failure error dialog.
 - Tapping an element in an open file activates its tab, selects it and activates its scrap; double-tap zooms to the selection.
+- A single tap on an element row applies its effect without waiting for the double-tap timeout: the selection, active scrap and, for an open file, tab activation are visible after one `pump()` with no added delay.
+- Two taps on the same row within `kDoubleTapTimeout` and `kDoubleTapSlop` run the double-tap extras once. The second tap does not call `setSelectedElements` again and does not change the state-machine state.
+- Two quick taps on different rows are two single taps: each selects its own element and neither zooms. Two taps on the same row further apart than `kDoubleTapTimeout` are also two single taps. A third quick tap after a double tap starts a new sequence and does not zoom again.
+- A second tap that arrives after a Reload replaced the file's controller, or after the element was removed, does nothing and raises no exception.
 - Tapping a tab-less element sets that controller's selection and active scrap and highlights the row. It opens no tab and changes no dirty state or active tab index.
 - Double-tapping a tab-less element opens and activates the tab. The canvas shows the element selected with its scrap active, and the first layout zooms to the selection, not to the whole file.
+- Tapping an element row while its open tab is in add-line mode with a line in progress ends the line creation as the Select tool would. The undo stack is unchanged, the state is non-empty selection, and only the tapped element is selected. Repeat for add-area mode with an area in progress.
+- Tapping an element row while its open tab is in edit-single-line mode leaves that mode through its normal exit. Only the tapped element is selected, in the non-empty-selection state.
+- Tapping an element row of a tab-less controller left in add-point mode switches it to the non-empty-selection state with the tapped element selected. No tab opens and the file does not become dirty.
 - `requestZoomToFit` on a controller that is already laid out zooms immediately. With an empty selection it falls back to the default zoom-to-file on first layout.
 - Canvas selection highlights the corresponding row and clears/moves the highlight when selection changes. The highlight in a tab-less or inactive-tab file follows that file's own selection.
 - A canvas selection change updates the highlight of a visible element row without re-flattening: the `th2ElementRowsFor` callback count does not change.
