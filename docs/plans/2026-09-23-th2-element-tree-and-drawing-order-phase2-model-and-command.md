@@ -197,6 +197,24 @@ Add `dispose()` to `TH2FileEditController`. It reuses the existing `_disposeReac
 - `MPGeneralController.reset()`, for every registered TH2 controller before `_t2hFileEditControllers.clear()`, mirroring how it already disposes text editor controllers;
 - the tab-less cleanup below.
 
+#### Focus node disposal timing
+
+`MPListenerWidget` stores the controller's `th2FileFocusNode` in `initState` and attaches it to a `Focus` widget, so the node is attached only while a canvas for that file is mounted. The paths differ:
+
+- **Tab close:** `close()` → `removeFileTab` → `removeFileController` → `dispose()` all run inside one MobX action. The tab's `Focus` widget stays mounted until the next frame and still holds the node.
+- **Reload:** `reloadTH2File` replaces only broken controllers. A broken file shows the diagnostic panel, never a canvas, so the replaced node is not attached.
+- **Tab-less cleanup and `reset()`:** these controllers have no mounted canvas, so the node is not attached.
+
+Disposing an attached node synchronously relies on framework internals: `FocusNode.dispose()` detaches itself, and the unmounting `Focus` then finds nothing to detach. It also leaves a window in which a pending `requestFocus()`, for example the one in `TH2FileEditOverlayWindowController`, can reach a disposed node. Therefore `dispose()` must:
+
+1. Set the disposed flag first, then run `_disposeReactions()` and release timers and other resources synchronously.
+2. Dispose `th2FileFocusNode` immediately when `th2FileFocusNode.context == null` (not attached).
+3. Otherwise, defer only the focus-node disposal: register `WidgetsBinding.instance.addPostFrameCallback` to dispose it once the tab has unmounted, and call `WidgetsBinding.instance.scheduleFrame()` so that frame is guaranteed to happen.
+
+The disposed flag keeps this idempotent: a second `dispose()` call neither disposes the node again nor registers another callback.
+
+Moving focus-node ownership into `MPListenerWidget` would be the more idiomatic Flutter design, but four call sites request focus through the controller (`MPGeneralController` twice, `TH2FileTabsPage` and `TH2FileEditOverlayWindowController`). They would all need to go through a new controller indirection, so that change is out of scope for Phase 2.
+
 ### 5.2 Tab-less cleanup
 
 Add `MPGeneralController.disposeTablessTH2Controllers(Iterable<String> canonicalPaths)`.
@@ -260,6 +278,8 @@ Extend the nearest existing `MPGeneralController`/project lifecycle tests, or ad
 - a dirty tab-less project controller is disposed too, and the next access loads the file from disk;
 - closing a tab disposes its controller, `reloadTH2File` disposes the replaced one (through `removeFileController`), and `getTH2FileEditController(forceNewController: true)` called directly on a registered file disposes the replaced one;
 - `TH2FileEditController.close()` followed by the `removeFileController` disposal is safe (second `dispose()` is a no-op, focus node disposed once);
+- a widget test mounts a canvas tab, closes it and pumps: no exception is thrown, and the focus node is still usable before the pump and disposed after it;
+- a controller that never mounted a canvas (tab-less, or broken and then reloaded) disposes its focus node immediately;
 - `MPGeneralController.reset()` disposes every registered TH2 controller;
 - unrelated standalone controllers remain untouched;
 - `_structureRevision` advances once after load and once per move/undo/redo, not once per parsed element, and not when a line segment is added;
