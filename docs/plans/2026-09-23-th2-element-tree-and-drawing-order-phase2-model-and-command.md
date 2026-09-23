@@ -63,13 +63,13 @@ moveElements({
 })
 ```
 
-The command stores concrete moves, each containing `elementMPID`, `newParentMPID` and `positionInNewParent`. Resolve the position against the full `childrenMPIDs` list, including comments, empty lines, settings and closing `end*` elements. The command must not use drawable-child indices.
+The command stores concrete moves, each containing `elementMPID`, `newParentMPID` and `positionInNewParent`. The full `childrenMPIDs` lists remain authoritative, but requests are resolved against the filtered sequence of movable siblings: scraps at file level, and points, lines and areas inside scraps. Project the resulting movable order back onto the full list so comments, empty lines, settings and images are not independently moved and closing `end*` elements remain in place. The command must not use drawable-child indices.
 
 `positionInNewParent` is an index into the new parent's list **after** the element has been removed from its old parent. For a move within the same parent this is one less than the pre-removal index whenever the element was before the target slot.
 
-The only parents a move can target are the file and scraps. For an end-of-parent request, resolve the index of the scrap's `THEndscrap` (inserting just before it); for the file, use the end of the file list. `beforeSiblingMPID` may be the scrap's `THEndscrap`, which means the same as end of scrap. Preserve hidden children at their existing slots as far as the requested insertion position permits.
+The only parents a move can target are the file and scraps. `beforeSiblingMPID` must be a movable sibling in the requested parent, or the scrap's `THEndscrap`; it may not name a hidden file/list child. For an end-of-parent request, use the end of the movable-sibling sequence: for a scrap, project that position just before `THEndscrap`; for the file, reorder the scrap entries in their existing file-level slots, leaving trailing comments, settings and images in place. Preserve the relative order of every non-movable child.
 
-The simplest correct resolution is anchor-based: in the simulated list after the removal, the target index is the current index of `beforeSiblingMPID`, or the end-of-parent index described above.
+The simplest correct resolution is anchor-based on the movable-sibling sequence, followed by projection onto the full parent list. In the simulated sequence after the removal, the target is the current index of `beforeSiblingMPID`, or the end-of-parent position described above.
 
 ### 4.2 Raw model primitive
 
@@ -126,7 +126,7 @@ The validator must not mutate the file and must be usable during drag-hover befo
 
 Add `lib/src/commands/mp_move_elements_command.dart` as a `part` of `mp_command.dart`.
 
-The command accepts a list of concrete `MPElementMove` records, or an equivalent immutable value type, and executes them in order. For multi-selection, preserve the current relative order of the selected elements. When they come from several parents, that order is file order: scraps in file order, then children in each scrap's order. Area moves across scraps are expanded during preparation to move the area and its referenced border lines as one undoable command; area moves within the same scrap move only the area.
+The command accepts a list of concrete `MPElementMove` records, or an equivalent immutable value type, and executes them in order. For multi-selection, preserve the current relative order of the selected elements. When they come from several parents, that order is file order: scraps in file order, then children in each scrap's order. Area moves across scraps are expanded during preparation into a contiguous block consisting of each referenced border line in original file order followed by the area; shared lines are emitted once. The block is inserted at the requested area position, immediately before the target sibling or `THEndscrap`. Multiple expanded areas are processed in stable original file order. Area moves within the same scrap move only the area.
 
 Indices must be resolved sequentially. Simulate the affected parent lists while preparing the command so the second move sees the list left by the first. This is required for adjacent siblings and for several elements entering the same parent. Record each move’s original `(parentMPID, index)` immediately before that move, in `_prepareUndoRedoInfo`. Undo applies inverse moves in reverse order, restoring both child-list order and parent MPIDs exactly. Following the map-based pattern, `_createUndoRedoCommand` builds `mapUndo` as the `toMap()` of another `MPMoveElementsCommand` holding those inverse moves in reverse order. The original index uses the same after-removal convention as §4.1, so the inverse move is also a valid move.
 
