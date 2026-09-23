@@ -67,7 +67,7 @@ The command stores concrete moves, each containing `elementMPID`, `newParentMPID
 
 `positionInNewParent` is an index into the new parent's list **after** the element has been removed from its old parent. For a move within the same parent this is one less than the pre-removal index whenever the element was before the target slot.
 
-The only parents a move can target are the file and scraps. `beforeSiblingMPID` must be a movable sibling in the requested parent, or the scrap's `THEndscrap`; it may not name a hidden file/list child. For an end-of-parent request, use the end of the movable-sibling sequence: for a scrap, project that position just before `THEndscrap`; for the file, reorder the scrap entries in their existing file-level slots, leaving trailing comments, settings and images in place. Preserve the relative order of every non-movable child.
+The only parents a move can target are the file and scraps. `beforeSiblingMPID` must be a movable sibling in the requested parent, or the scrap's `THEndscrap`; it may not name a hidden file/list child. For an end-of-parent request, use the end of the movable-sibling sequence: for a scrap, project that position just before `THEndscrap`; for the file, insert immediately after the last scrap that remains once the moving element has been removed, leaving trailing comments, settings and images in place. Do not reuse the slot-permutation semantics of `TH2File.reorderScrapMPIDs`: they move other scraps too and cannot be expressed as a single-element move. For example, moving `S1` to the end of `[S1, comment, S2, trailing]` yields `[comment, S2, S1, trailing]`. Preserve the relative order of every non-movable child.
 
 The simplest correct resolution is anchor-based on the movable-sibling sequence, followed by projection onto the full parent list. In the simulated sequence after the removal, the target is the current index of `beforeSiblingMPID`, or the end-of-parent position described above.
 
@@ -120,7 +120,7 @@ Use a typed result with at least `ok` and `rejected(reasonKey)` states. Validate
 - an area moved across scraps expands to include all referenced border lines, and every such line is movable under the area rule;
 - an area moved across scraps is rejected when one of its border lines also borders another area that is not part of the same move. Selecting both areas makes the move valid.
 
-The validator must not mutate the file and must be usable during drag-hover before a command exists. Keep reason keys stable for Phase 4 localization. Add a helper for finding an area’s referenced border-line MPIDs (`THArea.getLineMPIDs`) and a helper returning **all** areas that reference a given line. The second one must scan every area's border references, because `_areaMPIDByLineMPID` keeps only one area per line. The command uses these helpers instead of repeating the traversal.
+The validator must not mutate the file and must be usable during drag-hover before a command exists. Keep reason keys stable for Phase 4 localization. Reuse the existing `THArea.getLineMPIDs` to find an area’s referenced border-line MPIDs, and add a helper returning **all** areas that reference a given line. The second one must scan every area's border references, because `_areaMPIDByLineMPID` keeps only one area per line. The command uses these helpers instead of repeating the traversal.
 
 ### 4.4 Command and sequential resolution
 
@@ -134,9 +134,9 @@ Area moves within the same scrap move only the area, and there is no block to fo
 
 Preparation produces an ordered list of single-element moves. Resolve indices sequentially by simulating the affected full parent lists while preparing the command: before emitting each move, remove the element from its simulated old parent, calculate its insertion index in the simulated new parent, emit that concrete move, and then insert it into the simulated new parent. The move’s `positionInNewParent` is therefore always an index into the new parent’s full list after that move’s removal. Execution applies the moves in exactly that order and must not recalculate positions from the original file state. This is required for adjacent siblings, expanded area blocks and several elements entering the same parent.
 
-For example, with zero-based indices, moving the expanded block `[L, A]` before `X` in the full list `[P, hidden comment, X, L, A]` emits two sequential moves. Removing `L` leaves `[P, hidden comment, X, A]`, so `L` is inserted at position `2`, producing `[P, hidden comment, L, X, A]`. Removing `A` from that updated list leaves `[P, hidden comment, L, X]`, so `A` is inserted at position `3`, producing `[P, hidden comment, L, A, X]`. Hidden children remain in the full list and are never independently moved.
+For example, with zero-based indices, moving a two-element selection `[L, A]` before `X` within the same scrap (so no area expansion applies; a cross-scrap expanded block is resolved the same way) in the full list `[P, hidden comment, X, L, A]` emits two sequential moves. Removing `L` leaves `[P, hidden comment, X, A]`, so `L` is inserted at position `2`, producing `[P, hidden comment, L, X, A]`. Removing `A` from that updated list leaves `[P, hidden comment, L, X]`, so `A` is inserted at position `3`, producing `[P, hidden comment, L, A, X]`. Hidden children remain in the full list and are never independently moved.
 
-Record each move’s original `(parentMPID, index)` immediately before that move, in `_prepareUndoRedoInfo`. Undo applies inverse moves in reverse order, restoring both child-list order and parent MPIDs exactly. Following the map-based pattern, `_createUndoRedoCommand` builds `mapUndo` as the `toMap()` of another `MPMoveElementsCommand` holding those inverse moves in reverse order. The original index uses the same after-removal convention as §4.1, so the inverse move is also a valid move.
+Record each move’s original `(parentMPID, index)` as it stands immediately before that move. `MPCommand.execute` calls `_prepareUndoRedoInfo` once, before `_actualExecute` applies any move, so from the second move on the live file no longer shows that state. `_prepareUndoRedoInfo` must therefore replay the same sequential simulation over copies of the affected full parent lists: for each move in order, read the element's current parent and index from the simulated lists, record them, then apply the move to the simulation. Undo applies inverse moves in reverse order, restoring both child-list order and parent MPIDs exactly. Following the map-based pattern, `_createUndoRedoCommand` builds `mapUndo` as the `toMap()` of another `MPMoveElementsCommand` holding those inverse moves in reverse order. The original index uses the same after-removal convention as §4.1, so the inverse move is also a valid move.
 
 Register the command in all existing command plumbing:
 
@@ -163,20 +163,23 @@ The bring/send methods operate on visible movable siblings but resolve positions
 Each structural execution must:
 
 - reject execution when the controller is broken (a runtime check, not an assertion-only guard);
-- refresh selection state after each move: call `selectionController.updateSelectedElementLogicalClone` for moved elements that stay selected, call `resetSelectableElements()` when any element enters or leaves the active scrap, and deselect a selected element that leaves the active scrap (selection only works inside the active scrap);
+- refresh selection state after each move (this matters on first execution; undo and redo already clear the selection in `TH2FileEditController._undoRedoDone()`): call `selectionController.updateSelectedElementLogicalClone` for moved elements that stay selected, call `resetSelectableElements()` when any element enters or leaves the active scrap, and deselect a selected element that leaves the active scrap (selection only works inside the active scrap);
 - invalidate/redraw non-selected elements and any affected images/area support state;
+- call `snapController.updateSnapTargets()` when any element changes scraps. The snap point and line target lists are built from each scrap's `childrenMPIDs` and are not recomputed on their own, so without this refresh, snapping would still use the element's old scrap;
 - mark the file dirty through the normal command path;
 - increment the structure revision exactly once per command execution, including undo and redo.
 
 ### 4.6 Structure revision
 
-Add an observable `@readonly int _structureRevision` to `TH2FileEditController`. Increment it after structural changes from `executeMoveElements`, `executeAddElement`, `executeRemoveElement...`, `executeReorderScraps`, and substitutions that change a tree-visible label such as type or THID. The label paths include the type edit commands and `executeSetOptionToElement`/`executeRemoveOptionFromElement` when the option is `id`.
+Add an observable `@readonly int _structureRevision` to `TH2FileEditController`. Increment it after structural changes from `executeMoveElements`, `executeAddElement`, element removal, `executeReorderScraps`, and substitutions that change a tree-visible label such as type or THID. The label paths are the type edit commands and `executeSetOptionToElement`/`executeRemoveOptionFromElement` when the option is `id`.
 
-`executeAddElement` and `executeRemoveElement...` increment only for elements the tree shows (scraps, points, lines and areas). `executeAddLineSegment` goes through `executeAddElement`, and incrementing for each segment would rebuild the tree while a line is being drawn.
+The type edit commands (`MPEditPointTypeCommand`, `MPEditLineTypeCommand`, `MPEditAreaTypeCommand`) apply their change through the generic `TH2FileEditElementEditController.substituteElement`. Do **not** increment inside `substituteElement`: it is also the path for point, line, line-segment and image geometry commands, so an increment there would rebuild the tree on every drag step. Increment from the type edit commands' `_actualExecute` instead, after the substitution, or route them through a dedicated `@action` that substitutes and then increments.
+
+`executeAddElement` and element removal increment only for elements the tree shows (scraps, points, lines and areas). `executeAddLineSegment` goes through `executeAddElement`, and incrementing for each segment would rebuild the tree while a line is being drawn. Removal has no single `executeRemoveElement` method. The entry points are `removeElement` (the `@action`), `executeRemoveElementByMPID` and `applyRemoveElements`, and they all reach the recursive private `_removeElement`. Put the tree-visible check and increment in `removeElement`, not in `_removeElement`: removing a scrap recurses through `_removeElement` into every child, and an increment there would fire once per descendant.
 
 Parser insertion must not notify once per element. Route every increment through a single `@action` helper (for example `_bumpStructureRevision()`) that returns without incrementing while `_isLoading` is true; nothing needs to be queued. `_postParseInitialize` is not an action and `_structureRevision` is observable, so the helper must be the only writer.
 
-Perform exactly one load-time increment in `_postParseInitialize`, immediately after its call to `_finalFilePreparations` returns, not inside `_finalFilePreparations`. Broken files return early from `_finalFilePreparations`, so an increment at its end would never run for them. Broken files get the bump too: they have no tree rows, but the tree still needs one signal that loading finished so it can leave its loading state. This relies on both branches of `_finalFilePreparations` setting `_isLoading = false` before returning; keep that ordering, or the helper would swallow the load-time bump.
+Perform exactly one load-time increment in `_postParseInitialize`, immediately after its call to `_finalFilePreparations` returns, not inside `_finalFilePreparations`. `TH2FileEditControllerBase.createFromNewTH2File` also calls `_finalFilePreparations` directly and never reaches `_postParseInitialize`; add the same single increment there, right after that call, so a new file's controller also leaves the tree's loading state. Broken files return early from `_finalFilePreparations`, so an increment at its end would never run for them. Broken files get the bump too: they have no tree rows, but the tree still needs one signal that loading finished so it can leave its loading state. This relies on both branches of `_finalFilePreparations` setting `_isLoading = false` before returning; keep that ordering, or the helper would swallow the load-time bump.
 
 The same revision must be restored/advanced through undo and redo because those operations call the execute methods. Phase 3 will observe this value when rebuilding rows.
 
@@ -189,8 +192,8 @@ Add `dispose()` to `TH2FileEditController`. It reuses the existing `_disposeReac
 `dispose()` must be idempotent, and this is load-bearing rather than defensive: `close()` runs `_disposeReactions()` and then reaches `dispose()` again through `removeFileTab` → `removeFileController`. Guard with a disposed flag so the focus node is disposed only once. Call it from:
 
 - `MPGeneralController.removeFileController`, so every tab removal disposes its controller, including tabs closed by `closeProjectFileTabs`;
-- `MPGeneralController.reloadTH2File`, for the replaced controller;
-- `getTH2FileEditController(forceNewController: true)`, for the replaced controller;
+- `MPGeneralController.reloadTH2File`, for the replaced controller. It already calls `removeFileController` first, so that call covers it;
+- `getTH2FileEditController(forceNewController: true)`, for the replaced controller. `reloadTH2File` never reaches this branch because the entry is already gone, so it only matters for other callers of `forceNewController: true`;
 - `MPGeneralController.reset()`, for every registered TH2 controller before `_t2hFileEditControllers.clear()`, mirroring how it already disposes text editor controllers;
 - the tab-less cleanup below.
 
@@ -233,7 +236,9 @@ Before allocating names, scan the test tree for duplicate numeric prefixes. The 
 - move to end of scrap through `beforeSiblingMPID` set to the `THEndscrap`;
 - bring/send across a sibling of another type and across hidden comments/empty lines;
 - no-op, first/last boundary and invalid-command behavior;
-- undo and redo restoring `childrenMPIDs`, `parentMPID`, THID lookup and subtree membership exactly;
+- move a scrap to the end of the file through an end-of-parent request, with a comment between scraps and trailing non-scrap children, asserting that only the moved scrap changes position;
+- undo and redo restoring `childrenMPIDs`, `parentMPID`, THID lookup and subtree membership exactly, including a multi-element command whose later moves' original indices depend on the earlier moves (for example, several adjacent siblings entering the same parent);
+- snap targets reflecting the new scrap membership after a cross-scrap move into and out of the active scrap;
 - `THScrap.getPointsMPIDs`/`getLinesMPIDs`/`getAreasMPIDs` of both scraps reflecting membership and order after a cross-scrap move, an intra-scrap reorder, and their undo/redo (warm the caches before moving so staleness would show);
 - selected elements remaining consistent after an intra-scrap move, and a selected element leaving the active scrap being deselected;
 - command `toMap`/`fromMap` and JSON round trips;
@@ -253,19 +258,21 @@ Extend the nearest existing `MPGeneralController`/project lifecycle tests, or ad
 - it is disposed on reload and recreated on next access;
 - it is disposed when another project is opened in place of the current one;
 - a dirty tab-less project controller is disposed too, and the next access loads the file from disk;
-- closing a tab disposes its controller, and `reloadTH2File` disposes the replaced one;
+- closing a tab disposes its controller, `reloadTH2File` disposes the replaced one (through `removeFileController`), and `getTH2FileEditController(forceNewController: true)` called directly on a registered file disposes the replaced one;
 - `TH2FileEditController.close()` followed by the `removeFileController` disposal is safe (second `dispose()` is a no-op, focus node disposed once);
 - `MPGeneralController.reset()` disposes every registered TH2 controller;
 - unrelated standalone controllers remain untouched;
 - `_structureRevision` advances once after load and once per move/undo/redo, not once per parsed element, and not when a line segment is added;
-- loading a valid file and loading a broken file each leave `_structureRevision` at exactly one.
+- `_structureRevision` advances on a type edit and on setting/removing an `id` option, but not on point, line or line-segment geometry moves that go through `substituteElement`;
+- removing a scrap that has children advances `_structureRevision` once, not once per descendant;
+- loading a valid file, loading a broken file and creating a new file through `createFromNewTH2File` each leave `_structureRevision` at exactly one.
 
 ## 8. Expected files
 
 | Area | Files |
 |---|---|
 | Model | `lib/src/elements/th2_file.dart`, `lib/src/elements/mixins/th_is_parent_mixin.dart`, `lib/src/elements/th_scrap.dart` |
-| Command | new `lib/src/commands/mp_move_elements_command.dart`, `lib/src/commands/mp_command.dart`, `lib/src/commands/types/mp_command_type.dart`, `lib/src/commands/factories/mp_command_factory.dart` |
+| Command | new `lib/src/commands/mp_move_elements_command.dart`, `lib/src/commands/mp_command.dart`, `lib/src/commands/types/mp_command_type.dart`, `lib/src/commands/factories/mp_command_factory.dart`, `lib/src/commands/mp_edit_point_type_command.dart`, `lib/src/commands/mp_edit_line_type_command.dart`, `lib/src/commands/mp_edit_area_type_command.dart` (structure-revision increment) |
 | Controllers | `lib/src/controllers/th2_file_edit_element_edit_controller.dart`, `lib/src/controllers/th2_file_edit_controller.dart` (`_structureRevision`, `dispose()`), `lib/src/controllers/mp_general_controller.dart`, `lib/src/controllers/th_project_controller.dart` (cleanup call in `_beginProjectLifecycleTransition()`) |
 | Auxiliary | new `lib/src/auxiliary/th2_hierarchy_aux.dart`, possibly `lib/src/auxiliary/mp_text_to_user.dart` for command description/reason mapping |
 | Localization | `lib/l10n/intl_en.arb`, `lib/l10n/intl_pt.arb` only if a new command description is needed |
