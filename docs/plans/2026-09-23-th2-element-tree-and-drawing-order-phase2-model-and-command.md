@@ -20,7 +20,7 @@ The sidebar, drag-and-drop widgets and context menus are Phase 3/4. This phase e
 - `THIsParentMixin.removeElementFromParent` unregisters THIDs. A move must therefore remove the MPID directly from the old parent list.
 - Line segments, line options, area border references and `end*` elements are children of their owning line/area. Moving the owner moves its complete block automatically.
 - The existing `MPCommandDescriptionType.moveElements` is already used for canvas geometry movement. The new structural command must use the same description text but get a distinct `MPCommandType` and command class; do not change the serialization shape of existing canvas move commands.
-- Phase 1 already provides `TH2FileProblem`, `isBroken`, `problems`, broken-file loading behavior and `reloadTH2File`. Structural APIs must assert or reject broken files so they cannot be used to mutate the detect-only model.
+- Phase 1 already provides `TH2FileProblem`, `isBroken`, `problems`, broken-file loading behavior and `reloadTH2File`. Structural APIs must reject broken files at runtime so they cannot be used to mutate the detect-only model; assertions may supplement these checks but must not be the only protection because Dart assertions are disabled in release builds.
 - `MPGeneralController.closeProjectFileTabs` removes project-owned open tabs during project lifecycle transitions. A separately loaded, tab-less TH2 controller remains in `_t2hFileEditControllers`; Phase 2 must add cleanup for those controllers.
 - `TH2FileEditController` has no `dispose()`. `_initializeReactions()` adds 17 MobX reactions to `_disposers`, including the one that mirrors the dirty state into `THProjectController.dirtyFilePaths`. Only `TH2FileEditController.close()` releases them: it clears overlay windows and `visualController.patternCache`, runs `_disposeReactions()` and then calls `removeFileTab`. Every other path that drops a controller leaks its reactions: `removeFileController` (reached directly from `closeProjectFileTabs`), `reloadTH2File`, `getTH2FileEditController(forceNewController: true)` and `MPGeneralController.reset()` only drop the registry entry. `th2FileFocusNode` is never disposed on any path.
 - Undo/redo is map-based: `_createUndoRedoCommand` returns `MPUndoRedoCommand(mapRedo:, mapUndo:)`, and undo rebuilds a command with `MPCommand.fromMap(mapUndo)`.
@@ -92,7 +92,7 @@ The primitive deliberately does not validate hierarchy. It should:
 
 The area-to-line support maps (`_areaMPIDByLineMPID`, `_areaMPIDByLineTHID`) and each area's line caches are keyed by MPID/thID across the whole file, not by scrap. A move does not make them stale, so they do not need clearing.
 
-Do not call `removeElement`, `removeElementFromParent` or `addElementToParent`: those paths either recursively delete descendants or unregister THIDs. Assert valid MPIDs, parent existence and insertion bounds at this low-level boundary.
+Do not call `removeElement`, `removeElementFromParent` or `addElementToParent`: those paths either recursively delete descendants or unregister THIDs. Reject invalid MPIDs, missing parents and out-of-bounds insertion positions at this low-level boundary with runtime exceptions; assertions may also document/debug the invariant but must not be the only validation.
 
 ### 4.3 Hierarchy validation
 
@@ -158,7 +158,7 @@ The bring/send methods operate on visible movable siblings but resolve positions
 
 Each structural execution must:
 
-- assert that the controller is not broken;
+- reject execution when the controller is broken (a runtime check, not an assertion-only guard);
 - refresh selection state after each move: call `selectionController.updateSelectedElementLogicalClone` for moved elements that stay selected, call `resetSelectableElements()` when any element enters or leaves the active scrap, and deselect a selected element that leaves the active scrap (selection only works inside the active scrap);
 - invalidate/redraw non-selected elements and any affected images/area support state;
 - mark the file dirty through the normal command path;
