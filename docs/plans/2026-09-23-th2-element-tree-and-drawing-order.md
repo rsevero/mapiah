@@ -98,8 +98,9 @@ This plan adds an expandable list of each `.th2` file's elements under that file
 
 Extra rule for **areas**: an area's border lines must be in the same scrap as the area.
 
-- Moving an **area** to another scrap also moves every border line it references by thID and that lives in the source scrap. These lines keep their relative order and go just before the area.
-- Moving a **line** that borders an area to another scrap, without that area, is rejected. The drop indicator explains why ("Line is a border of area X; move the area instead").
+- Moving an **area** to another scrap also moves every existing border line it references by thID, wherever those lines currently live. These lines keep their relative order and go just before the area. The area and its border lines move in one command.
+- Moving an **area** within the same scrap moves only the area; its border lines stay where they are.
+- Moving a **line** that borders an area by itself to another scrap is rejected. The drop indicator explains why ("Line is a border of area X; move the area instead"). Moving that line within its current scrap is allowed.
 
 ### 3.2 Drawing order
 
@@ -153,7 +154,7 @@ Validation happens in one pure function, `TH2HierarchyAux.validateMove(th2File, 
 - `scrap` → parent must be the file (`newParentMPID < 0`).
 - `point`/`line`/`area` → parent must be a `THScrap`, and that scrap must not itself be nested in another scrap.
 - An element cannot be dropped onto itself or into its own subtree.
-- A dropped line that borders an area outside the destination scrap is rejected (§3.1).
+- A standalone dropped line that borders an area is rejected when the drop changes its scrap (§3.1). The same line may be reordered within its current scrap.
 - An element missing its `end*` cannot be moved until it is closed (§5.3). Its extent in the file is uncertain, so the "close" action comes first. The row's reject tooltip says so.
 - Moving to the same position is a no-op and creates no command.
 
@@ -268,7 +269,7 @@ New file `lib/src/commands/mp_move_elements_command.dart` (a `part of 'mp_comman
 - `toMap`/`fromMap`/`copyWith`/`==`/`hashCode` follow `MPReorderScrapsCommand`.
 - Register `MPCommandType.moveElements`, `MPCommandDescriptionType.moveElements`, the factory `MPCommandFactory.moveElements(...)`, the `mp_command.dart` `fromMap` switch, and `MPTextToUser` + `.arb` strings ("Move elements" / "Mover elementos").
 - Scrap-only reorders from the new tree also use `MPMoveElementsCommand`. `MPReorderScrapsCommand` stays, because the scraps dialog uses it and it appears in saved undo maps.
-- Area moves between scraps expand into area + border lines inside the same command (§3.1), in the prepare step.
+- Area moves between scraps expand into the area plus all of its referenced border lines inside the same command (§3.1), in the prepare step. Area moves within one scrap include only the area.
 
 ### 5.3 Closing elements with a missing `end*`
 
@@ -298,7 +299,7 @@ The tree and the broken status must update after a move, undo or redo. `TH2File`
 
 Changes in `th2_grammar.dart` and `th2_file_parser.dart`:
 
-1. **File level:** `th2Structure()` also accepts `point() | line() | area() | endscrap()`. The inject methods already use `_currentParent`, which is the file at this level. `line`/`area` already push their child parsers, so their bodies parse correctly at file level too. A file-level `endscrap` is kept as a `THEndscrap` child of the file (`strayEndscrap`).
+1. **File level:** `th2Structure()` also accepts `point() | line() | area() | endscrap()`. The inject methods already use `_currentParent`, which is the file at this level. `line`/`area` already push their child parsers, so their bodies parse correctly at file level too. A file-level `endscrap` is kept as a `THEndscrap` child of the file (`strayEndscrap`). `_injectEndScrap` must special-case `TH2File` as the current parent: add the `THEndscrap`, record the warning, leave `_currentParent` unchanged, and return without calling `_returnToParentParser()`. The normal close-and-pop behavior remains unchanged for an `endscrap` belonging to a real scrap. This prevents a root-level stray `endscrap` from causing a parent cast or parser-stack underflow.
 2. **Scrap level:** `scrapContent()` also accepts `scrap()`. `_injectScrap` already pushes the scrap parser and makes the new scrap `_currentParent`, and `_injectEndScrap` pops. Nested scraps therefore produce a `THScrap` whose `parentMPID` is the enclosing scrap.
 3. **Implicit closing of unterminated line/area (missing `endline`/`endarea`):** when the current context is a line or area and a line fails that context's grammar, the parser checks it against the **enclosing** context. If it parses there (for example `point`, `line`, `area`, `endscrap` or `scrap`), the parser:
    - records `missingEndline`/`missingEndarea` for the open element;
@@ -325,6 +326,7 @@ Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGE
     - multi-line `line…endline` and `area…endarea` at file level;
     - nested scrap with contents;
     - stray `endscrap`;
+    - stray file-level `endscrap` followed by another top-level element (no parser exception, source line retained, warning recorded, and write-back preserved);
     - missing `endline` followed by `point`/`line`/`endscrap`;
     - missing `endarea`;
     - missing `endscrap` at EOF;
@@ -339,7 +341,7 @@ Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGE
 - `TH2File.moveElementToParent`, `THIsParentMixin.invalidateDrawableChildrenCache`, `MPMoveElementsCommand` with its registration, localization and factory, `prepareMoveElements`/`executeMoveElements`, close and remove-stray helpers (§5.3), and the convenience methods from §5.4.
 - `MPGeneralController.disposeTablessTH2Controllers` and the call from project close and reload.
 - Tests:
-  - `t24xx_commands_mpmoveelementscommand_test.dart` (next to `t2460_commands_mpreorderimagescommand_test.dart`): reorder within a scrap, move between scraps, scrap reorder, area + border lines moved together, multi-element move, and undo/redo returning `childrenMPIDs` and `parentMPID` exactly. Also `toMap`/`fromMap` round-trip, thID registry unchanged, and a written file that differs only in line order.
+  - `t24xx_commands_mpmoveelementscommand_test.dart` (next to `t2460_commands_mpreorderimagescommand_test.dart`): reorder within a scrap, move between scraps, scrap reorder, an area moved within its scrap without moving border lines, an area moved across scraps together with its border lines, multi-element move, and undo/redo returning `childrenMPIDs` and `parentMPID` exactly. Also `toMap`/`fromMap` round-trip, thID registry unchanged, and a written file that differs only in line order.
   - Bring forward/backward/front/back: stepping over a sibling of another type, stepping over hidden comments, already first or last. A point brought forward past a multi-segment line must be written **after that line's `endline`**, and a point sent backward past an area must be written **before its `area` line**, never between an element's opening and `end*` lines.
   - Close element: the written file gains exactly one `endline`/`endarea`/`endscrap` line in the right place. Undo removes it. Broken-to-valid switching after the last fix, and back to broken on undo.
 
@@ -362,7 +364,7 @@ Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGE
 - Opening the tab on the first edit of a tab-less file (§4.2).
 - Row context menu (§4.7) and canvas shortcuts for forward/backward/front/back on the current selection.
 - Tests:
-  - widget drag tests: valid reorder, valid move between scraps, and rejected drops (scrap into scrap, PLA onto the file row, border line alone, unclosed element). Each asserts the resulting `childrenMPIDs` or that no command was pushed;
+  - widget drag tests: valid reorder, valid move between scraps, same-scrap border-line reorder, and rejected drops (scrap into scrap, PLA onto the file row, border line alone across scraps, unclosed element). Each asserts the resulting `childrenMPIDs` or that no command was pushed;
   - menu actions;
   - shortcuts.
 
