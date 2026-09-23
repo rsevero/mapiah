@@ -22,7 +22,7 @@ The sidebar, drag-and-drop widgets and context menus are Phase 3/4. This phase e
 - The existing `MPCommandDescriptionType.moveElements` is already used for canvas geometry movement. The new structural command must use the same description text but get a distinct `MPCommandType` and command class; do not change the serialization shape of existing canvas move commands.
 - Phase 1 already provides `TH2FileProblem`, `isBroken`, `problems`, broken-file loading behavior and `reloadTH2File`. Structural APIs must assert or reject broken files so they cannot be used to mutate the detect-only model.
 - `MPGeneralController.closeProjectFileTabs` removes project-owned open tabs during project lifecycle transitions. A separately loaded, tab-less TH2 controller remains in `_t2hFileEditControllers`; Phase 2 must add cleanup for those controllers.
-- `TH2FileEditController` has no `dispose()`. `_initializeReactions()` adds about ten MobX reactions to `_disposers`, including the one that mirrors the dirty state into `THProjectController.dirtyFilePaths`, and nothing ever runs them. `removeFileController` and `reloadTH2File` only drop the registry entry.
+- `TH2FileEditController` has no `dispose()`. `_initializeReactions()` adds 17 MobX reactions to `_disposers`, including the one that mirrors the dirty state into `THProjectController.dirtyFilePaths`. Only `TH2FileEditController.close()` releases them: it clears overlay windows and `visualController.patternCache`, runs `_disposeReactions()` and then calls `removeFileTab`. Every other path that drops a controller leaks its reactions: `removeFileController` (reached directly from `closeProjectFileTabs`), `reloadTH2File`, `getTH2FileEditController(forceNewController: true)` and `MPGeneralController.reset()` only drop the registry entry. `th2FileFocusNode` is never disposed on any path.
 - Undo/redo is map-based: `_createUndoRedoCommand` returns `MPUndoRedoCommand(mapRedo:, mapUndo:)`, and undo rebuilds a command with `MPCommand.fromMap(mapUndo)`.
 - `THArea` is not in `THIsParentMixin.drawableChildElementTypes` and areas are not painted as filled shapes. Moving an area changes file order (what XTherion and Therion see) but nothing on Mapiah's canvas.
 - `TH2File._areaMPIDByLineMPID` stores a single area per line, so it cannot tell whether a line borders more than one area.
@@ -32,12 +32,12 @@ The sidebar, drag-and-drop widgets and context menus are Phase 3/4. This phase e
 ### In scope
 
 - A raw `TH2File.moveElementToParent` primitive.
-- Drawable-child cache invalidation in `THIsParentMixin`.
+- Drawable-child cache invalidation in `THIsParentMixin`, and per-type child-list invalidation in `THScrap`.
 - `TH2HierarchyAux.validateMove` and the result/reason model consumed by later UI phases.
 - `MPMoveElementsCommand`, including multi-element moves, area-border expansion, undo/redo and command serialization.
 - Controller preparation/execution APIs and bring/send convenience operations.
 - Structure revision observability and the existing mutation paths needed to notify the future tree.
-- `TH2FileEditController.dispose()` and its use on every path that drops a TH2 controller.
+- `TH2FileEditController.dispose()` and its use on every path that drops a TH2 controller, including `MPGeneralController.reset()`.
 - Disposal of tab-less project TH2 controllers on project open, reload and close.
 - Focused model, command, hierarchy and lifecycle tests.
 
@@ -88,7 +88,7 @@ The primitive deliberately does not validate hierarchy. It should:
 1. Resolve the old parent and remove only the element MPID from its full child list.
 2. Only when the parent changes: copy the moved element with the new `parentMPID` and substitute that copy in the file registry. A reorder within the same parent keeps the existing instance.
 3. Insert the MPID at the supplied concrete index in the new parent. The index refers to the list after step 1 (§4.1).
-4. Invalidate drawable-child caches for both parents, clear the bounding boxes of both parents, and invalidate the scrap cache when a scrap changes order.
+4. Invalidate drawable-child caches for both parents, clear the bounding boxes of both parents, and invalidate the scrap cache when a scrap changes order. When a parent is a scrap, also invalidate its per-type child lists (`_areasMPIDs`, `_linesMPIDs`, `_pointsMPIDs`), for the old and the new scrap and also for a reorder within one scrap. These are ordered lists that only `THScrap.addElementToParent`/`removeElementFromParent` keep in sync, and this primitive bypasses both. `TH2FileEditSearchController` reads them through `THScrap.getPoints`/`getLines`/`getAreas`, so stale lists would report the wrong scrap membership after a cross-scrap move and the old order after a reorder. The fields are private to `th_scrap.dart`, so add a public `THScrap` invalidation method that nulls all three.
 
 The area-to-line support maps (`_areaMPIDByLineMPID`, `_areaMPIDByLineTHID`) and each area's line caches are keyed by MPID/thID across the whole file, not by scrap. A move does not make them stale, so they do not need clearing.
 
@@ -172,11 +172,14 @@ Parser insertion must not notify once per element. While `_isLoading` is true, d
 
 ### 5.1 `TH2FileEditController.dispose()`
 
-Add `dispose()` to `TH2FileEditController`. It runs and clears every entry in `_disposers` and releases anything else the controller owns that needs explicit release (focus node, timers). Calling it twice is harmless. Call it from:
+Add `dispose()` to `TH2FileEditController`. It reuses the existing `_disposeReactions()` (which runs and clears every entry in `_disposers`) and releases anything else the controller owns that needs explicit release (`th2FileFocusNode`, timers). Keep `close()` as the user-facing tab-close entry point; it still clears overlay windows and the pattern cache before calling `removeFileTab`.
 
-- `MPGeneralController.removeFileController`, so closing a tab disposes its controller;
+`dispose()` must be idempotent, and this is load-bearing rather than defensive: `close()` runs `_disposeReactions()` and then reaches `dispose()` again through `removeFileTab` → `removeFileController`. Guard with a disposed flag so the focus node is disposed only once. Call it from:
+
+- `MPGeneralController.removeFileController`, so every tab removal disposes its controller, including tabs closed by `closeProjectFileTabs`;
 - `MPGeneralController.reloadTH2File`, for the replaced controller;
 - `getTH2FileEditController(forceNewController: true)`, for the replaced controller;
+- `MPGeneralController.reset()`, for every registered TH2 controller before `_t2hFileEditControllers.clear()`, mirroring how it already disposes text editor controllers;
 - the tab-less cleanup below.
 
 ### 5.2 Tab-less cleanup
@@ -216,6 +219,7 @@ Before allocating names, scan the test tree for duplicate numeric prefixes. The 
 - bring/send across a sibling of another type and across hidden comments/empty lines;
 - no-op, first/last boundary and invalid-command behavior;
 - undo and redo restoring `childrenMPIDs`, `parentMPID`, THID lookup and subtree membership exactly;
+- `THScrap.getPointsMPIDs`/`getLinesMPIDs`/`getAreasMPIDs` of both scraps reflecting membership and order after a cross-scrap move, an intra-scrap reorder, and their undo/redo (warm the caches before moving so staleness would show);
 - selected elements remaining consistent after an intra-scrap move, and a selected element leaving the active scrap being deselected;
 - command `toMap`/`fromMap` and JSON round trips;
 - writer output differing only in block order, with each moved element retaining its original line text.
@@ -235,6 +239,8 @@ Extend the nearest existing `MPGeneralController`/project lifecycle tests, or ad
 - it is disposed when another project is opened in place of the current one;
 - a dirty tab-less project controller is disposed too, and the next access loads the file from disk;
 - closing a tab disposes its controller, and `reloadTH2File` disposes the replaced one;
+- `TH2FileEditController.close()` followed by the `removeFileController` disposal is safe (second `dispose()` is a no-op, focus node disposed once);
+- `MPGeneralController.reset()` disposes every registered TH2 controller;
 - unrelated standalone controllers remain untouched;
 - `_structureRevision` advances once after load and once per move/undo/redo, not once per parsed element, and not when a line segment is added.
 
@@ -242,7 +248,7 @@ Extend the nearest existing `MPGeneralController`/project lifecycle tests, or ad
 
 | Area | Files |
 |---|---|
-| Model | `lib/src/elements/th2_file.dart`, `lib/src/elements/mixins/th_is_parent_mixin.dart` |
+| Model | `lib/src/elements/th2_file.dart`, `lib/src/elements/mixins/th_is_parent_mixin.dart`, `lib/src/elements/th_scrap.dart` |
 | Command | new `lib/src/commands/mp_move_elements_command.dart`, `lib/src/commands/mp_command.dart`, `lib/src/commands/types/mp_command_type.dart`, `lib/src/commands/factories/mp_command_factory.dart` |
 | Controllers | `lib/src/controllers/th2_file_edit_element_edit_controller.dart`, `lib/src/controllers/th2_file_edit_controller.dart` (`_structureRevision`, `dispose()`), `lib/src/controllers/mp_general_controller.dart`, `lib/src/controllers/th_project_controller.dart` (cleanup call in `_beginProjectLifecycleTransition()`) |
 | Auxiliary | new `lib/src/auxiliary/th2_hierarchy_aux.dart`, possibly `lib/src/auxiliary/mp_text_to_user.dart` for command description/reason mapping |
