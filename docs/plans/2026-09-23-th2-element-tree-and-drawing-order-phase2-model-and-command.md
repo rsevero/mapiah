@@ -170,7 +170,11 @@ Add an observable `@readonly int _structureRevision` to `TH2FileEditController`.
 
 `executeAddElement` and `executeRemoveElement...` increment only for elements the tree shows (scraps, points, lines and areas). `executeAddLineSegment` goes through `executeAddElement`, and incrementing for each segment would rebuild the tree while a line is being drawn.
 
-Parser insertion must not notify once per element. While `_isLoading` is true, defer increments and perform one increment during `_postParseInitialize`. The same revision must be restored/advanced through undo and redo because those operations call the execute methods. Phase 3 will observe this value when rebuilding rows.
+Parser insertion must not notify once per element. Route every increment through a single `@action` helper (for example `_bumpStructureRevision()`) that returns without incrementing while `_isLoading` is true; nothing needs to be queued. `_postParseInitialize` is not an action and `_structureRevision` is observable, so the helper must be the only writer.
+
+Perform exactly one load-time increment in `_postParseInitialize`, immediately after its call to `_finalFilePreparations` returns, not inside `_finalFilePreparations`. Broken files return early from `_finalFilePreparations`, so an increment at its end would never run for them. Broken files get the bump too: they have no tree rows, but the tree still needs one signal that loading finished so it can leave its loading state. This relies on both branches of `_finalFilePreparations` setting `_isLoading = false` before returning; keep that ordering, or the helper would swallow the load-time bump.
+
+The same revision must be restored/advanced through undo and redo because those operations call the execute methods. Phase 3 will observe this value when rebuilding rows.
 
 ## 5. Controller disposal and tab-less cleanup
 
@@ -249,7 +253,8 @@ Extend the nearest existing `MPGeneralController`/project lifecycle tests, or ad
 - `TH2FileEditController.close()` followed by the `removeFileController` disposal is safe (second `dispose()` is a no-op, focus node disposed once);
 - `MPGeneralController.reset()` disposes every registered TH2 controller;
 - unrelated standalone controllers remain untouched;
-- `_structureRevision` advances once after load and once per move/undo/redo, not once per parsed element, and not when a line segment is added.
+- `_structureRevision` advances once after load and once per move/undo/redo, not once per parsed element, and not when a line segment is added;
+- loading a valid file and loading a broken file each leave `_structureRevision` at exactly one.
 
 ## 8. Expected files
 
