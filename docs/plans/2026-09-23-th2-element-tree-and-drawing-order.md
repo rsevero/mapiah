@@ -46,7 +46,7 @@ A file that already breaks those rules when it is read, or that has **any other 
 - `TH2FileNode` (`th2_file_node.dart`) is a **leaf**. Its doc comment says that the `.th2` contents "are intentionally not parsed by `THProjectParser`; they are loaded lazily when a canvas tab is opened". A `THScrapNode` with `isFromTH2File` exists, but the widget comments that this flag is "always false today" (`th_project_tree_node_widget.dart:106-107`).
 - `flattenVisibleNodes(...)` walks `THProjectNode.children` depth first. It takes an `isExpanded(node)` callback, which the widget answers with `THProjectTreeUIController.isExpanded(node.id)`, and honors the filter. It returns `THProjectTreeVisibleNode(node, depth)` rows, which a plain `ListView.builder` renders (`th_project_tree_widget.dart:68-87`).
 - `THProjectTreeNodeWidget._buildExpandControl` shows a chevron only when `node.children.isNotEmpty` (`:153-175`). A `TH2FileNode` therefore has no chevron today.
-- `THProjectTreeUIController` (`th_project_tree_ui_controller.dart`) holds an `ObservableSet<String> expandedNodeIds` and has `toggleExpanded`/`expand`/`collapse`/`expandAncestorsOf` actions. It is keyed by string id, so new row kinds can use it as is.
+- `THProjectTreeUIController` (`th_project_tree_ui_controller.dart`) holds an `ObservableSet<String> expandedNodeIds` and has `toggleExpanded`/`expand`/`collapse`/`expandAncestorsOf` actions. It is keyed by string id. TH2 file rows keep using it through their `TH2FileNode` id. Scrap rows do not use it; their collapsed state lives in a separate `collapsedTH2ScrapIds` set (§4, Phase 3 plan §6.1).
 - Tapping a `TH2FileNode` calls `getTH2FileEditController(filename:)` and `addFileTab(...)` (`th_project_tree_node_widget.dart:81-86`).
 
 ### 2.2 TH2 data model
@@ -143,21 +143,22 @@ final class TH2ElementTreeRow extends THProjectTreeVisibleRow {
   …
 }
 final class TH2FileStatusTreeRow extends THProjectTreeVisibleRow {
-  final String th2FilePath;
+  final String th2FilePath;   // canonical path, equals TH2FileNode.absolutePath
   final TH2FileStatusTreeRowKind kind; // loading, loadError, broken
   …
 }
 ```
 
-- `flattenVisibleNodes(...)` gains an optional `th2ElementRowsFor(TH2FileNode node, int depth)` callback. When the callback exists and the `TH2FileNode` is expanded, the flattener adds the rows it returns right after that file row. `THProjectTreeVisibleNode` is renamed or wrapped as `THProjectTreeNodeRow`. Existing tests in `t3881_th_project_tree_flatten_test.dart` are updated.
-- Element row ids are `th2el:<canonicalPath>:<mpID>`, so expansion state goes through the same `expandedNodeIds`. MPIDs only exist while the app runs. A stale id after reloading a file is harmless and gets pruned on project close.
+- `flattenVisibleNodes(...)` gains an optional `th2ElementRowsFor(TH2FileNode node, int depth, {required bool filterActive})` callback that returns `({List<THProjectTreeVisibleRow> rows, bool hasMatch})`. With no filter active, when the callback exists and the `TH2FileNode` is expanded, the flattener adds the returned rows right after that file row. With a filter active, the rows are only the matching ones and their scrap ancestors, and `hasMatch` counts as a matching descendant of the file node (Phase 3 plan §7). `THProjectTreeVisibleNode` is renamed or wrapped as `THProjectTreeNodeRow`. Existing tests in `t3881_th_project_tree_flatten_test.dart` are updated.
+- Element row ids are `th2el:<canonicalPath>:<mpID>` and status row ids are `th2status:<canonicalPath>:<kind>`. `canonicalPath` is `THProjectPathResolver.canonicalize(p.absolute(path))`, which for project files equals `TH2FileNode.absolutePath` (Phase 3 plan §3.1 item 5).
+- Scrap rows can be collapsed and start expanded. Their collapsed state is kept in a separate `THProjectTreeUIController.collapsedTH2ScrapIds` set, keyed by scrap row id, not in `expandedNodeIds`, so project default-expansion seeding never sees TH2 ids. MPIDs only exist while the app runs and are never reused, so a stale id after reloading a file is harmless. Both sets are cleared on project close (Phase 3 plan §6.1).
 - The builder lives in a new `lib/src/auxiliary/th2_element_tree_aux.dart`. For a valid file it walks `TH2File.childrenMPIDs` and each scrap's `childrenMPIDs`, and keeps only `THScrap`, `THPoint`, `THLine` and `THArea` rows. For a broken file it returns one `TH2FileStatusTreeRow(broken)` (§4.2). It runs inside the tree's `Observer`, so structural changes must be observable (§5.4).
-- **Labels:** `<type> <subtype?> <thID?>`, for example `line wall:blocks id=w12` or `point station (1.3)`. Type and subtype names are localized with the existing `MPTextToUser` helpers. Scraps show their thID. Rows use the existing PLA type icons where they exist.
-- **Filter:** the sidebar search filter also matches element labels of **loaded, valid** files. It does not load files just to search them.
+- **Labels:** `<kind> <type[:subtype]?> <thID?>`. Kind and type/subtype come from the existing localized `MPTextToUser` helpers. The Therion id is shown exactly as stored, in a muted span with no `id=` prefix or brackets, for example `line wall:blocks w12` (`w12` muted), `point station` or `scrap s1`. Therion ids are free form, so the tree never validates, changes or generates them; elements without `-id` show no id. Scraps always have an id. Station `-name` values and other option values are not part of the label. Rows use the existing PLA type icons where they exist. Details: Phase 3 plan §6.2.
+- **Filter:** the sidebar search filter also matches element and scrap labels of **loaded, valid** files. It follows the existing project-tree rule: a row is shown only if it or a descendant matches, so a file or scrap that matches by its own name does not reveal its non-matching children. Status rows are hidden while filtering, and no file is loaded while a filter is active. Details: Phase 3 plan §7.
 
 ### 4.2 Loading a file's elements, and the broken badge
 
-- `TH2FileNode` rows always show a chevron. Expanding one calls `getTH2FileEditController(filename:)` and `load()` if it is not loaded yet. While loading, one "Loading…" status row is shown.
+- `TH2FileNode` rows always show a chevron. Any visible `TH2FileNode` row in the user's expansion set whose controller is missing, or neither loaded nor loading, gets a load through an idempotent `ensureTH2FileLoaded(path)` (`getTH2FileEditController(filename:)` + `load()`), run after the frame, but only while no filter is active and only if an earlier load did not fail (`loadError`). This covers a first expansion and also a row that was still expanded when its controller was disposed, for example across a project reload. While loading, one "Loading…" status row is shown. Details: Phase 3 plan §5.
 - **The broken badge appears only once the file is loaded.** Loading happens when the file is expanded in the tree or opened in a tab. No project-wide pre-scan is done. After loading, a broken file's row shows a "broken" badge with the problem count and a tooltip listing the first problems. Expanding it shows a single status row, "Broken file: fix it outside Mapiah and reload". Clicking that row opens the file's tab, which shows the broken-file body (§4.7).
 - Loading does **not** open a tab. Only reading the list never creates dirty state.
 - **Editing from the tree opens the tab.** The first structural edit made from the tree on a file with no open tab calls `addFileTab(path)` and activates it. The command then runs. This keeps the rule "a modified TH2 file has a visible tab", so undo (`Ctrl+Z`), Save and the close-tab prompt work as they do today. Broken files have no edit actions, so this never applies to them.
@@ -199,7 +200,8 @@ Rows support `Ctrl`/`Shift` multi-select, which mirrors the canvas selection (§
 
 - Single-clicking an element row of an **open** file activates its tab, sets the active scrap (`setActiveScrap` / `setActiveScrapByChildElement`, `th2_file_edit_controller.dart:1018-1053`), and selects the element through the selection controller. Double-click also zooms to the selection (`zoomToFit(zoomFitToType: MPZoomToFitType.selection)`).
 - The canvas selection is reflected back as row highlighting when the file is expanded. This is read-only and comes from `selectionController`.
-- Single-click on a row of a **tab-less** file only highlights the row. Double-click opens the tab.
+- The highlight of an element row is always its file's own `selectionController` selection, tab-less or not; the tree keeps no separate highlight state.
+- Single-click on a row of a **tab-less** file sets that file controller's selection and active scrap, which highlights the row, but opens no tab. Double-click also opens and activates the tab and zooms to the selection. A pending zoom request is applied on the new canvas's first layout, in place of the default zoom-to-file. Details: Phase 3 plan §8.
 
 ### 4.7 Broken-file status
 
@@ -344,7 +346,11 @@ Changes in `th2_grammar.dart` and `th2_file_parser.dart`:
 
 ## 7. Implementation Phases
 
-Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGELOG entry.
+Each phase ends with:
+
+- `flutter analyze` clean and `flutter test` green;
+- its own CHANGELOG entry in the current unreleased section, referencing #32. Phase 5 adds an entry only for its own documentation and localization work;
+- from Phase 3 on, EN/PT `.arb` entries for every user-visible string the phase introduces, followed by `flutter gen-l10n`, so that no phase from Phase 3 on commits hard-coded UI text. Phase 1 hard-coded the broken-file body text before this rule existed; Phase 5 localizes it.
 
 ### Phase 1: Violation detection and the broken-file body
 
@@ -388,9 +394,11 @@ Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGE
 ### Phase 3: Element tree in the sidebar (read-only)
 
 - Sealed row model, flattener callback, `th2_element_tree_aux.dart` row builder, `TH2ElementTreeRowWidget` (icon, label, selection highlight) and the status row (loading, load error, broken).
-- Chevron on `TH2FileNode`, lazy load on expand, and the broken badge after loading (§4.2). Reload from the broken file row's context menu.
+- Chevron on `TH2FileNode`, lazy load on expand, and the broken badge after loading (§4.2). Reload from the right-click context menu of broken and load-error file rows and their status rows, through the shared `MenuAnchor`-based `THProjectTreeRowContextMenuWidget` (Phase 3 plan §9.2).
 - Filter matching of loaded element labels, and the header order tooltip.
 - Tree → canvas selection sync and canvas → tree highlight (§4.6).
+- EN/PT strings for the loading, load-error and broken status rows, the broken badge tooltip, the Reload menu entry and the header order tooltip (Phase 3 plan §9.1).
+- CHANGELOG entry for Phase 3, referencing #32.
 - Tests:
   - update `t3881_th_project_tree_flatten_test.dart` and `t3883_th_project_tree_widget_test.dart`;
   - `t3942_th2_element_tree_rows_test.dart`: hidden children are excluded, order is preserved, a broken file yields only its status row;
@@ -402,21 +410,24 @@ Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGE
 - An insertion-line indicator, reject feedback with a localized reason, auto-expand of a collapsed scrap after hovering for `mpProjectTreeDragHoverExpandDelayMilliseconds` (new constant), and auto-scroll near the list edges.
 - Cross-file drag payloads are rejected with a clear reason.
 - Opening the tab on the first edit of a tab-less file (§4.2).
-- Row context menu (§4.8) and canvas shortcuts for forward/backward/front/back on the current selection.
+- Row context menu (§4.8) and canvas shortcuts for forward/backward/front/back on the current selection. Element-row menu items go into Phase 3's `THProjectTreeRowContextMenuWidget`; the "Move to scrap… ▸" list uses `SubmenuButton`. Phase 4 decides whether right-clicking an element row also selects it.
+- EN/PT strings for every drop-rejection reason, context-menu item and other text this phase introduces.
+- CHANGELOG entry for Phase 4, referencing #32.
 - Tests:
   - widget drag tests: valid reorder, valid move between scraps, same-scrap border-line reorder, and rejected drops (scrap into scrap, PLA onto the file row, border line alone across scraps). Each asserts the resulting `childrenMPIDs` or that no command was pushed;
   - menu actions;
   - shortcuts.
 
-### Phase 5: Documentation and localization
+### Phase 5: Documentation and remaining localization
 
-- EN/PT `.arb` strings for every new label, reason, badge, violation, menu item, panel and tooltip, followed by `flutter gen-l10n`.
+- Localize the strings Phase 1 hard-coded in `TH2BrokenFileBodyWidget` (the explanatory sentence, the `Line …:` problem line and `Reload`) and the user-visible problem-kind names, followed by `flutter gen-l10n`. Reuse the Phase 3 keys `th2ElementTreeProblemLine` and `th2ElementTreeReload` where the wording matches.
+- Check that no hard-coded user-visible string from Phases 1–4 remains.
 - Help pages (EN/PT):
   - a new section "Drawing order and element tree";
   - a new section "Broken files", covering which violations exist, that Mapiah does not display or change such files, and how to fix them in a text editor and reload;
   - a mention in the project-sidebar section.
 - Keyboard shortcuts page with the new shortcuts in alphabetical order.
-- CHANGELOG entry that references #32.
+- CHANGELOG entry for Phase 5 (help pages, shortcuts page, remaining localization), referencing #32. Also check that the CHANGELOG as a whole calls out the broken-file behavior change (§9, risk 1); if Phase 1's entry does not, Phase 5's entry does.
 
 ## 8. Files Touched (expected)
 
@@ -429,7 +440,9 @@ Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGE
 | Aux | new `lib/src/auxiliary/th2_hierarchy_aux.dart`, new `th2_element_tree_aux.dart`, `th_project_tree_flatten_aux.dart`, `mp_text_to_user.dart` |
 | Widgets / pages | `th_project_tree_widget.dart`, `th_project_tree_node_widget.dart`, new `th2_element_tree_row_widget.dart`, new `th2_broken_file_body_widget.dart`, `th2_file_edit_body_widget.dart`, `th2_file_tabs_page.dart` (Save As disabled for broken files), `mp_therion_run_dialog_widget.dart` (broken-file warning) |
 | Constants | `mp_constants.dart` (drag hover delay, drop-zone fractions) |
-| l10n / docs | `lib/l10n/intl_en.arb`, `intl_pt.arb`, help pages EN/PT, keyboard-shortcuts page, `CHANGELOG.md` |
+| l10n | `lib/l10n/intl_en.arb`, `intl_pt.arb`, updated in each phase from Phase 3 on for that phase's strings, and in Phase 5 for the Phase 1 strings |
+| Docs | help pages EN/PT and keyboard-shortcuts page (Phase 5) |
+| Changelog | `CHANGELOG.md`, one entry per phase |
 
 ## 9. Risks and Open Questions
 
