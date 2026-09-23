@@ -71,6 +71,8 @@ The only parents a move can target are the file and scraps. `beforeSiblingMPID` 
 
 The simplest correct resolution is anchor-based on the movable-sibling sequence, followed by projection onto the full parent list. In the simulated sequence after the removal, the target is the current index of `beforeSiblingMPID`, or the end-of-parent position described above.
 
+Projection must never split an owner block. For example, with full children `[point, comment, line, segment, endline, area, endarea]`, moving the point after the line must yield `[comment, line, segment, endline, point, area, endarea]`; it must not place the point between `line` and `endline`. A hidden comment immediately before an owner remains before the nearest projected movable slot, and hidden children inside a line or area remain inside that owner block.
+
 ### 4.2 Raw model primitive
 
 Add `TH2File.moveElementToParent`:
@@ -88,7 +90,7 @@ The primitive deliberately does not validate hierarchy. It should:
 1. Resolve the old parent and remove only the element MPID from its full child list.
 2. Only when the parent changes: copy the moved element with the new `parentMPID` and substitute that copy in the file registry. A reorder within the same parent keeps the existing instance.
 3. Insert the MPID at the supplied concrete index in the new parent. The index refers to the list after step 1 (§4.1).
-4. Invalidate drawable-child caches for both parents through a new public `THIsParentMixin.invalidateDrawableChildrenCache()` (`_drawableChildrenMPIDs` is private to the mixin file), clear the bounding boxes of both parents, and invalidate the scrap cache when a scrap changes order. When a parent is a scrap, also invalidate its per-type child lists (`_areasMPIDs`, `_linesMPIDs`, `_pointsMPIDs`), for the old and the new scrap and also for a reorder within one scrap. These are ordered lists that only `THScrap.addElementToParent`/`removeElementFromParent` keep in sync, and this primitive bypasses both. `TH2FileEditSearchController` reads them through `THScrap.getPoints`/`getLines`/`getAreas`, so stale lists would report the wrong scrap membership after a cross-scrap move and the old order after a reorder. The fields are private to `th_scrap.dart`, so add a public `THScrap` invalidation method that nulls all three.
+4. Invalidate drawable-child caches for both parents through a new public `THIsParentMixin.invalidateDrawableChildrenCache()` (`_drawableChildrenMPIDs` is private to the mixin file), clear the bounding boxes of both parents, invalidate `TH2File._scrapMPIDs` when a scrap changes order at file level, and invalidate each affected scrap's per-type child lists (`_areasMPIDs`, `_linesMPIDs`, `_pointsMPIDs`) for both old and new scraps, including an intra-scrap reorder. The file-level type sets and `_imageMPIDs` retain their membership and relative filtered order for these supported moves and do not need clearing; state this explicitly in the implementation. These ordered scrap lists are only kept in sync by `THScrap.addElementToParent`/`removeElementFromParent`, and this primitive bypasses both. `TH2FileEditSearchController` reads them through `THScrap.getPoints`/`getLines`/`getAreas`, so stale lists would report the wrong scrap membership after a cross-scrap move and the old order after a reorder. The fields are private to `th_scrap.dart`, so add a public `THScrap` invalidation method that nulls all three.
 
 The area-to-line support maps (`_areaMPIDByLineMPID`, `_areaMPIDByLineTHID`) and each area's line caches are keyed by MPID/thID across the whole file, not by scrap. A move does not make them stale, so they do not need clearing.
 
@@ -195,6 +197,8 @@ The same revision must be restored/advanced through undo and redo because those 
 ### 5.1 `TH2FileEditController.dispose()`
 
 Add `dispose()` to `TH2FileEditController`. It reuses the existing `_disposeReactions()` (which runs and clears every entry in `_disposers`) and releases anything else the controller owns that needs explicit release (`th2FileFocusNode`, `isInteractiveLineSimplificationDialogOpen` and any future disposable resources; neither `TH2FileEditController` nor its `th2_file_*` sub-controllers own a `Timer` today). Dispose the `ValueNotifier` synchronously; apply the deferred focus-node rule below only to `th2FileFocusNode`. Keep `close()` as the user-facing tab-close entry point; it still clears overlay windows and the pattern cache before calling `removeFileTab`.
+
+Every registry-removal path must detach the controller from `_t2hFileEditControllers` before calling `dispose()`, so disposal reactions cannot observe the controller as still registered. For replacement, remove the old entry, dispose the removed instance, then create and register the replacement. For reset, take a snapshot, clear the registry, then dispose each snapshot entry. The idempotent guard still covers `close()` calling through `removeFileTab` and `removeFileController`.
 
 `dispose()` must be idempotent, and this is load-bearing rather than defensive: `close()` runs `_disposeReactions()` and then reaches `dispose()` again through `removeFileTab` → `removeFileController`. Guard with a disposed flag so the focus node is disposed only once. Call it from:
 
