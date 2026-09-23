@@ -115,8 +115,8 @@ Use a typed result with at least `ok` and `rejected(reasonKey)` states. Validate
 - every selected element is a supported movable top-level kind;
 - `beforeSiblingMPID`, when present, belongs to the requested parent and is not one of the moving elements;
 - `beforeSiblingMPID` may be the target scrap's `THEndscrap`, meaning end of scrap;
-- a standalone line that borders an area cannot change scraps;
-- a move to the current effective position is a no-op;
+- a line that borders any area can change scraps only when every area it borders is part of the same move. A line selected alone whose area stays behind is rejected; a line selected together with all the areas it borders is accepted and folded into an area block (§4.4);
+- a move to the current effective position is a no-op. Evaluate this after normalization (§4.4), so explicitly selected border lines cannot turn a no-op into a change or the reverse;
 - an area moved across scraps expands to include all referenced border lines, and every such line is movable under the area rule;
 - an area moved across scraps is rejected when one of its border lines also borders another area that is not part of the same move. Selecting both areas makes the move valid.
 
@@ -126,7 +126,11 @@ The validator must not mutate the file and must be usable during drag-hover befo
 
 Add `lib/src/commands/mp_move_elements_command.dart` as a `part` of `mp_command.dart`.
 
-The command accepts a list of concrete `MPElementMove` records, or an equivalent immutable value type, and executes them in order. For multi-selection, preserve the current relative order of the selected elements. When they come from several parents, that order is file order: scraps in file order, then children in each scrap's order. Area moves across scraps are expanded during preparation into a contiguous block consisting of each referenced border line in original file order followed by the area; shared lines are emitted once. The block is inserted at the requested area position, immediately before the target sibling or `THEndscrap`. Multiple expanded areas are processed in stable original file order. Area moves within the same scrap move only the area.
+The command accepts a list of concrete `MPElementMove` records, or an equivalent immutable value type, and executes them in order. For multi-selection, preserve the current relative order of the selected elements. When they come from several parents, that order is file order: scraps in file order, then children in each scrap's order. Area moves across scraps are expanded during preparation into a contiguous block consisting of each referenced border line in original file order followed by the area. The block is inserted at the requested area position, immediately before the target sibling or `THEndscrap`. Multiple expanded areas are processed in stable original file order.
+
+Normalize the selection before placing anything. Remove from the selection every line that borders an area in the same cross-scrap move; such a line is emitted only inside an area block and is never placed again at its own file-order position. A line shared by several moving areas is emitted once, in the block of the first of those areas in file order. As a result, moving an area together with its explicitly selected border lines produces the same command as moving the area alone.
+
+Area moves within the same scrap move only the area, and there is no block to fold into: an explicitly selected border line in a same-scrap move is placed as an ordinary element at its file-order position.
 
 Indices must be resolved sequentially. Simulate the affected parent lists while preparing the command so the second move sees the list left by the first. This is required for adjacent siblings and for several elements entering the same parent. Record each move’s original `(parentMPID, index)` immediately before that move, in `_prepareUndoRedoInfo`. Undo applies inverse moves in reverse order, restoring both child-list order and parent MPIDs exactly. Following the map-based pattern, `_createUndoRedoCommand` builds `mapUndo` as the `toMap()` of another `MPMoveElementsCommand` holding those inverse moves in reverse order. The original index uses the same after-removal convention as §4.1, so the inverse move is also a valid move.
 
@@ -213,6 +217,9 @@ Before allocating names, scan the test tree for duplicate numeric prefixes. The 
 - move an area within its scrap without moving border lines;
 - move an area between scraps with all referenced border lines, preserving their relative order;
 - reject moving an area between scraps when one of its border lines also borders another area, and accept it when both areas move together;
+- moving an area plus its explicitly selected border line to another scrap producing the same command and result as moving the area alone;
+- moving two areas that share a border line, with that line also selected, emitting the line once, in the block of the first area in file order;
+- moving an area plus its explicitly selected border line within one scrap placing the line as an ordinary element;
 - move several adjacent siblings as one command;
 - move several elements from different scraps into one scrap, keeping file order;
 - move to end of scrap through `beforeSiblingMPID` set to the `THEndscrap`;
@@ -228,7 +235,7 @@ Explicitly assert that a point moved forward past a multi-segment line is writte
 
 ### 7.2 Validator suite
 
-`t3941_th2_hierarchy_aux_test.dart` should cover every movable element type against file, scrap, line and area parents; self/subtree targets; invalid sibling IDs; `THEndscrap` as `beforeSiblingMPID`; no-op moves; line-border restrictions; area-border expansion; a border line shared by two areas; mixed multi-selection; and preservation of hidden children.
+`t3941_th2_hierarchy_aux_test.dart` should cover every movable element type against file, scrap, line and area parents; self/subtree targets; invalid sibling IDs; `THEndscrap` as `beforeSiblingMPID`; no-op moves, including no-op detection after normalization; line-border restrictions (line alone with its area left behind rejected, line with all its areas accepted, shared line with only one of its areas rejected, shared line with both areas accepted); area-border expansion; a border line shared by two areas; mixed multi-selection; and preservation of hidden children.
 
 ### 7.3 Lifecycle/revision coverage
 
