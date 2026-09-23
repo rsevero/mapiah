@@ -13,6 +13,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
 import 'package:mapiah/src/widgets/th2_file_widget.dart';
+import 'package:mapiah/src/widgets/th2_broken_file_body_widget.dart';
 
 import 'th_test_aux.dart';
 
@@ -64,7 +65,7 @@ void main() {
   });
 
   testWidgets(
-    'soft parse failures open the file with a non-blocking warning',
+    'parse failures show the broken-file body without mounting the canvas',
     (WidgetTester tester) async {
       tester.view.physicalSize = const Size(1280, 720);
       tester.view.devicePixelRatio = 1.0;
@@ -114,9 +115,12 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
 
-      expect(find.byType(MPErrorDialog), findsOneWidget);
-      expect(find.byType(TH2FileWidget), findsOneWidget);
+      expect(find.byType(MPErrorDialog), findsNothing);
+      expect(find.byType(TH2BrokenFileBodyWidget), findsOneWidget);
+      expect(find.byType(TH2FileWidget), findsNothing);
       expect(failedController.isFileLoaded, isTrue);
+      expect(failedController.isBroken, isTrue);
+      expect(failedController.problems, isNotEmpty);
       expect(failedController.errorMessages, isNotEmpty);
       expect(
         mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
@@ -125,12 +129,9 @@ void main() {
         same(failedController),
       );
 
-      await tester.tap(find.text(mpLocator.appLocalizations.buttonClose));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-
       expect(find.byType(MPErrorDialog), findsNothing);
-      expect(find.byType(TH2FileWidget), findsOneWidget);
+      expect(find.byType(TH2BrokenFileBodyWidget), findsOneWidget);
+      expect(find.byType(TH2FileWidget), findsNothing);
       expect(
         mpLocator.mpGeneralController.getTH2FileEditControllerIfExists(
           filename,
