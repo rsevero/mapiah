@@ -95,7 +95,8 @@ A file that already breaks those rules when it is read, or that has **any other 
 
 - `MPGeneralController.getTH2FileEditController(filename:)` creates and registers a controller whether or not a tab exists (`mp_general_controller.dart:337-361`). `forceNewController: true` replaces the registered controller. `controller.load()` parses it once and caches the future (`th2_file_edit_controller.dart:699-727`). `_finalFilePreparations` (`:742-775`) sets the active scrap and snap targets, registers the controller's reactions (`_initializeReactions()`, including the dirty mirroring below), and initializes selection, once, after the parse.
 - A reaction in `TH2FileEditController` (`:~945-955`) mirrors the controller's dirty state into `THProjectController.dirtyFilePaths`. `_saveTH2ProjectFile` saves through `getTH2FileEditControllerIfExists(path)` (`th_project_controller.dart:1535-…`). A controller with no tab is therefore already counted by the dirty dot, by Save All and by the unsaved-changes guard.
-- `closeProjectFileTabs(...)` only disposes controllers that have an **open tab** (`mp_general_controller.dart:296-…`). A controller loaded only for the tree would leak across project close or reload unless cleanup is added (Phase 2).
+- `closeProjectFileTabs(...)` only removes controllers that have an **open tab** (`mp_general_controller.dart:296-…`). A controller loaded only for the tree would leak across project open, close or reload unless cleanup is added (Phase 2).
+- `TH2FileEditController` has **no `dispose()`**. `_initializeReactions()` fills `_disposers` with MobX reactions (including the dirty mirroring above), but nothing ever runs them: `removeFileController` (`mp_general_controller.dart:469-477`) and `reloadTH2File` only drop the map entry. Phase 2 adds `dispose()` and calls it from every path that drops a TH2 controller.
 - Undo/redo is per `TH2FileEditController` (`MPUndoRedoController`). `Ctrl+Z` reaches it only while that file's tab is active.
 
 ## 3. Rules This Feature Enforces
@@ -116,6 +117,7 @@ A file read with any of these rules broken is a broken file (§4.7). Tree edits 
 Extra rule for **areas** when moving: an area's border lines must stay in the same scrap as the area.
 
 - Moving an **area** to another scrap also moves every existing border line it references by thID, wherever those lines currently live. These lines keep their relative order and go just before the area. The area and its border lines move in one command.
+- A line can border **more than one area**. Moving area A to another scrap is rejected if any of its border lines also borders an area that is not part of the same move ("Line X is also a border of area Y"). Selecting both areas makes the move valid. `TH2File._areaMPIDByLineMPID` keeps only one area per line, so this check must scan every area's border references instead of using that map.
 - Moving an **area** within the same scrap moves only the area; its border lines stay where they are.
 - Moving a **line** that borders an area by itself to another scrap is rejected. The drop indicator explains why ("Line is a border of area X; move the area instead"). Moving that line within its current scrap is allowed.
 
@@ -159,7 +161,7 @@ final class TH2FileStatusTreeRow extends THProjectTreeVisibleRow {
 - **The broken badge appears only once the file is loaded.** Loading happens when the file is expanded in the tree or opened in a tab. No project-wide pre-scan is done. After loading, a broken file's row shows a "broken" badge with the problem count and a tooltip listing the first problems. Expanding it shows a single status row, "Broken file: fix it outside Mapiah and reload". Clicking that row opens the file's tab, which shows the broken-file body (§4.7).
 - Loading does **not** open a tab. Only reading the list never creates dirty state.
 - **Editing from the tree opens the tab.** The first structural edit made from the tree on a file with no open tab calls `addFileTab(path)` and activates it. The command then runs. This keeps the rule "a modified TH2 file has a visible tab", so undo (`Ctrl+Z`), Save and the close-tab prompt work as they do today. Broken files have no edit actions, so this never applies to them.
-- **Cleanup:** `MPGeneralController` gets `disposeTablessTH2Controllers(Iterable<String> canonicalPaths)`. `THProjectController` calls it on close and reload, together with `closeProjectFileTabs`. Dirty controllers always have a tab, so this only ever disposes clean, read-only controllers.
+- **Cleanup:** `MPGeneralController` gets `disposeTablessTH2Controllers(Iterable<String> canonicalPaths)`. `THProjectController._beginProjectLifecycleTransition()` calls it right after `closeProjectFileTabs`, so every lifecycle transition (open, reload and close) runs it. At that point the unsaved-changes guard has already run and every tabbed project controller is already gone, so it disposes **every** remaining project-owned controller, dirty or not. Keeping a dirty one would bring back edits the user chose to discard the next time the project opens.
 
 ### 4.3 Drop semantics (valid files only)
 
@@ -179,6 +181,8 @@ Validation happens in one pure function, `TH2HierarchyAux.validateMove(th2File, 
 - `point`/`line`/`area` → parent must be a `THScrap`.
 - An element cannot be dropped onto itself or into its own subtree.
 - A standalone dropped line that borders an area is rejected when the drop changes its scrap (§3.1). The same line may be reordered within its current scrap.
+- An area moved to another scrap is rejected when one of its border lines also borders an area that is not moving with it (§3.1).
+- `beforeSiblingMPID`, when given, must be a child of the target parent and not one of the moving elements. The scrap's `THEndscrap` is accepted and means "end of scrap".
 - Moving to the same position is a no-op and creates no command.
 
 Feedback: a valid drop shows the usual insertion line (as in `mp_available_scraps_widget.dart`). An invalid drop shows a "not allowed" cursor and a tooltip with the localized reason. Invalid drops never create a command.
@@ -189,7 +193,7 @@ Hidden children stay where they are. The move primitive resolves "before sibling
 
 ### 4.5 Multi-selection
 
-Rows support `Ctrl`/`Shift` multi-select, which mirrors the canvas selection (§4.6). Dragging a multi-selection moves all selected rows to the drop point in their current relative order, as **one** command. The drop is rejected if any item fails validation.
+Rows support `Ctrl`/`Shift` multi-select, which mirrors the canvas selection (§4.6). Dragging a multi-selection moves all selected rows to the drop point in their current relative order, as **one** command. When the selection comes from several scraps, "current relative order" is file order: scraps in file order, then children in each scrap's order. The drop is rejected if any item fails validation.
 
 ### 4.6 Tree ↔ canvas selection sync
 
@@ -231,7 +235,7 @@ Every `_addError(...)` call site counts, with no allow-list. If one of them late
 
 **Why the canvas must not see a broken file.** Several canvas paths assume that a PLA's parent is a scrap: active scrap, selection, snapping and the non-selected-elements painter. `addElementToParent`'s default insertion assumes the closing `end*` exists (§2.2). The parser has also dropped or misplaced lines while reading it (§2.3), so any save would lose data. Keeping broken files out of the editor entirely avoids both problems.
 
-**Reload.** `MPGeneralController.reloadTH2File(canonicalPath)` replaces the controller with `getTH2FileEditController(filename:, forceNewController: true)`, disposes the old one, and calls `load()`. An open tab rebinds to the new controller and shows either the canvas or the broken panel again. The sidebar row updates its badge. Reload is only offered for broken files, which are never dirty, so no changes can be lost. Reloading a *valid* file is out of scope.
+**Reload.** `MPGeneralController.reloadTH2File(canonicalPath)` replaces the controller with `getTH2FileEditController(filename:, forceNewController: true)`, disposes the old one (with the `dispose()` added in Phase 2; Phase 1 only removes it from the registry), and calls `load()`. An open tab rebinds to the new controller and shows either the canvas or the broken panel again. The sidebar row updates its badge. Reload is only offered for broken files, which are never dirty, so no changes can be lost. Reloading a *valid* file is out of scope.
 
 ### 4.8 Keyboard and context-menu actions (non-drag equivalents, valid files only)
 
@@ -260,13 +264,13 @@ void moveElementToParent({
 Implementation:
 
 1. `oldParent.childrenMPIDs.remove(mpID)` directly. It does **not** call `removeElementFromParent`, because that unregisters the thID (§2.2).
-2. `newElement = element.copyWith(parentMPID: newParentMPID)`, then `substituteElement(newElement)`. Checked: `THScrap`, `THPoint`, `THLine` and `THArea` `copyWith` accept `parentMPID`, and parent types copy `childrenMPIDs` into the new instance, so the subtree survives the substitution.
-3. Insert into `newParent.childrenMPIDs` at the given index. `moveElementToParent` inserts by itself, not through `addElementToParent`, so callers always pass a concrete index: for "end of scrap", the index of the scrap's `THEndscrap`; for "end of file", `childrenMPIDs.length`.
-4. Invalidate caches: both parents' `_drawableChildrenMPIDs` (add a public `invalidateDrawableChildrenCache()` on `THIsParentMixin`), `_scrapMPIDs` when a scrap moves, the scrap bounding boxes of both old and new parent (`clearBoundingBox()`), and `_areaMPIDByLineMPID`/`_areaMPIDByLineTHID` when an area or border line moves.
+2. Only when the parent changes: `newElement = element.copyWith(parentMPID: newParentMPID)`, then `substituteElement(newElement)`. Checked: `THScrap`, `THPoint`, `THLine` and `THArea` `copyWith` accept `parentMPID`, and parent types copy `childrenMPIDs` into the new instance, so the subtree survives the substitution. A reorder within the same parent keeps the existing instance.
+3. Insert into `newParent.childrenMPIDs` at the given index. **The index refers to the list after step 1**: for a move within the same parent, the element has already been removed. `moveElementToParent` inserts by itself, not through `addElementToParent`, so callers always pass a concrete index: for "end of scrap", the index of the scrap's `THEndscrap`; for "end of file", `childrenMPIDs.length`.
+4. Invalidate caches: both parents' `_drawableChildrenMPIDs` (add a public `invalidateDrawableChildrenCache()` on `THIsParentMixin`), `_scrapMPIDs` when a scrap moves, and the scrap bounding boxes of both old and new parent (`clearBoundingBox()`). `_areaMPIDByLineMPID`/`_areaMPIDByLineTHID` and each area's line caches are keyed by MPID/thID for the whole file, not by scrap, so a move does not make them stale and they do not need clearing.
 
 The children's `parentMPID` points at the element's unchanged MPID, so the subtree does not need rewriting.
 
-`TH2File.moveElementToParent` is the raw model primitive. `executeMoveElements` wraps it at controller level. It does what `TH2FileEditElementEditController.substituteElement` (`:505-533`) does after a substitution: `addUpdateSelectableElement`, `updateSelectedElementLogicalClone` and the station-cache invalidation. When an element changes scrap, it also calls `selectionController.resetSelectableElements()`, because selectable elements depend on the active scrap.
+`TH2File.moveElementToParent` is the raw model primitive. `executeMoveElements` wraps it at controller level. It does what `TH2FileEditElementEditController.substituteElement` (`:505-533`) does after a substitution: `addUpdateSelectableElement`, `updateSelectedElementLogicalClone` and the station-cache invalidation. When an element changes scrap, it also calls `selectionController.resetSelectableElements()`, because selectable elements depend on the active scrap. A selected element that leaves the active scrap is deselected, since selection only works inside the active scrap. A selected element that stays in the active scrap stays selected, with its logical clone refreshed.
 
 ### 5.2 `MPMoveElementsCommand`
 
@@ -275,6 +279,7 @@ New file `lib/src/commands/mp_move_elements_command.dart` (a `part of 'mp_comman
 - Fields: `List<MPElementMove> moves` (`elementMPID`, `newParentMPID`, `positionInNewParent`), resolved at prepare time into concrete indices, applied in order.
 - **Indices are resolved sequentially.** Each move's source index and target index are computed against the state left by the **previous moves in the same command**, not against the state before the command. The resolver simulates the moves on a copy of the affected `childrenMPIDs` lists. Example: a scrap has `[a, b, c, E]`, and `[a, b]` is moved to another scrap. If the source indices were recorded up front (`a@0`, `b@1`), undoing in reverse would give `[a, c, b, E]`. Recorded sequentially (`a@0`, then `b@0`), undo restores `[a, b, c, E]`. The same applies to target indices when several elements land in one parent, or leave and re-enter the same parent.
 - `_prepareUndoRedoInfo` records each element's `(parentMPID, index)` as it was just before *its own* move. Undo applies the inverse moves in **reverse** order. This follows `MPRemoveElementCommand._prepareUndoRedoInfo`'s pattern.
+- Undo follows the map-based `MPUndoRedoCommand(mapRedo:, mapUndo:)` pattern: `mapUndo` is the `toMap()` of another `MPMoveElementsCommand` whose moves are the recorded inverse moves in reverse order, built in `_createUndoRedoCommand` from the data recorded in `_prepareUndoRedoInfo`. Undoing a move is therefore itself a move command.
 - `_actualExecute` → `elementEditController.executeMoveElements(moves)` (`@action`). It calls `TH2File.moveElementToParent` for each move, bumps `_structureRevision`, and redraws the canvas.
 - `toMap`/`fromMap`/`copyWith`/`==`/`hashCode` follow `MPReorderScrapsCommand`.
 - Register `MPCommandType.moveElements`, `MPCommandDescriptionType.moveElements`, the factory `MPCommandFactory.moveElements(...)`, the `mp_command.dart` `fromMap` switch, and `MPTextToUser` + `.arb` strings ("Move elements" / "Mover elementos").
@@ -295,7 +300,7 @@ All of them assert that the file is not broken.
 
 ### 5.4 Observability
 
-The tree must update after a move, undo or redo. `TH2File` is not a MobX store. Add a `@readonly int _structureRevision` to `TH2FileEditController`. It is bumped by `executeMoveElements`, `executeAddElement`, `executeRemoveElement…`, `executeReorderScraps` and element substitutions that change a label (type or thID edits). Undo and redo also go through these `execute*` methods, so they update the tree too. The tree's `Observer` reads it.
+The tree must update after a move, undo or redo. `TH2File` is not a MobX store. Add a `@readonly int _structureRevision` to `TH2FileEditController`. It is bumped by `executeMoveElements`, `executeAddElement`, `executeRemoveElement…`, `executeReorderScraps` and element substitutions that change a label (type or thID edits, including `executeSetOptionToElement` and `executeRemoveOptionFromElement` for the `id` option). `executeAddElement` and `executeRemoveElement…` bump it only for elements the tree shows (scraps, points, lines and areas). `executeAddLineSegment` goes through `executeAddElement`, and bumping for every segment would rebuild the tree while a line is being drawn. Undo and redo also go through these `execute*` methods, so they update the tree too. The tree's `Observer` reads it.
 
 `TH2FileParser` adds **every parsed line** through `executeAddElement` (for example `_injectScrap` and `_injectEndScrap`). The bump must be skipped while `_isLoading` is true, with a single bump in `_postParseInitialize`. Otherwise a large file triggers one MobX notification per line during load.
 
@@ -369,14 +374,16 @@ Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGE
 
 ### Phase 2: Model primitive and `MPMoveElementsCommand`
 
-- `TH2File.moveElementToParent`, `THIsParentMixin.invalidateDrawableChildrenCache`, `MPMoveElementsCommand` with its registration, localization and factory, `prepareMoveElements`/`executeMoveElements`, `_structureRevision` (§5.4), and the convenience methods from §5.3.
+- `TH2File.moveElementToParent`, `THIsParentMixin.invalidateDrawableChildrenCache`, `MPMoveElementsCommand` with its registration, localization and factory, `moveElements`/`executeMoveElements` (following the existing `reorderScraps`/`executeReorderScraps` naming), `_structureRevision` (§5.4), and the convenience methods from §5.3.
+- `TH2FileEditController.dispose()`, running `_disposers`, called from `removeFileController`, `reloadTH2File` and the tab-less cleanup.
 - `TH2HierarchyAux.validateMove` in a new `lib/src/auxiliary/th2_hierarchy_aux.dart`.
-- `MPGeneralController.disposeTablessTH2Controllers` and the call from project close and reload.
+- `MPGeneralController.disposeTablessTH2Controllers` and the call from `_beginProjectLifecycleTransition()` (project open, reload and close).
 - Tests:
   - `t2462_commands_mpmoveelementscommand_test.dart` (next to `t2460_commands_mpreorderimagescommand_test.dart`; `t2461` is taken): reorder within a scrap, move between scraps, scrap reorder, an area moved within its scrap without moving border lines, an area moved across scraps together with its border lines, multi-element move (including several adjacent siblings from one parent, §5.2), and undo/redo returning `childrenMPIDs` and `parentMPID` exactly. Also `toMap`/`fromMap` round-trip, thID registry unchanged, a written file that differs only in line order, and a selected element keeping a consistent selection after a move.
-  - `t3941_th2_hierarchy_aux_test.dart`: the `validateMove` matrix (every element type × every parent type, self-subtree, area-border rule, no-op move).
+  - `t3941_th2_hierarchy_aux_test.dart`: the `validateMove` matrix (every element type × every parent type, self-subtree, area-border rule, a border line shared by two areas, `beforeSiblingMPID` set to the `THEndscrap`, no-op move).
   - Bring forward/backward/front/back: stepping over a sibling of another type, stepping over hidden comments, already first or last. A point brought forward past a multi-segment line must be written **after that line's `endline`**, and a point sent backward past an area must be written **before its `area` line**, never between an element's opening and `end*` lines.
-  - `_structureRevision` is bumped once per load, not once per parsed element.
+  - `_structureRevision` is bumped once per load, not once per parsed element, and not when a line segment is added.
+  - Lifecycle: tab-less project controllers, dirty or clean, are disposed (their reactions run) on project open, reload and close; standalone controllers outside the project are untouched.
 
 ### Phase 3: Element tree in the sidebar (read-only)
 
@@ -418,7 +425,7 @@ Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGE
 | Model | `lib/src/elements/th2_file.dart`, `lib/src/elements/mixins/th_is_parent_mixin.dart` |
 | Parser | `lib/src/mp_file_read_write/th2_grammar.dart` (recovery rules for `scrap`/`line`/`area` lines), `th2_file_parser.dart` |
 | Commands | new `lib/src/commands/mp_move_elements_command.dart`, `mp_command.dart`, `factories/mp_command_factory.dart`, `types/mp_command_type.dart`, `types/mp_command_description_type.dart` |
-| Controllers | `th2_file_edit_element_edit_controller.dart`, `th2_file_edit_controller.dart` (`_structureRevision`, `isBroken`, `problems`, `_finalFilePreparations` split), `mp_general_controller.dart` (tab-less cleanup, open-on-edit helper, `reloadTH2File`), `th_project_controller.dart` (cleanup call, skip broken files on save) |
+| Controllers | `th2_file_edit_element_edit_controller.dart`, `th2_file_edit_controller.dart` (`_structureRevision`, `isBroken`, `problems`, `_finalFilePreparations` split, `dispose()`), `mp_general_controller.dart` (tab-less cleanup, open-on-edit helper, `reloadTH2File`), `th_project_controller.dart` (cleanup call, skip broken files on save) |
 | Aux | new `lib/src/auxiliary/th2_hierarchy_aux.dart`, new `th2_element_tree_aux.dart`, `th_project_tree_flatten_aux.dart`, `mp_text_to_user.dart` |
 | Widgets / pages | `th_project_tree_widget.dart`, `th_project_tree_node_widget.dart`, new `th2_element_tree_row_widget.dart`, new `th2_broken_file_body_widget.dart`, `th2_file_edit_body_widget.dart`, `th2_file_tabs_page.dart` (Save As disabled for broken files), `mp_therion_run_dialog_widget.dart` (broken-file warning) |
 | Constants | `mp_constants.dart` (drag hover delay, drop-zone fractions) |
