@@ -3,34 +3,40 @@
 # TH2 Element Tree in the Project Sidebar (Drawing Order and Hierarchy Editing): Implementation Plan
 
 **Date:** 2026-09-23
-**Status:** Proposed. Checked against the codebase on 2026-09-23 (`main` at `24c44fcc`). Revised the same day with these decisions: broken-file status instead of drawing violators on the canvas; XTherion drawing order only; the broken badge only after a file is opened; broken files can be saved; bring forward and send backward step over the next row of any type; missing `endline`/`endarea` count as violations.
+**Status:** Proposed. Checked against the codebase on 2026-09-23 (`main` at `24c44fcc`, and again at `d8017b3c`). Revised the same day with these decisions: XTherion drawing order only; bring forward and send backward step over the next row of any type. Later the same day, the handling of files that break the hierarchy was **simplified to detect-and-warn**. Mapiah detects such a file, warns the user, and neither draws, edits, saves nor fixes it. The user fixes it outside Mapiah and reloads it. After that, **any parse error**, not only hierarchy violations, was made to mark the file broken too, so Mapiah never saves a file whose lines it failed to read. Unknown point, line and area **types** stay acceptable input, as they are today. Unknown **options** are parse errors, so they make a file broken (§6.2).
 **Issue:** [#32: Provide move object up/down drawing stack and awareness of relative stack order between objects](https://github.com/rsevero/mapiah/issues/32)
 
 ## 1. Overview and Objectives
 
 Issue #32 asks for two things XTherion already has: a way to **see** the relative stacking order of a drawing's objects, and a way to **change** it by moving objects up and down. In a `.th2` file the stacking order, as XTherion shows and edits it, is the file order. An object written later is drawn on top of an object written earlier.
 
-This plan adds an expandable list of each `.th2` file's elements under that file's node in the project sidebar. It has these levels: file → scraps → points, lines and areas. The list can be reordered with drag and drop. The allowed moves follow Therion's structure rules. A file that breaks those rules is loaded without losing data and gets a **broken** status. It is not drawn on the canvas until the user fixes it from the element tree or with a Fix-hierarchy dialog.
+This plan adds an expandable list of each `.th2` file's elements under that file's node in the project sidebar. It has these levels: file → scraps → points, lines and areas. The list can be reordered with drag and drop. The allowed moves follow Therion's structure rules, so an edit can never make a valid file invalid.
+
+A file that already breaks those rules when it is read, or that has **any other parse error**, is **broken**. Mapiah detects it, shows the user what is wrong and where, and does nothing else with it: it is not drawn, not editable and not saveable. Because Mapiah never saves it, the lines its parser cannot place are never lost. The user fixes the file in a text editor outside Mapiah and reloads it.
 
 ### Key objectives
 
-1. **See the order.** Every `TH2FileNode` in the project tree can be expanded to show its scraps, and each scrap can be expanded to show its points, lines and areas, in file order (XTherion's order).
+1. **See the order.** Every `TH2FileNode` of a valid file in the project tree can be expanded to show its scraps, and each scrap can be expanded to show its points, lines and areas, in file order (XTherion's order).
 2. **Reorder within a parent.** Drag a scrap to a new position among the file's scraps. Drag a point, line or area to a new position inside its scrap. Bring forward, Send backward, Bring to front and Send to back do the same without dragging.
 3. **Move between scraps.** Drag a point, line or area from one scrap into another scrap in the same file.
 4. **Enforce the hierarchy.** Points, lines and areas must end up inside a scrap. A scrap must end up directly under the file, never inside another scrap. The UI must reject any drop that would break this, and must say so visibly.
-5. **Broken-file status.** A file that breaks the hierarchy loads **without data loss** and is marked broken. Hierarchy violations are points, lines or areas outside a scrap, a scrap inside a scrap, a stray `endscrap`, and a line, area or scrap missing its own `endline`/`endarea`/`endscrap`. A broken file is not drawn on the canvas. Its elements appear only in the sidebar tree, where the user moves or closes the offending elements until the file is valid. The file then switches to the normal canvas automatically.
-6. **Undoable, file-preserving edits.** Every structural change is one `MPCommand` on the file's own undo stack. Saving keeps each moved element's original text (`originalLineInTH2File`), so only the order, plus any added `end*` lines, changes on disk. Broken files can be saved at any point.
-7. **Canvas integration.** For a valid file, clicking a tree row selects that element on the canvas and makes its scrap active. The canvas repaints right away in the new order.
+5. **Detect broken files and warn.** A file that breaks the hierarchy when it is read is marked broken. Hierarchy violations are points, lines or areas outside a scrap, a scrap inside a scrap, a stray `endscrap`, and a line, area or scrap missing its own `endline`/`endarea`/`endscrap`. Any other parse error (a plain syntax error such as a misspelled command, a line point with one coordinate, an invalid option, a malformed `##XTHERION##`/`##MAPIAH##` setting, or an unclosed multiline comment) also makes the file broken. A broken file is **not drawn, not editable, not saveable and not fixed by Mapiah**. Its tab and its sidebar row say it is broken and list each problem with its line number. A **Reload** action reads the file again after the user fixed it elsewhere.
+6. **Undoable, file-preserving edits.** Every structural change on a valid file is one `MPCommand` on the file's own undo stack. Saving keeps each moved element's original text (`originalLineInTH2File`), so only the order changes on disk.
+7. **Canvas integration.** Clicking a tree row selects that element on the canvas and makes its scrap active. The canvas repaints right away in the new order.
 8. **Complete integration.** EN/PT localization, help pages and keyboard shortcuts are updated. Controller, command, parser and widget tests are added. `flutter analyze` and `flutter test` stay green.
 
 ### Non-goals (this plan)
 
+- **Fixing broken files in Mapiah.** There is no fix dialog, no "close element" action, no lifting of nested scraps and no editing of a broken file's elements, on the canvas or in the tree.
+- **Showing a broken file's elements.** Its tree node shows the broken status, not its elements.
 - **Therion's own rendering order.** It may layer by symbol class and by `-place bottom/default/top`. This plan only deals with XTherion's order, which is file order. `-place` stays editable through the existing option editor.
 - Moving elements **between files**.
 - Showing line segments, area border references, comments, xtherion settings or images as tree rows.
-- A TH2 element tree when no project is open. The broken-file tab body (§4.8) still lets such a file be fixed with the Fix-hierarchy dialog.
+- A TH2 element tree when no project is open. The broken-file tab body (§4.7) still works for a broken file opened without a project.
 - Pre-scanning a project's `.th2` files when the project loads, just to detect broken files. The broken badge only appears after a file is loaded (§4.2).
-- Other parse errors (plain syntax errors), which keep today's behavior. The line is reported in the load-error dialog and dropped.
+- Watching files on disk for external changes. Reloading a broken file is an explicit user action.
+- Telling apart "harmless" and "harmful" parse errors. Every parse error makes the file broken (§4.7), including unknown options. Unknown point, line and area types are not parse errors (§6.2).
+- Supporting unknown options (keeping them in the model and writing them back).
 
 ## 2. Grounding: Current State
 
@@ -38,47 +44,56 @@ This plan adds an expandable list of each `.th2` file's elements under that file
 
 - The tree is built from `THProjectNode` objects (`lib/src/elements/th_project/th_project_node.dart`). The project parser creates them. Each node has a `children` list, a string `id`, a `label`, a `sourceFilePath` and a `lineNumber`.
 - `TH2FileNode` (`th2_file_node.dart`) is a **leaf**. Its doc comment says that the `.th2` contents "are intentionally not parsed by `THProjectParser`; they are loaded lazily when a canvas tab is opened". A `THScrapNode` with `isFromTH2File` exists, but the widget comments that this flag is "always false today" (`th_project_tree_node_widget.dart:106-107`).
-- `flattenVisibleNodes(...)` walks `THProjectNode.children` depth first. It honors `THProjectTreeUIController.isExpanded(node.id)` and the filter. It returns `THProjectTreeVisibleNode(node, depth)` rows, which a plain `ListView.builder` renders (`th_project_tree_widget.dart:68-87`).
+- `flattenVisibleNodes(...)` walks `THProjectNode.children` depth first. It takes an `isExpanded(node)` callback, which the widget answers with `THProjectTreeUIController.isExpanded(node.id)`, and honors the filter. It returns `THProjectTreeVisibleNode(node, depth)` rows, which a plain `ListView.builder` renders (`th_project_tree_widget.dart:68-87`).
 - `THProjectTreeNodeWidget._buildExpandControl` shows a chevron only when `node.children.isNotEmpty` (`:153-175`). A `TH2FileNode` therefore has no chevron today.
 - `THProjectTreeUIController` (`th_project_tree_ui_controller.dart`) holds an `ObservableSet<String> expandedNodeIds` and has `toggleExpanded`/`expand`/`collapse`/`expandAncestorsOf` actions. It is keyed by string id, so new row kinds can use it as is.
 - Tapping a `TH2FileNode` calls `getTH2FileEditController(filename:)` and `addFileTab(...)` (`th_project_tree_node_widget.dart:81-86`).
 
 ### 2.2 TH2 data model
 
-- `TH2File` (`lib/src/elements/th2_file.dart`) mixes in `THIsParentMixin`. Its `childrenMPIDs` holds the ordered top-level children, and `_elementByMPID` holds every element. It also keeps derived caches such as `_scrapMPIDs`, `_imageMPIDs`, `_pointsMPIDs`/`_linesMPIDs`/`_areasMPIDs` and the area↔line maps. These are updated in `_updateSupportMaps` (`:388-422`) and `removeElement` (`:458-523`).
-- `THIsParentMixin` (`lib/src/elements/mixins/th_is_parent_mixin.dart`) owns `childrenMPIDs` and a cached `_drawableChildrenMPIDs` (lines, points and scraps, in child order). `addElementToParent(element, elementPositionInParent:)` supports an explicit index or `mpAddChildAtEndMinusOneOfParentChildrenList`, which inserts just before the closing `endscrap`/`endline`/`endarea`. **That default assumes the closing element exists.** If it doesn't, the new child lands before the last real child. This is one reason a file with a missing `end*` must not be edited on the canvas (§4.8). `removeElementFromParent` also **unregisters the element's thID** (`:96-98`).
-- `THElement.parentMPID` is **`final`** (`th_element.dart:95`). A negative `parentMPID` means "the file" (`parent()`, `:126-136`). Changing an element's parent therefore means creating a `copyWith(parentMPID: …)` and replacing the element with `TH2File.substituteElement(...)` (`th2_file.dart:322-…`).
-- `TH2File.removeElement` removes **all descendants recursively** (`:459-467`). A plain "remove, then add" would delete a line's segments or an area's border references. A move needs its own primitive.
+- `TH2File` (`lib/src/elements/th2_file.dart`) mixes in `THIsParentMixin`. Its `childrenMPIDs` holds the ordered top-level children, and `_elementByMPID` holds every element. It also keeps derived caches such as `_scrapMPIDs`, `_imageMPIDs`, `_pointsMPIDs`/`_linesMPIDs`/`_areasMPIDs` and the area↔line maps. These are updated in `_updateSupportMaps` (`:390-422`) and `removeElement` (`:458-523`).
+- `THIsParentMixin` (`lib/src/elements/mixins/th_is_parent_mixin.dart`) owns `childrenMPIDs` and a cached `_drawableChildrenMPIDs` (lines, points and scraps, in child order). `drawableChildElementTypes` is `{line, point, scrap}` only: **areas are not drawable children** (`:18-22`). `addElementToParent(element, elementPositionInParent:)` supports an explicit index or `mpAddChildAtEndMinusOneOfParentChildrenList`, which inserts just before the closing `endscrap`/`endline`/`endarea`. `removeElementFromParent` also **unregisters the element's thID** (`:100-118`).
+- `THElement.parentMPID` is **`final`** (`th_element.dart:97`). A negative `parentMPID` means "the file" (`parent()`, `:131-136`). Changing an element's parent therefore means creating a `copyWith(parentMPID: …)` and replacing the element with `TH2File.substituteElement(...)` (`th2_file.dart:323-374`).
+- `TH2File.removeElement` removes **all descendants recursively** (`:458-467`). A plain "remove, then add" would delete a line's segments or an area's border references. A move needs its own primitive.
 - **Existing reorder precedent.** `TH2File.reorderScrapMPIDs({oldIndex, newIndex})` (`:846-892`) reorders scraps inside `childrenMPIDs` and leaves non-scrap children in their slots. `MPReorderScrapsCommand` (`lib/src/commands/mp_reorder_scraps_command.dart`) wraps it through `TH2FileEditElementEditController.reorderScraps`/`executeReorderScraps` (`th2_file_edit_element_edit_controller.dart:1329-1341`). The scraps dialog (`mp_available_scraps_widget.dart`) drives it with `Draggable<int>`/`DragTarget<int>` rows. `MPReorderImagesCommand` and `mp_available_images_widget.dart` follow the same pattern. This plan reuses that command, factory, description and localization pattern. It also reuses the `Draggable`/`DragTarget` pattern (the code does not use `ReorderableListView`).
 
 ### 2.3 Parser: hierarchy violations are currently dropped (data loss)
 
 - `TH2Grammar` (`lib/src/mp_file_read_write/th2_grammar.dart:33-55`) chooses the grammar by context:
-  - file level `th2Structure()`: `xtherionConfig | mapiahConfig | multiLineComment | scrap | fullLineComment`;
+  - file level `th2Structure()`: `xtherionConfig | mapiahConfig | th2Command | fullLineComment`, where `th2Command()` is `multiLineComment | scrap`;
   - scrap level `scrapContent()`: `point | line | area | endscrap`;
   - line level `lineContent()`: segments, line options, `endline`;
   - area level `areaContent()`: `endarea`, area options, border references.
-- `TH2FileParser._injectContents` (`th2_file_parser.dart:~145-262`) switches `_currentParser` as scraps, lines and areas open and close. When a line does not match the current context's grammar, the result is a `Failure`. The parser then records an error with `_addError(...)` and runs `continue`. **The line never enters the model.**
+- `TH2FileParser._injectContents` (`th2_file_parser.dart:144-262`) switches `_currentParser` as scraps, lines and areas open and close. When a line does not match the current context's grammar, the result is a `Failure`. The parser then records an error with `_addError(...)` and runs `continue`. **The line never enters the model.**
 - Results for each violation:
   - **Point, line or area at file level:** the `point`/`line`/`area` line fails and is dropped. For a multi-line `line … endline` every following line also fails, because the line parser was never pushed. Everything is lost.
   - **Scrap inside a scrap:** the inner `scrap` line is dropped. Its contents are silently added to the **outer** scrap. The inner `endscrap` closes the outer scrap, and the outer `endscrap` then fails at file level and is dropped. Saving writes one merged scrap.
   - **Missing `endline`/`endarea`:** the line or area parser stays active. Every following `point`, `line`, `area` or `endscrap` fails that context's grammar and is dropped, until an `endline`/`endarea` happens to appear. If none does, everything to the end of the file is lost. At the end of the file only "Multiline commmands left open at end of file" is reported (`th2_file_parser.dart:~2712-2719`).
+  - **Exception in the area context:** `borderLineReference()` is `reference().end()` (`th2_grammar.dart:906-909`), so any single-word line, such as `endscrap` or a stray `endline`, *parses successfully* as a border thID reference. For example, `area … endscrap` with no `endarea` produces a `THAreaBorderTHID("endscrap")` and leaves the scrap open, with no error at that line.
   - **Missing `endscrap`:** the scrap stays open. A following `scrap` is dropped (as in the nested case), and the end-of-file "left open" error is reported.
-- `_injectEndLine` (`:1061-…`) and `_injectEndArea` (`:1045-1059`) pop the parent and parser. `TH2FileWriter` can generate a fresh `endline`/`endarea` line for a new `THEndline`/`THEndarea` with an empty `originalLineInTH2File` (`th2_file_writer.dart:253-270`). This is what the "close element" fix needs (§5.3).
-- `TH2FileEditController._postParseInitialize` (`th2_file_edit_controller.dart:729-740`) copies the errors into `errorMessages`, and the file still opens and can be saved. **Saving it makes the loss permanent.**
+- **Unknown types and options, checked by parsing small sample files on `d8017b3c`:**
+  - Unknown point, line and area **types** (`point 1 2 foobarpoint`, `line foobarline`, `area foobararea`), unknown **subtypes** (`station:weirdsub`, `wall:weirdsub`) and user types (`u:myuser`) already parse with no error and round-trip byte for byte.
+  - Unknown **options** do not. `THHasOptionsMixin` stores options in a `SplayTreeMap<THCommandOptionType, THCommandOption>` (`th_has_options_mixin.dart:6-7`), so it can hold only one option per type. `THUnrecognizedCommandOption` exists (`th_unrecognized_command_option.dart`) but has only a `value`, no name, and is never created: its factory case is commented out (`th_command_option.dart:415-416`) and `_injectUnrecognizedCommandOption` throws (`th2_file_parser.dart:2446-2452`). Results:
+    - an unknown option on a `point` line (`-weirdpointopt abc`, or a flag such as `-weirdflag`) fails the whole line, which is dropped;
+    - an unknown option on a `line` or `area` line fails the opening line, so the whole block cascades into errors and is dropped;
+    - an unknown option on a `scrap` line fails the scrap line, and **every line up to the end of the file** is dropped;
+    - an unknown line-point option line inside a line (`weirdsegopt xyz`) is reported and dropped;
+    - an unknown option line inside an area (`weirdareaopt 5`) is **dropped silently, with no error**, and `isSuccessful` stays `true`. Its cause is not traced yet; Phase 1 must find it (§6.2).
+- `TH2FileEditController._postParseInitialize` (`th2_file_edit_controller.dart:729-740`) copies the errors into `errorMessages`. `TH2FileEditBodyWidget` (`th2_file_edit_body_widget.dart:80-87`) then shows them with `_handleSoftLoadFailure` (a "parsing warnings" dialog), and **mounts the canvas anyway**. The file can be edited and saved. **Saving it makes the loss permanent.** This is what the broken status stops. It happens for plain syntax errors too. For example, a file with `  poin 150 250 station -name 2` (a typo for `point`) inside a scrap, and a line point `    150` with one coordinate inside a `line … endline`, reports two `petitparser returned a "Failure"` errors, both saying `"comment" expected` and neither giving a line number. It opens on the canvas, and saving it writes the file **without both lines**.
 
 ### 2.4 Canvas paint order
 
 - `MPNonSelectedElementsWidget.addChildrenPainters` (`lib/src/widgets/mp_non_selected_elements_widget.dart:71-140`) and `mp_non_selected_scraps_widget.dart:71` iterate `parent.getDrawableChildrenMPIDs()` in child order. Mapiah therefore already paints in file order, matching XTherion. Reordering `childrenMPIDs` and clearing `_drawableChildrenMPIDs` is enough to change the stacking on screen.
+- **Areas are not painted as filled shapes.** `THArea` is not a drawable child (§2.2), and only its border lines are drawn, as lines. Reordering an area therefore changes the file order (and what XTherion and Therion see) but has **no visible effect on Mapiah's canvas**. Moving an area's border lines does.
 - Selected elements are painted by a separate widget, on top of everything. The tree shows file order, not the temporary "selected on top" order.
 
 ### 2.5 Writer
 
-- `TH2FileWriter` (`lib/src/mp_file_read_write/th2_file_writer.dart:114, 421`) serializes by walking `childrenMPIDs` recursively. It writes `originalLineInTH2File` for unmodified elements. A moved element keeps its original text and is simply written in its new position. A file-level PLA or a nested scrap is written where it is in the tree, so a broken file round-trips as it was read. **No writer change is expected.** Round-trip tests confirm it (Phase 1).
+- `TH2FileWriter` (`lib/src/mp_file_read_write/th2_file_writer.dart:113-117, 419-428`) serializes by walking `childrenMPIDs` recursively. It writes `originalLineInTH2File` for unmodified elements. A moved element keeps its original text and is simply written in its new position. Broken files are never saved (§4.7), so the writer only ever sees valid structures, where every `end*` element closes an open block. **No writer change is needed.**
 
 ### 2.6 Controller lifecycle and dirty tracking
 
-- `MPGeneralController.getTH2FileEditController(filename:)` creates and registers a controller whether or not a tab exists (`mp_general_controller.dart:337-361`). `controller.load()` parses it once and caches the future (`th2_file_edit_controller.dart:~696-727`). `_finalFilePreparations` (`:742-775`) sets the active scrap and snap targets, and initializes selection, once, after the parse.
+- `MPGeneralController.getTH2FileEditController(filename:)` creates and registers a controller whether or not a tab exists (`mp_general_controller.dart:337-361`). `forceNewController: true` replaces the registered controller. `controller.load()` parses it once and caches the future (`th2_file_edit_controller.dart:699-727`). `_finalFilePreparations` (`:742-775`) sets the active scrap and snap targets, registers the controller's reactions (`_initializeReactions()`, including the dirty mirroring below), and initializes selection, once, after the parse.
 - A reaction in `TH2FileEditController` (`:~945-955`) mirrors the controller's dirty state into `THProjectController.dirtyFilePaths`. `_saveTH2ProjectFile` saves through `getTH2FileEditControllerIfExists(path)` (`th_project_controller.dart:1535-…`). A controller with no tab is therefore already counted by the dirty dot, by Save All and by the unsaved-changes guard.
 - `closeProjectFileTabs(...)` only disposes controllers that have an **open tab** (`mp_general_controller.dart:296-…`). A controller loaded only for the tree would leak across project close or reload unless cleanup is added (Phase 2).
 - Undo/redo is per `TH2FileEditController` (`MPUndoRedoController`). `Ctrl+Z` reaches it only while that file's tab is active.
@@ -96,11 +111,15 @@ This plan adds an expandable list of each `.th2` file's elements under that file
 | line segments, line/area options, area border references | their line or area | n/a (they always move with their owner) |
 | comments, empty lines, `##XTHERION##`/`##MAPIAH##` settings, `encoding` | anywhere they already are | n/a (never moved by tree operations, §4.4) |
 
-Extra rule for **areas**: an area's border lines must be in the same scrap as the area.
+A file read with any of these rules broken is a broken file (§4.7). Tree edits on a valid file are validated so they can never break them (§4.3).
+
+Extra rule for **areas** when moving: an area's border lines must stay in the same scrap as the area.
 
 - Moving an **area** to another scrap also moves every existing border line it references by thID, wherever those lines currently live. These lines keep their relative order and go just before the area. The area and its border lines move in one command.
 - Moving an **area** within the same scrap moves only the area; its border lines stay where they are.
 - Moving a **line** that borders an area by itself to another scrap is rejected. The drop indicator explains why ("Line is a border of area X; move the area instead"). Moving that line within its current scrap is allowed.
+
+A border line that is *already* in another scrap when the file is read does **not** make the file broken. Mapiah opens such files today, and this is a Therion rule about references, not a structural error that makes the parser lose lines. The move rules above simply do not make it worse.
 
 ### 3.2 Drawing order
 
@@ -119,26 +138,30 @@ final class TH2ElementTreeRow extends THProjectTreeVisibleRow {
   final String th2FilePath;   // canonical path, equals TH2FileNode.absolutePath
   final int elementMPID;
   final THElementType elementType;
-  final List<THHierarchyViolation> violations; // empty for a valid element
+  …
+}
+final class TH2FileStatusTreeRow extends THProjectTreeVisibleRow {
+  final String th2FilePath;
+  final TH2FileStatusTreeRowKind kind; // loading, loadError, broken
   …
 }
 ```
 
-- `flattenVisibleNodes(...)` gains an optional `th2ElementRowsFor(TH2FileNode node, int depth)` callback. When the callback exists and the `TH2FileNode` is expanded, the flattener adds the element rows right after that file row. `THProjectTreeVisibleNode` is renamed or wrapped as `THProjectTreeNodeRow`. Existing tests in `t3881_th_project_tree_flatten_test.dart` are updated.
+- `flattenVisibleNodes(...)` gains an optional `th2ElementRowsFor(TH2FileNode node, int depth)` callback. When the callback exists and the `TH2FileNode` is expanded, the flattener adds the rows it returns right after that file row. `THProjectTreeVisibleNode` is renamed or wrapped as `THProjectTreeNodeRow`. Existing tests in `t3881_th_project_tree_flatten_test.dart` are updated.
 - Element row ids are `th2el:<canonicalPath>:<mpID>`, so expansion state goes through the same `expandedNodeIds`. MPIDs only exist while the app runs. A stale id after reloading a file is harmless and gets pruned on project close.
-- The builder lives in a new `lib/src/auxiliary/th2_element_tree_aux.dart`. It walks `TH2File.childrenMPIDs` and each scrap's `childrenMPIDs`, recursing into nested scraps. It keeps only `THScrap`, `THPoint`, `THLine`, `THArea` and stray `THEndscrap` rows. It runs inside the tree's `Observer`, so structural changes must be observable (§5.5).
-- **Labels:** `<type> <subtype?> <thID?>`, for example `line wall:blocks id=w12` or `point station (1.3)`. Type and subtype names are localized with the existing `MPTextToUser` helpers. Scraps show their thID. Rows use the existing PLA type icons where they exist. A row with violations gets a warning icon and a tooltip listing them, such as "Outside any scrap" or "Missing endline".
-- **Filter:** the sidebar search filter also matches element labels of **loaded** files. It does not load files just to search them.
+- The builder lives in a new `lib/src/auxiliary/th2_element_tree_aux.dart`. For a valid file it walks `TH2File.childrenMPIDs` and each scrap's `childrenMPIDs`, and keeps only `THScrap`, `THPoint`, `THLine` and `THArea` rows. For a broken file it returns one `TH2FileStatusTreeRow(broken)` (§4.2). It runs inside the tree's `Observer`, so structural changes must be observable (§5.4).
+- **Labels:** `<type> <subtype?> <thID?>`, for example `line wall:blocks id=w12` or `point station (1.3)`. Type and subtype names are localized with the existing `MPTextToUser` helpers. Scraps show their thID. Rows use the existing PLA type icons where they exist.
+- **Filter:** the sidebar search filter also matches element labels of **loaded, valid** files. It does not load files just to search them.
 
 ### 4.2 Loading a file's elements, and the broken badge
 
-- `TH2FileNode` rows always show a chevron. Expanding one calls `getTH2FileEditController(filename:)` and `load()` if it is not loaded yet. While loading, one "Loading…" row is shown.
-- **The broken badge appears only once the file is loaded.** Loading happens when the file is expanded in the tree or opened in a tab. No project-wide pre-scan is done. After loading, a broken file's row shows a "broken" badge with the violation count. The badge updates live as violations are fixed or brought back by undo.
+- `TH2FileNode` rows always show a chevron. Expanding one calls `getTH2FileEditController(filename:)` and `load()` if it is not loaded yet. While loading, one "Loading…" status row is shown.
+- **The broken badge appears only once the file is loaded.** Loading happens when the file is expanded in the tree or opened in a tab. No project-wide pre-scan is done. After loading, a broken file's row shows a "broken" badge with the problem count and a tooltip listing the first problems. Expanding it shows a single status row, "Broken file: fix it outside Mapiah and reload". Clicking that row opens the file's tab, which shows the broken-file body (§4.7).
 - Loading does **not** open a tab. Only reading the list never creates dirty state.
-- **Editing from the tree opens the tab.** The first structural edit made from the tree on a file with no open tab calls `addFileTab(path)` and activates it. The command then runs. This keeps the rule "a modified TH2 file has a visible tab", so undo (`Ctrl+Z`), Save and the close-tab prompt work as they do today. For a broken file, the tab shows the broken-file body (§4.8), not the canvas.
+- **Editing from the tree opens the tab.** The first structural edit made from the tree on a file with no open tab calls `addFileTab(path)` and activates it. The command then runs. This keeps the rule "a modified TH2 file has a visible tab", so undo (`Ctrl+Z`), Save and the close-tab prompt work as they do today. Broken files have no edit actions, so this never applies to them.
 - **Cleanup:** `MPGeneralController` gets `disposeTablessTH2Controllers(Iterable<String> canonicalPaths)`. `THProjectController` calls it on close and reload, together with `closeProjectFileTabs`. Dirty controllers always have a tab, so this only ever disposes clean, read-only controllers.
 
-### 4.3 Drop semantics
+### 4.3 Drop semantics (valid files only)
 
 Every drop becomes one request: **move element E to parent P, just before sibling S (or at the end of P)**. The drop zone decides it:
 
@@ -146,92 +169,76 @@ Every drop becomes one request: **move element E to parent P, just before siblin
 |---|---|
 | upper third of T | before T, under T's parent |
 | lower third of T (T collapsed, or not a scrap) | after T, under T's parent |
-| middle of a **scrap** row, or lower third of an expanded scrap | at the **end** of that scrap, or the start when expanded |
+| middle of a **scrap** row | at the **end** of that scrap |
+| lower third of an **expanded** scrap row | at the **start** of that scrap |
 | middle of the **file** row | at the end of the file |
 
-Validation happens in one pure function, `TH2HierarchyAux.validateMove(th2File, elementMPIDs, newParentMPID, beforeSiblingMPID) → MPHierarchyMoveCheck` (`ok` / `rejected(reasonKey)`). It is used both while hovering, for the indicator, and in the command, as a guard. Moves must always land in a **valid position**, in valid and broken files alike. A broken element can be moved *out* to a valid place, but nothing can be moved *into* an invalid one:
+Validation happens in one pure function, `TH2HierarchyAux.validateMove(th2File, elementMPIDs, newParentMPID, beforeSiblingMPID) → MPHierarchyMoveCheck` (`ok` / `rejected(reasonKey)`). It is used both while hovering, for the indicator, and in the command, as a guard. Because the file starts valid and every move lands in a valid position, the file stays valid:
 
 - `scrap` → parent must be the file (`newParentMPID < 0`).
-- `point`/`line`/`area` → parent must be a `THScrap`, and that scrap must not itself be nested in another scrap.
+- `point`/`line`/`area` → parent must be a `THScrap`.
 - An element cannot be dropped onto itself or into its own subtree.
 - A standalone dropped line that borders an area is rejected when the drop changes its scrap (§3.1). The same line may be reordered within its current scrap.
-- An element missing its `end*` cannot be moved until it is closed (§5.3). Its extent in the file is uncertain, so the "close" action comes first. The row's reject tooltip says so.
 - Moving to the same position is a no-op and creates no command.
 
 Feedback: a valid drop shows the usual insertion line (as in `mp_available_scraps_widget.dart`). An invalid drop shows a "not allowed" cursor and a tooltip with the localized reason. Invalid drops never create a command.
 
 ### 4.4 Non-tree children (comments, empty lines, settings)
 
-Hidden children stay where they are. The move primitive resolves "before sibling S" to S's index in the **full** `childrenMPIDs`. "End of scrap" is resolved to `mpAddChildAtEndMinusOneOfParentChildrenList`, just before `endscrap`. A comment line written right above a line in the file therefore stays at its slot when the line moves. That is the safe choice, since the code has no way to know which element a comment "belongs" to. Possible later option: "full-line comments directly above an element move with it."
+Hidden children stay where they are. The move primitive resolves "before sibling S" to S's index in the **full** `childrenMPIDs`. "End of scrap" is resolved to the index of the scrap's `THEndscrap`, just before it. A comment line written right above a line in the file therefore stays at its slot when the line moves. That is the safe choice, since the code has no way to know which element a comment "belongs" to. Possible later option: "full-line comments directly above an element move with it."
 
 ### 4.5 Multi-selection
 
-Rows support `Ctrl`/`Shift` multi-select, which mirrors the canvas selection for valid files (§4.6). Dragging a multi-selection moves all selected rows to the drop point in their current relative order, as **one** command. The drop is rejected if any item fails validation.
+Rows support `Ctrl`/`Shift` multi-select, which mirrors the canvas selection (§4.6). Dragging a multi-selection moves all selected rows to the drop point in their current relative order, as **one** command. The drop is rejected if any item fails validation.
 
-### 4.6 Tree ↔ canvas selection sync (valid files only)
+### 4.6 Tree ↔ canvas selection sync
 
-- Single-clicking an element row of an **open, valid** file activates its tab, sets the active scrap (`setActiveScrap` / `setActiveScrapByChildElement`, `th2_file_edit_controller.dart:1018-1047`), and selects the element through the selection controller. Double-click also zooms to the selection (`zoomToFit(zoomFitToType: MPZoomToFitType.selection)`).
+- Single-clicking an element row of an **open** file activates its tab, sets the active scrap (`setActiveScrap` / `setActiveScrapByChildElement`, `th2_file_edit_controller.dart:1018-1053`), and selects the element through the selection controller. Double-click also zooms to the selection (`zoomToFit(zoomFitToType: MPZoomToFitType.selection)`).
 - The canvas selection is reflected back as row highlighting when the file is expanded. This is read-only and comes from `selectionController`.
 - Single-click on a row of a **tab-less** file only highlights the row. Double-click opens the tab.
-- For a **broken** file, rows are tree-only. Clicking highlights the row, and the canvas is not involved.
 
-### 4.7 Keyboard and context-menu actions (non-drag equivalents)
+### 4.7 Broken-file status
 
-Every row with a PLA or scrap element has a context menu:
-
-- **Bring forward / Send backward** swaps the element with the **next or previous visible sibling row in the same parent, whatever its type**. For example, a point steps over the adjacent line. A sibling is always stepped over **as a whole**. Bringing a point forward past a line moves it past the entire `line … endline` block, including all its segments, options and the `endline`. An area is passed as its whole `area … endarea` block in the same way. The model gives this for free, because segments, options, border references and the `end*` element are children of the `THLine`/`THArea`, not siblings. The move only reorders the scrap's own `childrenMPIDs`, so the point can never land inside another element's block. The element being moved also carries its own block with it (§5.1). Hidden children (comments, empty lines) are stepped over. **Bring to front / Send to back** moves the element to the end or start of its parent. Scraps use the same actions among scraps. These are the literal requests from issue #32. They also get canvas keyboard shortcuts working on the current selection (valid files only). The key bindings are chosen in Phase 4, after checking for conflicts in the keyboard shortcuts page. The candidates are `Ctrl+]`/`Ctrl+[` and `Ctrl+Shift+]`/`Ctrl+Shift+[`.
-- **Move to scrap… ▸ <scrap list>** for PLAs.
-- For violators:
-  - **Move to scrap…** for a PLA outside any scrap;
-  - **Move to file level** for a nested scrap, which lifts it to right after its enclosing scrap;
-  - **Close line**, **Close area** and **Close scrap** for an element missing its `end*` (§5.3);
-  - **Remove** for a stray `endscrap`.
-
-### 4.8 Broken-file status
-
-**Definition.** A loaded file is *broken* when `TH2HierarchyAux.findViolations(th2File)` is not empty. The violation kinds are:
+**Definition.** A loaded file is *broken* when the parser recorded at least one problem: a hierarchy violation or any other parse error. The problem kinds, each with the 1-based line number in the file where it was detected:
 
 | Violation | Detected when |
 |---|---|
-| `plaOutsideScrap(mpID)` | a `THPoint`/`THLine`/`THArea` has the file as parent |
-| `scrapInsideScrap(mpID, enclosingScrapMPID)` | a `THScrap` has a scrap as parent |
-| `strayEndscrap(mpID)` | a `THEndscrap` has the file as parent |
-| `missingEndline(lineMPID)` | a `THLine`'s last child is not a `THEndline` |
-| `missingEndarea(areaMPID)` | a `THArea`'s last child is not a `THEndarea` |
-| `missingEndscrap(scrapMPID)` | a `THScrap`'s last child is not a `THEndscrap` |
-| `areaBorderInOtherScrap(areaMPID, lineMPID)` | a border line's scrap differs from its area's scrap |
+| `plaOutsideScrap` | a `point`/`line`/`area` line appears at file level |
+| `scrapInsideScrap` | a `scrap` line appears while a scrap is open |
+| `strayEndscrap` | an `endscrap` line appears at file level |
+| `missingEndline` | a line is still open when a line that belongs to an enclosing context, or the end of the file, is reached |
+| `missingEndarea` | the same, for an area |
+| `missingEndscrap` | the same, for a scrap (at end of file) |
+| `parseError` | anything else the parser reports today through `_addError(...)` (`th2_file_parser.dart:2454-2459`): a line that fails every applicable grammar, an option that cannot be created, a line-segment option without a segment, an `endline` without a line, a malformed `##XTHERION##`/`##MAPIAH##` setting, or a multiline comment still open at the end of the file |
 
-"Broken" is **computed, not stored**. A MobX `@computed bool isBroken` / `List<THHierarchyViolation> hierarchyViolations` on `TH2FileEditController` derives it from the `_structureRevision` observable (§5.5). Undo and redo therefore move a file between broken and valid automatically.
+Every `_addError(...)` call site counts, with no allow-list. If one of them later turns out to be too strict for real files, the fix is to make the parser accept that input properly, not to let the file open with a line missing.
+
+"Broken" is decided **once, at load**, and stored on the controller as `bool isBroken` plus `List<TH2FileProblem> problems`. It cannot change afterwards: a broken file has no edit actions, and tree edits on a valid file are validated (§4.3). Only a reload can change it.
 
 **Behavior while broken:**
 
-- **Not drawn.** The file's tab replaces `TH2FileEditBodyWidget`'s canvas with a `TH2BrokenFileBodyWidget` panel. The panel shows:
-  - an explanation and the violations list, where clicking a violation reveals and highlights its row in the sidebar tree;
-  - a **Fix hierarchy…** button;
-  - Undo/Redo and Save buttons.
-
-  It holds keyboard focus so `Ctrl+Z`, `Ctrl+Shift+Z`/`Ctrl+Y` and `Ctrl+S` keep working. Canvas-only toolbar actions and state-machine shortcuts are disabled.
-- **Tree only.** Its elements are visible and editable only in the sidebar tree (§4.3, §4.7).
-- **Saveable.** Save, Save As and Save All work. The writer round-trips the partly fixed structure faithfully (§2.5), so a large file can be fixed across several sessions.
-- **Load notice.** Hierarchy violations are reported as **warnings** (a new `parseWarnings` list on the parse result), not load errors. Instead of the load-error dialog, the file shows the broken badge and the broken panel. Plain syntax errors keep today's dialog.
+- **Not drawn.** In `TH2FileEditBodyWidget`, when the load result is broken, the `FutureBuilder` shows a new `TH2BrokenFileBodyWidget` instead of `_buildEditor(...)`, and hides the last-used PLA buttons and the bottom status bar. The panel shows:
+  - an explanation: the file has structural errors, Mapiah will not display or change it, and it must be fixed in a text editor;
+  - the problems list, each with its line number, the source line and a short explanation (for example "Line 42: point outside any scrap" or "Line 4: unrecognized command"), plus the expandable "Details" section;
+  - the file path, with a **Copy path** button;
+  - a **Reload** button.
+- **Not editable, not saveable.** The canvas, its state machine and its keyboard shortcuts are never mounted for the file. The controller is never dirty, so Save and Save All skip it and closing its tab never prompts. Save As is disabled for it.
+- **No load dialog.** Problems are **not** shown in today's "parsing warnings" dialog. The broken panel replaces it. Since any parse error now makes the file broken, a loaded `.th2` file is either valid with no errors or broken, so `TH2FileEditBodyWidget._handleSoftLoadFailure` (`th2_file_edit_body_widget.dart:187-210`) has no remaining caller and is removed, together with the `parsingWarnings` string if nothing else uses it. A load that **throws** (`snapshot.hasError`) keeps today's `_handleLoadFailure` dialog.
+- **Readable messages.** Today's error strings are internal (`'petitparser returned a "Failure"' at '_injectContents()' …`) and have no line number. Each problem becomes a `TH2FileProblem(kind, lineNumber, sourceLine, detail)`. The panel shows the line number, the source line as written, and a localized one-line explanation per kind. The internal text goes in an expandable "Details" section, for bug reports.
+- **No canvas setup.** `_postParseInitialize` still runs `_initializeReactions()`, `setFilename(...)` and clears `_isLoading` for a broken file. It skips the canvas-only part of `_finalFilePreparations` (active scrap, snap targets, selectable elements, used types). The split keeps `createFromNewTH2File` (`th2_file_edit_controller.dart:630-638`) working unchanged, since a new file is always valid.
+- **Tree.** Badge and status row only (§4.2). No element rows, no context-menu actions except **Reload**.
 - **Run Therion.** The run dialog lists open broken files as a warning before running. Therion would fail on them anyway.
 
-**Why the canvas must not see a broken file.** Several canvas paths assume that a PLA's parent is a scrap: active scrap, selection, snapping and the non-selected-elements painter. `addElementToParent`'s default insertion assumes the closing `end*` exists (§2.2). Keeping broken files off the canvas avoids having to harden all of these paths.
+**Why the canvas must not see a broken file.** Several canvas paths assume that a PLA's parent is a scrap: active scrap, selection, snapping and the non-selected-elements painter. `addElementToParent`'s default insertion assumes the closing `end*` exists (§2.2). The parser has also dropped or misplaced lines while reading it (§2.3), so any save would lose data. Keeping broken files out of the editor entirely avoids both problems.
 
-**Fix-hierarchy dialog.** It is reachable from the broken panel and from the file row's context menu. It lists the violations with a proposed fix for each:
+**Reload.** `MPGeneralController.reloadTH2File(canonicalPath)` replaces the controller with `getTH2FileEditController(filename:, forceNewController: true)`, disposes the old one, and calls `load()`. An open tab rebinds to the new controller and shows either the canvas or the broken panel again. The sidebar row updates its badge. Reload is only offered for broken files, which are never dirty, so no changes can be lost. Reloading a *valid* file is out of scope.
 
-- orphan PLAs → move into [existing scrap ▾], or a **new scrap** placed after the last scrap (`MPAddScrapCommand` with an auto-generated thID);
-- nested scraps → lift to file level right after their enclosing scrap;
-- stray `endscrap` → remove;
-- missing `endline`/`endarea`/`endscrap` → close;
-- an area border in another scrap → move the line into the area's scrap.
+### 4.8 Keyboard and context-menu actions (non-drag equivalents, valid files only)
 
-The dialog runs everything as one `MPMultipleElementsCommand`, so one undo reverts it. It uses `MPDialogBottomWidget` for its buttons. This dialog is also the way to fix a broken file opened **without a project**, when there is no sidebar tree.
+Every row with a PLA or scrap element has a context menu:
 
-**Switching between broken and valid.** When `isBroken` changes:
-
-- **broken → valid:** clear selection, run the same setup `_finalFilePreparations` does (active scrap = first scrap, `updateHasMultipleScraps`, snap targets, selectable elements, used types, `initializeUsedTypes`), then mount the canvas body. That setup is split out of `_finalFilePreparations` into `prepareCanvasForValidFile()`, so load and this switch share one code path.
-- **valid → broken** (only through undo or redo of a fix): reset the state machine to the empty-selection state, clear selection, and unmount the canvas.
+- **Bring forward / Send backward** swaps the element with the **next or previous visible sibling row in the same parent, whatever its type**. For example, a point steps over the adjacent line. A sibling is always stepped over **as a whole**. Bringing a point forward past a line moves it past the entire `line … endline` block, including all its segments, options and the `endline`. An area is passed as its whole `area … endarea` block in the same way. The model gives this for free, because segments, options, border references and the `end*` element are children of the `THLine`/`THArea`, not siblings. The move only reorders the scrap's own `childrenMPIDs`, so the point can never land inside another element's block. The element being moved also carries its own block with it (§5.1). Hidden children (comments, empty lines) are stepped over. **Bring to front / Send to back** moves the element to the end or start of its parent. Scraps use the same actions among scraps. These are the literal requests from issue #32. They also get canvas keyboard shortcuts working on the current selection. The key bindings are chosen in Phase 4, after checking for conflicts in the keyboard shortcuts page. The candidates are `Ctrl+]`/`Ctrl+[` and `Ctrl+Shift+]`/`Ctrl+Shift+[`.
+- **Move to scrap… ▸ <scrap list>** for PLAs.
 
 ## 5. Model and Command Layer
 
@@ -241,8 +248,8 @@ Add to `TH2File`:
 
 ```dart
 /// Moves [elementMPID] (with its whole subtree) to [newParentMPID], inserting
-/// it at [positionInNewParent] in the parent's full childrenMPIDs (or
-/// mpAddChildAtEndMinusOneOfParentChildrenList). Does not validate hierarchy.
+/// it at [positionInNewParent] in the parent's full childrenMPIDs. Does not
+/// validate hierarchy.
 void moveElementToParent({
   required int elementMPID,
   required int newParentMPID,
@@ -253,108 +260,134 @@ void moveElementToParent({
 Implementation:
 
 1. `oldParent.childrenMPIDs.remove(mpID)` directly. It does **not** call `removeElementFromParent`, because that unregisters the thID (§2.2).
-2. `newElement = element.copyWith(parentMPID: newParentMPID)`, then `substituteElement(newElement)`. Phase 2 checks that every moved type's `copyWith` accepts `parentMPID` (`THScrap.copyWith` at `th_scrap.dart:111`).
-3. Insert into `newParent.childrenMPIDs` at the resolved index.
+2. `newElement = element.copyWith(parentMPID: newParentMPID)`, then `substituteElement(newElement)`. Checked: `THScrap`, `THPoint`, `THLine` and `THArea` `copyWith` accept `parentMPID`, and parent types copy `childrenMPIDs` into the new instance, so the subtree survives the substitution.
+3. Insert into `newParent.childrenMPIDs` at the given index. `moveElementToParent` inserts by itself, not through `addElementToParent`, so callers always pass a concrete index: for "end of scrap", the index of the scrap's `THEndscrap`; for "end of file", `childrenMPIDs.length`.
 4. Invalidate caches: both parents' `_drawableChildrenMPIDs` (add a public `invalidateDrawableChildrenCache()` on `THIsParentMixin`), `_scrapMPIDs` when a scrap moves, the scrap bounding boxes of both old and new parent (`clearBoundingBox()`), and `_areaMPIDByLineMPID`/`_areaMPIDByLineTHID` when an area or border line moves.
 
 The children's `parentMPID` points at the element's unchanged MPID, so the subtree does not need rewriting.
+
+`TH2File.moveElementToParent` is the raw model primitive. `executeMoveElements` wraps it at controller level. It does what `TH2FileEditElementEditController.substituteElement` (`:505-533`) does after a substitution: `addUpdateSelectableElement`, `updateSelectedElementLogicalClone` and the station-cache invalidation. When an element changes scrap, it also calls `selectionController.resetSelectableElements()`, because selectable elements depend on the active scrap.
 
 ### 5.2 `MPMoveElementsCommand`
 
 New file `lib/src/commands/mp_move_elements_command.dart` (a `part of 'mp_command.dart'`, like the rest):
 
 - Fields: `List<MPElementMove> moves` (`elementMPID`, `newParentMPID`, `positionInNewParent`), resolved at prepare time into concrete indices, applied in order.
-- `_prepareUndoRedoInfo` records each element's original `(parentMPID, index)`. Undo applies the inverse moves in **reverse** order. This follows `MPRemoveElementCommand._prepareUndoRedoInfo`'s pattern.
-- `_actualExecute` → `elementEditController.executeMoveElements(moves)` (`@action`). It calls `TH2File.moveElementToParent` for each move, bumps `_structureRevision`, and redraws the canvas when the file is valid.
+- **Indices are resolved sequentially.** Each move's source index and target index are computed against the state left by the **previous moves in the same command**, not against the state before the command. The resolver simulates the moves on a copy of the affected `childrenMPIDs` lists. Example: a scrap has `[a, b, c, E]`, and `[a, b]` is moved to another scrap. If the source indices were recorded up front (`a@0`, `b@1`), undoing in reverse would give `[a, c, b, E]`. Recorded sequentially (`a@0`, then `b@0`), undo restores `[a, b, c, E]`. The same applies to target indices when several elements land in one parent, or leave and re-enter the same parent.
+- `_prepareUndoRedoInfo` records each element's `(parentMPID, index)` as it was just before *its own* move. Undo applies the inverse moves in **reverse** order. This follows `MPRemoveElementCommand._prepareUndoRedoInfo`'s pattern.
+- `_actualExecute` → `elementEditController.executeMoveElements(moves)` (`@action`). It calls `TH2File.moveElementToParent` for each move, bumps `_structureRevision`, and redraws the canvas.
 - `toMap`/`fromMap`/`copyWith`/`==`/`hashCode` follow `MPReorderScrapsCommand`.
 - Register `MPCommandType.moveElements`, `MPCommandDescriptionType.moveElements`, the factory `MPCommandFactory.moveElements(...)`, the `mp_command.dart` `fromMap` switch, and `MPTextToUser` + `.arb` strings ("Move elements" / "Mover elementos").
 - Scrap-only reorders from the new tree also use `MPMoveElementsCommand`. `MPReorderScrapsCommand` stays, because the scraps dialog uses it and it appears in saved undo maps.
 - Area moves between scraps expand into the area plus all of its referenced border lines inside the same command (§3.1), in the prepare step. Area moves within one scrap include only the area.
 
-### 5.3 Closing elements with a missing `end*`
-
-**Where the parser closes them (§6).** The parser closes an unterminated line, area or scrap **implicitly**, at the first line that doesn't belong to it. So the element's children are exactly the lines that were valid content for it, and it has no `THEndline`/`THEndarea`/`THEndscrap` child.
-
-**What "Close" does.** It adds the missing closing element as the **last child** with the existing `MPAddElementCommand`. It uses `elementPositionInParent: mpAddChildAtEndOfParentChildrenList`, **not** the end-minus-one default, and a new `THEndline`/`THEndarea`/`THEndscrap` with an empty `originalLineInTH2File`. The writer then generates `endline`/`endarea`/`endscrap` on its own line right after the element's last child (§2.3). No new command type is needed. The description reuses "Add element", or gets a specific "Close element" description type if that reads better in the undo menu (decided in Phase 5).
-
-### 5.4 Controller API
+### 5.3 Controller API
 
 In `TH2FileEditElementEditController`:
 
 - `MPHierarchyMoveCheck checkMoveElements({required List<int> elementMPIDs, required int newParentMPID, int? beforeSiblingMPID})`, a pure wrapper over `TH2HierarchyAux.validateMove`.
 - `void moveElements({required List<int> elementMPIDs, required int newParentMPID, int? beforeSiblingMPID})` checks, resolves positions, builds the command and runs `_th2FileEditController.execute(...)`.
 - Convenience methods used by the context menu and shortcuts:
-  - `bringForward`, `sendBackward`, `bringToFront` and `sendToBack` (operating on `List<int>`, stepping over one visible sibling row of any type, §4.7);
-  - `moveElementsToScrap(List<int>, int scrapMPID)`;
-  - `liftScrapToFileLevel(int scrapMPID)`;
-  - `closeElement(int mpID)`;
-  - `removeStrayEndscrap(int mpID)`.
-- `fixHierarchy(TH2HierarchyFixPlan plan)` builds one `MPMultipleElementsCommand`.
+  - `bringForward`, `sendBackward`, `bringToFront` and `sendToBack` (operating on `List<int>`, stepping over one visible sibling row of any type, §4.8);
+  - `moveElementsToScrap(List<int>, int scrapMPID)`.
 
-### 5.5 Observability
+All of them assert that the file is not broken.
 
-The tree and the broken status must update after a move, undo or redo. `TH2File` is not a MobX store. Add a `@readonly int _structureRevision` to `TH2FileEditController`. It is bumped by `executeMoveElements`, `executeAddElement`, `executeRemoveElement…`, `executeReorderScraps` and element substitutions that change a label (type or thID edits). Undo and redo also go through these `execute*` methods, so they update the tree too. The tree's `Observer` and the `@computed hierarchyViolations`/`isBroken` read it.
+### 5.4 Observability
 
-## 6. Lenient Parsing
+The tree must update after a move, undo or redo. `TH2File` is not a MobX store. Add a `@readonly int _structureRevision` to `TH2FileEditController`. It is bumped by `executeMoveElements`, `executeAddElement`, `executeRemoveElement…`, `executeReorderScraps` and element substitutions that change a label (type or thID edits). Undo and redo also go through these `execute*` methods, so they update the tree too. The tree's `Observer` reads it.
+
+`TH2FileParser` adds **every parsed line** through `executeAddElement` (for example `_injectScrap` and `_injectEndScrap`). The bump must be skipped while `_isLoading` is true, with a single bump in `_postParseInitialize`. Otherwise a large file triggers one MobX notification per line during load.
+
+`isBroken` and `problems` are set once in `_postParseInitialize`, before `_isFileLoaded` becomes true, so the tree and the tab body never see a loaded file with an unknown status. `_isFileLoaded` must be observable for the tree's badge. It is a plain field today (`th2_file_edit_controller.dart:116`), so it becomes `@readonly`.
+
+## 6. Parser Changes
+
+### 6.1 Detecting hierarchy violations
+
+The parser only has to **detect and locate** violations, not build a usable model of a broken file: that model is never drawn, edited or saved. The requirements are:
+
+- report every violation of §4.7 with the right line number;
+- never throw, whatever the input;
+- stay in sync with the file's real structure after a violation, so later violations are reported at the right lines instead of as a cascade of unrelated errors.
 
 Changes in `th2_grammar.dart` and `th2_file_parser.dart`:
 
-1. **File level:** `th2Structure()` also accepts `point() | line() | area() | endscrap()`. The inject methods already use `_currentParent`, which is the file at this level. `line`/`area` already push their child parsers, so their bodies parse correctly at file level too. A file-level `endscrap` is kept as a `THEndscrap` child of the file (`strayEndscrap`). `_injectEndScrap` must special-case `TH2File` as the current parent: add the `THEndscrap`, record the warning, leave `_currentParent` unchanged, and return without calling `_returnToParentParser()`. The normal close-and-pop behavior remains unchanged for an `endscrap` belonging to a real scrap. This prevents a root-level stray `endscrap` from causing a parent cast or parser-stack underflow.
-2. **Scrap level:** `scrapContent()` also accepts `scrap()`. `_injectScrap` already pushes the scrap parser and makes the new scrap `_currentParent`, and `_injectEndScrap` pops. Nested scraps therefore produce a `THScrap` whose `parentMPID` is the enclosing scrap.
-3. **Implicit closing of unterminated line/area (missing `endline`/`endarea`):** when the current context is a line or area and a line fails that context's grammar, the parser checks it against the **enclosing** context. If it parses there (for example `point`, `line`, `area`, `endscrap` or `scrap`), the parser:
-   - records `missingEndline`/`missingEndarea` for the open element;
-   - calls `setCurrentParent(parent)` and `_returnToParentParser()` **without** adding a `THEndline`/`THEndarea`;
-   - re-dispatches the same source line in the parent context.
+1. **Classify a failing line against the enclosing contexts.** When a line fails the current context's grammar, the parser tries it against the contexts on the parser stack, innermost first, and then the scrap-content grammar at file level:
+   - In a **line or area** context, if the line parses in the enclosing scrap or file context, the open line or area is closed implicitly: record `missingEndline`/`missingEndarea` at the line that closed it, pop the parent and parser **without** adding a `THEndline`/`THEndarea`, and re-dispatch the same line in the enclosing context.
+   - At **file level**, a line that parses as `point`/`line`/`area` records `plaOutsideScrap`. A `line`/`area` pushes its content parser so its body is consumed without further errors. It is injected with the file as parent. The model is discarded anyway, so this only keeps the parser state right.
+   - At **file level**, an `endscrap` records `strayEndscrap` and is skipped. `_injectEndScrap` is not called, so there is no parent cast and no parser-stack underflow.
+   - In a **scrap** context, a `scrap` line records `scrapInsideScrap` and opens the nested scrap as usual (`_injectScrap` already pushes the scrap parser), so the inner `endscrap` closes the inner scrap, not the outer one.
+   - Anything else records a `parseError` at that line and drops the line, as today. Dropping is harmless now, because the model of a broken file is discarded.
+2. **Area-context keyword guard.** In the area context, `borderLineReference()` accepts any single word (§2.3), so a structural keyword would never fail there. Before dispatching a line in the area context, the parser checks whether the line is exactly `endscrap`, `endline` or a `scrap …` line that parses in the enclosing context. If so, it treats the line as closing the area implicitly, as in step 1, instead of creating a `THAreaBorderTHID` named after the keyword. The grammar could reject these keywords in `borderLineReference()` instead, but that would change how valid files that happen to use such a thID are parsed. The pre-dispatch check leaves them alone.
+3. **End of file.** Every line, area or scrap still open records its `missing*` violation at the line where it was opened. That replaces the generic "Multiline commmands left open" error for these three element kinds (multiline comments keep that error).
+4. **Ambiguity: nested scrap vs missing `endscrap`.** `scrap A … scrap B … endscrap` (EOF) is reported as B nested in A (`scrapInsideScrap`) and A missing its `endscrap`. Both messages point at the lines the user has to look at, which is all a detect-only parser needs.
+5. **Line numbers for every problem.** `_injectContents` already iterates `_splittedContents`. The parser keeps the current 1-based line number (counting the lines of multi-line constructs as they are read), and `_addError(...)` records it with the source line. The end-of-file checks use the number of the line that opened the unclosed element.
+6. **Result.** `TH2FileParser.parse` returns the problems in a new `problems` list (`List<TH2FileProblem>`) next to today's `errors` strings, which stay for existing callers and tests. `TH2FileEditControllerCreateResult` gains `isBroken` and `problems`. `isBroken` is `problems.isNotEmpty`, and a file is broken exactly when today's `isSuccessful` would be `false` or a hierarchy violation was found.
+7. **No silent drops.** Every non-empty source line must end up either in the model or as a problem. The `weirdareaopt 5` case in §2.3 shows that today this is not always true. A parser-level invariant test checks it for every fixture (§7, Phase 1).
 
-   If it doesn't parse there either, today's error-and-drop behavior applies. At end of file, every line, area or scrap still open is closed implicitly the same way, with its `missing*` violation. That replaces the generic "Multiline commmands left open" error for these three element kinds (multiline comments keep that error).
-4. **Ambiguity: nested scrap vs missing `endscrap`.** `scrap A … scrap B … endscrap` (EOF) is read as B nested in A, with A missing its `endscrap`. The standard fixes (lift B to file level, then close A) give a valid file, and the user can reorder afterwards. The alternative reading, "A closed just before B", would need guesswork and is not attempted.
-5. Each accepted violation adds a **warning** (`parseWarnings`), not an error, so the load-error dialog stays for real syntax errors.
-6. **Writer:** no change expected. A broken file round-trips as it was read. Missing `end*` lines stay missing until closed.
+### 6.2 Unknown types are accepted, unknown options are not
+
+1. **Unknown point, line and area types and subtypes** (including `u:` user types) already parse with no error and round-trip byte for byte (§2.3). They stay accepted and are **not** problems. No change; Phase 1 adds regression tests so they keep working.
+2. **Unknown options are parse errors**, so a file with one is broken (§4.7). No grammar fallback is added for them, and `THUnrecognizedCommandOption` stays unused.
+3. **Report them clearly, once.** Today an unknown option on a `scrap`, `line` or `area` line makes the whole opening line fail, so the parser never opens the block, and the rest of the block (or, for a scrap, the rest of the file) turns into a cascade of unrelated errors (§2.3). For a readable problem list, the parser recovers:
+   - when a `scrap`, `line` or `area` line fails the grammar, the parser tries a relaxed recovery rule that only matches the command keyword and its first argument (`scrap <id> …`, `line <type> …`, `area <type> …`);
+   - if that matches, it records **one** `parseError` at that line ("unrecognized option or invalid option value"), opens the block as usual so its body and `end*` line are consumed normally, and carries on. The model is discarded anyway, because the file is broken;
+   - a `point` line fails on its own and needs no recovery.
+4. **Unknown option lines inside a line or an area** (`weirdsegopt xyz`, `weirdareaopt 5`) are reported as a `parseError` at that line. The implicit-close check of §6.1 step 1 runs first, so a `point`/`line`/`area`/`scrap`/`endscrap` line still closes an unclosed element instead of being reported as an unknown option.
+5. **Fix the silent drop.** Today `weirdareaopt 5` inside an area is dropped with no error (§2.3). Phase 1 traces the cause and makes it a `parseError`, so the file is correctly reported as broken. The no-silent-drops check of §6.1 step 7 guards against similar cases.
 
 ## 7. Implementation Phases
 
 Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGELOG entry.
 
-### Phase 1: Lenient parser, violations and broken status
+### Phase 1: Violation detection and the broken-file body
 
-- Grammar and parser changes from §6.
-- New `lib/src/auxiliary/th2_hierarchy_aux.dart` with `findViolations` and `validateMove`.
-- `_structureRevision`, `@computed hierarchyViolations`/`isBroken`, `prepareCanvasForValidFile()` split out of `_finalFilePreparations`, `TH2BrokenFileBodyWidget` (violations list, Undo/Redo/Save, focus and shortcuts), and body switching in `th2_file_tabs_page.dart`. Save works for broken files.
+- Parser changes from §6.
+- `TH2FileProblem` type (§4.7), line tracking in the parser, `isBroken`/`problems` on the controller and the load result, and the split of `_finalFilePreparations` into the always-run part and the canvas-only part (§4.7).
+- `TH2BrokenFileBodyWidget` and the switch in `TH2FileEditBodyWidget`; no dirty state, Save/Save As/Save All skip or disable broken files; `MPGeneralController.reloadTH2File` and tab rebinding.
+- Run-Therion warning for open broken files.
 - Tests:
-  - `t39xx_th2_file_parser_hierarchy_violations_test.dart`. Cases:
+  - `t3939_th2_file_parser_hierarchy_violations_test.dart`. Cases, each asserting the violation kinds and line numbers, no exception, and that the load is reported broken:
     - PLA at file level;
-    - multi-line `line…endline` and `area…endarea` at file level;
+    - multi-line `line…endline` and `area…endarea` at file level (one violation each, no cascade from their bodies);
     - nested scrap with contents;
-    - stray `endscrap`;
-    - stray file-level `endscrap` followed by another top-level element (no parser exception, source line retained, warning recorded, and write-back preserved);
+    - stray `endscrap`, including a stray file-level `endscrap` followed by another top-level element;
     - missing `endline` followed by `point`/`line`/`endscrap`;
-    - missing `endarea`;
+    - missing `endarea` followed by `line`/`point`;
+    - missing `endarea` followed directly by `endscrap` (reports `missingEndarea`, not a border reference named `endscrap`);
     - missing `endscrap` at EOF;
-    - missing `endline` at EOF.
-
-    Each case asserts the model shape, the violations and warnings, **no dropped source lines**, and a **byte-identical write-back**.
-  - `t39xx_th2_hierarchy_aux_test.dart`: `findViolations` for every kind, and the `validateMove` matrix (every element type × every parent type, self-subtree, area-border rule, unclosed element).
-  - `t39xx_th2_broken_file_body_widget_test.dart`: a broken file shows the panel and not the canvas, Save works, and switching to valid mounts the canvas with an active scrap.
+    - missing `endline` at EOF;
+    - a valid file with a border thID that is an ordinary word is still valid;
+    - unknown types are **not** problems and round-trip byte for byte: an unknown point, line and area type, an unknown point and line subtype, and a `u:` user type;
+    - unknown options **are** problems (§6.2): an unknown option, with an argument and as a flag, on a `point`, `line`, `area` and `scrap` line, each reported as **one** `parseError` at that line with no cascade from the block's body or the rest of the file; an unknown line-point option line; an unknown option line inside an area (today's silent drop);
+    - an unknown option line inside an unclosed line or area does not hide a following `point`/`line`/`endscrap`, which still closes the element and is reported as a missing `end*`;
+    - **no silent drops:** for every Phase 1 fixture, every non-empty source line is either in the model or reported as a problem (§6.1 step 7);
+    - plain syntax errors, each reported as `parseError` with the right line number and source line: a misspelled command (`poin …`) inside a scrap, a line point with one coordinate inside a line, a line-segment option with no segment, a malformed `##XTHERION##` image setting, and an unclosed multiline comment at EOF.
+  - Existing parser tests stay green: valid files are parsed exactly as before.
+  - `t3940_th2_broken_file_body_widget_test.dart`: a broken file shows the panel and not the canvas, lists the problems (hierarchy violations and plain syntax errors) with line numbers, never opens the "parsing warnings" dialog, is never dirty, Save As is disabled, closing its tab does not prompt, and Reload after fixing the file on disk mounts the canvas with an active scrap.
 
 ### Phase 2: Model primitive and `MPMoveElementsCommand`
 
-- `TH2File.moveElementToParent`, `THIsParentMixin.invalidateDrawableChildrenCache`, `MPMoveElementsCommand` with its registration, localization and factory, `prepareMoveElements`/`executeMoveElements`, close and remove-stray helpers (§5.3), and the convenience methods from §5.4.
+- `TH2File.moveElementToParent`, `THIsParentMixin.invalidateDrawableChildrenCache`, `MPMoveElementsCommand` with its registration, localization and factory, `prepareMoveElements`/`executeMoveElements`, `_structureRevision` (§5.4), and the convenience methods from §5.3.
+- `TH2HierarchyAux.validateMove` in a new `lib/src/auxiliary/th2_hierarchy_aux.dart`.
 - `MPGeneralController.disposeTablessTH2Controllers` and the call from project close and reload.
 - Tests:
-  - `t24xx_commands_mpmoveelementscommand_test.dart` (next to `t2460_commands_mpreorderimagescommand_test.dart`): reorder within a scrap, move between scraps, scrap reorder, an area moved within its scrap without moving border lines, an area moved across scraps together with its border lines, multi-element move, and undo/redo returning `childrenMPIDs` and `parentMPID` exactly. Also `toMap`/`fromMap` round-trip, thID registry unchanged, and a written file that differs only in line order.
+  - `t2462_commands_mpmoveelementscommand_test.dart` (next to `t2460_commands_mpreorderimagescommand_test.dart`; `t2461` is taken): reorder within a scrap, move between scraps, scrap reorder, an area moved within its scrap without moving border lines, an area moved across scraps together with its border lines, multi-element move (including several adjacent siblings from one parent, §5.2), and undo/redo returning `childrenMPIDs` and `parentMPID` exactly. Also `toMap`/`fromMap` round-trip, thID registry unchanged, a written file that differs only in line order, and a selected element keeping a consistent selection after a move.
+  - `t3941_th2_hierarchy_aux_test.dart`: the `validateMove` matrix (every element type × every parent type, self-subtree, area-border rule, no-op move).
   - Bring forward/backward/front/back: stepping over a sibling of another type, stepping over hidden comments, already first or last. A point brought forward past a multi-segment line must be written **after that line's `endline`**, and a point sent backward past an area must be written **before its `area` line**, never between an element's opening and `end*` lines.
-  - Close element: the written file gains exactly one `endline`/`endarea`/`endscrap` line in the right place. Undo removes it. Broken-to-valid switching after the last fix, and back to broken on undo.
+  - `_structureRevision` is bumped once per load, not once per parsed element.
 
 ### Phase 3: Element tree in the sidebar (read-only)
 
-- Sealed row model, flattener callback, `th2_element_tree_aux.dart` row builder, and `TH2ElementTreeRowWidget` (icon, label, violation marker, selection highlight).
-- Chevron on `TH2FileNode`, lazy load on expand with loading and error rows, and the broken badge after loading (§4.2).
+- Sealed row model, flattener callback, `th2_element_tree_aux.dart` row builder, `TH2ElementTreeRowWidget` (icon, label, selection highlight) and the status row (loading, load error, broken).
+- Chevron on `TH2FileNode`, lazy load on expand, and the broken badge after loading (§4.2). Reload from the broken file row's context menu.
 - Filter matching of loaded element labels, and the header order tooltip.
-- Tree → canvas selection sync and canvas → tree highlight for valid files (§4.6).
+- Tree → canvas selection sync and canvas → tree highlight (§4.6).
 - Tests:
   - update `t3881_th_project_tree_flatten_test.dart` and `t3883_th_project_tree_widget_test.dart`;
-  - `t39xx_th2_element_tree_rows_test.dart`: hidden children are excluded, violators are included and flagged, nested scraps recurse, order is preserved;
-  - `t39xx_th2_element_tree_widget_test.dart`: expanding loads without opening a tab, the badge appears only after load, a row tap selects on the canvas, the tree rebuilds after undo.
+  - `t3942_th2_element_tree_rows_test.dart`: hidden children are excluded, order is preserved, a broken file yields only its status row;
+  - `t3943_th2_element_tree_widget_test.dart`: expanding loads without opening a tab, the badge appears only after load, a broken file shows the badge and status row, a row tap selects on the canvas, the tree rebuilds after undo.
 
 ### Phase 4: Drag and drop, context menu, shortcuts
 
@@ -362,23 +395,18 @@ Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGE
 - An insertion-line indicator, reject feedback with a localized reason, auto-expand of a collapsed scrap after hovering for `mpProjectTreeDragHoverExpandDelayMilliseconds` (new constant), and auto-scroll near the list edges.
 - Cross-file drag payloads are rejected with a clear reason.
 - Opening the tab on the first edit of a tab-less file (§4.2).
-- Row context menu (§4.7) and canvas shortcuts for forward/backward/front/back on the current selection.
+- Row context menu (§4.8) and canvas shortcuts for forward/backward/front/back on the current selection.
 - Tests:
-  - widget drag tests: valid reorder, valid move between scraps, same-scrap border-line reorder, and rejected drops (scrap into scrap, PLA onto the file row, border line alone across scraps, unclosed element). Each asserts the resulting `childrenMPIDs` or that no command was pushed;
+  - widget drag tests: valid reorder, valid move between scraps, same-scrap border-line reorder, and rejected drops (scrap into scrap, PLA onto the file row, border line alone across scraps). Each asserts the resulting `childrenMPIDs` or that no command was pushed;
   - menu actions;
   - shortcuts.
 
-### Phase 5: Fix-hierarchy dialog
+### Phase 5: Documentation and localization
 
-- The dialog from §4.8, reachable from the broken panel and the file row menu.
-- Tests: the dialog turns every Phase 1 fixture into a valid file (`findViolations` empty), a single undo reverts it, and it works on a broken file opened without a project.
-
-### Phase 6: Documentation and localization
-
-- EN/PT `.arb` strings for every new label, reason, badge, violation, menu item, dialog, panel and tooltip, followed by `flutter gen-l10n`.
+- EN/PT `.arb` strings for every new label, reason, badge, violation, menu item, panel and tooltip, followed by `flutter gen-l10n`.
 - Help pages (EN/PT):
   - a new section "Drawing order and element tree";
-  - a new section "Broken files", covering which violations exist and how to fix them;
+  - a new section "Broken files", covering which violations exist, that Mapiah does not display or change such files, and how to fix them in a text editor and reload;
   - a mention in the project-sidebar section.
 - Keyboard shortcuts page with the new shortcuts in alphabetical order.
 - CHANGELOG entry that references #32.
@@ -388,20 +416,21 @@ Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGE
 | Area | Files |
 |---|---|
 | Model | `lib/src/elements/th2_file.dart`, `lib/src/elements/mixins/th_is_parent_mixin.dart` |
-| Parser | `lib/src/mp_file_read_write/th2_grammar.dart`, `th2_file_parser.dart` |
+| Parser | `lib/src/mp_file_read_write/th2_grammar.dart` (recovery rules for `scrap`/`line`/`area` lines), `th2_file_parser.dart` |
 | Commands | new `lib/src/commands/mp_move_elements_command.dart`, `mp_command.dart`, `factories/mp_command_factory.dart`, `types/mp_command_type.dart`, `types/mp_command_description_type.dart` |
-| Controllers | `th2_file_edit_element_edit_controller.dart`, `th2_file_edit_controller.dart` (`_structureRevision`, `isBroken`, `prepareCanvasForValidFile`), `mp_general_controller.dart` (tab-less cleanup, open-on-edit helper), `th_project_controller.dart` (cleanup call) |
+| Controllers | `th2_file_edit_element_edit_controller.dart`, `th2_file_edit_controller.dart` (`_structureRevision`, `isBroken`, `problems`, `_finalFilePreparations` split), `mp_general_controller.dart` (tab-less cleanup, open-on-edit helper, `reloadTH2File`), `th_project_controller.dart` (cleanup call, skip broken files on save) |
 | Aux | new `lib/src/auxiliary/th2_hierarchy_aux.dart`, new `th2_element_tree_aux.dart`, `th_project_tree_flatten_aux.dart`, `mp_text_to_user.dart` |
-| Widgets / pages | `th_project_tree_widget.dart`, `th_project_tree_node_widget.dart`, new `th2_element_tree_row_widget.dart`, new `th2_broken_file_body_widget.dart`, new Fix-hierarchy dialog widget, `th2_file_edit_body_widget.dart` / `th2_file_tabs_page.dart` (body switching), `mp_therion_run_dialog_widget.dart` (broken-file warning) |
+| Widgets / pages | `th_project_tree_widget.dart`, `th_project_tree_node_widget.dart`, new `th2_element_tree_row_widget.dart`, new `th2_broken_file_body_widget.dart`, `th2_file_edit_body_widget.dart`, `th2_file_tabs_page.dart` (Save As disabled for broken files), `mp_therion_run_dialog_widget.dart` (broken-file warning) |
 | Constants | `mp_constants.dart` (drag hover delay, drop-zone fractions) |
 | l10n / docs | `lib/l10n/intl_en.arb`, `intl_pt.arb`, help pages EN/PT, keyboard-shortcuts page, `CHANGELOG.md` |
 
 ## 9. Risks and Open Questions
 
-1. **Implicit-close heuristics (§6.3-§6.4).** The re-dispatch rule is simple but decides where an unterminated element ends. The fixtures in Phase 1 pin the behavior down. Any ambiguous case is resolved toward keeping every source line in the model, never dropping one.
-2. **Switching between broken and valid (§4.8).** Remounting the canvas mid-session must leave no stale state (selection, active scrap, state machine, overlay windows). Mitigation: one shared `prepareCanvasForValidFile()` and widget tests covering both directions.
-3. **Code paths that assume a scrap parent.** These are avoided rather than fixed, because broken files never reach the canvas. Any new canvas feature must keep checking `isBroken` before mounting.
-4. **Comments next to moved elements (§4.4).** Leaving comments in place can separate a comment from the element it describes. This is acceptable for v1.
-5. **Performance on large files.** Rebuilding rows on every `_structureRevision` bump is O(visible rows) and only happens for expanded files. If needed, cache the row list per `(path, revision)`. `findViolations` is O(elements) and only runs on structural changes.
-6. **Tab-less controllers.** These use memory for files that were only browsed. Mitigation: cleanup on project close. A possible later step is to dispose a clean, tab-less controller when its file row collapses.
-7. **Undo location.** The undo for a tree edit lives on the file's own stack. Opening and activating the tab on the first edit (§4.2) keeps `Ctrl+Z` natural. Edits made while another file's tab is active switch tabs, which is intentional and visible.
+1. **Behavior change for existing users.** Files with hierarchy violations or any other parse error open today on the canvas, with lines silently dropped. After this change they no longer open for editing, even when the only problem is one unknown option or one malformed `##XTHERION##` line. Files that use options from a newer Therion version, or custom options, are affected too. This is intended, since editing and saving them loses data, but it must be called out in the CHANGELOG and the help page.
+2. **Implicit-close heuristics (§6.1, steps 1-2).** They decide at which line a missing `end*` is reported. The Phase 1 fixtures pin that down. A wrong guess only moves a line number in a warning; it cannot damage data, because the file is not saved.
+3. **Parser gaps become blocking.** Any input the parser does not support yet, even valid Therion, now stops a file from opening instead of losing one line. That is the safer failure, but a gap reported by a user needs a parser fix before they can open the file in Mapiah again. The "Details" section (§4.7) gives them something to report.
+4. **Code paths that assume a scrap parent.** These are avoided rather than fixed, because broken files never reach the canvas and tree edits cannot create violations. Any new canvas feature must keep checking `isBroken` before mounting.
+5. **Comments next to moved elements (§4.4).** Leaving comments in place can separate a comment from the element it describes. This is acceptable for v1.
+6. **Performance on large files.** Rebuilding rows on every `_structureRevision` bump is O(visible rows) and only happens for expanded files. If needed, cache the row list per `(path, revision)`.
+7. **Tab-less controllers.** These use memory for files that were only browsed. Mitigation: cleanup on project close. A possible later step is to dispose a clean, tab-less controller when its file row collapses.
+8. **Undo location.** The undo for a tree edit lives on the file's own stack. Opening and activating the tab on the first edit (§4.2) keeps `Ctrl+Z` natural. Edits made while another file's tab is active switch tabs, which is intentional and visible.
