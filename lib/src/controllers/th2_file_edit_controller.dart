@@ -58,6 +58,7 @@ class TH2FileEditController = TH2FileEditControllerBase
     with _$TH2FileEditController;
 
 abstract class TH2FileEditControllerBase with Store {
+  bool _disposed = false;
   late final MPDefaultOptionsController defaultOptionsController;
   late final TH2FilePropertiesController propertiesController;
   late final TH2FileEditAreaLineCreationController areaLineCreationController;
@@ -113,6 +114,10 @@ abstract class TH2FileEditControllerBase with Store {
 
   @readonly
   bool _isLoading = false;
+
+  @readonly
+  int _structureRevision = 0;
+
 
   bool _isFileLoaded = false;
 
@@ -638,6 +643,7 @@ abstract class TH2FileEditControllerBase with Store {
 
     th2FileEditController._basicInitialization(th2File);
     th2FileEditController._finalFilePreparations(th2File);
+    th2FileEditController.bumpStructureRevision();
 
     return th2FileEditController;
   }
@@ -742,6 +748,7 @@ abstract class TH2FileEditControllerBase with Store {
     List<String> errors,
   ) {
     _finalFilePreparations(parsedFile);
+    bumpStructureRevision();
     _isFileLoaded = true;
 
     if (!isSuccessful) {
@@ -1415,6 +1422,26 @@ abstract class TH2FileEditControllerBase with Store {
     visualController.patternCache.clear();
     _disposeReactions();
     mpLocator.mpGeneralController.removeFileTab(filename: _th2File.filename);
+  }
+
+  @action
+  void bumpStructureRevision() {
+    if (!_isLoading) _structureRevision++;
+  }
+
+  void dispose() {
+    if (_disposed) return;
+    _disposed = true;
+    _disposeReactions();
+    isInteractiveLineSimplificationDialogOpen.dispose();
+    if (th2FileFocusNode.context == null) {
+      th2FileFocusNode.dispose();
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((Duration _) {
+        th2FileFocusNode.dispose();
+      });
+      WidgetsBinding.instance.scheduleFrame();
+    }
   }
 
   @action

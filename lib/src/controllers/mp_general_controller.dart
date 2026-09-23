@@ -242,7 +242,12 @@ abstract class MPGeneralControllerBase with Store {
   void reset() {
     _nextMPIDForElements = mpFirstMPIDForElements;
     _nextMPIDForTH2Files = mpFirstMPIDForTH2Files;
+    final List<TH2FileEditController> th2Controllers =
+        _t2hFileEditControllers.values.toList();
     _t2hFileEditControllers.clear();
+    for (final TH2FileEditController controller in th2Controllers) {
+      controller.dispose();
+    }
 
     for (final THTextEditorController controller
         in _textEditorControllers.values) {
@@ -343,7 +348,9 @@ abstract class MPGeneralControllerBase with Store {
 
     if (_t2hFileEditControllers.containsKey(normalizedFilename)) {
       if (forceNewController) {
-        _t2hFileEditControllers.remove(normalizedFilename);
+        final TH2FileEditController oldController =
+            _t2hFileEditControllers.remove(normalizedFilename)!;
+        oldController.dispose();
       } else {
         return _t2hFileEditControllers[normalizedFilename]!;
       }
@@ -469,11 +476,24 @@ abstract class MPGeneralControllerBase with Store {
   void removeFileController({required String filename}) {
     final String normalizedFilename = _normalizeFilename(filename);
 
-    if (_t2hFileEditControllers.containsKey(normalizedFilename)) {
-      _t2hFileEditControllers.remove(normalizedFilename);
+    final TH2FileEditController? controller =
+        _t2hFileEditControllers.remove(normalizedFilename);
+    if (controller != null) {
+      controller.dispose();
     }
 
     _textEditorControllers.remove(normalizedFilename)?.dispose();
+  }
+
+  @action
+  void disposeTablessTH2Controllers(Iterable<String> canonicalPaths) {
+    final Set<String> targets = canonicalPaths.map(_normalizeFilename).toSet();
+    for (final String path in List<String>.of(_t2hFileEditControllers.keys)) {
+      if (!targets.contains(path) || _openFileOrder.contains(path)) continue;
+      final TH2FileEditController? controller =
+          _t2hFileEditControllers.remove(path);
+      controller?.dispose();
+    }
   }
 
   /// Triggers a complete redraw of every open TH2 drawing.

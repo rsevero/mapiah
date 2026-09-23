@@ -58,6 +58,7 @@ part 'mp_remove_point_command.dart';
 part 'mp_remove_scrap_command.dart';
 part 'mp_reorder_images_command.dart';
 part 'mp_reorder_scraps_command.dart';
+part 'mp_move_elements_command.dart';
 part 'mp_replace_line_segments_command.dart';
 part 'mp_rotate_image_insert_config_command.dart';
 part 'mp_scale_image_insert_config_command.dart';
@@ -213,6 +214,8 @@ abstract class MPCommand {
         return MPReorderImagesCommand.fromMap(map);
       case MPCommandType.reorderScraps:
         return MPReorderScrapsCommand.fromMap(map);
+      case MPCommandType.moveElements:
+        return MPMoveElementsCommand.fromMap(map);
       case MPCommandType.removeAttrOptionFromElement:
         return MPRemoveAttrOptionFromElementCommand.fromMap(map);
       case MPCommandType.removeArea:

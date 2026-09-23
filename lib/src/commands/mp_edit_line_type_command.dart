@@ -55,6 +55,7 @@ class MPEditLineTypeCommand extends MPCommand {
     );
 
     th2FileEditController.elementEditController.substituteElement(newLine);
+    th2FileEditController.bumpStructureRevision();
   }
 
   @override

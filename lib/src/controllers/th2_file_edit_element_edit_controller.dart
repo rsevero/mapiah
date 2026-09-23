@@ -5,6 +5,7 @@ import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/auxiliary/th2_hierarchy_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_bezier_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_simplify_straight_to_bezier.dart';
 import 'package:mapiah/src/auxiliary/mp_straight_line_simplification_aux.dart';
@@ -642,11 +643,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     );
 
     _markStationCacheDirtyForAddedElement(newElement);
+    if (newElement is THScrap || newElement is THPoint ||
+        newElement is THLine || newElement is THArea) {
+      _th2FileEditController.bumpStructureRevision();
+    }
   }
 
   @action
   void removeElement(THElement element, {bool setState = false}) {
     _removeElement(element, setState: setState);
+    if (element is THScrap || element is THPoint || element is THLine ||
+        element is THArea) {
+      _th2FileEditController.bumpStructureRevision();
+    }
   }
 
   void _removeElement(THElement element, {bool setState = false}) {
@@ -816,6 +825,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if (parentMPID >= 0) {
       _th2File.substituteElement(parentElement);
+      if (option.type == THCommandOptionType.id) {
+        _th2FileEditController.bumpStructureRevision();
+      }
 
       if (option is THStationNameCommandOption) {
         _syncTherionStationCacheOrMarkDirty(
@@ -856,6 +868,9 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     newParentElement.removeOption(optionType);
     _th2File.substituteElement(newParentElement);
+    if (optionType == THCommandOptionType.id) {
+      _th2FileEditController.bumpStructureRevision();
+    }
 
     if (optionType == THCommandOptionType.station) {
       _syncTherionStationCacheOrMarkDirty(
@@ -1333,10 +1348,122 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.execute(reorderScrapsCommand);
   }
 
+  MPHierarchyMoveCheck checkMoveElements({
+    required List<int> elementMPIDs,
+    required int newParentMPID,
+    int? beforeSiblingMPID,
+  }) => _th2FileEditController.isBroken
+      ? const MPHierarchyMoveCheck.rejected('broken_file')
+      : TH2HierarchyAux.validateMove(
+          _th2File,
+          elementMPIDs: elementMPIDs,
+          newParentMPID: newParentMPID,
+          beforeSiblingMPID: beforeSiblingMPID,
+        );
+
+  MPMoveElementsResult moveElements({
+    required List<int> elementMPIDs,
+    required int newParentMPID,
+    int? beforeSiblingMPID,
+  }) {
+    final MPHierarchyMoveCheck check = checkMoveElements(
+      elementMPIDs: elementMPIDs,
+      newParentMPID: newParentMPID,
+      beforeSiblingMPID: beforeSiblingMPID,
+    );
+    if (!check.ok) return MPMoveElementsResult.rejected(check.reasonKey!);
+    final MPMoveElementsCommand? command = MPCommandFactory.moveElements(
+      th2File: _th2File,
+      elementMPIDs: elementMPIDs,
+      newParentMPID: newParentMPID,
+      beforeSiblingMPID: beforeSiblingMPID,
+    );
+    if (command == null) return const MPMoveElementsResult.noOp();
+    _th2FileEditController.execute(command);
+    return const MPMoveElementsResult.executed();
+  }
+
+  @action
+  void executeMoveElements(List<MPElementMove> moves) {
+    if (_th2FileEditController.isBroken) {
+      throw StateError('Cannot structurally edit a broken TH2 file.');
+    }
+    final Set<int> oldParents = <int>{};
+    for (final MPElementMove move in moves) {
+      final THElement element = _th2File.elementByMPID(move.elementMPID);
+      oldParents.add(element.parentMPID < 0 ? _th2File.mpID : element.parentMPID);
+      _th2File.moveElementToParent(
+        elementMPID: move.elementMPID,
+        newParentMPID: move.newParentMPID,
+        positionInNewParent: move.positionInNewParent,
+      );
+    }
+    _th2FileEditController.selectionController.resetSelectableElements();
+    _th2FileEditController.snapController.updateSnapTargets();
+    _th2FileEditController.triggerAllElementsRedraw();
+    _th2FileEditController.bumpStructureRevision();
+  }
+
+  MPMoveElementsResult moveElementsToScrap({
+    required List<int> elementMPIDs,
+    required int scrapMPID,
+    int? beforeSiblingMPID,
+  }) => moveElements(
+    elementMPIDs: elementMPIDs,
+    newParentMPID: scrapMPID,
+    beforeSiblingMPID: beforeSiblingMPID,
+  );
+
+  MPMoveElementsResult bringForward({required List<int> elementMPIDs}) =>
+      _moveRelative(elementMPIDs, forward: true);
+  MPMoveElementsResult sendBackward({required List<int> elementMPIDs}) =>
+      _moveRelative(elementMPIDs, forward: false);
+  MPMoveElementsResult bringToFront({required List<int> elementMPIDs}) =>
+      _moveToBoundary(elementMPIDs, front: true);
+  MPMoveElementsResult sendToBack({required List<int> elementMPIDs}) =>
+      _moveToBoundary(elementMPIDs, front: false);
+
+  MPMoveElementsResult _moveRelative(List<int> ids, {required bool forward}) {
+    if (ids.isEmpty) return const MPMoveElementsResult.noOp();
+    final THElement element = _th2File.elementByMPID(ids.first);
+    final THIsParentMixin parent = element.parent(th2File: _th2File);
+    final List<int> movable = parent.childrenMPIDs.where((int id) {
+      final THElement child = _th2File.elementByMPID(id);
+      return child is THScrap || child is THPoint || child is THLine || child is THArea;
+    }).toList();
+    final int index = movable.indexOf(ids.first);
+    final int targetIndex = forward ? index + 2 : index - 1;
+    if (index < 0 || targetIndex < 0 || targetIndex >= movable.length) {
+      return const MPMoveElementsResult.noOp();
+    }
+    return moveElements(
+      elementMPIDs: ids,
+      newParentMPID: parent is TH2File ? _th2File.mpID : parent.mpID,
+      beforeSiblingMPID: movable[targetIndex],
+    );
+  }
+
+  MPMoveElementsResult _moveToBoundary(List<int> ids, {required bool front}) {
+    if (ids.isEmpty) return const MPMoveElementsResult.noOp();
+    final THElement element = _th2File.elementByMPID(ids.first);
+    final THIsParentMixin parent = element.parent(th2File: _th2File);
+    final List<int> movable = parent.childrenMPIDs.where((int id) {
+      final THElement child = _th2File.elementByMPID(id);
+      return child is THScrap || child is THPoint || child is THLine || child is THArea;
+    }).toList();
+    if (movable.isEmpty) return const MPMoveElementsResult.noOp();
+    return moveElements(
+      elementMPIDs: ids,
+      newParentMPID: parent is TH2File ? _th2File.mpID : parent.mpID,
+      beforeSiblingMPID: front ? movable.first : null,
+    );
+  }
+
   @action
   void executeReorderScraps({required int oldIndex, required int newIndex}) {
     _th2File.reorderScrapMPIDs(oldIndex: oldIndex, newIndex: newIndex);
     _th2FileEditController.triggerNonSelectedElementsRedraw();
+    _th2FileEditController.bumpStructureRevision();
   }
 
   @action
@@ -2480,6 +2607,18 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   THCommandOptionType? get currentOptionTypeBeingEdited {
     return _currentOptionTypeBeingEdited;
   }
+}
+
+class MPMoveElementsResult {
+  final bool executed;
+  final bool noOp;
+  final String? reasonKey;
+  const MPMoveElementsResult.executed()
+      : executed = true, noOp = false, reasonKey = null;
+  const MPMoveElementsResult.noOp()
+      : executed = false, noOp = true, reasonKey = null;
+  const MPMoveElementsResult.rejected(this.reasonKey)
+      : executed = false, noOp = false;
 }
 
 class MPTypeUsed {

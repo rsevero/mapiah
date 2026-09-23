@@ -54,6 +54,7 @@ class MPEditAreaTypeCommand extends MPCommand {
         );
 
     th2FileEditController.elementEditController.substituteElement(newArea);
+    th2FileEditController.bumpStructureRevision();
     th2FileEditController.optionEditController.updateOptionStateMap();
   }
 

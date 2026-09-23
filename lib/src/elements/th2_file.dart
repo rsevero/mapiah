@@ -1017,6 +1017,58 @@ class TH2File
         : null;
   }
 
+  /// Returns every area that references [lineMPID].  The legacy support map
+  /// intentionally stores only one area and is therefore not suitable here.
+  List<int> getAreaMPIDsByLineMPID(int lineMPID) {
+    final List<int> result = <int>[];
+    for (final int areaMPID in _areasMPIDs) {
+      final THArea area = areaByMPID(areaMPID);
+      if (area.getLineMPIDs(this).contains(lineMPID)) {
+        result.add(areaMPID);
+      }
+    }
+    return result;
+  }
+
+  /// Moves one already-registered top-level element without touching THID
+  /// registration or any descendant. Validation belongs to the hierarchy
+  /// auxiliary; this method only enforces registry/list invariants.
+  void moveElementToParent({
+    required int elementMPID,
+    required int newParentMPID,
+    required int positionInNewParent,
+  }) {
+    final THElement element = elementByMPID(elementMPID);
+    final THIsParentMixin oldParent = element.parent(th2File: this);
+    final THIsParentMixin newParent = newParentMPID == mpID
+        ? this
+        : parentByMPID(newParentMPID);
+    if (!oldParent.childrenMPIDs.remove(elementMPID)) {
+      throw THCustomException('Element $elementMPID is not in its parent.');
+    }
+    if (positionInNewParent < 0 ||
+        positionInNewParent > newParent.childrenMPIDs.length) {
+      throw THCustomException('Invalid insertion position $positionInNewParent.');
+    }
+    if (oldParent.mpID != newParent.mpID) {
+      substituteElement(element.copyWith(
+        parentMPID: newParent is TH2File ? -1 : newParent.mpID,
+      ));
+    }
+    newParent.childrenMPIDs.insert(positionInNewParent, elementMPID);
+    oldParent.invalidateDrawableChildrenCache();
+    newParent.invalidateDrawableChildrenCache();
+    if (oldParent is MPBoundingBoxMixin) {
+      (oldParent as MPBoundingBoxMixin).clearBoundingBox();
+    }
+    if (newParent is MPBoundingBoxMixin) {
+      (newParent as MPBoundingBoxMixin).clearBoundingBox();
+    }
+    if (oldParent is THScrap) oldParent.invalidateElementTypeCaches();
+    if (newParent is THScrap) newParent.invalidateElementTypeCaches();
+    if (oldParent is TH2File || newParent is TH2File) _scrapMPIDs = null;
+  }
+
   String getNewTHID({THElement? element, String prefix = ''}) {
     if ((prefix == '') && (element != null)) {
       prefix = element.elementType.name;

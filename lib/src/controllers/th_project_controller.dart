@@ -275,6 +275,7 @@ abstract class THProjectControllerBase with Store {
 
     if (outgoingPaths.isNotEmpty) {
       mpLocator.mpGeneralController.closeProjectFileTabs(outgoingPaths);
+      mpLocator.mpGeneralController.disposeTablessTH2Controllers(outgoingPaths);
     }
 
     return _projectEpoch;

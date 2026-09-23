@@ -423,6 +423,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     return super._isLoading;
   }
 
+  late final _$_structureRevisionAtom = Atom(
+    name: 'TH2FileEditControllerBase._structureRevision',
+    context: context,
+  );
+
+  int get structureRevision {
+    _$_structureRevisionAtom.reportRead();
+    return super._structureRevision;
+  }
+
+  @override
+  int get _structureRevision => structureRevision;
+
+  @override
+  set _structureRevision(int value) {
+    _$_structureRevisionAtom.reportWrite(value, super._structureRevision, () {
+      super._structureRevision = value;
+    });
+  }
+
   @override
   bool get _isLoading => isLoading;
 
@@ -1919,6 +1939,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.moveCanvasHorizontally');
     try {
       return super.moveCanvasHorizontally(left: left);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void bumpStructureRevision() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.bumpStructureRevision');
+    try {
+      return super.bumpStructureRevision();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

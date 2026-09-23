@@ -129,6 +129,11 @@ mixin THIsParentMixin on MPTH2FileReferenceMixin {
     return _drawableChildrenMPIDs!;
   }
 
+  /// Invalidates the cached list used by canvas painting.
+  void invalidateDrawableChildrenCache() {
+    _drawableChildrenMPIDs = null;
+  }
+
   List<int> _getDrawableChildrenMPIDs() {
     final List<int> drawableChildrenMPIDs = [];
 

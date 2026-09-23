@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:collection';
+import 'package:collection/collection.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_svg_aux.dart';
+import 'package:mapiah/src/auxiliary/th2_hierarchy_aux.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -24,6 +26,98 @@ import 'package:material_ui/material_ui.dart';
 import 'package:path/path.dart' as p;
 
 class MPCommandFactory {
+  static MPMoveElementsCommand? moveElements({
+    required TH2File th2File,
+    required List<int> elementMPIDs,
+    required int newParentMPID,
+    int? beforeSiblingMPID,
+  }) {
+    final MPHierarchyMoveCheck check = TH2HierarchyAux.validateMove(
+      th2File,
+      elementMPIDs: elementMPIDs,
+      newParentMPID: newParentMPID,
+      beforeSiblingMPID: beforeSiblingMPID,
+    );
+    if (!check.ok) return null;
+    final Set<int> selected = elementMPIDs.toSet();
+    final List<int> order = <int>[];
+    void addTopLevel(THIsParentMixin parent) {
+      for (final int id in parent.childrenMPIDs) {
+        final THElement element = th2File.elementByMPID(id);
+        if (element is THScrap) {
+          if (parent is TH2File) {
+            order.add(id);
+            addTopLevel(element);
+          }
+        } else if (element is THPoint || element is THLine || element is THArea) {
+          order.add(id);
+        }
+      }
+    }
+    addTopLevel(th2File);
+    final List<int> effective = <int>[];
+    for (final int id in order) {
+      if (!selected.contains(id)) continue;
+      final THElement element = th2File.elementByMPID(id);
+      if (element is THArea && element.parentMPID != newParentMPID) {
+        for (final int lineID in element.getLineMPIDs(th2File)) {
+          final THElement? line = th2File.tryElementByMPID(lineID);
+          if (line is THLine && line.parentMPID == element.parentMPID) {
+            effective.add(lineID);
+          }
+        }
+      }
+      effective.add(id);
+    }
+    for (final int id in elementMPIDs) {
+      if (!effective.contains(id)) effective.add(id);
+    }
+    final Map<int, List<int>> lists = <int, List<int>>{};
+    List<int> listFor(int parent) => lists.putIfAbsent(parent, () =>
+        parent == th2File.mpID ? th2File.childrenMPIDs.toList() :
+        th2File.parentByMPID(parent).childrenMPIDs.toList());
+    final Map<int, List<int>> initialLists = <int, List<int>>{
+      th2File.mpID: th2File.childrenMPIDs.toList(),
+    };
+    if (newParentMPID != th2File.mpID) {
+      initialLists[newParentMPID] = listFor(newParentMPID).toList();
+    }
+    final List<MPElementMove> moves = <MPElementMove>[];
+    for (final int id in effective) {
+      final THElement element = th2File.elementByMPID(id);
+      final int oldParent = element.parentMPID < 0 ? th2File.mpID : element.parentMPID;
+      final List<int> oldList = listFor(oldParent);
+      oldList.remove(id);
+      final List<int> target = listFor(newParentMPID);
+      int position;
+      if (beforeSiblingMPID != null && target.contains(beforeSiblingMPID)) {
+        position = target.indexOf(beforeSiblingMPID);
+      } else if (newParentMPID == th2File.mpID) {
+        int lastScrap = -1;
+        for (int i = 0; i < target.length; i++) {
+          if (th2File.elementByMPID(target[i]) is THScrap) {
+            lastScrap = i;
+          }
+        }
+        position = lastScrap + 1;
+      } else {
+        position = target.length;
+        for (int i = 0; i < target.length; i++) {
+          if (th2File.elementByMPID(target[i]).elementType == THElementType.endscrap) {
+            position = i; break;
+          }
+        }
+      }
+      target.insert(position, id);
+      moves.add(MPElementMove(elementMPID: id, newParentMPID: newParentMPID,
+        positionInNewParent: position));
+    }
+    if (moves.isEmpty || initialLists.entries.every((MapEntry<int, List<int>> entry) =>
+        const ListEquality<int>().equals(entry.value, listFor(entry.key)))) {
+      return null;
+    }
+    return MPMoveElementsCommand(moves: moves);
+  }
   static MPCommand _actualRemoveLineSegmentFromExisting({
     required int toRemoveLineSegmentMPID,
     required TH2File th2File,

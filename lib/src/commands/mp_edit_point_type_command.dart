@@ -54,6 +54,7 @@ class MPEditPointTypeCommand extends MPCommand {
         );
 
     th2FileEditController.elementEditController.substituteElement(newPoint);
+    th2FileEditController.bumpStructureRevision();
     th2FileEditController.optionEditController.updateOptionStateMap();
   }
 

@@ -38,6 +38,7 @@ enum MPCommandType {
   removeScrap,
   reorderImages,
   reorderScraps,
+  moveElements,
   replaceLineSegments,
   setAttrOptionToElement,
   setFileEncoding,

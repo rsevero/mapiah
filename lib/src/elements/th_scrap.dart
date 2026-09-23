@@ -325,6 +325,13 @@ class THScrap extends THElement
     }
   }
 
+  /// Invalidates the ordered child indexes used by search and the tree.
+  void invalidateElementTypeCaches() {
+    _areasMPIDs = null;
+    _linesMPIDs = null;
+    _pointsMPIDs = null;
+  }
+
   @override
   void setTH2File(TH2File th2File) {
     if (this.th2File == th2File) {
