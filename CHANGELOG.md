@@ -30,6 +30,13 @@
   * On Windows (and other desktop platforms), closing Mapiah via the window's close button, taskbar control, or Alt+F4/Ctrl+F4 no longer leaves the window visibly frozen on screen for several seconds before it vanishes; the window is now hidden right after its placement is persisted, so the Flutter engine's shutdown happens invisibly in the background afterward instead of behind a still-visible, unresponsive window. [reported by CaverBruce]
   * The project-tree Open project action now always treats the selected file as a `thconfig` root, including files with arbitrary extensions or no extension. Project shape detection also now recognizes `.thconfig`-suffixed filenames, so showcase configs such as `therion_uis_showcase.thconfig` load their `source`/`input` tree instead of being misdetected as `.th` data files. Added parser and controller regression coverage.
 * Infrastructure maintenance:
+  * Added a new Phase 5 to the TH2 element-tree plan, which shows extra details in the tree's element labels:
+    * a station's `-name`, and the `-text` of label and remark points, appear between the type and the Therion id;
+    * values are shown as stored, and `<br>` in text is handled the same way as on the canvas;
+    * the details are searchable;
+    * editing `-name` or `-text` bumps the structure revision so labels stay current.
+
+    Documentation and remaining localization moved from Phase 5 to Phase 6.
   * Revised the Phase 3 read-only sidebar plan and the parent TH2 element-tree plan after validating them against the code:
     * The load state, broken status, problems, load errors and set of TH2 controllers become MobX-observable, and a load's result is saved in one action.
     * Expanded file rows load based on their state, including after a project reload, but never while a filter is active.

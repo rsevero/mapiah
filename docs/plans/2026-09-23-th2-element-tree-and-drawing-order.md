@@ -153,7 +153,7 @@ final class TH2FileStatusTreeRow extends THProjectTreeVisibleRow {
 - Element row ids are `th2el:<canonicalPath>:<mpID>` and status row ids are `th2status:<canonicalPath>:<kind>`. `canonicalPath` is `THProjectPathResolver.canonicalize(p.absolute(path))`, which for project files equals `TH2FileNode.absolutePath` (Phase 3 plan §3.1 item 5).
 - Scrap rows can be collapsed and start expanded. Their collapsed state is kept in a separate `THProjectTreeUIController.collapsedTH2ScrapIds` set, keyed by scrap row id, not in `expandedNodeIds`, so project default-expansion seeding never sees TH2 ids. MPIDs only exist while the app runs and are never reused, so a stale id after reloading a file is harmless. Both sets are cleared on project close (Phase 3 plan §6.1).
 - The builder lives in a new `lib/src/auxiliary/th2_element_tree_aux.dart`. For a valid file it walks `TH2File.childrenMPIDs` and each scrap's `childrenMPIDs`, and keeps only `THScrap`, `THPoint`, `THLine` and `THArea` rows. For a broken file it returns one `TH2FileStatusTreeRow(broken)` (§4.2). It runs inside the tree's `Observer`, so structural changes must be observable (§5.4).
-- **Labels:** `<kind> <type[:subtype]?> <thID?>`. Kind and type/subtype come from the existing localized `MPTextToUser` helpers. The Therion id is shown exactly as stored, in a muted span with no `id=` prefix or brackets, for example `line wall:blocks w12` (`w12` muted), `point station` or `scrap s1`. Therion ids are free form, so the tree never validates, changes or generates them; elements without `-id` show no id. Scraps always have an id. Station `-name` values and other option values are not part of the label. Rows use the existing PLA type icons where they exist. Details: Phase 3 plan §6.2.
+- **Labels:** `<kind> <type[:subtype]?> <thID?>`. Kind and type/subtype come from the existing localized `MPTextToUser` helpers. The Therion id is shown exactly as stored, in a muted span with no `id=` prefix or brackets, for example `line wall:blocks w12` (`w12` muted), `point station` or `scrap s1`. Therion ids are free form, so the tree never validates, changes or generates them; elements without `-id` show no id. Scraps always have an id. Phase 3 labels leave out station `-name` values and other option values. Phase 5 adds the station `-name` and the `-text` of `label`/`remark` points as an extra detail part. Rows use the existing PLA type icons where they exist. Details: Phase 3 plan §6.2.
 - **Filter:** the sidebar search filter also matches element and scrap labels of **loaded, valid** files. It follows the existing project-tree rule: a row is shown only if it or a descendant matches, so a file or scrap that matches by its own name does not reveal its non-matching children. Status rows are hidden while filtering, and no file is loaded while a filter is active. Details: Phase 3 plan §7.
 
 ### 4.2 Loading a file's elements, and the broken badge
@@ -349,8 +349,8 @@ Changes in `th2_grammar.dart` and `th2_file_parser.dart`:
 Each phase ends with:
 
 - `flutter analyze` clean and `flutter test` green;
-- its own CHANGELOG entry in the current unreleased section, referencing #32. Phase 5 adds an entry only for its own documentation and localization work;
-- from Phase 3 on, EN/PT `.arb` entries for every user-visible string the phase introduces, followed by `flutter gen-l10n`, so that no phase from Phase 3 on commits hard-coded UI text. Phase 1 hard-coded the broken-file body text before this rule existed; Phase 5 localizes it.
+- its own CHANGELOG entry in the current unreleased section, referencing #32. Phase 6 adds an entry only for its own documentation and localization work;
+- from Phase 3 on, EN/PT `.arb` entries for every user-visible string the phase introduces, followed by `flutter gen-l10n`, so that no phase from Phase 3 on commits hard-coded UI text. Phase 1 hard-coded the broken-file body text before this rule existed; Phase 6 localizes it.
 
 ### Phase 1: Violation detection and the broken-file body
 
@@ -418,16 +418,44 @@ Each phase ends with:
   - menu actions;
   - shortcuts.
 
-### Phase 5: Documentation and remaining localization
+### Phase 5: Station names and label/remark text in element labels
+
+Phase 3 labels are `<kind> <type[:subtype]> <thID?>` (Phase 3 plan §6.2). This phase adds one extra *detail* part for three point types, so surveyors can recognize stations and text points in the tree without selecting them:
+
+| Point type | Detail source | Example row |
+|---|---|---|
+| `station` | the `-name` option (`THCommandOptionType.station`, `THStationNameCommandOption.name`) | `point station` *`1.3@main`* `s12` |
+| `label` | the `-text` option (`THCommandOptionType.text`, `THTextCommandOption.text.content`) | `point label` *`Main entrance`* |
+| `remark` | the `-text` option | `point remark` *`Unsurveyed lead`* |
+
+In the examples, italics show the detail span and the trailing muted part is the Therion id.
+
+- **Format:** `<kind> <type[:subtype]> <detail?> <thID?>`. The detail is shown in *italics* in the normal text colour, between the type and the muted Therion id. There are no quotes, brackets or prefixes such as `name=`/`text=`, for the same reasons Phase 3 gives for ids. Points with no `-name`/`-text`, or with an empty value after trimming, show no detail. Every other point type, every line (including line `label -text`), every area and every scrap is unchanged. The `-text` of `continuation` points and other option values (`-value`, `-altitude`, dates, dimensions) stay out of scope.
+- **Values are shown as stored.** A station name is shown verbatim (for example `1.3@main`), without resolving survey namespaces or checking that the station exists. Label and remark text reuse the canvas rule in `MPLabelTextAux`: `MPLabelTextAux.resolve(point)` returns the text split on `<br>` into trimmed lines. The tree joins those lines with a single space so the row stays on one line, and leaves every other Therion text tag (`<center>`, `<size:N>`, font switches, `<rtl>`, `<lang:XX>`, `<thsp>`) as literal text, exactly as the canvas does today. The row's normal ellipsis handles long text. When a label or remark row has a detail, the row tooltip shows the full text with one `<br>` line per tooltip line.
+- **No new translatable strings.** The detail is user data, and the kind and type parts already come from `MPTextToUser`.
+- **Filtering:** the row's plain text used for filtering (Phase 3 plan §7) becomes `<kind> <type[:subtype]> <detail> <thID>`, with empty parts left out, so searching for a station name or for words from a label or remark finds the point. As before, only loaded, valid files are searched.
+- **Keeping labels current.** Today `executeSetOptionToElement` and `executeRemoveOptionFromElement` in `th2_file_edit_element_edit_controller.dart` call `bumpStructureRevision()` only for `THCommandOptionType.id`. This phase extends that to `THCommandOptionType.station` and `THCommandOptionType.text`, for any element type (checking the element type is not worth it, since these edits are rare). This covers edits from the options dialog, undo/redo of those commands, and commands wrapped in `MPMultipleElementsCommand`. Changing a point's type to or from `station`/`label`/`remark` already bumps the revision through the type-edit commands (Phase 2). The Phase 3 label cache, keyed by `structureRevision`, then picks up the new detail.
+- **Row data:** the row builder in `th2_element_tree_aux.dart` computes the detail next to the rest of the label, and `TH2ElementTreeRowWidget` renders it as a third span in the existing `Text.rich`.
+- CHANGELOG entry for Phase 5, referencing #32.
+- Tests (`t3945_th2_element_tree_label_details_test.dart`):
+  - a station with `-name` shows the name verbatim, including `@` and dots; a station without `-name` shows no detail;
+  - label and remark points with `-text` show the text; `<br>` becomes a single space in the row and a line break in the tooltip; other tags stay literal; empty or whitespace-only text shows no detail;
+  - a line `label` with `-text`, a `continuation` point with `-text`, and points of other types show no detail;
+  - with a Therion id, the order is kind, type, detail, then id, and only the id span is muted;
+  - setting, changing and removing `-name`/`-text` through `MPSetOptionToElementCommand`/`MPRemoveOptionFromElementCommand` bumps `structureRevision` and updates the row, and undo/redo restores the previous row text;
+  - filtering by a station name or by a word from a label or remark finds the row and shows its scrap and file ancestors;
+  - building labels never changes the file.
+
+### Phase 6: Documentation and remaining localization
 
 - Localize the strings Phase 1 hard-coded in `TH2BrokenFileBodyWidget` (the explanatory sentence, the `Line …:` problem line and `Reload`) and the user-visible problem-kind names, followed by `flutter gen-l10n`. Reuse the Phase 3 keys `th2ElementTreeProblemLine` and `th2ElementTreeReload` where the wording matches.
-- Check that no hard-coded user-visible string from Phases 1–4 remains.
+- Check that no hard-coded user-visible string from Phases 1–5 remains.
 - Help pages (EN/PT):
-  - a new section "Drawing order and element tree";
+  - a new section "Drawing order and element tree", including how rows are labelled: kind, type, the station name or label/remark text (Phase 5), and the Therion id;
   - a new section "Broken files", covering which violations exist, that Mapiah does not display or change such files, and how to fix them in a text editor and reload;
   - a mention in the project-sidebar section.
 - Keyboard shortcuts page with the new shortcuts in alphabetical order.
-- CHANGELOG entry for Phase 5 (help pages, shortcuts page, remaining localization), referencing #32. Also check that the CHANGELOG as a whole calls out the broken-file behavior change (§9, risk 1); if Phase 1's entry does not, Phase 5's entry does.
+- CHANGELOG entry for Phase 6 (help pages, shortcuts page, remaining localization), referencing #32. Also check that the CHANGELOG as a whole calls out the broken-file behavior change (§9, risk 1); if Phase 1's entry does not, Phase 6's entry does.
 
 ## 8. Files Touched (expected)
 
@@ -436,12 +464,12 @@ Each phase ends with:
 | Model | `lib/src/elements/th2_file.dart`, `lib/src/elements/mixins/th_is_parent_mixin.dart` |
 | Parser | `lib/src/mp_file_read_write/th2_grammar.dart` (recovery rules for `scrap`/`line`/`area` lines), `th2_file_parser.dart` |
 | Commands | new `lib/src/commands/mp_move_elements_command.dart`, `mp_command.dart`, `factories/mp_command_factory.dart`, `types/mp_command_type.dart`, `types/mp_command_description_type.dart` |
-| Controllers | `th2_file_edit_element_edit_controller.dart`, `th2_file_edit_controller.dart` (`_structureRevision`, `isBroken`, `problems`, `_finalFilePreparations` split, `dispose()`), `mp_general_controller.dart` (tab-less cleanup, open-on-edit helper, `reloadTH2File`), `th_project_controller.dart` (cleanup call, skip broken files on save) |
-| Aux | new `lib/src/auxiliary/th2_hierarchy_aux.dart`, new `th2_element_tree_aux.dart`, `th_project_tree_flatten_aux.dart`, `mp_text_to_user.dart` |
+| Controllers | `th2_file_edit_element_edit_controller.dart` (Phase 5: revision bump for `station`/`text` option edits), `th2_file_edit_controller.dart` (`_structureRevision`, `isBroken`, `problems`, `_finalFilePreparations` split, `dispose()`), `mp_general_controller.dart` (tab-less cleanup, open-on-edit helper, `reloadTH2File`), `th_project_controller.dart` (cleanup call, skip broken files on save) |
+| Aux | new `lib/src/auxiliary/th2_hierarchy_aux.dart`, new `th2_element_tree_aux.dart` (Phase 5: label details), `th_project_tree_flatten_aux.dart`, `mp_text_to_user.dart`, `mp_label_text_aux.dart` (reused as is in Phase 5) |
 | Widgets / pages | `th_project_tree_widget.dart`, `th_project_tree_node_widget.dart`, new `th2_element_tree_row_widget.dart`, new `th2_broken_file_body_widget.dart`, `th2_file_edit_body_widget.dart`, `th2_file_tabs_page.dart` (Save As disabled for broken files), `mp_therion_run_dialog_widget.dart` (broken-file warning) |
 | Constants | `mp_constants.dart` (drag hover delay, drop-zone fractions) |
-| l10n | `lib/l10n/intl_en.arb`, `intl_pt.arb`, updated in each phase from Phase 3 on for that phase's strings, and in Phase 5 for the Phase 1 strings |
-| Docs | help pages EN/PT and keyboard-shortcuts page (Phase 5) |
+| l10n | `lib/l10n/intl_en.arb`, `intl_pt.arb`, updated in each phase from Phase 3 on for that phase's strings, and in Phase 6 for the Phase 1 strings |
+| Docs | help pages EN/PT and keyboard-shortcuts page (Phase 6) |
 | Changelog | `CHANGELOG.md`, one entry per phase |
 
 ## 9. Risks and Open Questions

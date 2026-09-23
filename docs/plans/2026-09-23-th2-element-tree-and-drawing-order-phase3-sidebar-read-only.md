@@ -210,7 +210,7 @@ Every element and scrap row uses one rule: **localized kind, localized type[:sub
 
 **Presentation.** The row uses a `Text.rich` with two spans: kind and type[:subtype] in the normal row style, then a single space and the id in a muted style (`colorScheme.onSurfaceVariant`). There is no `id=` prefix, because it looks like Therion syntax but is not, and no brackets, because ids can contain brackets themselves. The colour alone sets the id apart, so no label template or separator word is added to the `.arb` files. The row's text, used for filtering (§7) and semantics, is the plain concatenation `<kind> <type[:subtype]> <thID>`, with empty parts and their spaces left out.
 
-**Out of scope for Phase 3:** the station point `-name` option (for example a station `1.3`), `label`/`remark` point text, and any other option values. Adding them later is a separate label-source decision.
+**Out of scope for Phase 3:** the station point `-name` option (for example a station `1.3`), `label`/`remark` point text, and any other option values. The parent plan's Phase 5 adds station names and label/remark text as an extra detail part between the type and the id. Phase 3 keeps the label builder and the `Text.rich` spans easy to extend with it.
 
 Reuse the existing element icon mappings. Do not hardcode user-facing strings or use all-caps labels; any new strings go in the `.arb` files as described in §9.1.
 
@@ -308,7 +308,7 @@ Keep ordinary project node rendering in `THProjectTreeNodeWidget` unless a small
 
 ### 9.1 Localization
 
-Phase 3 adds its own EN/PT strings; it does not defer them to Phase 5. Every user-visible string introduced by this phase goes in `lib/l10n/intl_en.arb` and `lib/l10n/intl_pt.arb`, followed by `flutter gen-l10n`. Widgets read the strings through `AppLocalizations`, and code without a `BuildContext` uses `mpLocator.appLocalizations`. Each entry has an `@key` description ending in `Used on: <Class>.<method>`, like the existing entries. PT uses Brazilian Portuguese ("arquivo", not "ficheiro").
+Phase 3 adds its own EN/PT strings; it does not defer them to Phase 6 (documentation and remaining localization). Every user-visible string introduced by this phase goes in `lib/l10n/intl_en.arb` and `lib/l10n/intl_pt.arb`, followed by `flutter gen-l10n`. Widgets read the strings through `AppLocalizations`, and code without a `BuildContext` uses `mpLocator.appLocalizations`. Each entry has an `@key` description ending in `Used on: <Class>.<method>`, like the existing entries. PT uses Brazilian Portuguese ("arquivo", not "ficheiro").
 
 | Key | EN | PT | Used by |
 |---|---|---|---|
@@ -327,8 +327,8 @@ Rules:
 - Element labels are built only from the existing `MPTextToUser` kind and type/subtype strings plus the element's Therion id shown verbatim (§6.2). The id is set apart by a muted span, not by a separator word, so labels need no new `.arb` entry.
 - The number of problems shown in the badge tooltip before `th2ElementTreeMoreProblems` is a new constant in `mp_constants.dart` (`mpTH2ElementTreeBadgeTooltipMaxProblems`), not a magic number.
 - `problem.detail` is shown as the parser produced it. Localizing parser details is out of scope for this phase.
-- The strings that Phase 1 hard-coded in `TH2BrokenFileBodyWidget` (the explanatory sentence, `Line …:` and `Reload`) are not changed in Phase 3. Phase 5 localizes them and should reuse `th2ElementTreeProblemLine` and `th2ElementTreeReload` where the wording matches.
-- No all-caps text. Help pages and the keyboard-shortcuts page are not changed in this phase; Phase 5 covers them.
+- The strings that Phase 1 hard-coded in `TH2BrokenFileBodyWidget` (the explanatory sentence, `Line …:` and `Reload`) are not changed in Phase 3. Phase 6 localizes them and should reuse `th2ElementTreeProblemLine` and `th2ElementTreeReload` where the wording matches.
+- No all-caps text. Help pages and the keyboard-shortcuts page are not changed in this phase; Phase 6 covers them.
 
 ### 9.2 Row context menu
 
