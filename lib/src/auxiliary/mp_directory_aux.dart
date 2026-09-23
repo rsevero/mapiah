@@ -58,11 +58,27 @@ class MPDirectoryAux {
     }
   }
 
-  static String getResolvedPath(String referencePath, String filename) {
-    final String resolvedPath = p.canonicalize(
-      p.isAbsolute(filename)
-          ? filename
-          : p.join(p.dirname(referencePath), filename),
+  /// Resolves [filename] against the directory of [referencePath] into an
+  /// absolute, normalized path.
+  ///
+  /// Deliberately avoids [p.canonicalize], which lowercases paths on Windows:
+  /// resolved paths are opened and rebased into paths written back to TH2
+  /// files, so the user's letter case must be kept.
+  ///
+  /// [pathContext] defaults to the current platform's context; tests pass a
+  /// Windows or POSIX context to exercise both styles on any host.
+  static String getResolvedPath(
+    String referencePath,
+    String filename, {
+    p.Context? pathContext,
+  }) {
+    final p.Context context = pathContext ?? p.context;
+    final String resolvedPath = context.normalize(
+      context.absolute(
+        context.isAbsolute(filename)
+            ? filename
+            : context.join(context.dirname(referencePath), filename),
+      ),
     );
 
     return resolvedPath;
@@ -70,52 +86,76 @@ class MPDirectoryAux {
 
   /// Rewrites a relative asset path so it still points to the same target
   /// after the referencing TH2 file is saved elsewhere.
+  ///
+  /// An absolute [filename] is returned verbatim when [oldReferencePath] is
+  /// absolute, because moving the TH2 file does not change what it points at.
   static String rebaseRelativePath({
     required String oldReferencePath,
     required String newReferencePath,
     required String filename,
+    p.Context? pathContext,
   }) {
-    if (p.isAbsolute(filename)) {
-      if (!p.isAbsolute(oldReferencePath)) {
+    final p.Context context = pathContext ?? p.context;
+
+    if (context.isAbsolute(filename)) {
+      if (!context.isAbsolute(oldReferencePath)) {
         return relativePathFromReferencePath(
           targetPath: filename,
           referencePath: newReferencePath,
+          pathContext: context,
         );
       }
 
-      return p.canonicalize(filename);
+      return filename;
     }
 
-    final String resolvedPath = getResolvedPath(oldReferencePath, filename);
-    final String absoluteResolvedPath = p.isAbsolute(resolvedPath)
-        ? p.canonicalize(resolvedPath)
-        : p.canonicalize(p.absolute(resolvedPath));
+    final String resolvedPath = getResolvedPath(
+      oldReferencePath,
+      filename,
+      pathContext: context,
+    );
 
     return relativePathFromReferencePath(
-      targetPath: absoluteResolvedPath,
+      targetPath: resolvedPath,
       referencePath: newReferencePath,
+      pathContext: context,
     );
   }
 
+  /// Returns [targetPath] relative to the directory of [referencePath], with
+  /// `/` separators and a leading `./` or `../`.
+  ///
+  /// Uses the platform context's [p.Context.relative], which compares paths
+  /// case-insensitively on Windows and understands drive letters. When the
+  /// target is on a different drive than the reference, no relative path
+  /// exists and the absolute target is returned unchanged.
   static String relativePathFromReferencePath({
     required String targetPath,
     required String referencePath,
+    p.Context? pathContext,
   }) {
-    final String normalizedTargetPath = p.posix.canonicalize(
-      targetPath.replaceAll('\\', '/'),
+    final p.Context context = pathContext ?? p.context;
+    final String normalizedTargetPath = context.normalize(
+      context.absolute(targetPath),
     );
-    final String normalizedReferenceDirectory = p.posix.canonicalize(
-      p.dirname(referencePath).replaceAll('\\', '/'),
+    final String normalizedReferenceDirectory = context.dirname(
+      context.normalize(context.absolute(referencePath)),
     );
-    final String rawRelativePath = p.posix.relative(
+    final String rawRelativePath = context.relative(
       normalizedTargetPath,
       from: normalizedReferenceDirectory,
     );
 
-    if (rawRelativePath.startsWith('./') || rawRelativePath.startsWith('../')) {
+    if (context.isAbsolute(rawRelativePath)) {
       return rawRelativePath;
     }
 
-    return './$rawRelativePath';
+    final String relativePath = rawRelativePath.replaceAll('\\', '/');
+
+    if (relativePath.startsWith('./') || relativePath.startsWith('../')) {
+      return relativePath;
+    }
+
+    return './$relativePath';
   }
 }
