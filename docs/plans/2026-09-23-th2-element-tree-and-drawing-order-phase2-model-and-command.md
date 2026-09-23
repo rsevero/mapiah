@@ -146,14 +146,14 @@ Register the command in all existing command plumbing:
 - implement `toMap`, `fromMap`, `fromJson`, `copyWith`, equality and hash code following `MPReorderScrapsCommand` conventions;
 - preserve `MPCommandDescriptionType.moveElements` and add only the required user-facing description/localization if the existing description cannot be reused.
 
-The factory must reject invalid requests before constructing a command, return no command for a no-op, and make all area-border expansion decisions deterministic.
+The factory must reject invalid requests before constructing a command, return `null` for a valid no-op, and make all area-border expansion decisions deterministic. Its return type must therefore be `MPCommand?`; callers must validate first and must not submit a `null` command to `TH2FileEditController.execute`.
 
 ### 4.5 Controller API and redraws
 
 In `TH2FileEditElementEditController`, add:
 
 - `checkMoveElements(...)`, a pure wrapper around `TH2HierarchyAux.validateMove`;
-- `moveElements(...)`, which validates, resolves/expands the request, creates the command and submits it through `TH2FileEditController.execute`. The name follows the existing `reorderScraps`/`executeReorderScraps` pair, not the `prepare*` wording;
+- `moveElements(...)`, which validates, resolves/expands the request, creates the command and submits it through `TH2FileEditController.execute`. It returns an `MPMoveElementsResult` with explicit `executed`, `noOp` and `rejected` states; a rejected result carries the same stable reason key as `checkMoveElements(...)`. The method must not call `execute` when the factory returns `null`. The name follows the existing `reorderScraps`/`executeReorderScraps` pair, not the `prepare*` wording;
 - `executeMoveElements(...)`, an `@action` that applies the prepared moves through the raw model primitive;
 - `moveElementsToScrap(...)`;
 - `bringForward`, `sendBackward`, `bringToFront` and `sendToBack`.
@@ -187,7 +187,7 @@ The same revision must be restored/advanced through undo and redo because those 
 
 ### 5.1 `TH2FileEditController.dispose()`
 
-Add `dispose()` to `TH2FileEditController`. It reuses the existing `_disposeReactions()` (which runs and clears every entry in `_disposers`) and releases anything else the controller owns that needs explicit release (`th2FileFocusNode`, timers). Keep `close()` as the user-facing tab-close entry point; it still clears overlay windows and the pattern cache before calling `removeFileTab`.
+Add `dispose()` to `TH2FileEditController`. It reuses the existing `_disposeReactions()` (which runs and clears every entry in `_disposers`) and releases anything else the controller owns that needs explicit release (`th2FileFocusNode`, `isInteractiveLineSimplificationDialogOpen`, timers and any future disposable resources). Dispose the `ValueNotifier` synchronously; apply the deferred focus-node rule below only to `th2FileFocusNode`. Keep `close()` as the user-facing tab-close entry point; it still clears overlay windows and the pattern cache before calling `removeFileTab`.
 
 `dispose()` must be idempotent, and this is load-bearing rather than defensive: `close()` runs `_disposeReactions()` and then reaches `dispose()` again through `removeFileTab` → `removeFileController`. Guard with a disposed flag so the focus node is disposed only once. Call it from:
 
@@ -279,11 +279,13 @@ Extend the nearest existing `MPGeneralController`/project lifecycle tests, or ad
 - closing a tab disposes its controller, `reloadTH2File` disposes the replaced one (through `removeFileController`), and `getTH2FileEditController(forceNewController: true)` called directly on a registered file disposes the replaced one;
 - `TH2FileEditController.close()` followed by the `removeFileController` disposal is safe (second `dispose()` is a no-op, focus node disposed once);
 - a widget test mounts a canvas tab, closes it and pumps: no exception is thrown, and the focus node is still usable before the pump and disposed after it;
+- `isInteractiveLineSimplificationDialogOpen` is disposed exactly once on every controller disposal path, alongside the reaction disposers;
 - a controller that never mounted a canvas (tab-less, or broken and then reloaded) disposes its focus node immediately;
 - `MPGeneralController.reset()` disposes every registered TH2 controller;
 - unrelated standalone controllers remain untouched;
 - `_structureRevision` advances once after load and once per move/undo/redo, not once per parsed element, and not when a line segment is added;
 - `_structureRevision` advances on a type edit and on setting/removing an `id` option, but not on point, line or line-segment geometry moves that go through `substituteElement`;
+- the move factory returns `null` for a valid no-op, and `moveElements(...)` reports that no-op without calling `execute`; rejected requests retain their stable reason key;
 - removing a scrap that has children advances `_structureRevision` once, not once per descendant;
 - loading a valid file, loading a broken file and creating a new file through `createFromNewTH2File` each leave `_structureRevision` at exactly one.
 
