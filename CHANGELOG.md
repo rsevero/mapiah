@@ -57,6 +57,7 @@
     * A shared right-click context menu offers Reload for broken and failed files.
     * Labels show Therion ids exactly as stored, without changing them.
     * From Phase 3 on, each phase adds its own EN/PT strings and its own CHANGELOG entry.
+  * Corrected the Phase 3 read-only sidebar plan to treat Phase 2 controller lifecycle work as an existing prerequisite and to define one diagnostic source for parser errors, broken-file counts, and sidebar tooltips.
   * Added and validated the Phase 3 read-only sidebar plan for the TH2 element tree and drawing order, covering lazy `.th2` loading, file-order rows, broken/loading status rows, loaded-element filtering, and tree/canvas selection synchronization.
   * Implemented Phase 2 of the TH2 element-tree/drawing-order work: added validated structural moves for scraps, points, lines and areas, deterministic area-border expansion, sequential undo/redo command serialization, hierarchy checks, structure revision signaling, cache invalidation, and lifecycle-safe disposal of TH2 controllers including tab-less project cleanup. Added controller bring/send APIs and runtime protection for broken files.
   * Refined the TH2 element-tree Phase 2 and parent plans: documented all affected cache invalidation, hidden-child block-preservation examples, controller registry-detach ordering during disposal, and consistent cross-scrap area-border move rules.
