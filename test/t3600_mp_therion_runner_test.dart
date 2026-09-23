@@ -482,6 +482,51 @@ void main(List<String> arguments) {
       }
     });
 
+    test(
+      'finishes with error when Therion waits for ENTER after an error',
+      () async {
+        final String scriptSource = '''
+import 'dart:io';
+
+void main(List<String> arguments) {
+  stderr.write('therion: error -- ');
+  stderr.writeln('Map is too large for PDF format. Try smaller scale!');
+  stdout.write('Press ENTER to exit!');
+  stdin.readLineSync();
+  exit(1);
+}
+''';
+
+        final Directory tempDirectory = await Directory.systemTemp.createTemp(
+          'mapiah_runner_test_',
+        );
+
+        try {
+          final String scriptPath = await _createScriptFile(
+            directory: tempDirectory,
+            filename: 'runner_press_enter_to_exit.dart',
+            source: scriptSource,
+          );
+
+          final MPTherionRunner runner = MPTherionRunner(
+            thConfigFilePath: scriptPath,
+          );
+
+          try {
+            await runner.start().timeout(const Duration(seconds: 30));
+
+            final MPTherionRunStatus finalStatus = runner.statusNotifier.value;
+
+            expect(finalStatus, MPTherionRunStatus.error);
+          } finally {
+            runner.dispose();
+          }
+        } finally {
+          await tempDirectory.delete(recursive: true);
+        }
+      },
+    );
+
     test('parses carriage return as line break without blank lines', () async {
       final String scriptSource = '''
 import 'dart:io';

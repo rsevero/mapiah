@@ -659,6 +659,7 @@ class _MPTherionRunnerWindowsProcessRunner implements MPTherionProcessRunner {
       }
 
       onProcessStarted(process);
+      _closeProcessStdin(process);
 
       final StreamSubscription<String> stdoutSubscription = utf8.decoder
           .bind(process.stdout)
@@ -773,6 +774,7 @@ class _MPUnixLikeTherionRunnerProcessRunner implements MPTherionProcessRunner {
       );
 
       onProcessStarted(process);
+      _closeProcessStdin(process);
 
       final StreamSubscription<String> stdoutSubscription = utf8.decoder
           .bind(process.stdout)
@@ -846,4 +848,18 @@ class _MPUnixLikeTherionRunnerProcessRunner implements MPTherionProcessRunner {
       );
     }
   }
+}
+
+/// Closes [process]'s stdin so anything reading from it gets end of input
+/// instead of blocking forever on the open pipe.
+///
+/// Windows Therion builds pause on fatal errors with "Press ENTER to exit!"
+/// and a `getchar()` call, and MetaPost/pdfTeX (started by Therion with the
+/// same stdin) wait for terminal input on errors. With stdin closed they all
+/// proceed to exit with an error code, so the run finishes instead of staying
+/// in the running state indefinitely.
+void _closeProcessStdin(Process process) {
+  // A process that already exited may fail the close with a broken pipe; that
+  // is harmless here.
+  process.stdin.close().ignore();
 }
