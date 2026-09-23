@@ -30,6 +30,11 @@
   * On Windows (and other desktop platforms), closing Mapiah via the window's close button, taskbar control, or Alt+F4/Ctrl+F4 no longer leaves the window visibly frozen on screen for several seconds before it vanishes; the window is now hidden right after its placement is persisted, so the Flutter engine's shutdown happens invisibly in the background afterward instead of behind a still-visible, unresponsive window. [reported by CaverBruce]
   * The project-tree Open project action now always treats the selected file as a `thconfig` root, including files with arbitrary extensions or no extension. Project shape detection also now recognizes `.thconfig`-suffixed filenames, so showcase configs such as `therion_uis_showcase.thconfig` load their `source`/`input` tree instead of being misdetected as `.th` data files. Added parser and controller regression coverage.
 * Infrastructure maintenance:
+  * Added a Phase 7 to the TH2 element-tree plan: each point, line and area row in the sidebar tree gets a small icon previewing how its type is drawn on the canvas.
+    * Points show their canvas symbol. Label-type points use their placeholder shape.
+    * Lines show a short curve inside a small rectangle, and areas show a filled oval.
+    * Icons follow the current visualization method and symbol set, look the same at any zoom, and are cached.
+    * The line painter's drawing core will be moved into a helper with explicit sizes so the icons can reuse it.
   * Added a new Phase 5 to the TH2 element-tree plan, which shows extra details in the tree's element labels:
     * a station's `-name`, and the `-text` of label and remark points, appear between the type and the Therion id;
     * values are shown as stored, and `<br>` in text is handled the same way as on the canvas;

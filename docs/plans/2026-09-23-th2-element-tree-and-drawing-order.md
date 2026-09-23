@@ -153,7 +153,7 @@ final class TH2FileStatusTreeRow extends THProjectTreeVisibleRow {
 - Element row ids are `th2el:<canonicalPath>:<mpID>` and status row ids are `th2status:<canonicalPath>:<kind>`. `canonicalPath` is `THProjectPathResolver.canonicalize(p.absolute(path))`, which for project files equals `TH2FileNode.absolutePath` (Phase 3 plan §3.1 item 5).
 - Scrap rows can be collapsed and start expanded. Their collapsed state is kept in a separate `THProjectTreeUIController.collapsedTH2ScrapIds` set, keyed by scrap row id, not in `expandedNodeIds`, so project default-expansion seeding never sees TH2 ids. MPIDs only exist while the app runs and are never reused, so a stale id after reloading a file is harmless. Both sets are cleared on project close (Phase 3 plan §6.1).
 - The builder lives in a new `lib/src/auxiliary/th2_element_tree_aux.dart`. For a valid file it walks `TH2File.childrenMPIDs` and each scrap's `childrenMPIDs`, and keeps only `THScrap`, `THPoint`, `THLine` and `THArea` rows. For a broken file it returns one `TH2FileStatusTreeRow(broken)` (§4.2). It runs inside the tree's `Observer`, so structural changes must be observable (§5.4).
-- **Labels:** `<kind> <type[:subtype]?> <thID?>`. Kind and type/subtype come from the existing localized `MPTextToUser` helpers. The Therion id is shown exactly as stored, in a muted span with no `id=` prefix or brackets, for example `line wall:blocks w12` (`w12` muted), `point station` or `scrap s1`. Therion ids are free form, so the tree never validates, changes or generates them; elements without `-id` show no id. Scraps always have an id. Phase 3 labels leave out station `-name` values and other option values. Phase 5 adds the station `-name` and the `-text` of `label`/`remark` points as an extra detail part. Rows use the existing PLA type icons where they exist. Details: Phase 3 plan §6.2.
+- **Labels:** `<kind> <type[:subtype]?> <thID?>`. Kind and type/subtype come from the existing localized `MPTextToUser` helpers. The Therion id is shown exactly as stored, in a muted span with no `id=` prefix or brackets, for example `line wall:blocks w12` (`w12` muted), `point station` or `scrap s1`. Therion ids are free form, so the tree never validates, changes or generates them; elements without `-id` show no id. Scraps always have an id. Phase 3 labels leave out station `-name` values and other option values. Phase 5 adds the station `-name` and the `-text` of `label`/`remark` points as an extra detail part. Rows use the existing PLA type icons where they exist; Phase 7 replaces them on point, line and area rows with previews of how each type is drawn. Details: Phase 3 plan §6.2.
 - **Filter:** the sidebar search filter also matches element and scrap labels of **loaded, valid** files. It follows the existing project-tree rule: a row is shown only if it or a descendant matches, so a file or scrap that matches by its own name does not reveal its non-matching children. Status rows are hidden while filtering, and no file is loaded while a filter is active. Details: Phase 3 plan §7.
 
 ### 4.2 Loading a file's elements, and the broken badge
@@ -457,6 +457,53 @@ In the examples, italics show the detail span and the trailing muted part is the
 - Keyboard shortcuts page with the new shortcuts in alphabetical order.
 - CHANGELOG entry for Phase 6 (help pages, shortcuts page, remaining localization), referencing #32. Also check that the CHANGELOG as a whole calls out the broken-file behavior change (§9, risk 1); if Phase 1's entry does not, Phase 6's entry does.
 
+### Phase 7: Type preview icons on element rows
+
+Each point, line and area row in the sidebar tree starts with a small icon that previews how that element's type (and subtype) is drawn on the canvas. It replaces the generic element-kind icon that Phase 3 uses for these rows. Scrap rows keep their Phase 3 icon, and file, status and project rows are unchanged.
+
+**Icon content.** Each icon is a preview of the element's type and subtype, not of that particular element, so it uses only `type` and `subtype`. Everything else is ignored: `-orient`, `-scale`, `-reverse`, `-clip`, `-visibility`, `-id`, the actual geometry, and selection or highlight state. The same type always gets the same icon.
+
+- **Points:** the symbol the canvas would draw for that point type and subtype, drawn with `MPInteractionAux.drawPoint` and the paint from `MPVisualController.getDefaultPointPaint(point)`, centred and scaled to fit the icon box, with no frame. For label-mode point types (`label`, `remark`, `altitude`, `date`, `height`, `passage-height`, `dimensions`), the canvas draws the element's own text, which would be unreadable at this size and is not a type preview. These types use their `mapiahPlaceholder` shape instead.
+- **Lines:** a small rectangle frame (`colorScheme.outline`, 1 logical pixel) with a short curved sample line inside: a single cubic Bézier S-curve from the left edge to the right edge of the frame's inner area. The curve is drawn with the line type's canvas paint (`getDefaultLinePaintByTypeSubtype`), decorator (`getLineDecorator`) and decorator color (`getLineDecoratorColor`), so dash patterns, ticks and other decorations appear as on the canvas. Line-direction ticks are not drawn.
+- **Areas:** the same rectangle frame with a small oval inside, a closed ellipse path drawn with the area type's canvas paint (`getDefaultAreaPaint`), including its fill or pattern, as the canvas draws an area.
+- **Background:** inside the frame, and behind point symbols, the icon paints the canvas background colour for the current brightness (white in light mode, black in dark mode, as in `TH2FileWidget`), so the preview has the same contrast as on the canvas.
+- **Visualization method:** icons follow the current `tH2EditVisualizationMethod` setting and the selected Therion symbol set, exactly as the canvas does. Placeholder mode shows placeholder previews; Therion modes show that set's symbols.
+
+**Zoom-independent rendering.** Canvas painting reads zoom-dependent values from `TH2FileEditController`: `canvasScale`, `lineThicknessOnCanvas`, `pointRadiusOnCanvas`, `lineDirectionTickLengthOnCanvas` and `scaleScreenToCanvas`. Icons must look the same at every zoom level, so:
+
+- The path-drawing core of `THLinePainter.paint` (base path from the decorator, fill, dash or continuous stroke, decorator pass) moves into a static helper that takes the canvas, `Path`, `THLinePaint`, optional decorator and decorator color, `MPSymbolUnit`, and line thickness as explicit arguments. `THLinePainter` calls it with values from the controller, so canvas output is unchanged; the icon painter calls it with fixed preview values. `MPInteractionAux.drawPoint` already takes an explicit `MPSymbolUnit` and needs no change.
+- Preview sizes are new constants in `mp_constants.dart`: `mpTH2ElementTreeTypeIconWidth`, `mpTH2ElementTreeTypeIconHeight` (the frame, wider than tall and fitting within `mpProjectTreeRowHeight`), `mpTH2ElementTreeTypeIconSymbolUnitScale`, `mpTH2ElementTreeTypeIconLineThickness` and `mpTH2ElementTreeTypeIconPointRadius`. No magic numbers go in the painter.
+- Paints are resolved through the row's own file controller's `visualController`, which exists for tab-less controllers too, and their stroke widths are then replaced with the preview constants through `copyWith`. The canvas's paint objects are never modified; the icon code works on copies.
+
+**Widget and caching.**
+
+- A new `TH2ElementTypeIconWidget` (`lib/src/widgets/th2_element_type_icon_widget.dart`) draws the icon with a `CustomPaint` and a new `TH2ElementTypeIconPainter`, wrapped in `ExcludeSemantics`, because the row label already describes the element.
+- Rendering each icon from scratch for every row in a long file would be slow, so rendered icons are cached as `ui.Picture`s in a small app-wide cache. The key is the element kind, type, subtype, visualization method, symbol set, brightness and device pixel ratio. The cache is cleared when any setting that affects symbols changes, and its size is bounded (least recently used entries dropped first; limit in `mp_constants.dart`).
+- The row keeps its existing leading space. The icon replaces the Phase 3 icon in the same slot, so labels still line up with scrap rows and the chevron column (Phase 3 plan §6.1).
+- Area pattern fills use the same pattern source as the canvas (`MPPatternCache`). If a pattern image is not ready yet, the icon draws the area's plain fill and repaints when the pattern arrives; it never blocks the build.
+
+**Keeping icons current.** A type or subtype edit already bumps `structureRevision` through the type-edit commands (Phase 2), and the row rebuilds with the new key. A change of visualization method or symbol set clears the cache and rebuilds the tree.
+
+- **Localization:** no new strings, since icons are decorative and excluded from semantics.
+- **Help pages (EN/PT):** Phase 6 comes earlier, so this phase updates the "Drawing order and element tree" help section itself, to mention the type preview icons.
+- CHANGELOG entry for Phase 7, referencing #32.
+- Tests (`t3946_th2_element_type_icon_test.dart`):
+  - golden tests, following the existing Therion symbol golden tests (`t3764`–`t3766`), in light and dark mode, for:
+    - a point with a Therion symbol (for example `station`);
+    - a label-mode point (placeholder fallback);
+    - a continuous line (`wall`);
+    - a decorated line (for example `pit` or `contour`);
+    - a plain-fill area (for example `water`);
+    - a patterned area (for example `debris`).
+
+    Each golden is captured under at least placeholder mode and one Therion symbol set.
+  - two elements with the same type and subtype but different `-orient`, `-scale`, `-reverse` or geometry produce identical icons and one cache entry;
+  - changing canvas zoom does not change any icon;
+  - after the `THLinePainter` refactor, existing line and area canvas golden tests pass unchanged;
+  - changing a point's type through the type-edit command updates the row icon; changing the visualization method or symbol set updates every visible icon;
+  - scrap rows keep their Phase 3 icon, and icon size and label alignment match the row layout;
+  - the icon is excluded from semantics, and the row's semantics label is unchanged.
+
 ## 8. Files Touched (expected)
 
 | Area | Files |
@@ -466,8 +513,9 @@ In the examples, italics show the detail span and the trailing muted part is the
 | Commands | new `lib/src/commands/mp_move_elements_command.dart`, `mp_command.dart`, `factories/mp_command_factory.dart`, `types/mp_command_type.dart`, `types/mp_command_description_type.dart` |
 | Controllers | `th2_file_edit_element_edit_controller.dart` (Phase 5: revision bump for `station`/`text` option edits), `th2_file_edit_controller.dart` (`_structureRevision`, `isBroken`, `problems`, `_finalFilePreparations` split, `dispose()`), `mp_general_controller.dart` (tab-less cleanup, open-on-edit helper, `reloadTH2File`), `th_project_controller.dart` (cleanup call, skip broken files on save) |
 | Aux | new `lib/src/auxiliary/th2_hierarchy_aux.dart`, new `th2_element_tree_aux.dart` (Phase 5: label details), `th_project_tree_flatten_aux.dart`, `mp_text_to_user.dart`, `mp_label_text_aux.dart` (reused as is in Phase 5) |
-| Widgets / pages | `th_project_tree_widget.dart`, `th_project_tree_node_widget.dart`, new `th2_element_tree_row_widget.dart`, new `th2_broken_file_body_widget.dart`, `th2_file_edit_body_widget.dart`, `th2_file_tabs_page.dart` (Save As disabled for broken files), `mp_therion_run_dialog_widget.dart` (broken-file warning) |
-| Constants | `mp_constants.dart` (drag hover delay, drop-zone fractions) |
+| Widgets / pages | `th_project_tree_widget.dart`, `th_project_tree_node_widget.dart`, new `th2_element_tree_row_widget.dart`, new `th2_element_type_icon_widget.dart` (Phase 7), new `th2_broken_file_body_widget.dart`, `th2_file_edit_body_widget.dart`, `th2_file_tabs_page.dart` (Save As disabled for broken files), `mp_therion_run_dialog_widget.dart` (broken-file warning) |
+| Constants | `mp_constants.dart` (drag hover delay, drop-zone fractions; Phase 7: type-icon sizes, preview symbol scale, line thickness, point radius and cache limit) |
+| Painters | Phase 7: `lib/src/painters/th_line_painter.dart` (path-drawing core moved into a static helper with explicit symbol unit and thickness), new `lib/src/painters/th2_element_type_icon_painter.dart` |
 | l10n | `lib/l10n/intl_en.arb`, `intl_pt.arb`, updated in each phase from Phase 3 on for that phase's strings, and in Phase 6 for the Phase 1 strings |
 | Docs | help pages EN/PT and keyboard-shortcuts page (Phase 6) |
 | Changelog | `CHANGELOG.md`, one entry per phase |
