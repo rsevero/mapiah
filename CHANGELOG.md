@@ -36,6 +36,14 @@
   * On Windows (and other desktop platforms), closing Mapiah via the window's close button, taskbar control, or Alt+F4/Ctrl+F4 no longer leaves the window visibly frozen on screen for several seconds before it vanishes; the window is now hidden right after its placement is persisted, so the Flutter engine's shutdown happens invisibly in the background afterward instead of behind a still-visible, unresponsive window. [reported by CaverBruce]
   * The project-tree Open project action now always treats the selected file as a `thconfig` root, including files with arbitrary extensions or no extension. Project shape detection also now recognizes `.thconfig`-suffixed filenames, so showcase configs such as `therion_uis_showcase.thconfig` load their `source`/`input` tree instead of being misdetected as `.th` data files. Added parser and controller regression coverage.
 * Infrastructure maintenance:
+  * Revised the Phase 3 read-only sidebar plan again after validating it against the code:
+    * A load that finishes after its controller was disposed commits nothing and registers no reactions.
+    * Closing a TH2 tab keeps its controller tab-less while its tree row is expanded and it has no unsaved changes, so the tree keeps its state and a failed load is not retried automatically.
+    * Subtype-only edits bump the structure revision, so row labels stay current.
+    * The remaining observable writes outside actions (`_preParseInitialize` and the Save As write) become actions.
+    * Scrap, point, line and area rows use named existing icons, with the add-element image paths moved to constants.
+    * Selection highlights, the active-scrap highlight, the "contains selection" dot and the broken badge use row-scoped observers.
+    * Default project-tree expansion stops above the shallowest `.th2` file even when a deeper one comes first, so it never expands a TH2 row.
   * Added a Phase 7 to the TH2 element-tree plan: each point, line and area row in the sidebar tree gets a small icon previewing how its type is drawn on the canvas.
     * Points show their canvas symbol. Label-type points use their placeholder shape.
     * Lines show a short curve inside a small rectangle, and areas show a filled oval.

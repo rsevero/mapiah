@@ -26,7 +26,9 @@ This phase provides the read-only row model and the tree-to-canvas selection con
 - Search matching for labels belonging to loaded, valid TH2 files.
 - Element labels, existing element icons, indentation, expansion state and selection highlight.
 - Tree-to-canvas selection for open files and canvas-to-tree highlight synchronization.
-- Rebuilding the rows after load, undo/redo, type/id changes and controller reload via `isFileLoaded`, `isBroken`, `structureRevision` and `th2ControllersRevision`, after making those signals observable (§3.1).
+- Rebuilding the rows after load, undo/redo, type/subtype/id changes and controller reload via `isFileLoaded`, `isBroken`, `structureRevision` and `th2ControllersRevision`, after making those signals observable (§3.1).
+- Keeping a file's controller tab-less when its tab closes while its tree row is expanded (§3.2).
+- Making default expansion stop above the shallowest `.th2` file, so it never expands a TH2 row (§3.3).
 
 ### Out of scope
 
@@ -52,14 +54,16 @@ This phase provides the read-only row model and the tree-to-canvas selection con
 
 ### 3.1 Observability prerequisites
 
-Phase 2 already added the observable `isLoading`/`structureRevision` signals, controller disposal, and tab-less cleanup. The remaining gap is that a tree `Observer` cannot yet see a load finish, a file become broken, a load failure, or a controller being created or replaced. Phase 3 adds only the observability and load-error changes below; it must preserve the Phase 2 behavior.
+Phase 2 already added the observable `isLoading`/`structureRevision` signals, controller disposal, and tab-less cleanup. The remaining gap is that a tree `Observer` cannot yet see a load finish, a file become broken, a load failure, or a controller being created or replaced. Phase 3 adds only the observability, load-error, disposal and revision changes below, plus the tab-close rule in §3.2; it must otherwise preserve the Phase 2 behavior.
 
 1. **Lifecycle fields become observable.** In `TH2FileEditControllerBase`:
    - `bool _isFileLoaded` becomes `@readonly bool _isFileLoaded = false;` (the hand-written `isFileLoaded` getter is removed; the generated one replaces it).
    - `bool isBroken` becomes `@readonly bool _isBroken = false;`.
    - `List<TH2FileProblem> problems` becomes `@readonly List<TH2FileProblem> _problems = const <TH2FileProblem>[];`. It is always replaced by a new unmodifiable list, never mutated in place. `TH2FileProblemKind.parseError` entries produced by `TH2FileParser._addError` remain part of this list; parser error strings returned separately for the existing error dialog are not a second tree diagnostic source.
 
-   The public read names (`isFileLoaded`, `isBroken`, `problems`) stay the same, so readers such as `th2_file_edit_body_widget.dart` and `th2_file_tabs_page.dart` are unchanged. Every write happens inside an action, including the `_isFileLoaded = true` in the Save As path.
+   The public read names (`isFileLoaded`, `isBroken`, `problems`) stay the same, so readers such as `th2_file_edit_body_widget.dart` and `th2_file_tabs_page.dart` are unchanged. Every write happens inside an action. MobX's default `observed` write policy asserts in debug builds and tests when an observed field is written outside an action, and the tree observes these fields, so two existing writes need changes:
+   - `_preParseInitialize` becomes `@action`. It sets `_isLoading = true` and runs synchronously inside `load()`. When `ensureTH2FileLoaded` (§5) loads a controller the tree `Observer` has already read, that write would otherwise happen outside an action.
+   - `saveAsTH2File` is `async` and is not an action, so its `_isFileLoaded = true` moves into a small private `@action` (for example `_markLoadedAfterSaveAs()`) called at the same point.
 
 2. **Load results are committed in one action, with the revision bump last.** The existing Phase 2 load path runs `_finalFilePreparations` (which resets `_isLoading`), bumps `structureRevision`, and only then marks the file loaded, while `problems`/`isBroken` are assigned earlier in `_loadOnce`. The bump therefore fires, but a synchronous reaction to it still sees `isFileLoaded == false`. The part of `_loadOnce` after `await parser.parse(...)` moves into one `@action` method that sets `_problems`, `_isBroken`, runs `_finalFilePreparations`, sets `_isFileLoaded = true`, and calls `bumpStructureRevision()` last. Observers then see one consistent transition from loading to loaded, valid or broken. Preserve the existing Phase 2 revision semantics: one load-time bump, one bump per relevant edit/undo/redo, and no bump per parsed element.
 
@@ -86,6 +90,49 @@ Phase 2 already added the observable `isLoading`/`structureRevision` signals, co
    - **Definition.** In this plan, the *canonical path* of a file is `THProjectPathResolver.canonicalize(p.absolute(path))`: absolute and normalized, with **no** symlink resolution and **no** case folding. For a project TH2 file it equals `TH2FileNode.absolutePath`. Row ids (`th2el:<canonicalPath>:<mpID>`), status-row ids, `collapsedTH2ScrapIds` keys, `ensureTH2FileLoaded(path)` and every controller lookup from the tree use it.
    - **Refactor, no behavior change.** `_normalizeFilename` keeps its special cases (empty names and `mpNewFilePrefix…` names are returned unchanged). For every other name it returns `THProjectPathResolver.canonicalize(p.absolute(filename))` instead of repeating the rule, so the registry and the project tree share one definition.
    - **Deliberately not done.** Symlink resolution fails for missing files, which the project tree shows on purpose, and it would change the paths Mapiah shows, saves to and writes into directives. `THProjectPathResolver.canonicalize` documents this choice. Case folding on Windows and default macOS would change displayed and written paths. It would only fix the pre-existing case where the same file opened with different letter case gets two tabs, which needs case-insensitive *comparison* with the original *display* path kept. That is a separate issue. `MPDirectoryAux`'s `p.canonicalize` is used for relative image-path rebasing, not file identity, and is not changed. Its Windows lowercasing of absolute image paths in `rebaseRelativePath` is a possible existing bug to check separately.
+
+6. **A load that finishes after disposal commits nothing.** Expanding a file row is enough to start a load, and every project reload or close calls `disposeTablessTH2Controllers`, so a controller is often disposed while its parse is still running. Today the load would then run `_finalFilePreparations` on the disposed controller, and its `_initializeReactions()` would register autoruns that nothing ever disposes.
+   - The load-commit action (item 2) checks `_disposed` first. If the controller is disposed, it writes no field, registers no reaction, does not bump `structureRevision`, and only returns the result so the future completes.
+   - The load-error action (item 4) does the same: a disposed controller does not set `_loadError` or `_isLoading`. `load()` still rethrows, and `ensureTH2FileLoaded` already catches the error.
+   - The parser may keep writing into the disposed controller's own `TH2File` until the parse ends. Nothing reads that file afterwards, so this is harmless.
+
+7. **Subtype edits bump `structureRevision`.** A subtype is stored as a `THSubtypeCommandOption`, and today `executeSetOptionToElement` and `executeRemoveOptionFromElement` in `th2_file_edit_element_edit_controller.dart` bump the revision only for `THCommandOptionType.id`. A subtype changed on its own, for example from the options panel, would therefore leave the row label and the label cache (§7) stale. Both methods also bump for `THCommandOptionType.subtype`. A type-and-subtype edit made through the type commands then bumps more than once inside one command; this is harmless because rows rebuild on the next frame. The rule in item 2 still holds: no bump per parsed element, because `bumpStructureRevision` does nothing while `isLoading`.
+
+### 3.2 Keeping a controller when its tab closes
+
+Closing a TH2 tab calls `TH2FileEditController.close()`, which disposes the controller's reactions and then calls `removeFileTab`, which calls `removeFileController` and disposes the controller. If the file's tree row is expanded, the tree would then find no controller and parse the file again tab-less. The new controller has new MPIDs, so collapsed scraps would expand again and the tree selection would be lost. The failed-load path has the same problem: `_discardFailedFileLoad` in `th2_file_tabs_page.dart` removes the failed controller, the tree loads the file again, and the load that failed is retried automatically, which §3.1 item 4 forbids.
+
+**Rule.** When a TH2 tab closes, its controller is kept, tab-less, if all of these are true:
+
+- the file is a TH2 file of the open project, and the id of its `TH2FileNode` is in `expandedNodeIds`. This is asked through a new `THProjectTreeUIController.isTH2FileRowExpanded(String canonicalPath)`, which returns `false` when there is no project or no `TH2FileNode` with that `absolutePath`;
+- the controller has no unsaved changes (`!enableSaveButton`, the same value that drives dirty mirroring);
+- it is not a new, never-saved file (`mpNewFilePrefix…`).
+
+Otherwise the controller is disposed as it is today. A controller with unsaved changes is disposed because closing its tab discards those changes. Keeping it would show edits that are not on disk, so the tree loads the file again from disk, once.
+
+**Mechanics:**
+
+- `removeFileTab` makes the decision. For a TH2 tab it calls `removeFileController` only when the rule above does not keep the controller. `closeProjectFileTabs` is unchanged: it runs only during project transitions and is followed by `disposeTablessTH2Controllers` for the same paths, so kept controllers are still disposed when the project closes or reloads.
+- `close()` no longer calls `_disposeReactions()` itself, so a kept controller stays fully working, including dirty mirroring and the tree's selection sync. `dispose()` already disposes the reactions when the controller is removed. `close()` still clears overlay windows and the pattern cache.
+- `_discardFailedFileLoad` still drops its `_fileLoads` entry, but it calls `removeFileController` only when the same rule does not keep the controller. A failed controller kept this way keeps its `loadError`, so the tree keeps the load-error row and nothing retries. Opening the tab again shows the cached failure and the error dialog again. Reload remains the only retry (§3.1 item 4).
+- Collapsing the row later does not dispose a kept controller. Tab-less controllers are disposed on project transitions, as in Phase 2.
+- `th2ControllersRevision` is not bumped when a controller is kept, because the registry does not change. Removing the tab still updates `openFileOrder` as it does today.
+
+### 3.3 Default expansion never expands TH2 rows
+
+When a project opens with an empty expansion set, `THProjectTreeUIController._handleProjectRootChanged` seeds `expandedNodeIds` with every node shallower than the shallowest `.th2` file, as the existing t3880 test "expands all branches down to the shallowest th2 file" states. The code does not quite do that. `_firstTH2FileDepth` walks the tree depth first and returns the depth of the first `.th2` file in walk order, which is not always the smallest depth:
+
+```
+main.thconfig            depth 0
+└─ cave.th               depth 1
+   ├─ input north.th     depth 2
+   │  └─ north.th2       depth 3   ← reached first → expansion depth 3
+   └─ input cave.th2     depth 2   ← shallowest .th2, but expanded
+```
+
+`_expandNodesAboveDepth` then expands every node shallower than 3, including `cave.th2`. Today this does nothing, because TH2 file nodes are leaves. In Phase 3 an expanded TH2 row loads automatically (§5), so opening this project would parse `cave.th2` without the user asking.
+
+**Fix.** Replace `_firstTH2FileDepth` with a helper that returns the minimum depth of any `TH2FileNode` in the tree (for example `_shallowestTH2FileDepth`), or `null` when there is none. No `.th2` file can then be shallower than the expansion depth, so seeding never adds a TH2 file id. The behavior for projects without `.th2` files (expand the whole tree) and the rule that seeding runs only when `expandedNodeIds` is empty do not change. Only user or programmatic expansion (§5 item 2) expands a TH2 row.
 
 ## 4. Row model
 
@@ -212,7 +259,18 @@ Every element and scrap row uses one rule: **localized kind, localized type[:sub
 
 **Out of scope for Phase 3:** the station point `-name` option (for example a station `1.3`), `label`/`remark` point text, and any other option values. The parent plan's Phase 5 adds station names and label/remark text as an extra detail part between the type and the id. Phase 3 keeps the label builder and the `Text.rich` spans easy to extend with it.
 
-Reuse the existing element icon mappings. Do not hardcode user-facing strings or use all-caps labels; any new strings go in the `.arb` files as described in §9.1.
+**Icons.** Rows reuse icons Mapiah already has:
+
+| Row | Icon |
+|---|---|
+| scrap | `Icons.map_outlined`, the icon `THProjectTreeNodeIconWidget` already uses for `THScrapNode` |
+| point | `assets/icons/add_element-addPoint.png` |
+| line | `assets/icons/add_element-addLine.png` |
+| area | `assets/icons/add_element-addArea.png` |
+
+The three PNGs are the ones the last-used PLA buttons show, and today their paths are only in the private `_buttonIconPath` in `th2_file_edit_last_used_pla_buttons_widget.dart`. Phase 3 moves them to `mp_constants.dart`, next to the existing `mpScrapButtonImagePath`, as `mpAddPointButtonImagePath`, `mpAddLineButtonImagePath` and `mpAddAreaButtonImagePath`. Both widgets use the constants. The row draws a PNG with `Image.asset` at `mpSmallIconSize` × `mpSmallIconSize`, and the scrap icon with `Icon` at `mpSmallIconSize`, so every row's icon slot has the same width. Icons are decorative and wrapped in `ExcludeSemantics`, because the label already names the element kind. Phase 7 of the parent plan replaces the point, line and area icons with type previews in the same slot.
+
+Do not hardcode user-facing strings or use all-caps labels; any new strings go in the `.arb` files as described in §9.1.
 
 ### 6.3 Drawing-order tooltip
 
@@ -251,7 +309,7 @@ Filtering inside a file extends the rule the project tree already has and tests 
 - Loading, load-error and broken status rows are hidden while a filter is active; they are not matches. The file row still appears, with its broken badge if it has one, when the file's own label matches.
 - No load is triggered while a filter is active. This includes a file row in the user's expansion set that has no controller, for example after a project reload. The §5 "needs a load" rule applies only when the filter is inactive. Loading resumes on the first build after the filter is cleared.
 
-**Label cache.** `th2_element_tree_aux.dart` caches each file's row labels, keyed by controller identity, `structureRevision` and locale. A controller replaced by Reload, a structural or type/id edit that bumps `structureRevision`, or a locale change each invalidate the cache. The existing `mpProjectTreeFilterDebounceMilliseconds` debounce limits how often filtering rebuilds.
+**Label cache.** `th2_element_tree_aux.dart` caches each file's row labels, keyed by controller identity, `structureRevision` and locale. A controller replaced by Reload, a structural, type, subtype or id edit that bumps `structureRevision`, or a locale change each invalidate the cache. The existing `mpProjectTreeFilterDebounceMilliseconds` debounce limits how often filtering rebuilds.
 
 **Expansion state is never written by filtering.** Auto-expanded files and scraps are computed per build. Nothing is added to or removed from `expandedNodeIds` or `collapsedTH2ScrapIds`, so clearing the filter restores the previous view exactly, as the existing "clearing filter restores the prior manual expansion state" test requires for project nodes. Chevron taps during filtering still toggle the stored state, as they do for project nodes today. Selection highlight and the "contains selection" dot behave as §8 describes.
 
@@ -288,9 +346,23 @@ Use the canonical path (§3.1 item 5) and MPID to resolve the controller. Do not
 
 ### Canvas to tree
 
-For each expanded, loaded, valid file, the highlighted element rows are the MPIDs in that file controller's `selectionController.mpSelectedElementsLogical`, which is an `ObservableMap` the tree `Observer` reads. This applies to the active tab, inactive tabs and tab-less files alike. Selection highlighting must not reorder rows or change expansion state.
+For each expanded, loaded, valid file, the highlighted element rows are the MPIDs in that file controller's `selectionController.mpSelectedElementsLogical`, an `ObservableMap`. Each row reads it in its own `Observer` (see "Row-scoped observers" below), not the tree `Observer`. This applies to the active tab, inactive tabs and tab-less files alike. Selection highlighting must not reorder rows or change expansion state.
 
 A collapsed file shows no element highlight. A collapsed scrap is never expanded to reveal a selection. If any of its children is selected in that file's controller, the scrap row shows a "contains selection" dot instead. The dot is the size of the existing project-tree status dots, uses the selection color, has the key `TH2ElementTreeScrapContainsSelectionDot|<rowId>` and has a tooltip and semantics label from `th2ElementTreeScrapContainsSelection` (§9.1). The dot is derived from the same `mpSelectedElementsLogical` read as the row highlight, so it clears or moves with the selection. A selected element in a scrap other than the active one is still highlighted on its row; changing the active scrap is handled by existing canvas behavior. The project-node highlight (`activeSelectedNodeId`) is independent and may be visible at the same time as element-row highlights.
+
+### Row-scoped observers
+
+`ListView.builder` builds rows lazily, during layout, outside the tree `Observer`'s builder, so a value read while a row builds is not tracked by the tree `Observer`. Computing highlights during flattening would work, but then every selection change (a selection-window drag, repeated shift-clicks) would rebuild and re-flatten every row, although the rows and their order have not changed. Therefore:
+
+- **The tree `Observer` tracks structure only:** which rows exist, their order, and expansion (project expansion, `collapsedTH2ScrapIds`, `isFileLoaded`, `isBroken`, `loadError`, `structureRevision`, `th2ControllersRevision` and the filter). It never reads selection or the active scrap.
+- **Each row wraps only its changing parts in its own `Observer`:**
+  - element rows: the selected background, from `selectionController.mpSelectedElementsLogical.containsKey(elementMPID)`;
+  - scrap rows: the active-scrap highlight (`activeScrapID == elementMPID`) and, when the scrap is collapsed, the "contains selection" dot. The dot checks whether any selected element's parent is this scrap, looping over the selection rather than the scrap's children;
+  - TH2 file rows in `THProjectTreeNodeWidget`: the broken badge (`isBroken`, `problems`, `loadError`). The badge then also updates while the file row is collapsed and the flattener does not read that controller, for example when the file's tab loads it as broken.
+- **Resolve the controller inside the row's `Observer` builder** with `getTH2FileEditControllerIfExists(th2FilePath)` on every build (§3.1 item 3), and never keep it in the row. That call reads `th2ControllersRevision`, so the row stays correct after Reload, disposal, or a controller kept when its tab closes (§3.2). When the controller is missing or not loaded, the row shows no highlight, no dot and no badge.
+- **The row shell** (indentation, chevron, icon, label, gestures, context menu) stays outside the `Observer`, so a selection change repaints only the background, dot or badge.
+
+Only the visible rows are built, so a selection change rebuilds a few dozen small widgets. MobX's `ObservableMap` may notify every observer on any change rather than per key; at this row count that is acceptable, and no per-row `computed` is added.
 
 ## 9. Widget structure
 
@@ -300,6 +372,7 @@ Create `TH2ElementTreeRowWidget` for element and status rows, or use two private
 - PLA/scrap icons and localized labels;
 - a collapse chevron on scrap rows and the "contains selection" dot on collapsed scraps (§6.1, §8);
 - selected-row background matching the project row;
+- row-scoped `Observer`s for the selection background, active-scrap highlight, "contains selection" dot and broken badge (§8, "Row-scoped observers");
 - loading/error/broken status affordances;
 - a broken badge on the file row with problem count and a tooltip containing the first problems;
 - a right-click context menu with Reload for broken and load-error files (§9.2).
@@ -359,14 +432,14 @@ Mapiah has no context menus yet; the only menu is the overflow `PopupMenuButton`
 
 ## 10. Implementation order
 
-1. Apply the remaining §3.1 observability changes on top of the Phase 2 controller/revision/disposal implementation: observable lifecycle fields, single-action load commit, `th2ControllersRevision`, `loadError`, and `_normalizeFilename` delegating to `THProjectPathResolver.canonicalize`. Preserve the Phase 2 disposal, tab-less cleanup and revision behavior. Let the MobX watch process regenerate the `.g.dart` files.
-2. Add the sealed visible-row types and update the flattener with compatibility tests for ordinary project trees.
+1. Apply the remaining §3.1 observability changes on top of the Phase 2 controller/revision/disposal implementation: observable lifecycle fields, `_preParseInitialize` and the Save As write as actions, single-action load commit, `th2ControllersRevision`, `loadError`, the disposed-controller guard in the load-commit and load-error actions, subtype revision bumps, and `_normalizeFilename` delegating to `THProjectPathResolver.canonicalize`. Preserve the Phase 2 disposal, tab-less cleanup and revision behavior. Let the MobX watch process regenerate the `.g.dart` files.
+2. Fix default expansion to use the shallowest TH2 depth (§3.3), with its t3880 regression test, before any TH2 row can load. Then add the sealed visible-row types and update the flattener with compatibility tests for ordinary project trees.
 3. Add `th2_element_tree_aux.dart` and pure row/label tests using valid and broken controller fixtures. Add `collapsedTH2ScrapIds` to `THProjectTreeUIController` and the scrap expansion fields to the row model (§6.1).
 4. Refactor `THProjectTreeWidget` to render each row kind and observe loaded-controller state/revisions.
-5. Add the file-row chevron, `ensureTH2FileLoaded` and the post-frame load trigger for expanded rows that need a load (§5). Verify that expansion does not open a tab or dirty a file, and that a row kept expanded across a project reload loads again.
+5. Add the file-row chevron, `ensureTH2FileLoaded` and the post-frame load trigger for expanded rows that need a load (§5). Verify that expansion does not open a tab or dirty a file, and that a row kept expanded across a project reload loads again. Then add the §3.2 tab-close rule (`isTH2FileRowExpanded`, the keep-or-dispose decision in `removeFileTab` and `_discardFailedFileLoad`, and `close()` no longer disposing reactions).
 6. Add status rows, broken badge, `THProjectTreeRowContextMenuWidget` with the Reload action for broken and load-error files (§9.2), and load-error handling based on `loadError`.
 7. Split `matchesFilter` to add `matchesFilterText`. Add the filter-aware callback result, `hasMatch` in `_collectSubtreeMatches`, the per-build result map and the label cache (§7). Add the drawing-order tooltip.
-8. Add `requestZoomToFit` and the pending-zoom handling in `TH2FileWidget`. Then wire tree-to-canvas selection through each file's own selection controller, and canvas-to-tree highlighting, including tab-less files and double-click zoom (§8).
+8. Add `requestZoomToFit` and the pending-zoom handling in `TH2FileWidget`. Then wire tree-to-canvas selection through each file's own selection controller, and canvas-to-tree highlighting through row-scoped `Observer`s, including tab-less files and double-click zoom (§8).
 9. Add the §9.1 EN/PT `.arb` entries and the badge constant, run `flutter gen-l10n`, and switch the new widgets to `AppLocalizations`. Do this alongside steps 6–8 rather than as a clean-up, so that no hard-coded strings are ever committed.
 10. Run focused tests, `flutter analyze`, and the full test suite. Do not run `build_runner` manually or `dart format`.
 11. Add one Phase 3 entry to the current unreleased section of `CHANGELOG.md` (under "New features"), referencing #32 and listing the new test files. This follows the parent plan rule that every phase ends with its own CHANGELOG entry.
@@ -377,12 +450,12 @@ Mapiah has no context menus yet; the only menu is the overflow `PopupMenuButton`
 |---|---|
 | Row model/flattening | `lib/src/auxiliary/th_project_tree_flatten_aux.dart`, possibly a new visible-row model file |
 | TH2 row builder | new `lib/src/auxiliary/th2_element_tree_aux.dart` |
-| Tree UI state | `lib/src/controllers/th_project_tree_ui_controller.dart` (`collapsedTH2ScrapIds`, `toggleTH2ScrapCollapsed`, `isTH2ScrapCollapsed`, clearing on project close; `matchesFilterText` split out of `matchesFilter`) and its regenerated `.g.dart` file |
-| Widgets | `lib/src/widgets/th_project_tree_widget.dart`, `lib/src/widgets/th_project_tree_node_widget.dart`, new `lib/src/widgets/th2_element_tree_row_widget.dart`, new `lib/src/widgets/th_project_tree_row_context_menu_widget.dart`, `lib/src/widgets/th2_file_widget.dart` (consume a pending zoom on first layout) |
-| Controllers | `lib/src/controllers/th2_file_edit_controller.dart` (§3.1: observable `_isFileLoaded`/`_isBroken`/`_problems`, single-action load commit, `_loadError` capture; §8: `requestZoomToFit` and its pending-zoom field), `lib/src/controllers/mp_general_controller.dart` (§3.1: `_th2ControllersRevision` and `_normalizeFilename` delegation; §5: `ensureTH2FileLoaded`), their regenerated `.g.dart` files, selection controller files only if an adapter is required. Preserve the Phase 2 disposal and tab-less cleanup code. |
+| Tree UI state | `lib/src/controllers/th_project_tree_ui_controller.dart` (`collapsedTH2ScrapIds`, `toggleTH2ScrapCollapsed`, `isTH2ScrapCollapsed`, clearing on project close; `matchesFilterText` split out of `matchesFilter`; §3.3: shallowest-TH2-depth seeding) and its regenerated `.g.dart` file |
+| Widgets | `lib/src/widgets/th_project_tree_widget.dart`, `lib/src/widgets/th_project_tree_node_widget.dart`, new `lib/src/widgets/th2_element_tree_row_widget.dart`, new `lib/src/widgets/th_project_tree_row_context_menu_widget.dart`, `lib/src/widgets/th2_file_widget.dart` (consume a pending zoom on first layout), `lib/src/widgets/th2_file_edit_last_used_pla_buttons_widget.dart` (use the new icon path constants, §6.2) |
+| Controllers | `lib/src/controllers/th2_file_edit_controller.dart` (§3.1: observable `_isFileLoaded`/`_isBroken`/`_problems`, `_preParseInitialize` and the Save As write as actions, single-action load commit, `_loadError` capture, disposed-controller guard; §3.2: `close()` no longer disposing reactions; §8: `requestZoomToFit` and its pending-zoom field), `lib/src/controllers/mp_general_controller.dart` (§3.1: `_th2ControllersRevision` and `_normalizeFilename` delegation; §3.2: keep-or-dispose decision in `removeFileTab`; §5: `ensureTH2FileLoaded`), `lib/src/controllers/th2_file_edit_element_edit_controller.dart` (§3.1 item 7: subtype revision bumps), `lib/src/controllers/th_project_tree_ui_controller.dart` (§3.2: `isTH2FileRowExpanded`), `lib/src/pages/th2_file_tabs_page.dart` (§3.2: `_discardFailedFileLoad`), their regenerated `.g.dart` files, selection controller files only if an adapter is required. Preserve the Phase 2 disposal and tab-less cleanup code. |
 | Text/icon helpers | existing `mp_text_to_user.dart` and `th_project_tree_node_icon_widget.dart`, only where reuse requires a small extension |
-| Tests | `test/t3881_th_project_tree_flatten_test.dart`, `test/t3883_th_project_tree_widget_test.dart`, new `test/t3942_th2_element_tree_rows_test.dart`, new `test/t3943_th2_element_tree_widget_test.dart`, new `test/t3944_th2_controller_lifecycle_observability_test.dart` |
-| Localization | `lib/l10n/intl_en.arb`, `lib/l10n/intl_pt.arb`, generated `lib/src/generated/i18n/` files from `flutter gen-l10n`, `lib/src/constants/mp_constants.dart` (`mpTH2ElementTreeBadgeTooltipMaxProblems`) |
+| Tests | `test/t3880_th_project_tree_ui_controller_test.dart`, `test/t3881_th_project_tree_flatten_test.dart`, `test/t3883_th_project_tree_widget_test.dart`, new `test/t3942_th2_element_tree_rows_test.dart`, new `test/t3943_th2_element_tree_widget_test.dart`, new `test/t3944_th2_controller_lifecycle_observability_test.dart` |
+| Localization | `lib/l10n/intl_en.arb`, `lib/l10n/intl_pt.arb`, generated `lib/src/generated/i18n/` files from `flutter gen-l10n`, `lib/src/constants/mp_constants.dart` (`mpTH2ElementTreeBadgeTooltipMaxProblems`; the icon paths `mpAddPointButtonImagePath`, `mpAddLineButtonImagePath` and `mpAddAreaButtonImagePath`, §6.2) |
 | Changelog | `CHANGELOG.md` (one Phase 3 entry referencing #32) |
 
 Do not edit generated `.g.dart` files manually. If the MobX watch process regenerates them after an annotated source change, include only the required generated diff.
@@ -397,13 +470,24 @@ Do not edit generated `.g.dart` files manually. If the MobX watch process regene
 - `th2ControllersRevision` changes when `getTH2FileEditController` creates a controller, `removeFileController` removes one, `renameFileController` moves one, `disposeTablessTH2Controllers` disposes one, and `reloadTH2File` replaces one. It does not change when `getTH2FileEditController` returns an existing controller.
 - A reaction that reads `getTH2FileEditControllerIfExists(path)` re-runs after the controller for `path` is created, reloaded or removed.
 - Save As still leaves `isFileLoaded == true` with no MobX action-policy error.
+- Calling `load()` on an existing, unloaded controller while a reaction observes its `isLoading` raises no MobX action-policy assertion.
+- A controller disposed while its load is still running (for example by `disposeTablessTH2Controllers`) commits nothing when the parse ends: `isFileLoaded`, `isBroken`, `problems` and `structureRevision` are unchanged, and no reaction is registered after disposal. The same holds when the load throws after disposal: `loadError` stays `null`, and the rethrown error is not unhandled.
+- Setting or removing only a subtype option bumps `structureRevision` once, and so does undoing it. Changing another non-id option does not bump it.
 - When `_loadOnce` throws (for example through an injected failing parse or initialization step):
   - `loadError` is set, `isLoading` is `false` and `isFileLoaded` is `false`;
   - the future returned by `load()` completes with that error;
   - a second `load()` returns the same failed future without parsing again;
   - a reaction on `loadError` fires once.
 - After a failed load, `reloadTH2File` produces a new controller with `loadError == null` that loads normally.
+- `isTH2FileRowExpanded` is `true` only for a project TH2 file whose `TH2FileNode` id is in `expandedNodeIds`, and `false` with no project or for a file outside the project.
 - `_normalizeFilename` still returns empty and `mpNewFilePrefix…` names unchanged. For real paths, including relative ones and ones with `./` and `../` segments, it returns the same string as `THProjectPathResolver.canonicalize(p.absolute(path))`.
+
+### Default expansion tests (`t3880`)
+
+- With the §3.3 tree, where a deeper `.th2` comes first in walk order, seeding expands `main.thconfig`, `cave.th` and `north.th`, and expands neither `north.th2` nor `cave.th2`.
+- No seeded expansion set ever contains a `TH2FileNode` id, whatever the order of the project's children.
+- The existing default-expansion tests pass unchanged.
+- Opening that project in the widget tree parses no `.th2` file until the user expands one (`t3943`).
 
 ### Pure row/flattening tests (`t3942`)
 
@@ -454,10 +538,20 @@ Do not edit generated `.g.dart` files manually. If the MobX watch process regene
 - Double-tapping a tab-less element opens and activates the tab. The canvas shows the element selected with its scrap active, and the first layout zooms to the selection, not to the whole file.
 - `requestZoomToFit` on a controller that is already laid out zooms immediately. With an empty selection it falls back to the default zoom-to-file on first layout.
 - Canvas selection highlights the corresponding row and clears/moves the highlight when selection changes. The highlight in a tab-less or inactive-tab file follows that file's own selection.
+- A canvas selection change updates the highlight of a visible element row without re-flattening: the `th2ElementRowsFor` callback count does not change.
+- A collapsed TH2 file row shows the broken badge after its tab loads the file as broken, without the row being expanded.
+- A scrap row's active highlight follows `setActiveScrap`, made from the canvas or from a tree tap.
+- After Reload replaces a controller, row highlights read the new controller and show no stale selection.
 - A scrap chevron appears on scrap rows only. Tapping it collapses or expands just that scrap, without changing selection, active scrap or tab.
 - Collapsed state survives undo/redo and resets to expanded after Reload. Closing the project clears it.
 - A canvas selection inside a collapsed scrap shows the "contains selection" dot without expanding the scrap. The dot clears when the selection is cleared or moves elsewhere.
 - Undo/redo changes the visible order after `structureRevision` changes.
+- Changing only an element's subtype updates its row label.
+- Closing the tab of a file whose row is expanded and that has no unsaved changes keeps the same controller instance, tab-less and still working: no second parse, the same MPIDs, collapsed scraps and selection kept, and the row highlight still follows canvas selection changes made before closing. `th2ControllersRevision` does not change.
+- Closing that tab while the file has unsaved changes, or while its row is collapsed, disposes the controller as before. With the row expanded, the tree then loads the file from disk exactly once.
+- Closing or reloading the project still disposes controllers kept this way.
+- For an expanded file whose load throws, opening its tab shows the error dialog, and closing it keeps the failed controller. The load-error row stays and no second parse happens. Only Reload retries.
+- Each row shows its §6.2 icon: `Icons.map_outlined` for scraps and the add-element PNG for points, lines and areas.
 - Existing project-file opening, compiler-error dots, dirty dots and text-editor rows remain green.
 - With the PT locale, the loading, load-error and broken status rows, the badge tooltip (including singular/plural and truncation), the Reload menu entry and the header tooltip show the PT strings from §9.1.
 

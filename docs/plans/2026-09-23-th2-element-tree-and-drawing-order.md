@@ -482,7 +482,7 @@ Each point, line and area row in the sidebar tree starts with a small icon that 
 - The row keeps its existing leading space. The icon replaces the Phase 3 icon in the same slot, so labels still line up with scrap rows and the chevron column (Phase 3 plan §6.1).
 - Area pattern fills use the same pattern source as the canvas (`MPPatternCache`). If a pattern image is not ready yet, the icon draws the area's plain fill and repaints when the pattern arrives; it never blocks the build.
 
-**Keeping icons current.** A type or subtype edit already bumps `structureRevision` through the type-edit commands (Phase 2), and the row rebuilds with the new key. A change of visualization method or symbol set clears the cache and rebuilds the tree.
+**Keeping icons current.** A type edit bumps `structureRevision` through the type-edit commands (Phase 2), and a subtype set or removed as an option bumps it too (Phase 3 plan §3.1 item 7), so the row rebuilds with the new key. A change of visualization method or symbol set clears the cache and rebuilds the tree.
 
 - **Localization:** no new strings, since icons are decorative and excluded from semantics.
 - **Help pages (EN/PT):** Phase 6 comes earlier, so this phase updates the "Drawing order and element tree" help section itself, to mention the type preview icons.
