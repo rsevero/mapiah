@@ -67,7 +67,7 @@ The command stores concrete moves, each containing `elementMPID`, `newParentMPID
 
 `positionInNewParent` is an index into the new parent's list **after** the element has been removed from its old parent. For a move within the same parent this is one less than the pre-removal index whenever the element was before the target slot.
 
-The only parents a move can target are the file and scraps. `beforeSiblingMPID` must be a movable sibling in the requested parent, or the scrap's `THEndscrap`; it may not name a hidden file/list child. For an end-of-parent request, use the end of the movable-sibling sequence: for a scrap, project that position just before `THEndscrap`; for the file, insert immediately after the last scrap that remains once the moving element has been removed, leaving trailing comments, settings and images in place. Do not reuse the slot-permutation semantics of `TH2File.reorderScrapMPIDs`: they move other scraps too and cannot be expressed as a single-element move. For example, moving `S1` to the end of `[S1, comment, S2, trailing]` yields `[comment, S2, S1, trailing]`. Preserve the relative order of every non-movable child.
+The only parents a move can target are the file and scraps. `beforeSiblingMPID` must be a movable sibling in the requested parent, or the scrap's `THEndscrap`; it may not name a hidden file/list child. For an end-of-parent request, use the end of the movable-sibling sequence: for a scrap, project that position just before `THEndscrap`; for the file, insert immediately after the last scrap that remains once the moving element has been removed, leaving trailing comments, settings and images in place. When no other scrap remains (the moving scrap is the file's only scrap), the end-of-file request is a no-op. Do not reuse the slot-permutation semantics of `TH2File.reorderScrapMPIDs`: they move other scraps too and cannot be expressed as a single-element move. For example, moving `S1` to the end of `[S1, comment, S2, trailing]` yields `[comment, S2, S1, trailing]`. Preserve the relative order of every non-movable child.
 
 The simplest correct resolution is anchor-based on the movable-sibling sequence, followed by projection onto the full parent list. In the simulated sequence after the removal, the target is the current index of `beforeSiblingMPID`, or the end-of-parent position described above.
 
@@ -88,7 +88,7 @@ The primitive deliberately does not validate hierarchy. It should:
 1. Resolve the old parent and remove only the element MPID from its full child list.
 2. Only when the parent changes: copy the moved element with the new `parentMPID` and substitute that copy in the file registry. A reorder within the same parent keeps the existing instance.
 3. Insert the MPID at the supplied concrete index in the new parent. The index refers to the list after step 1 (§4.1).
-4. Invalidate drawable-child caches for both parents, clear the bounding boxes of both parents, and invalidate the scrap cache when a scrap changes order. When a parent is a scrap, also invalidate its per-type child lists (`_areasMPIDs`, `_linesMPIDs`, `_pointsMPIDs`), for the old and the new scrap and also for a reorder within one scrap. These are ordered lists that only `THScrap.addElementToParent`/`removeElementFromParent` keep in sync, and this primitive bypasses both. `TH2FileEditSearchController` reads them through `THScrap.getPoints`/`getLines`/`getAreas`, so stale lists would report the wrong scrap membership after a cross-scrap move and the old order after a reorder. The fields are private to `th_scrap.dart`, so add a public `THScrap` invalidation method that nulls all three.
+4. Invalidate drawable-child caches for both parents through a new public `THIsParentMixin.invalidateDrawableChildrenCache()` (`_drawableChildrenMPIDs` is private to the mixin file), clear the bounding boxes of both parents, and invalidate the scrap cache when a scrap changes order. When a parent is a scrap, also invalidate its per-type child lists (`_areasMPIDs`, `_linesMPIDs`, `_pointsMPIDs`), for the old and the new scrap and also for a reorder within one scrap. These are ordered lists that only `THScrap.addElementToParent`/`removeElementFromParent` keep in sync, and this primitive bypasses both. `TH2FileEditSearchController` reads them through `THScrap.getPoints`/`getLines`/`getAreas`, so stale lists would report the wrong scrap membership after a cross-scrap move and the old order after a reorder. The fields are private to `th_scrap.dart`, so add a public `THScrap` invalidation method that nulls all three.
 
 The area-to-line support maps (`_areaMPIDByLineMPID`, `_areaMPIDByLineTHID`) and each area's line caches are keyed by MPID/thID across the whole file, not by scrap. A move does not make them stale, so they do not need clearing.
 
@@ -122,6 +122,12 @@ Use a typed result with at least `ok` and `rejected(reasonKey)` states. Validate
 
 The validator must not mutate the file and must be usable during drag-hover before a command exists. Keep reason keys stable for Phase 4 localization. Reuse the existing `THArea.getLineMPIDs` to find an area’s referenced border-line MPIDs, and add a helper returning **all** areas that reference a given line. The second one must scan every area's border references, because `_areaMPIDByLineMPID` keeps only one area per line. The command uses these helpers instead of repeating the traversal.
 
+`THArea.getLineMPIDs` resolves border references through `mpIDByTHID` without checking the resolved element's type or scrap. The helpers and the validator must therefore:
+
+- reject a move when an area's border reference resolves to an element that is not a `THLine` (for example a point or scrap sharing the THID);
+- only expand/move border lines that are children of the area's current scrap. A referenced line in any other scrap (including the target scrap) is not part of the area block and is left in place; the validator rejects the cross-scrap area move with a dedicated reason key, since such a file is already inconsistent and moving it would not make the area and its border share a scrap;
+- because expansion only pulls lines from the source scrap, an expanded border line can never be the `beforeSiblingMPID`, which must belong to the target scrap.
+
 ### 4.4 Command and sequential resolution
 
 Add `lib/src/commands/mp_move_elements_command.dart` as a `part` of `mp_command.dart`.
@@ -136,7 +142,7 @@ Preparation produces an ordered list of single-element moves. Resolve indices se
 
 For example, with zero-based indices, moving a two-element selection `[L, A]` before `X` within the same scrap (so no area expansion applies; a cross-scrap expanded block is resolved the same way) in the full list `[P, hidden comment, X, L, A]` emits two sequential moves. Removing `L` leaves `[P, hidden comment, X, A]`, so `L` is inserted at position `2`, producing `[P, hidden comment, L, X, A]`. Removing `A` from that updated list leaves `[P, hidden comment, L, X]`, so `A` is inserted at position `3`, producing `[P, hidden comment, L, A, X]`. Hidden children remain in the full list and are never independently moved.
 
-Record each move’s original `(parentMPID, index)` as it stands immediately before that move. `MPCommand.execute` calls `_prepareUndoRedoInfo` once, before `_actualExecute` applies any move, so from the second move on the live file no longer shows that state. `_prepareUndoRedoInfo` must therefore replay the same sequential simulation over copies of the affected full parent lists: for each move in order, read the element's current parent and index from the simulated lists, record them, then apply the move to the simulation. Undo applies inverse moves in reverse order, restoring both child-list order and parent MPIDs exactly. Following the map-based pattern, `_createUndoRedoCommand` builds `mapUndo` as the `toMap()` of another `MPMoveElementsCommand` holding those inverse moves in reverse order. The original index uses the same after-removal convention as §4.1, so the inverse move is also a valid move.
+Record each move’s original `(parentMPID, index)` as it stands immediately before that move. `MPCommand.execute` calls `_prepareUndoRedoInfo` once, before `_actualExecute` applies any move, so from the second move on the live file no longer shows that state. `_prepareUndoRedoInfo` must therefore replay the same sequential simulation over copies of the affected full parent lists: for each move in order, read the element's current parent and index from the simulated lists, record them, then apply the move to the simulation. Store the recorded originals in the inherited `_undoRedoInfo` map (as `MPEditPointTypeCommand` does), and have `_createUndoRedoCommand` read them from there: `MPCommand.execute` throws "needs to prepare undo/redo info but did not" when an overriding `_prepareUndoRedoInfo` leaves `_undoRedoInfo` null. Undo applies inverse moves in reverse order, restoring both child-list order and parent MPIDs exactly. Following the map-based pattern, `_createUndoRedoCommand` builds `mapUndo` as the `toMap()` of another `MPMoveElementsCommand` holding those inverse moves in reverse order. The original index uses the same after-removal convention as §4.1, so the inverse move is also a valid move.
 
 Register the command in all existing command plumbing:
 
@@ -166,6 +172,7 @@ Each structural execution must:
 - refresh selection state after each move (this matters on first execution; undo and redo already clear the selection in `TH2FileEditController._undoRedoDone()`): call `selectionController.updateSelectedElementLogicalClone` for moved elements that stay selected, call `resetSelectableElements()` when any element enters or leaves the active scrap, and deselect a selected element that leaves the active scrap (selection only works inside the active scrap);
 - invalidate/redraw non-selected elements and any affected images/area support state;
 - call `snapController.updateSnapTargets()` when any element changes scraps. The snap point and line target lists are built from each scrap's `childrenMPIDs` and are not recomputed on their own, so without this refresh, snapping would still use the element's old scrap;
+- mark the Therion station-name cache dirty (`_markTherionStationPointNameCoordinateCacheDirty()`) when a station point changes scraps. `_getVisibleTherionStationPointRecords` builds its records by walking each visible scrap's `childrenMPIDs` and skips hidden scraps, and the raw primitive substitutes through `TH2File.substituteElement`, bypassing `_syncTherionStationCacheOrMarkDirty`; without this, a station moved between a visible and a hidden scrap would keep a stale name label;
 - mark the file dirty through the normal command path;
 - increment the structure revision exactly once per command execution, including undo and redo.
 
@@ -187,7 +194,7 @@ The same revision must be restored/advanced through undo and redo because those 
 
 ### 5.1 `TH2FileEditController.dispose()`
 
-Add `dispose()` to `TH2FileEditController`. It reuses the existing `_disposeReactions()` (which runs and clears every entry in `_disposers`) and releases anything else the controller owns that needs explicit release (`th2FileFocusNode`, `isInteractiveLineSimplificationDialogOpen`, timers and any future disposable resources). Dispose the `ValueNotifier` synchronously; apply the deferred focus-node rule below only to `th2FileFocusNode`. Keep `close()` as the user-facing tab-close entry point; it still clears overlay windows and the pattern cache before calling `removeFileTab`.
+Add `dispose()` to `TH2FileEditController`. It reuses the existing `_disposeReactions()` (which runs and clears every entry in `_disposers`) and releases anything else the controller owns that needs explicit release (`th2FileFocusNode`, `isInteractiveLineSimplificationDialogOpen` and any future disposable resources; neither `TH2FileEditController` nor its `th2_file_*` sub-controllers own a `Timer` today). Dispose the `ValueNotifier` synchronously; apply the deferred focus-node rule below only to `th2FileFocusNode`. Keep `close()` as the user-facing tab-close entry point; it still clears overlay windows and the pattern cache before calling `removeFileTab`.
 
 `dispose()` must be idempotent, and this is load-bearing rather than defensive: `close()` runs `_disposeReactions()` and then reaches `dispose()` again through `removeFileTab` → `removeFileController`. Guard with a disposed flag so the focus node is disposed only once. Call it from:
 
@@ -203,11 +210,12 @@ Add `dispose()` to `TH2FileEditController`. It reuses the existing `_disposeReac
 
 - **Tab close:** `close()` → `removeFileTab` → `removeFileController` → `dispose()` all run inside one MobX action. The tab's `Focus` widget stays mounted until the next frame and still holds the node.
 - **Reload:** `reloadTH2File` replaces only broken controllers. A broken file shows the diagnostic panel, never a canvas, so the replaced node is not attached.
-- **Tab-less cleanup and `reset()`:** these controllers have no mounted canvas, so the node is not attached.
+- **Tab-less cleanup:** these controllers have no mounted canvas, so the node is not attached.
+- **`reset()`:** in production-like flows its controllers have no mounted canvas, but widget tests may call it while a canvas is still mounted. Do not assume either case: the `context` check below decides.
 
 Disposing an attached node synchronously relies on framework internals: `FocusNode.dispose()` detaches itself, and the unmounting `Focus` then finds nothing to detach. It also leaves a window in which a pending `requestFocus()`, for example the one in `TH2FileEditOverlayWindowController`, can reach a disposed node. Therefore `dispose()` must:
 
-1. Set the disposed flag first, then run `_disposeReactions()` and release timers and other resources synchronously.
+1. Set the disposed flag first, then run `_disposeReactions()` and release the other resources synchronously.
 2. Dispose `th2FileFocusNode` immediately when `th2FileFocusNode.context == null` (not attached).
 3. Otherwise, defer only the focus-node disposal: register `WidgetsBinding.instance.addPostFrameCallback` to dispose it once the tab has unmounted, and call `WidgetsBinding.instance.scheduleFrame()` so that frame is guaranteed to happen.
 
@@ -257,6 +265,9 @@ Before allocating names, scan the test tree for duplicate numeric prefixes. The 
 - move a scrap to the end of the file through an end-of-parent request, with a comment between scraps and trailing non-scrap children, asserting that only the moved scrap changes position;
 - undo and redo restoring `childrenMPIDs`, `parentMPID`, THID lookup and subtree membership exactly, including a multi-element command whose later moves' original indices depend on the earlier moves (for example, several adjacent siblings entering the same parent);
 - snap targets reflecting the new scrap membership after a cross-scrap move into and out of the active scrap;
+- a station point moved between a visible and a hidden scrap appearing in, or disappearing from, the Therion station-name records;
+- an end-of-file request for the file's only scrap being a no-op;
+- the moved command's `_undoRedoInfo` populated after the first execution, so `execute` does not throw;
 - `THScrap.getPointsMPIDs`/`getLinesMPIDs`/`getAreasMPIDs` of both scraps reflecting membership and order after a cross-scrap move, an intra-scrap reorder, and their undo/redo (warm the caches before moving so staleness would show);
 - selected elements remaining consistent after an intra-scrap move, and a selected element leaving the active scrap being deselected;
 - command `toMap`/`fromMap` and JSON round trips;
@@ -266,7 +277,7 @@ Explicitly assert that a point moved forward past a multi-segment line is writte
 
 ### 7.2 Validator suite
 
-`t3941_th2_hierarchy_aux_test.dart` should cover every movable element type against file, scrap, line and area parents; self/subtree targets; invalid sibling IDs; `THEndscrap` as `beforeSiblingMPID`; no-op moves, including no-op detection after normalization; line-border restrictions (line alone with its area left behind rejected, line with all its areas accepted, shared line with only one of its areas rejected, shared line with both areas accepted); area-border expansion; a border line shared by two areas; mixed multi-selection; and preservation of hidden children.
+`t3941_th2_hierarchy_aux_test.dart` should cover every movable element type against file, scrap, line and area parents; self/subtree targets; invalid sibling IDs; `THEndscrap` as `beforeSiblingMPID`; no-op moves, including no-op detection after normalization; line-border restrictions (line alone with its area left behind rejected, line with all its areas accepted, shared line with only one of its areas rejected, shared line with both areas accepted); area-border expansion; a border reference resolving to a non-line element (rejected); a cross-scrap area move whose border line lives in another scrap (rejected); a border line shared by two areas; mixed multi-selection; and preservation of hidden children.
 
 ### 7.3 Lifecycle/revision coverage
 

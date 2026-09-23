@@ -282,7 +282,7 @@ New file `lib/src/commands/mp_move_elements_command.dart` (a `part of 'mp_comman
 - Undo follows the map-based `MPUndoRedoCommand(mapRedo:, mapUndo:)` pattern: `mapUndo` is the `toMap()` of another `MPMoveElementsCommand` whose moves are the recorded inverse moves in reverse order, built in `_createUndoRedoCommand` from the data recorded in `_prepareUndoRedoInfo`. Undoing a move is therefore itself a move command.
 - `_actualExecute` → `elementEditController.executeMoveElements(moves)` (`@action`). It calls `TH2File.moveElementToParent` for each move, bumps `_structureRevision`, and redraws the canvas.
 - `toMap`/`fromMap`/`copyWith`/`==`/`hashCode` follow `MPReorderScrapsCommand`.
-- Register `MPCommandType.moveElements`, `MPCommandDescriptionType.moveElements`, the factory `MPCommandFactory.moveElements(...)`, the `mp_command.dart` `fromMap` switch, and `MPTextToUser` + `.arb` strings ("Move elements" / "Mover elementos").
+- Register `MPCommandType.moveElements`, the factory `MPCommandFactory.moveElements(...)` and the `mp_command.dart` `fromMap` switch. Reuse the existing `MPCommandDescriptionType.moveElements`, which is already localized in `MPTextToUser` and the `.arb` files ("Move elements"); no new strings are needed for the command description.
 - Scrap-only reorders from the new tree also use `MPMoveElementsCommand`. `MPReorderScrapsCommand` stays, because the scraps dialog uses it and it appears in saved undo maps.
 - Area moves between scraps expand into the area plus all of its referenced border lines inside the same command (§3.1), in the prepare step. Area moves within one scrap include only the area.
 
@@ -374,7 +374,7 @@ Each phase ends with `flutter analyze` clean, `flutter test` green, and a CHANGE
 
 ### Phase 2: Model primitive and `MPMoveElementsCommand`
 
-- `TH2File.moveElementToParent`, `THIsParentMixin.invalidateDrawableChildrenCache`, `MPMoveElementsCommand` with its registration, localization and factory, `moveElements`/`executeMoveElements` (following the existing `reorderScraps`/`executeReorderScraps` naming), `_structureRevision` (§5.4), and the convenience methods from §5.3.
+- `TH2File.moveElementToParent`, `THIsParentMixin.invalidateDrawableChildrenCache`, `MPMoveElementsCommand` with its registration and factory, `moveElements`/`executeMoveElements` (following the existing `reorderScraps`/`executeReorderScraps` naming), `_structureRevision` (§5.4), and the convenience methods from §5.3.
 - `TH2FileEditController.dispose()`, running `_disposers`, called from `removeFileController`, `reloadTH2File` and the tab-less cleanup.
 - `TH2HierarchyAux.validateMove` in a new `lib/src/auxiliary/th2_hierarchy_aux.dart`.
 - `MPGeneralController.disposeTablessTH2Controllers` and the call from `_beginProjectLifecycleTransition()` (project open, reload and close).
