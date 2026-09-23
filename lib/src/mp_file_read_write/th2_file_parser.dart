@@ -21,6 +21,7 @@ import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_grammar.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_problem.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/debug.dart';
 import 'package:petitparser/petitparser.dart';
@@ -62,6 +63,10 @@ class TH2FileParser {
   late TH2FileEditElementEditController _th2FileElementEditController;
 
   final List<String> _parseErrors = [];
+  final List<TH2FileProblem> problems = <TH2FileProblem>[];
+  final Set<int> _problemLines = <int>{};
+  int _currentLineNumber = 0;
+  int _recoveryEndDepth = 0;
 
   final Set<int> _mpIDsToCleanOriginalLine = {};
 
@@ -145,6 +150,7 @@ class TH2FileParser {
     bool isFirst = true;
 
     for (MPParseableLine currentMPParseableLine in _splittedContents) {
+      _currentLineNumber = currentMPParseableLine.lineNumber;
       _currentOriginalLine = currentMPParseableLine.originalContent;
       _currentParseableLine = currentMPParseableLine.toParse;
 
@@ -163,6 +169,24 @@ class TH2FileParser {
         _resetParsersLineage();
       }
       if (_parsedContents is Failure) {
+        if (_recoveryEndDepth > 0) {
+          final String command = _commandName(_currentParseableLine);
+          if ((command == 'endline') ||
+              (command == 'endarea') ||
+              (command == 'endscrap')) {
+            _recoveryEndDepth--;
+          }
+          continue;
+        }
+        final String failedCommand = _commandName(_currentParseableLine);
+        if ((failedCommand == 'scrap') ||
+            (failedCommand == 'line') ||
+            (failedCommand == 'area') ||
+            (_currentParent is THLine) ||
+            (_currentParent is THArea) ||
+            (_currentParent is THScrap)) {
+          _recoveryEndDepth = 1;
+        }
         _addError(
           'petitparser returned a "Failure"',
           '_injectContents()',
@@ -195,6 +219,13 @@ class TH2FileParser {
           : null;
 
       final String elementType = (element[0] as String).toLowerCase();
+
+      if (_recoveryEndDepth > 0 &&
+          ((elementType == 'endline') ||
+              (elementType == 'endarea') ||
+              (elementType == 'endscrap'))) {
+        _recoveryEndDepth = 0;
+      }
 
       switch (elementType) {
         case 'area':
@@ -2456,6 +2487,118 @@ class TH2FileParser {
         "'$errorMessage' at '$location' with '$localInfo' local info.";
 
     _parseErrors.add(completeErrorMessage);
+    if (!_problemLines.contains(_currentLineNumber)) {
+      problems.add(
+        TH2FileProblem(
+          kind: TH2FileProblemKind.parseError,
+          lineNumber: _currentLineNumber,
+          sourceLine: _currentOriginalLine,
+          detail: errorMessage,
+        ),
+      );
+    }
+  }
+
+  String _commandName(String line) {
+    final RegExpMatch? match = RegExp(r'^\s*(\S+)').firstMatch(line);
+    return match?.group(1)?.toLowerCase() ?? '';
+  }
+
+  void _addProblem({required TH2FileProblemKind kind, required String detail}) {
+    if (_problemLines.add(_currentLineNumber)) {
+      problems.add(TH2FileProblem(
+        kind: kind,
+        lineNumber: _currentLineNumber,
+        sourceLine: _currentOriginalLine,
+        detail: detail,
+      ));
+    }
+  }
+
+  void _scanStructureProblems() {
+    final List<(String, int)> stack = <(String, int)>[];
+    bool inMultilineComment = false;
+    for (final MPParseableLine line in _splittedContents) {
+      final String command = _commandName(line.toParse);
+      if (command.isEmpty || command.startsWith('#')) continue;
+      if (inMultilineComment) {
+        if (command == 'endcomment') inMultilineComment = false;
+        continue;
+      }
+      if (command == 'comment') {
+        inMultilineComment = true;
+        continue;
+      }
+      _currentLineNumber = line.lineNumber;
+      _currentOriginalLine = line.originalContent;
+      final String current = command;
+      while (stack.isNotEmpty &&
+          ((stack.last.$1 == 'line') || (stack.last.$1 == 'area')) &&
+          <String>{'point', 'line', 'area', 'scrap', 'endscrap'}
+              .contains(current)) {
+        final String open = stack.removeLast().$1;
+        _addProblem(
+          kind: open == 'line'
+              ? TH2FileProblemKind.missingEndline
+              : TH2FileProblemKind.missingEndarea,
+          detail: 'Missing end$open',
+        );
+      }
+      if (current == 'scrap') {
+        if (stack.isNotEmpty && stack.last.$1 == 'scrap') {
+          _addProblem(
+            kind: TH2FileProblemKind.scrapInsideScrap,
+            detail: 'Scrap inside scrap',
+          );
+        }
+        stack.add(('scrap', line.lineNumber));
+      } else if (current == 'endscrap') {
+        if (stack.isEmpty || stack.last.$1 != 'scrap') {
+          _addProblem(
+            kind: TH2FileProblemKind.strayEndscrap,
+            detail: 'Stray endscrap',
+          );
+        } else {
+          stack.removeLast();
+        }
+      } else if ((current == 'line') || (current == 'area')) {
+        if (stack.isEmpty || stack.last.$1 != 'scrap') {
+          _addProblem(
+            kind: TH2FileProblemKind.plaOutsideScrap,
+            detail: '$current outside scrap',
+          );
+        }
+        stack.add((current, line.lineNumber));
+      } else if (current == 'point') {
+        if (stack.isEmpty || stack.last.$1 != 'scrap') {
+          _addProblem(
+            kind: TH2FileProblemKind.plaOutsideScrap,
+            detail: 'point outside scrap',
+          );
+        }
+      } else if (current == 'endline' || current == 'endarea') {
+        if (stack.isNotEmpty && stack.last.$1 == current.substring(3)) {
+          stack.removeLast();
+        }
+      }
+    }
+    for (final (String kind, int line) in stack.reversed) {
+      final TH2FileProblemKind problemKind = switch (kind) {
+        'line' => TH2FileProblemKind.missingEndline,
+        'area' => TH2FileProblemKind.missingEndarea,
+        _ => TH2FileProblemKind.missingEndscrap,
+      };
+      if (_problemLines.add(line)) {
+        problems.add(TH2FileProblem(
+          kind: problemKind,
+          lineNumber: line,
+          sourceLine: _splittedContents
+              .firstWhere((item) => item.lineNumber == line)
+              .originalContent,
+          detail: 'Missing end$kind',
+        ));
+      }
+    }
   }
 
   void _injectScrapScaleCommandOption() {
@@ -2680,6 +2823,9 @@ class TH2FileParser {
     _parsedTH2File = _th2FileEditController.th2File;
     setCurrentParent(_parsedTH2File);
     _parseErrors.clear();
+    problems.clear();
+    _problemLines.clear();
+    _recoveryEndDepth = 0;
 
     try {
       if (fileBytes == null) {
@@ -2705,6 +2851,7 @@ class TH2FileParser {
       _addError('Failed to read file: $e', 'pre injectContents()', '');
     }
 
+    _scanStructureProblems();
     _injectContents();
     _cleanOriginalLinesInFile();
     _linesCleanUp(_parsedTH2File);
@@ -2721,7 +2868,7 @@ class TH2FileParser {
 
     return (
       _th2FileElementEditController.th2File,
-      _parseErrors.isEmpty,
+      _parseErrors.isEmpty && problems.isEmpty,
       _parseErrors,
     );
   }
@@ -2878,6 +3025,7 @@ class TH2FileParser {
     _continuationDelimiter = '';
 
     int offset = 0;
+    int lineNumber = 1;
 
     while (offset < contents.length) {
       var (lineBreakIndex, lineBreakLength) = _findLineBreak(contents, offset);
@@ -2886,7 +3034,11 @@ class TH2FileParser {
         final String tail = contents.substring(offset);
 
         _splittedContents.add(
-          MPParseableLine(toParse: tail, originalContent: tail),
+          MPParseableLine(
+            toParse: tail,
+            originalContent: tail,
+            lineNumber: lineNumber,
+          ),
         );
 
         break;
@@ -2918,9 +3070,11 @@ class TH2FileParser {
           MPParseableLine(
             toParse: newContentToParse,
             originalContent: newContentOriginal,
+            lineNumber: lineNumber,
           ),
         );
         _slashJoinLine = false;
+        lineNumber += '\n'.allMatches(newContentOriginal).length;
 
         continue;
       }
@@ -2975,8 +3129,10 @@ class TH2FileParser {
         MPParseableLine(
           toParse: newContentToParse,
           originalContent: newContentOriginal,
+          lineNumber: lineNumber,
         ),
       );
+      lineNumber += '\n'.allMatches(newContentOriginal).length;
       _slashJoinLine = false;
     }
   }
@@ -3038,6 +3194,11 @@ class TH2FileParser {
 class MPParseableLine {
   final String toParse;
   final String originalContent;
+  final int lineNumber;
 
-  MPParseableLine({required this.toParse, required this.originalContent});
+  MPParseableLine({
+    required this.toParse,
+    required this.originalContent,
+    this.lineNumber = 1,
+  });
 }

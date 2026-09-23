@@ -872,6 +872,12 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       loadFuture: future,
       onLoadFailed: () =>
           _discardFailedFileLoad(filename: filename, controller: controller),
+      onReload: () {
+        unawaited(
+          mpLocator.mpGeneralController.reloadTH2File(filename),
+        );
+        setState(() {});
+      },
     );
   }
 

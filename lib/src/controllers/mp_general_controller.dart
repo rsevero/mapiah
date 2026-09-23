@@ -360,6 +360,22 @@ abstract class MPGeneralControllerBase with Store {
     return createdController;
   }
 
+  /// Replaces a broken TH2 controller with a fresh load from disk.
+  Future<TH2FileEditController> reloadTH2File(String filename) async {
+    final String normalizedFilename = _normalizeFilename(filename);
+    final bool wasOpen = _openFileOrder.contains(normalizedFilename);
+    removeFileController(filename: normalizedFilename);
+    final TH2FileEditController controller = getTH2FileEditController(
+      filename: normalizedFilename,
+      forceNewController: true,
+    );
+    await controller.load();
+    if (wasOpen) {
+      addFileTab(normalizedFilename);
+    }
+    return controller;
+  }
+
   TH2FileEditController getTH2FileEditControllerForNewFile({
     required String scrapTHID,
     required List<THCommandOption> scrapOptions,

@@ -41,6 +41,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_parser.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_problem.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_writer.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
@@ -116,6 +117,9 @@ abstract class TH2FileEditControllerBase with Store {
   bool _isFileLoaded = false;
 
   bool get isFileLoaded => _isFileLoaded;
+
+  bool isBroken = false;
+  List<TH2FileProblem> problems = <TH2FileProblem>[];
 
   Future<TH2FileEditControllerCreateResult>? _loadFuture;
 
@@ -504,7 +508,7 @@ abstract class TH2FileEditControllerBase with Store {
       mpLocator.mpGeneralController.hasClipboardContent;
 
   @computed
-  bool get enableSaveButton => _hasUndo && !_th2File.isNewFile;
+  bool get enableSaveButton => !isBroken && _hasUndo && !_th2File.isNewFile;
 
   @readonly
   String _statusBarMessage = '';
@@ -721,9 +725,15 @@ abstract class TH2FileEditControllerBase with Store {
       forceNewController: false,
     );
 
+    problems = List<TH2FileProblem>.of(parser.problems);
+    isBroken = problems.isNotEmpty || !isSuccessful;
     _postParseInitialize(_th2File, isSuccessful, errors);
 
-    return TH2FileEditControllerCreateResult(isSuccessful, errors);
+    return TH2FileEditControllerCreateResult(
+      isSuccessful && !isBroken,
+      errors,
+      problems,
+    );
   }
 
   void _postParseInitialize(
@@ -740,7 +750,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void _finalFilePreparations(TH2File parsedFile) {
-    if (_th2File.scrapMPIDs.isNotEmpty) {
+    if (!isBroken && _th2File.scrapMPIDs.isNotEmpty) {
       _activeScrapID = _th2File.scrapMPIDs.first;
       updateHasMultipleScraps();
 
@@ -753,6 +763,12 @@ abstract class TH2FileEditControllerBase with Store {
     }
 
     _initializeReactions();
+
+    if (isBroken) {
+      setFilename(_th2File.filename);
+      _isLoading = false;
+      return;
+    }
 
     selectionController.clearIsSelected();
 
@@ -1519,6 +1535,9 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void saveTH2File() {
+    if (isBroken) {
+      return;
+    }
     final File file = _localFile();
 
     _actualSave(file);
@@ -1529,6 +1548,9 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   Future<void> saveAsTH2File() async {
+    if (isBroken) {
+      return;
+    }
     final String filename = _th2File.isNewFile ? '' : _th2File.filename;
     final MPGeneralController mpGeneralController =
         mpLocator.mpGeneralController;
@@ -1850,6 +1872,11 @@ abstract class TH2FileEditControllerBase with Store {
 class TH2FileEditControllerCreateResult {
   final bool isSuccessful;
   final List<String> errors;
+  final List<TH2FileProblem> problems;
 
-  TH2FileEditControllerCreateResult(this.isSuccessful, this.errors);
+  TH2FileEditControllerCreateResult(
+    this.isSuccessful,
+    this.errors, [
+    this.problems = const <TH2FileProblem>[],
+  ]);
 }

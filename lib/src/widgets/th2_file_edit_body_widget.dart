@@ -11,17 +11,20 @@ import 'package:mapiah/src/widgets/th2_file_edit_last_used_pla_buttons_widget.da
 import 'package:mapiah/src/widgets/th2_file_edit_state_action_buttons_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_state_context_fabs_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_widget.dart';
+import 'package:mapiah/src/widgets/th2_broken_file_body_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 class TH2FileEditBodyWidget extends StatefulWidget {
   final TH2FileEditController th2FileEditController;
   final Future<TH2FileEditControllerCreateResult> loadFuture;
   final VoidCallback onLoadFailed;
+  final VoidCallback? onReload;
 
   const TH2FileEditBodyWidget({
     required this.th2FileEditController,
     required this.loadFuture,
     required this.onLoadFailed,
+    this.onReload,
     super.key,
   });
 
@@ -34,7 +37,6 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
   late AppLocalizations appLocalizations;
   late ColorScheme colorScheme;
   bool _loadFailureHandled = false;
-  bool _softLoadWarningHandled = false;
 
   @override
   void initState() {
@@ -78,10 +80,12 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
 
                     return Container();
                   } else if (snapshot.hasData) {
-                    final List<String> errorMessages = snapshot.data!.errors;
-
-                    if (!snapshot.data!.isSuccessful) {
-                      _handleSoftLoadFailure(errorMessages: errorMessages);
+                    if (snapshot.data!.problems.isNotEmpty ||
+                        th2FileEditController.isBroken) {
+                      return TH2BrokenFileBodyWidget(
+                        controller: th2FileEditController,
+                        onReload: widget.onReload,
+                      );
                     }
 
                     return _buildEditor(heroPrefix);
@@ -93,12 +97,14 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 },
           ),
         ),
-        TH2FileEditLastUsedPLAButtonsWidget(
-          th2FileEditController: th2FileEditController,
-        ),
-        TH2FileEditBottomStatusBarWidget(
-          th2FileEditController: th2FileEditController,
-        ),
+        if (!th2FileEditController.isBroken)
+          TH2FileEditLastUsedPLAButtonsWidget(
+            th2FileEditController: th2FileEditController,
+          ),
+        if (!th2FileEditController.isBroken)
+          TH2FileEditBottomStatusBarWidget(
+            th2FileEditController: th2FileEditController,
+          ),
       ],
     );
   }
@@ -182,30 +188,4 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
     });
   }
 
-  /// Presents a non-blocking diagnostic for a load that completed with
-  /// caught, non-fatal parsing errors; the file stays open.
-  void _handleSoftLoadFailure({required List<String> errorMessages}) {
-    if (_softLoadWarningHandled) {
-      return;
-    }
-
-    _softLoadWarningHandled = true;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
-
-      showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return MPErrorDialog(
-            title: appLocalizations.parsingWarnings,
-            errorMessages: errorMessages,
-            filename: th2FileEditController.th2File.filename,
-          );
-        },
-      );
-    });
-  }
 }
