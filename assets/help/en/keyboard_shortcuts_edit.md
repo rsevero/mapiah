@@ -6,8 +6,8 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | -------------------------------------------------------------------------------- | ------------------------------------------ |
 | Add image                                                                        | I                                          |
 | Add line segment between selected line segments                                  | /                                          |
-| Bring selected elements forward                                                                 | Ctrl+]                                     |
-| Bring selected elements to front                                                                | Ctrl+Shift+]                               |
+| Bring selected elements forward                                                  | Ctrl+]                                     |
+| Bring selected elements to front                                                 | Ctrl+Shift+]                               |
 | Change active scrap                                                              | Alt+K                                      |
 | Change active scrap by clicking inactive scrap                                   | Alt+click inactive scrap                   |
 | Change images                                                                    | Alt+I                                      |
@@ -58,8 +58,8 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Move selected image / elements / end-control points by 10 times the nudge factor | Shift+Arrow                                |
 | Options edit (elements selected)                                                 | O                                          |
 | Paste elements                                                                   | Ctrl+V                                     |
-| Project tree: select an element range                                                           | Shift+click                                |
-| Project tree: toggle an element or scrap                                                        | Ctrl+click                                 |
+| Project tree: select an element range                                            | Shift+click                                |
+| Project tree: toggle an element or scrap                                         | Ctrl+click                                 |
 | Rotate image                                                                     | drag image rotate handle                   |
 | Rotate image with angle snapping                                                 | Ctrl+drag image rotate handle              |
 | Rotate image while keeping opposite corner fixed                                 | Shift+drag image rotate handle             |
@@ -73,8 +73,6 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Scale selected elements from handle with aspect ratio preserved                  | Ctrl+drag selected-elements handle         |
 | Scale selected elements from handle with finer control                           | Alt+drag selected-elements handle          |
 | Redo                                                                             | Ctrl+Y                                     |
-| Send selected elements backward                                                                 | Ctrl+[                                     |
-| Send selected elements to back                                                                  | Ctrl+Shift+[                               |
 | Set a new control point constrained to the snap angle while drawing              | Shift+drag                                 |
 | Run Therion                                                                      | T                                          |
 | Save file                                                                        | Ctrl+S                                     |
@@ -83,6 +81,8 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Select all                                                                       | Ctrl+A                                     |
 | Select none                                                                      | Esc                                        |
 | Select tool                                                                      | C                                          |
+| Send selected elements backward                                                  | Ctrl+[                                     |
+| Send selected elements to back                                                   | Ctrl+Shift+[                               |
 | Simplify line - interactive dialog                                               | Ctrl+Alt+Shift+L                           |
 | Simplify line                                                                    | Ctrl+L                                     |
 | Simplify line - to Bézier curve line segments                                    | Ctrl+Alt+L                                 |

@@ -2,6 +2,8 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 Página inicial do espaço de trabalho, onde são apresentados a árvore do projeto, as abas de arquivos e as ações principais.
 
+A documentação completa para impressão, incluindo instruções de instalação, páginas de ajuda e atalhos de teclado, está em `Mapiah-User-Guide-pt.pdf` na raiz do [repositório do Mapiah](https://github.com/rsevero/mapiah). Uma cópia acompanha cada versão lançada.
+
 _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercambiáveis. Nas menções de atalhos abaixo usa-se "Ctrl" por brevidade._
 
 ## Fluxo do projeto
@@ -11,6 +13,8 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 A barra lateral contém nós de arquivos e nós lógicos. Nós de arquivos representam arquivos `thconfig`, `.th` e `.th2`; nós lógicos representam croquis, levantamentos, mapas e centrais encontrados nesses arquivos. Use o campo de pesquisa para filtrar e as setas para expandir ou recolher ramos. A largura e o estado recolhido da barra lateral são persistidos nas configurações. Um marcador de alteração indica alterações não salvas. Indicadores de erro identificam diagnósticos do analisador ou do compilador; arquivos ausentes e referências circulares são relatados como erros do projeto.
 
 Clique em um arquivo `.th2` para abrir sua aba de desenho. Clique em um arquivo `thconfig` ou `.th` para abrir sua aba de texto. Clicar em um croqui, levantamento, mapa ou central seleciona a fonte correspondente e navega até sua posição quando há uma linha de origem.
+
+Expandir a linha de um arquivo `.th2` carrega sua lista de croquis e elementos sem abrir uma aba; só os arquivos expandidos são carregados. A lista mostra a ordem de desenho do arquivo. Veja as seções **Ordem de desenho e árvore de elementos** e **Arquivos com problemas** da ajuda de edição de arquivos TH2 para mais detalhes.
 
 Use **Executar Therion** para executar a configuração raiz do projeto carregado. No estado vazio, a ação Executar Therion da árvore abre um projeto e o executa. Com um projeto carregado, a ação executa novamente esse projeto. Os diagnósticos do compilador substituem os diagnósticos da execução anterior depois da próxima execução; editar o arquivo, por si só, não os remove.
 

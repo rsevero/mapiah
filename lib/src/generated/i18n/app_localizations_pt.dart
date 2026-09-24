@@ -3320,4 +3320,41 @@ class AppLocalizationsPt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get th2BrokenFileExplanation =>
+      'Este arquivo tem erros de estrutura ou de leitura. O Mapiah não pode exibi-lo, editá-lo nem salvá-lo. Corrija-o em um editor de texto e recarregue.';
+
+  @override
+  String get th2BrokenFileCopyPath => 'Copiar caminho';
+
+  @override
+  String get th2BrokenFileDetails => 'Detalhes';
+
+  @override
+  String get th2FileProblemPlaOutsideScrap =>
+      'Ponto, linha ou área fora de um croqui';
+
+  @override
+  String get th2FileProblemScrapInsideScrap => 'Croqui dentro de outro croqui';
+
+  @override
+  String get th2FileProblemStrayEndscrap => 'endscrap sem um croqui aberto';
+
+  @override
+  String get th2FileProblemMissingEndline => 'Linha sem endline';
+
+  @override
+  String get th2FileProblemMissingEndarea => 'Área sem endarea';
+
+  @override
+  String get th2FileProblemMissingEndscrap => 'Croqui sem endscrap';
+
+  @override
+  String get th2FileProblemInvalidBorderReference =>
+      'Borda de área não aponta para uma linha válida';
+
+  @override
+  String get th2FileProblemParseError =>
+      'Conteúdo TH2 não reconhecido ou inválido';
 }

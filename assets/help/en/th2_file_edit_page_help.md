@@ -8,7 +8,9 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 - [Index](#index)
 - [Top bar](#top-bar)
 - [File tabs](#file-tabs)
-- [Elements in the project tree](#elements-in-the-project-tree)
+- [Project text editor](#project-text-editor)
+- [Drawing order and element tree](#drawing-order-and-element-tree)
+- [Broken files](#broken-files)
 - [Edit window](#edit-window)
   - [Top right corner](#top-right-corner)
   - [Bottom right corner](#bottom-right-corner)
@@ -84,23 +86,43 @@ Project `thconfig` and `.th` files open in text tabs. Syntax highlighting and fo
 
 Parser diagnostics are produced while loading or re-parsing source and are shown in the editor and project tree. Compiler diagnostics are produced by running Therion. Both kinds can coexist. A diagnostic with a known file and line can be selected to navigate to that location; a diagnostic without a source line remains in the run output and cannot target a tree line.
 
-## Elements in the project tree
+## Drawing order and element tree
 
-Each `.th2` file row in the project tree has an arrow. Expanding it shows the file's scraps and, below each scrap, its points, lines and areas. Comments, empty lines, settings, images and line points are not shown.
+Each `.th2` file row in the project tree has an arrow. Expanding it loads the file and shows its scraps and, below each scrap, its points, lines and areas. Comments, empty lines, settings, images and line points are not rows; they stay where they are in the file.
 
 * **Loading without opening a tab**: expanding a file reads it in the background. The tree shows _Loading…_ until it is ready. No tab opens and nothing is changed. Only files you expand are read; files are never read just to answer a search.
-* **Drawing order**: rows are in file order, which is the order XTherion uses. The top row is drawn first (bottom of the stack) and the last row is drawn last (on top). This is not Therion's own rendering order, which also depends on the symbol types.
-* **Labels**: each row shows the element kind, its type (and subtype, if any), then, in italics, a station's name or the text of a label or remark point, and then its Therion id, if it has one, exactly as written in the file. Hover over a multi-line label or remark to see all its lines. Search also finds station names and label or remark text.
-* **Scraps**: scraps start expanded. Click the arrow of a scrap to collapse or expand it. A collapsed scrap shows a dot when one of its elements is selected.
+* **Drawing order**: rows are in file order, which is the order XTherion uses. The top row is drawn first (bottom of the stack) and the last row is drawn last (on top). Therion's own rendered layering may differ, because it also depends on the symbol types. On Mapiah's canvas, selected elements are temporarily painted above the others.
+* **Areas**: an area's fill is painted together with its border line, so changing only the area row's order may have no visible effect on the canvas. Move the border line's row to change where the fill is layered.
+* **Labels**: each row shows the element kind, its type (and subtype, if any), then, in italics, a station's name or the text of a label or remark point, and then its Therion id, if it has one, exactly as written in the file. Hover over a multi-line label or remark to see all its lines.
+* **Scraps**: scraps start expanded. Click the arrow of a scrap to collapse or expand it; collapsing a scrap hides its rows. A collapsed scrap shows a dot when one of its elements is selected.
 * **Selecting**: clicking a point, line or area selects it, as the Select tool followed by a click on the element would. If the file already has a tab, that tab is brought to the front. If it has no tab, the element is selected without opening one. Clicking a scrap makes it the active scrap.
 * **Selecting several rows**: Ctrl+click a point, line or area to toggle it in the active scrap's selection. Shift+click extends the selection from the last clicked element row. Ctrl+click scraps selects several scraps for reordering without changing the active scrap; a plain click on a scrap only makes it active. Selection cannot span scraps.
-* **Dragging**: drag selected rows to move them together in file order. On a point, line or area row, the upper half places them before it and the lower half after it. On a scrap row, points, lines and areas go to the start or end of that scrap; scraps go before or after the whole scrap. The upper and lower halves of a file row mean the start and end of its scrap list. A collapsed scrap expands after a short hover. The tree scrolls when dragging near its edge. A mixed selection of scraps and drawing elements, a move between files, and a border line moved without every area that uses it are refused. Dragging is unavailable while search is active.
-* **Order menu and shortcuts**: right-click an element row for Bring forward, Send backward, Bring to front or Send to back. Points, lines and areas also have Move to scrap. A right-click selects an unselected drawing element; a selected row keeps the selection. Ctrl+]/Ctrl+[ step selected elements forward/backward; add Shift to send them to the front/back. Every tree edit opens the file's tab if needed and can be undone with Ctrl+Z.
 * **Double-click**: double-clicking an element also opens the file's tab if needed and zooms to the selection.
 * **Selection follows the canvas**: the rows of elements selected on the canvas are highlighted, and the active scrap's row is highlighted too.
-* **Search**: the project tree search field also matches the labels of the scraps and elements of files that are already loaded and valid. Matching rows are shown together with their scrap and file.
-* **Broken files**: a file with structural or parsing errors shows a badge with its number of problems (hover over it to see them) and a single row explaining that it must be fixed outside Mapiah. After fixing it, right-click the file row or that row and choose _Reload_. The same applies to a file whose loading failed unexpectedly.
+* **Dragging**: drag selected rows to move them together in file order. On a point, line or area row, the upper half places them before it and the lower half after it. On a scrap row, points, lines and areas go to the start or end of that scrap; scraps go before or after the whole scrap. The upper and lower halves of a file row mean the start and end of its scrap list. A collapsed scrap expands after a short hover. The tree scrolls when dragging near its edge. Dragging is unavailable while search is active.
+* **Refused moves**: a mixed selection of scraps and drawing elements and a move between files are refused. Moving an area to another scrap carries its border lines along; a move that would leave a border line in a different scrap from any area that uses it is refused. The drag preview shows why a drop is refused, and unavailable Move to scrap targets show why below their names.
+* **Order menu**: right-click an element row for Bring forward, Send backward, Bring to front or Send to back. Points, lines and areas also have Move to scrap. A right-click selects an unselected drawing element; a selected row keeps the selection. These actions move whole elements among their siblings, including the internal content of a line or area.
+* **Order shortcuts**: Ctrl+] brings the selection forward, Ctrl+[ sends it backward, Ctrl+Shift+] brings it to the front and Ctrl+Shift+[ sends it to the back (Cmd instead of Ctrl on macOS). They act in the active canvas tab on the selected drawing elements, or on the scraps selected in the tree, and need keyboard focus in that tab. They are ignored while Alt is pressed.
+* **Undo**: every tree edit opens the file's tab if needed and can be undone with Ctrl+Z.
+* **Search**: the project tree search field also matches the full labels of the scraps and elements of files that are already loaded and valid, including station names and label or remark text. Matching rows are shown together with their scrap and file.
 * **Closing a tab**: closing the tab of a file whose tree row is expanded keeps its elements in the tree, unless the file had unsaved changes, which are discarded as usual.
+
+## Broken files
+
+When a `.th2` file has any parsing or structural problem, Mapiah marks it as broken. Its element rows and canvas editor are unavailable and Mapiah cannot save it. Mapiah does not repair the file: fix it in a text editor outside Mapiah.
+
+Examples of problems:
+* A point, line or area outside a scrap.
+* A scrap inside another scrap.
+* An `endscrap` without an open scrap, or a missing `endline`, `endarea` or `endscrap`.
+* An area border that does not refer to a valid line.
+* A malformed command, an unknown command or an unknown option.
+
+Unknown point, line or area types alone are still accepted; unknown options are errors.
+
+* **In the project tree**: the file row shows a badge with its number of problems. Hover over it to see the line number and category of the first problems. Expanding the row shows a single row explaining that the file must be fixed outside Mapiah.
+* **In a tab**: opening a broken file, from the project or on its own, shows a page instead of the canvas. It explains the situation, shows the file path with a _Copy path_ button, and lists every problem with its line number, its category and the source line. _Details_ reveals the original parser message, which is useful when reporting a problem.
+* **Reload**: after fixing the file, use the _Reload_ button on that page, or right-click the file row or its explanation row in the tree and choose _Reload_. The same tree option applies to a file whose loading failed unexpectedly.
 
 ## Edit window
 

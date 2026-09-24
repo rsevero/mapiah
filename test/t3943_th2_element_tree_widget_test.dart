@@ -427,7 +427,12 @@ void main() {
 
       final Tooltip tooltip = tester.widget<Tooltip>(badge);
 
-      expect(tooltip.message, startsWith('2 problems\nLine 2: '));
+      expect(
+        tooltip.message,
+        '2 problems\n'
+        'Line 2: Point, line or area outside a scrap\n'
+        'Line 4: Unrecognized or invalid TH2 content',
+      );
     });
 
     testWidgets('the badge tooltip truncates long problem lists', (
@@ -1473,7 +1478,9 @@ void main() {
               find.byKey(ValueKey('THProjectTreeNodeBrokenBadge|${aNode.id}')),
             )
             .message,
-        startsWith('2 problemas\nLinha 2: '),
+        '2 problemas\n'
+        'Linha 2: Ponto, linha ou área fora de um croqui\n'
+        'Linha 4: Conteúdo TH2 não reconhecido ou inválido',
       );
       expect(
         tester

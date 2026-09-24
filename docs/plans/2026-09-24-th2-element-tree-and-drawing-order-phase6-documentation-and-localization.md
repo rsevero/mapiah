@@ -4,7 +4,7 @@
 
 **Date:** 2026-09-24
 
-**Status:** Proposed; checked against the code at `cf38e0d0` on 2026-09-24.
+**Status:** Implemented on 2026-09-24. The Details disclosure is a small stateful widget with a `TextButton`, not an `ExpansionTile`, because some widget-test harnesses mount the tabs page without a `Material` ancestor or Material localizations. The string audit found no other user-facing literals. Tests are in `t3954`, and `t3943` now expects the localized badge categories. Checked against the code at `cf38e0d0` on 2026-09-24.
 
 **Parent plan:** [TH2 Element Tree in the Project Sidebar](2026-09-23-th2-element-tree-and-drawing-order.md) (§7, Phase 6; §4.7 broken files)
 

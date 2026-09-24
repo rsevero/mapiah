@@ -4852,7 +4852,7 @@
   },
   "th2ElementTreeProblemLine": "Line {lineNumber}: {detail}",
   "@th2ElementTreeProblemLine": {
-    "description": "One problem line in the broken badge tooltip of a .th2 file row. Used on: THProjectTreeNodeWidget._brokenBadgeTooltip",
+    "description": "One problem line of a broken .th2 file: its line number and localized problem category (detail holds the category text, not the parser diagnostic). Used on: THProjectTreeNodeWidget._brokenBadgeTooltip, TH2BrokenFileBodyWidget._buildProblem",
     "type": "text",
     "placeholders": {
       "lineNumber": {
@@ -4875,7 +4875,7 @@
   },
   "th2ElementTreeReload": "Reload",
   "@th2ElementTreeReload": {
-    "description": "Context menu entry that reloads a broken or failed .th2 file from disk. Used on: THProjectTreeRowContextMenuWidget.reloadMenuItem",
+    "description": "Context menu entry and broken-file body button that reload a broken or failed .th2 file from disk. Used on: THProjectTreeRowContextMenuWidget.reloadMenuItem, TH2BrokenFileBodyWidget.build",
     "type": "text"
   },
   "th2ElementTreeScrapContainsSelection": "Contains selected elements",
@@ -4917,5 +4917,27 @@
   "th2MoveRejectedAreaBorderNotLine": "{area} has a border reference that is not a line",
   "@th2MoveRejectedAreaBorderNotLine": {"description": "Used on: TH2ElementTreeAux.moveRejectionMessage", "placeholders": {"area": {"type": "String"}}},
   "th2ElementTreeDragCount": "{count, plural, one {1 element} other {{count} elements}}",
-  "@th2ElementTreeDragCount": {"description": "Used on: TH2ElementTreeRowWidget.build", "placeholders": {"count": {"type": "int"}}}
+  "@th2ElementTreeDragCount": {"description": "Used on: TH2ElementTreeRowWidget.build", "placeholders": {"count": {"type": "int"}}},
+  "th2BrokenFileExplanation": "This file has structural or parsing errors. Mapiah cannot display, edit or save it. Fix it in a text editor and reload.",
+  "@th2BrokenFileExplanation": {"description": "Explanation at the top of the body shown for a broken .th2 file. Used on: TH2BrokenFileBodyWidget.build"},
+  "th2BrokenFileCopyPath": "Copy path",
+  "@th2BrokenFileCopyPath": {"description": "Button and tooltip that copy the broken .th2 file path to the clipboard. Used on: TH2BrokenFileBodyWidget._buildPath"},
+  "th2BrokenFileDetails": "Details",
+  "@th2BrokenFileDetails": {"description": "Disclosure that reveals the original parser diagnostic of one problem of a broken .th2 file. Used on: TH2BrokenFileBodyWidget._buildProblem"},
+  "th2FileProblemPlaOutsideScrap": "Point, line or area outside a scrap",
+  "@th2FileProblemPlaOutsideScrap": {"description": "Problem category of a broken .th2 file. Used on: TH2FileProblemTextAux.userMessage"},
+  "th2FileProblemScrapInsideScrap": "Scrap inside another scrap",
+  "@th2FileProblemScrapInsideScrap": {"description": "Problem category of a broken .th2 file. Used on: TH2FileProblemTextAux.userMessage"},
+  "th2FileProblemStrayEndscrap": "endscrap without an open scrap",
+  "@th2FileProblemStrayEndscrap": {"description": "Problem category of a broken .th2 file. 'endscrap' is a Therion command and is not translated. Used on: TH2FileProblemTextAux.userMessage"},
+  "th2FileProblemMissingEndline": "Line missing endline",
+  "@th2FileProblemMissingEndline": {"description": "Problem category of a broken .th2 file. 'endline' is a Therion command and is not translated. Used on: TH2FileProblemTextAux.userMessage"},
+  "th2FileProblemMissingEndarea": "Area missing endarea",
+  "@th2FileProblemMissingEndarea": {"description": "Problem category of a broken .th2 file. 'endarea' is a Therion command and is not translated. Used on: TH2FileProblemTextAux.userMessage"},
+  "th2FileProblemMissingEndscrap": "Scrap missing endscrap",
+  "@th2FileProblemMissingEndscrap": {"description": "Problem category of a broken .th2 file. 'endscrap' is a Therion command and is not translated. Used on: TH2FileProblemTextAux.userMessage"},
+  "th2FileProblemInvalidBorderReference": "Area border does not refer to a valid line",
+  "@th2FileProblemInvalidBorderReference": {"description": "Problem category of a broken .th2 file. Used on: TH2FileProblemTextAux.userMessage"},
+  "th2FileProblemParseError": "Unrecognized or invalid TH2 content",
+  "@th2FileProblemParseError": {"description": "Problem category of a broken .th2 file. Used on: TH2FileProblemTextAux.userMessage"}
 }

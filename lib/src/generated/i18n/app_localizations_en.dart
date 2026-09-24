@@ -3283,4 +3283,40 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get th2BrokenFileExplanation =>
+      'This file has structural or parsing errors. Mapiah cannot display, edit or save it. Fix it in a text editor and reload.';
+
+  @override
+  String get th2BrokenFileCopyPath => 'Copy path';
+
+  @override
+  String get th2BrokenFileDetails => 'Details';
+
+  @override
+  String get th2FileProblemPlaOutsideScrap =>
+      'Point, line or area outside a scrap';
+
+  @override
+  String get th2FileProblemScrapInsideScrap => 'Scrap inside another scrap';
+
+  @override
+  String get th2FileProblemStrayEndscrap => 'endscrap without an open scrap';
+
+  @override
+  String get th2FileProblemMissingEndline => 'Line missing endline';
+
+  @override
+  String get th2FileProblemMissingEndarea => 'Area missing endarea';
+
+  @override
+  String get th2FileProblemMissingEndscrap => 'Scrap missing endscrap';
+
+  @override
+  String get th2FileProblemInvalidBorderReference =>
+      'Area border does not refer to a valid line';
+
+  @override
+  String get th2FileProblemParseError => 'Unrecognized or invalid TH2 content';
 }

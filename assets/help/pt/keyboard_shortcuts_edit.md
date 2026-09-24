@@ -13,8 +13,10 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Alternar direção da linha                                                                     | R                                        |
 | Alternar marcas de direção em linhas não selecionadas                                         | Ctrl+Alt+R                               |
 | Alternar opção de visibilidade                                                                | V                                        |
+| Árvore do projeto: alternar elemento ou croqui                                                | Ctrl+clique                              |
+| Árvore do projeto: selecionar intervalo de elementos                                          | Shift+clique                             |
 | Atalhos de teclado                                                                            | Ctrl+K                                   |
-| Avançar elementos selecionados                                                                  | Ctrl+]                                     |
+| Avançar elementos selecionados                                                                | Ctrl+]                                   |
 | Clicar em linha de borda de área: alternar seleção das linhas de borda                        | Ctrl+clique                              |
 | Clicar em linha de borda de área: selecionar apenas a área                                    | Ctrl+Alt+clique                          |
 | Colar elementos                                                                               | Ctrl+V                                   |
@@ -31,7 +33,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Criar ponto                                                                                   | P                                        |
 | Criar segmento de linha entre segmentos de linha selecionados                                 | /                                        |
 | Desfazer                                                                                      | Ctrl+Z                                   |
-| Enviar elementos selecionados para trás                                                         | Ctrl+Shift+[                               |
+| Enviar elementos selecionados para trás                                                       | Ctrl+Shift+[                             |
 | Excluir um caminho inacabado ao desenhar                                                      | Esc                                      |
 | Desselecionar tudo                                                                            | Escape                                   |
 | Dividir linha nos pontos de linha selecionados                                                | Ctrl+P                                   |
@@ -67,7 +69,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Mover imagem / elementos / pontos finais-controle selecionados por 10 vezes o fator de ajuste | Shift+Seta                               |
 | Opções padrão (sem elementos selecionados)                                                    | O                                        |
 | Recortar elementos selecionados                                                               | Ctrl+X                                   |
-| Recuar elementos selecionados                                                                   | Ctrl+[                                     |
+| Recuar elementos selecionados                                                                 | Ctrl+[                                   |
 | Rotacionar imagem                                                                             | arrastar alça de rotação da imagem       |
 | Rotacionar imagem com snap de ângulo                                                          | Ctrl+arrastar alça de rotação da imagem  |
 | Rotacionar imagem mantendo o canto oposto fixo                                                | Shift+arrastar alça de rotação da imagem |
@@ -94,7 +96,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Simplificar linha - para segmentos de linha curva de Bézier                                   | Ctrl+Alt+L                               |
 | Simplificar linha - para segmentos de linha reta                                              | Ctrl+Shift+L                             |
 | Suavizar ponto da linha                                                                       | S                                        |
-| Trazer elementos selecionados para a frente                                                     | Ctrl+Shift+]                               |
+| Trazer elementos selecionados para a frente                                                   | Ctrl+Shift+]                             |
 | Zoom 1:1                                                                                      | 1                                        |
 | Zoom arquivo                                                                                  | 4                                        |
 | Zoom croqui                                                                                   | 3                                        |
@@ -112,5 +114,3 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - Uma aba de texto aberta que não faz parte do projeto carregado pode ser pesquisada e navegada, mas é marcada como *Somente pesquisa* e a substituição em massa nunca a modifica nem a salva.
   - Ativar um resultado abre ou foca a aba do arquivo, revela o arquivo na árvore do projeto e seleciona a ocorrência exata. Se o arquivo mudou desde a pesquisa, a pesquisa é atualizada e a ocorrência atual mais próxima é selecionada.
   - A substituição em massa pede confirmação, informa quantas ocorrências e arquivos são afetados (e quantos são excluídos), e então substitui e salva os arquivos do projeto afetados. Não há desfazer em uma única etapa entre arquivos.
-| Árvore do projeto: alternar elemento ou croqui                                                  | Ctrl+clique                                |
-| Árvore do projeto: selecionar intervalo de elementos                                            | Shift+clique                               |

@@ -8,7 +8,9 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Índice](#índice)
 - [Barra superior](#barra-superior)
 - [Abas de arquivo](#abas-de-arquivo)
-- [Elementos na árvore do projeto](#elementos-na-árvore-do-projeto)
+- [Editor de texto do projeto](#editor-de-texto-do-projeto)
+- [Ordem de desenho e árvore de elementos](#ordem-de-desenho-e-árvore-de-elementos)
+- [Arquivos com problemas](#arquivos-com-problemas)
 - [Imagens](#imagens)
   - [Modo de transformação da imagem](#modo-de-transformação-da-imagem)
   - [Movimento da imagem](#movimento-da-imagem)
@@ -84,23 +86,43 @@ Arquivos `thconfig` e `.th` do projeto são abertos em abas de texto. O realce d
 
 Diagnósticos do analisador são produzidos ao carregar ou analisar novamente a fonte e aparecem no editor e na árvore do projeto. Diagnósticos do compilador são produzidos ao executar o Therion. Os dois tipos podem coexistir. Um diagnóstico com arquivo e linha conhecidos pode ser selecionado para navegar até esse local; sem uma linha de origem, ele permanece na saída da execução e não pode direcionar para uma linha da árvore.
 
-## Elementos na árvore do projeto
+## Ordem de desenho e árvore de elementos
 
-Cada linha de arquivo `.th2` na árvore do projeto tem uma seta. Expandi-la mostra os croquis do arquivo e, abaixo de cada croqui, seus pontos, linhas e áreas. Comentários, linhas vazias, configurações, imagens e pontos de linha não são mostrados.
+Cada linha de arquivo `.th2` na árvore do projeto tem uma seta. Expandi-la carrega o arquivo e mostra seus croquis e, abaixo de cada croqui, seus pontos, linhas e áreas. Comentários, linhas vazias, configurações, imagens e pontos de linha não aparecem na árvore; eles permanecem onde estão no arquivo.
 
 * **Carregamento sem abrir aba**: expandir um arquivo faz sua leitura em segundo plano. A árvore mostra _Carregando…_ até terminar. Nenhuma aba é aberta e nada é alterado. Só os arquivos expandidos são lidos; arquivos nunca são lidos apenas para responder a uma pesquisa.
-* **Ordem de desenho**: as linhas seguem a ordem do arquivo, que é a ordem usada pelo XTherion. A primeira linha é desenhada primeiro (embaixo) e a última é desenhada por último (em cima). Esta não é a ordem de desenho do próprio Therion, que depende também dos tipos de símbolo.
-* **Rótulos**: cada linha mostra o tipo de elemento, seu tipo (e subtipo, se houver), depois, em itálico, o nome da estação ou o texto de um ponto `label` ou `remark`, e por fim seu id Therion, se houver, exatamente como está no arquivo. Passe o mouse sobre um `label` ou `remark` de várias linhas para ver todas elas. A pesquisa também encontra nomes de estações e textos de `label` e `remark`.
-* **Croquis**: os croquis começam expandidos. Clique na seta de um croqui para recolhê-lo ou expandi-lo. Um croqui recolhido mostra um ponto quando um de seus elementos está selecionado.
+* **Ordem de desenho**: as linhas seguem a ordem do arquivo, que é a ordem usada pelo XTherion. A primeira linha é desenhada primeiro (embaixo) e a última é desenhada por último (em cima). A sobreposição no resultado do próprio Therion pode ser diferente, pois depende também dos tipos de símbolo. No desenho do Mapiah, os elementos selecionados são pintados temporariamente acima dos demais.
+* **Áreas**: o preenchimento de uma área é pintado junto com sua linha de borda, então mudar apenas a ordem da linha da área pode não ter efeito visível no desenho. Mova a linha da linha de borda para mudar a posição do preenchimento na pilha.
+* **Rótulos**: cada linha mostra o tipo de elemento, seu tipo (e subtipo, se houver), depois, em itálico, o nome da estação ou o texto de um ponto `label` ou `remark`, e por fim seu id Therion, se houver, exatamente como está no arquivo. Passe o mouse sobre um `label` ou `remark` de várias linhas para ver todas elas.
+* **Croquis**: os croquis começam expandidos. Clique na seta de um croqui para recolhê-lo ou expandi-lo; recolher um croqui oculta suas linhas. Um croqui recolhido mostra um ponto quando um de seus elementos está selecionado.
 * **Seleção**: clicar em um ponto, linha ou área o seleciona, como a ferramenta Selecionar seguida de um clique no elemento. Se o arquivo já tem uma aba, ela passa para a frente. Se não tem, o elemento é selecionado sem abrir aba. Clicar em um croqui o torna o croqui ativo.
 * **Selecionar várias linhas**: Ctrl+clique em um ponto, linha ou área alterna sua seleção no croqui ativo. Shift+clique estende a seleção desde a última linha de elemento clicada. Ctrl+clique em croquis seleciona vários croquis para reordenação sem mudar o croqui ativo; um clique comum só o torna ativo. A seleção não abrange croquis diferentes.
-* **Arrastar**: arraste linhas selecionadas para movê-las juntas na ordem do arquivo. Na linha de um ponto, linha ou área, a metade superior coloca antes e a inferior depois. Na linha de um croqui, pontos, linhas e áreas vão para o início ou fim desse croqui; croquis vão antes ou depois do croqui inteiro. As metades superior e inferior da linha do arquivo significam o início e o fim da lista de croquis. Um croqui recolhido se expande após uma breve pausa. A árvore rola ao arrastar perto de sua borda. Uma seleção mista de croquis e elementos de desenho, uma mudança entre arquivos e uma linha de borda movida sem todas as áreas que a usam são recusadas. Arrastar fica indisponível durante a pesquisa.
-* **Menu de ordem e atalhos**: clique com o botão direito na linha de um elemento para Avançar, Recuar, Trazer para a frente ou Enviar para trás. Pontos, linhas e áreas também oferecem Mover para o scrap. O clique direito seleciona um elemento de desenho ainda não selecionado; em uma linha selecionada, mantém a seleção. Ctrl+]/Ctrl+[ avançam/recuam os elementos selecionados; com Shift, enviam para a frente/trás. Cada edição pela árvore abre a aba do arquivo se necessário e pode ser desfeita com Ctrl+Z.
 * **Clique duplo**: um clique duplo em um elemento também abre a aba do arquivo, se necessário, e aproxima a visualização da seleção.
 * **A seleção acompanha o desenho**: as linhas dos elementos selecionados no desenho ficam destacadas, assim como a linha do croqui ativo.
-* **Pesquisa**: o campo de pesquisa da árvore do projeto também encontra os rótulos dos croquis e elementos de arquivos já carregados e válidos. As linhas encontradas aparecem junto com seu croqui e arquivo.
-* **Arquivos com problemas**: um arquivo com erros de estrutura ou de interpretação mostra um indicador com o número de problemas (passe o mouse sobre ele para vê-los) e uma única linha explicando que ele deve ser corrigido fora do Mapiah. Depois de corrigi-lo, clique com o botão direito na linha do arquivo ou nessa linha e escolha _Recarregar_. O mesmo vale para um arquivo cujo carregamento falhou inesperadamente.
+* **Arrastar**: arraste linhas selecionadas para movê-las juntas na ordem do arquivo. Na linha de um ponto, linha ou área, a metade superior coloca antes e a inferior depois. Na linha de um croqui, pontos, linhas e áreas vão para o início ou fim desse croqui; croquis vão antes ou depois do croqui inteiro. As metades superior e inferior da linha do arquivo significam o início e o fim da lista de croquis. Um croqui recolhido se expande após uma breve pausa. A árvore rola ao arrastar perto de sua borda. Arrastar fica indisponível durante a pesquisa.
+* **Movimentos recusados**: uma seleção mista de croquis e elementos de desenho e uma mudança entre arquivos são recusadas. Mover uma área para outro croqui leva junto suas linhas de borda; um movimento que deixaria uma linha de borda em um croqui diferente de alguma área que a usa é recusado. A prévia do arraste mostra por que uma soltura é recusada, e destinos indisponíveis de Mover para o scrap mostram o motivo abaixo do nome.
+* **Menu de ordem**: clique com o botão direito na linha de um elemento para Avançar, Recuar, Trazer para a frente ou Enviar para trás. Pontos, linhas e áreas também oferecem Mover para o scrap. O clique direito seleciona um elemento de desenho ainda não selecionado; em uma linha selecionada, mantém a seleção. Essas ações movem elementos inteiros entre seus irmãos, incluindo o conteúdo interno de uma linha ou área.
+* **Atalhos de ordem**: Ctrl+] avança a seleção, Ctrl+[ a recua, Ctrl+Shift+] a traz para a frente e Ctrl+Shift+[ a envia para trás (Cmd em vez de Ctrl no macOS). Eles agem na aba de desenho ativa sobre os elementos de desenho selecionados, ou sobre os croquis selecionados na árvore, e precisam que o foco do teclado esteja nessa aba. São ignorados enquanto Alt está pressionado.
+* **Desfazer**: cada edição pela árvore abre a aba do arquivo se necessário e pode ser desfeita com Ctrl+Z.
+* **Pesquisa**: o campo de pesquisa da árvore do projeto também encontra os rótulos completos dos croquis e elementos de arquivos já carregados e válidos, incluindo nomes de estações e textos de `label` e `remark`. As linhas encontradas aparecem junto com seu croqui e arquivo.
 * **Fechar uma aba**: fechar a aba de um arquivo cuja linha na árvore está expandida mantém seus elementos na árvore, a menos que o arquivo tivesse alterações não salvas, que são descartadas como de costume.
+
+## Arquivos com problemas
+
+Quando um arquivo `.th2` tem qualquer problema de leitura ou de estrutura, o Mapiah o marca como um arquivo com problemas. Suas linhas de elementos e o editor de desenho ficam indisponíveis e o Mapiah não pode salvá-lo. O Mapiah não conserta o arquivo: corrija-o em um editor de texto fora do Mapiah.
+
+Exemplos de problemas:
+* Um ponto, linha ou área fora de um croqui.
+* Um croqui dentro de outro croqui.
+* Um `endscrap` sem um croqui aberto, ou um `endline`, `endarea` ou `endscrap` faltando.
+* Uma borda de área que não aponta para uma linha válida.
+* Um comando malformado, um comando desconhecido ou uma opção desconhecida.
+
+Tipos desconhecidos de ponto, linha ou área, sozinhos, continuam aceitos; opções desconhecidas são erros.
+
+* **Na árvore do projeto**: a linha do arquivo mostra um indicador com o número de problemas. Passe o mouse sobre ele para ver o número da linha e a categoria dos primeiros problemas. Expandir a linha mostra uma única linha explicando que o arquivo deve ser corrigido fora do Mapiah.
+* **Em uma aba**: abrir um arquivo com problemas, pelo projeto ou avulso, mostra uma página no lugar do desenho. Ela explica a situação, mostra o caminho do arquivo com um botão _Copiar caminho_ e lista cada problema com o número da linha, sua categoria e a linha do arquivo. _Detalhes_ revela a mensagem original do interpretador, útil ao relatar um problema.
+* **Recarregar**: depois de corrigir o arquivo, use o botão _Recarregar_ dessa página, ou clique com o botão direito na linha do arquivo ou na sua linha de explicação na árvore e escolha _Recarregar_. A mesma opção da árvore vale para um arquivo cujo carregamento falhou inesperadamente.
 
 ## Imagens
 A janela de imagens é aberta com o botão ![Botão imagens](assets/help/images/buttonImages.png "Imagens") (Alt+I) no canto inferior direito. Ela lista todas as imagens (fundos de levantamento XVI, imagens raster e imagens SVG exclusivas do Mapiah) inseridas no arquivo atual.

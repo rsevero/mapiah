@@ -5752,7 +5752,7 @@ abstract class AppLocalizations {
   /// **'{count, plural, one {1 problem} other {{count} problems}}'**
   String th2ElementTreeBrokenBadgeTooltip(int count);
 
-  /// One problem line in the broken badge tooltip of a .th2 file row. Used on: THProjectTreeNodeWidget._brokenBadgeTooltip
+  /// One problem line of a broken .th2 file: its line number and localized problem category (detail holds the category text, not the parser diagnostic). Used on: THProjectTreeNodeWidget._brokenBadgeTooltip, TH2BrokenFileBodyWidget._buildProblem
   ///
   /// In en, this message translates to:
   /// **'Line {lineNumber}: {detail}'**
@@ -5764,7 +5764,7 @@ abstract class AppLocalizations {
   /// **'{count, plural, one {…and 1 more} other {…and {count} more}}'**
   String th2ElementTreeMoreProblems(int count);
 
-  /// Context menu entry that reloads a broken or failed .th2 file from disk. Used on: THProjectTreeRowContextMenuWidget.reloadMenuItem
+  /// Context menu entry and broken-file body button that reload a broken or failed .th2 file from disk. Used on: THProjectTreeRowContextMenuWidget.reloadMenuItem, TH2BrokenFileBodyWidget.build
   ///
   /// In en, this message translates to:
   /// **'Reload'**
@@ -5871,6 +5871,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, one {1 element} other {{count} elements}}'**
   String th2ElementTreeDragCount(int count);
+
+  /// Explanation at the top of the body shown for a broken .th2 file. Used on: TH2BrokenFileBodyWidget.build
+  ///
+  /// In en, this message translates to:
+  /// **'This file has structural or parsing errors. Mapiah cannot display, edit or save it. Fix it in a text editor and reload.'**
+  String get th2BrokenFileExplanation;
+
+  /// Button and tooltip that copy the broken .th2 file path to the clipboard. Used on: TH2BrokenFileBodyWidget._buildPath
+  ///
+  /// In en, this message translates to:
+  /// **'Copy path'**
+  String get th2BrokenFileCopyPath;
+
+  /// Disclosure that reveals the original parser diagnostic of one problem of a broken .th2 file. Used on: TH2BrokenFileBodyWidget._buildProblem
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get th2BrokenFileDetails;
+
+  /// Problem category of a broken .th2 file. Used on: TH2FileProblemTextAux.userMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Point, line or area outside a scrap'**
+  String get th2FileProblemPlaOutsideScrap;
+
+  /// Problem category of a broken .th2 file. Used on: TH2FileProblemTextAux.userMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Scrap inside another scrap'**
+  String get th2FileProblemScrapInsideScrap;
+
+  /// Problem category of a broken .th2 file. 'endscrap' is a Therion command and is not translated. Used on: TH2FileProblemTextAux.userMessage
+  ///
+  /// In en, this message translates to:
+  /// **'endscrap without an open scrap'**
+  String get th2FileProblemStrayEndscrap;
+
+  /// Problem category of a broken .th2 file. 'endline' is a Therion command and is not translated. Used on: TH2FileProblemTextAux.userMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Line missing endline'**
+  String get th2FileProblemMissingEndline;
+
+  /// Problem category of a broken .th2 file. 'endarea' is a Therion command and is not translated. Used on: TH2FileProblemTextAux.userMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Area missing endarea'**
+  String get th2FileProblemMissingEndarea;
+
+  /// Problem category of a broken .th2 file. 'endscrap' is a Therion command and is not translated. Used on: TH2FileProblemTextAux.userMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Scrap missing endscrap'**
+  String get th2FileProblemMissingEndscrap;
+
+  /// Problem category of a broken .th2 file. Used on: TH2FileProblemTextAux.userMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Area border does not refer to a valid line'**
+  String get th2FileProblemInvalidBorderReference;
+
+  /// Problem category of a broken .th2 file. Used on: TH2FileProblemTextAux.userMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Unrecognized or invalid TH2 content'**
+  String get th2FileProblemParseError;
 }
 
 class _AppLocalizationsDelegate

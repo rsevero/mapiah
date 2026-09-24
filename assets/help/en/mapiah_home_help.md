@@ -2,6 +2,8 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 Initial workspace page where the project tree, file tabs, and main actions are presented.
 
+The complete printable documentation, including installation instructions, help pages, and keyboard shortcuts, is in `Mapiah-User-Guide-en.pdf` at the root of the [Mapiah repository](https://github.com/rsevero/mapiah). A copy is attached to every release.
+
 _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeable. Shortcut mentions below use "Ctrl" for brevity._
 
 ## Project workflow
@@ -11,6 +13,8 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 The sidebar contains file nodes and logical nodes. File nodes represent `thconfig`, `.th`, and `.th2` source files. Logical nodes represent scraps, surveys, maps, and centrelines discovered in those files. Use the search field to filter nodes and the chevrons to expand or collapse branches. The sidebar width and collapsed state are persisted in settings. A dirty marker means a text file has unsaved changes. Error indicators identify parser or compiler diagnostics; missing files and circular references are reported as project errors.
 
 Click a `.th2` file node to open its canvas tab. Click a `thconfig` or `.th` node to open its text tab. Clicking a scrap, survey, map, or centreline selects the corresponding source and navigates to its location when a source line is available.
+
+Expanding a `.th2` file row loads its scrap and element list without opening a tab; only the files you expand are loaded. The list shows the file's drawing order. See the **Drawing order and element tree** and **Broken files** sections of the TH2 file edit help for details.
 
 Use **Run Therion** to run the loaded project's root configuration. In the empty state, the project-tree Run Therion action opens a project and runs it. With a project loaded, the action reruns that project. Compiler diagnostics replace the previous run's compiler diagnostics after the next run; editing alone does not clear them.
 

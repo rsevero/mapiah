@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/th2_file_problem_text_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th_project_tree_ui_controller.dart';
@@ -182,7 +183,7 @@ class THProjectTreeNodeWidget extends StatelessWidget {
       lines.add(
         appLocalizations.th2ElementTreeProblemLine(
           problem.lineNumber,
-          problem.detail,
+          TH2FileProblemTextAux.userMessage(problem.kind, appLocalizations),
         ),
       );
     }
