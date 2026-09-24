@@ -42,6 +42,29 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   @readonly
   Set<int> _isSelected = {};
 
+  final ObservableSet<int> selectedScrapMPIDs = ObservableSet<int>();
+
+  List<int> get selectedScrapMPIDsInFileOrder => _th2File.childrenMPIDs
+      .where((int id) => selectedScrapMPIDs.contains(id) &&
+        _th2File.tryElementByMPID(id) is THScrap).toList();
+
+  @action
+  void toggleSelectedScrap(int scrapMPID) {
+    if (_th2File.tryElementByMPID(scrapMPID) is! THScrap) return;
+    if (!selectedScrapMPIDs.remove(scrapMPID)) {
+      selectedScrapMPIDs.add(scrapMPID);
+    }
+  }
+
+  @action
+  void clearSelectedScraps() => selectedScrapMPIDs.clear();
+
+  @action
+  void pruneSelectedScraps() {
+    selectedScrapMPIDs.removeWhere((int id) =>
+      _th2File.tryElementByMPID(id) is! THScrap);
+  }
+
   @readonly
   ObservableMap<int, MPSelectedElement> _mpSelectedElementsLogical =
       ObservableMap<int, MPSelectedElement>();
@@ -334,15 +357,18 @@ abstract class TH2FileEditSelectionControllerBase with Store {
   }) {
     switch (element) {
       case THPoint _:
+        clearSelectedScraps();
         _mpSelectedElementsLogical[element.mpID] = MPSelectedPoint(
           originalPoint: element,
         );
       case THLine _:
+        clearSelectedScraps();
         _mpSelectedElementsLogical[element.mpID] = MPSelectedLine(
           originalLine: element,
           th2FileEditController: _th2FileEditController,
         );
       case THArea _:
+        clearSelectedScraps();
         _mpSelectedElementsLogical[element.mpID] = MPSelectedArea(
           originalArea: element,
           th2FileEditController: _th2FileEditController,
@@ -383,6 +409,7 @@ abstract class TH2FileEditSelectionControllerBase with Store {
 
   @action
   void deselectAllElements() {
+    clearSelectedScraps();
     _clearSelectedElementsWithoutResettingRedrawTriggers();
     _th2FileEditController.stateController.setState(
       MPTH2FileEditStateType.selectEmptySelection,

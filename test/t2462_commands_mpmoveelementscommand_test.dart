@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:mapiah/src/auxiliary/th2_hierarchy_aux.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -464,7 +465,7 @@ void main() {
       );
 
       expect(rejected.executed, isFalse);
-      expect(rejected.reasonKey, 'area_border_shared');
+      expect(rejected.rejection, MPHierarchyMoveRejection.areaBorderShared);
 
       final MPMoveElementsResult accepted = edit().moveElements(
         elementMPIDs: <int>[id('a1'), id('a2')],
@@ -566,7 +567,7 @@ void main() {
 
       expect(result.executed, isFalse);
       expect(result.noOp, isFalse);
-      expect(result.reasonKey, 'drawable_parent_must_be_scrap');
+      expect(result.rejection, MPHierarchyMoveRejection.drawableParentMustBeScrap);
       expect(controller.undoRedoController.undoCount, undoCount);
     });
 

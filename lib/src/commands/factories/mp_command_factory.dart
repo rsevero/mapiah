@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:collection';
-import 'package:collection/collection.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_svg_aux.dart';
@@ -39,115 +38,24 @@ class MPCommandFactory {
       beforeSiblingMPID: beforeSiblingMPID,
     );
     if (!check.ok) return null;
-    final Set<int> selected = elementMPIDs.toSet();
-    final List<int> order = <int>[];
-    void addTopLevel(THIsParentMixin parent) {
-      for (final int id in parent.childrenMPIDs) {
-        final THElement element = th2File.elementByMPID(id);
-        if (element is THScrap) {
-          if (parent is TH2File) {
-            order.add(id);
-            addTopLevel(element);
-          }
-        } else if (element is THPoint || element is THLine || element is THArea) {
-          order.add(id);
-        }
-      }
-    }
-    addTopLevel(th2File);
-    /// Border lines of areas changing scraps move only inside their area's
-    /// block; each is emitted once, in the block of its first area.
-    List<int> foldedBorderLinesOf(THElement element) {
-      if ((element is! THArea) || (element.parentMPID == newParentMPID)) {
-        return const <int>[];
-      }
-
-      return element.getLineMPIDs(th2File).where((int lineID) {
-        final THElement? line = th2File.tryElementByMPID(lineID);
-
-        return (line is THLine) && (line.parentMPID == element.parentMPID);
-      }).toList();
-    }
-
-    final Set<int> foldedLines = <int>{};
-    for (final int id in order) {
-      if (selected.contains(id)) {
-        foldedLines.addAll(foldedBorderLinesOf(th2File.elementByMPID(id)));
-      }
-    }
-    final List<int> effective = <int>[];
-    final Set<int> emitted = <int>{};
-    for (final int id in order) {
-      if (!selected.contains(id) || foldedLines.contains(id)) continue;
-      for (final int lineID in foldedBorderLinesOf(th2File.elementByMPID(id))) {
-        if (emitted.add(lineID)) effective.add(lineID);
-      }
-      if (emitted.add(id)) effective.add(id);
-    }
-    for (final int id in elementMPIDs) {
-      if (!foldedLines.contains(id) && emitted.add(id)) effective.add(id);
-    }
-    final Map<int, List<int>> lists = <int, List<int>>{};
-    final Map<int, List<int>> initialLists = <int, List<int>>{};
-    List<int> listFor(int parent) => lists.putIfAbsent(parent, () {
-      final List<int> children = parent == th2File.mpID
-          ? th2File.childrenMPIDs.toList()
-          : th2File.parentByMPID(parent).childrenMPIDs.toList();
-
-      initialLists[parent] = children.toList();
-
-      return children;
-    });
-
-    /// Hidden children (comments, empty lines, settings, end* elements) never
-    /// make a move effective: a no-op is decided on the movable siblings.
-    List<int> movableOf(List<int> children) => children.where((int childMPID) {
-      final THElement child = th2File.elementByMPID(childMPID);
-
-      return (child is THScrap) ||
-          (child is THPoint) ||
-          (child is THLine) ||
-          (child is THArea);
-    }).toList();
-    final List<MPElementMove> moves = <MPElementMove>[];
-    for (final int id in effective) {
-      final THElement element = th2File.elementByMPID(id);
-      final int oldParent = element.parentMPID < 0 ? th2File.mpID : element.parentMPID;
-      final List<int> oldList = listFor(oldParent);
-      oldList.remove(id);
-      final List<int> target = listFor(newParentMPID);
-      int position;
-      if (beforeSiblingMPID != null && target.contains(beforeSiblingMPID)) {
-        position = target.indexOf(beforeSiblingMPID);
-      } else if (newParentMPID == th2File.mpID) {
-        int lastScrap = -1;
-        for (int i = 0; i < target.length; i++) {
-          if (th2File.elementByMPID(target[i]) is THScrap) {
-            lastScrap = i;
-          }
-        }
-        position = lastScrap + 1;
-      } else {
-        position = target.length;
-        for (int i = 0; i < target.length; i++) {
-          if (th2File.elementByMPID(target[i]).elementType == THElementType.endscrap) {
-            position = i; break;
-          }
-        }
-      }
-      target.insert(position, id);
-      moves.add(MPElementMove(elementMPID: id, newParentMPID: newParentMPID,
-        positionInNewParent: position));
-    }
-    if (moves.isEmpty || initialLists.entries.every((MapEntry<int, List<int>> entry) =>
-        const ListEquality<int>().equals(
-          movableOf(entry.value),
-          movableOf(listFor(entry.key)),
-        ))) {
-      return null;
-    }
-    return MPMoveElementsCommand(moves: moves);
+    final List<MPElementMove> moves = TH2HierarchyAux.resolveMoves(th2File,
+      elementMPIDs: elementMPIDs, newParentMPID: newParentMPID,
+      beforeSiblingMPID: beforeSiblingMPID);
+    return moves.isEmpty ? null : MPMoveElementsCommand(moves: moves);
   }
+
+  static MPMoveElementsCommand? moveElementGroups({
+    required TH2File th2File, required int parentMPID,
+    required List<MPMoveGroup> groups,
+  }) {
+    final MPHierarchyMoveCheck check = TH2HierarchyAux.validateMoveGroups(
+      th2File, parentMPID: parentMPID, groups: groups);
+    if (!check.ok) return null;
+    final List<MPElementMove> moves = TH2HierarchyAux.resolveMoveGroups(
+      th2File, parentMPID: parentMPID, groups: groups);
+    return moves.isEmpty ? null : MPMoveElementsCommand(moves: moves);
+  }
+
   static MPCommand _actualRemoveLineSegmentFromExisting({
     required int toRemoveLineSegmentMPID,
     required TH2File th2File,

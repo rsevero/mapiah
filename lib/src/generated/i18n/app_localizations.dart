@@ -5781,6 +5781,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rows are in file order: the top row is drawn first (bottom of the stack) and the last row is drawn last (on top).'**
   String get th2ElementTreeDrawingOrderTooltip;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Bring forward'**
+  String get th2ElementTreeBringForward;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Send backward'**
+  String get th2ElementTreeSendBackward;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Bring to front'**
+  String get th2ElementTreeBringToFront;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Send to back'**
+  String get th2ElementTreeSendToBack;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Move to scrap'**
+  String get th2ElementTreeMoveToScrap;
+
+  /// Used on: TH2ElementTreeAux.moveRejectionMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot be placed here'**
+  String get th2MoveRejectedGeneric;
+
+  /// Used on: TH2ElementTreeAux.moveRejectionMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Elements can only be moved within their own file'**
+  String get th2MoveRejectedCrossFile;
+
+  /// Used on: TH2ElementTreeAux.moveRejectionMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Scraps can only be placed among scraps'**
+  String get th2MoveRejectedScrapPlacement;
+
+  /// Used on: TH2ElementTreeAux.moveRejectionMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Points, lines and areas must be inside a scrap'**
+  String get th2MoveRejectedDrawablePlacement;
+
+  /// Used on: TH2ElementTreeAux.moveRejectionMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Scraps cannot be moved together with points, lines or areas'**
+  String get th2MoveRejectedMixedScrapsAndDrawables;
+
+  /// Used on: TH2ElementTreeAux.moveRejectionMessage
+  ///
+  /// In en, this message translates to:
+  /// **'{line} borders {area}; move every area using this border together'**
+  String th2MoveRejectedLineBorderShared(String line, String area);
+
+  /// Used on: TH2ElementTreeAux.moveRejectionMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Border {line} also borders {area}; move every area using this border together'**
+  String th2MoveRejectedAreaBorderShared(String line, String area);
+
+  /// Used on: TH2ElementTreeAux.moveRejectionMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Border {line} is in another scrap'**
+  String th2MoveRejectedAreaBorderWrongScrap(String line);
+
+  /// Used on: TH2ElementTreeAux.moveRejectionMessage
+  ///
+  /// In en, this message translates to:
+  /// **'{area} has a border reference that is not a line'**
+  String th2MoveRejectedAreaBorderNotLine(String area);
+
+  /// Used on: TH2ElementTreeRowWidget.build
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {1 element} other {{count} elements}}'**
+  String th2ElementTreeDragCount(int count);
 }
 
 class _AppLocalizationsDelegate

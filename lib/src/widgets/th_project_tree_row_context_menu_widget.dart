@@ -20,11 +20,14 @@ class THProjectTreeRowContextMenuWidget extends StatefulWidget {
 
   final List<Widget> Function() menuChildrenBuilder;
 
+  final void Function()? onBeforeOpen;
+
   const THProjectTreeRowContextMenuWidget({
     super.key,
     required this.rowId,
     required this.child,
     required this.menuChildrenBuilder,
+    this.onBeforeOpen,
   });
 
   /// The Reload items for the `.th2` file at [th2FilePath] when it is broken
@@ -109,6 +112,7 @@ class _THProjectTreeRowContextMenuWidgetState
 
   /// Stores the current items and opens the menu after they are built.
   void _onSecondaryTapUp(TapUpDetails details) {
+    widget.onBeforeOpen?.call();
     final List<Widget> menuChildren = widget.menuChildrenBuilder();
 
     if (menuChildren.isEmpty) {

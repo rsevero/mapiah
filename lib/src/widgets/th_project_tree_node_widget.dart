@@ -20,6 +20,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_problem.dart';
 import 'package:mapiah/src/widgets/th_project_tree_node_icon_widget.dart';
 import 'package:mapiah/src/widgets/th_project_tree_row_context_menu_widget.dart';
+import 'package:mapiah/src/widgets/th2_element_tree_drag_controller.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// One visible project-tree row.
@@ -32,12 +33,15 @@ class THProjectTreeNodeWidget extends StatelessWidget {
 
   final bool isDirty;
 
+  final TH2ElementTreeDragController? dragController;
+
   const THProjectTreeNodeWidget({
     super.key,
     required this.node,
     required this.depth,
     required this.isSelected,
     required this.isDirty,
+    this.dragController,
   });
 
   @override
@@ -86,7 +90,7 @@ class THProjectTreeNodeWidget extends StatelessWidget {
 
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
 
-    return THProjectTreeRowContextMenuWidget(
+    final Widget content = THProjectTreeRowContextMenuWidget(
       key: ValueKey('THProjectTreeRowContextMenu|${node.id}'),
       rowId: node.id,
       menuChildrenBuilder: () =>
@@ -97,6 +101,13 @@ class THProjectTreeNodeWidget extends StatelessWidget {
           ),
       child: row,
     );
+    if (dragController == null) return content;
+    return TH2ElementTreeDropTarget(
+      controller: dragController!, rowId: node.id,
+      th2FilePath: currentNode.absolutePath,
+      targetMPID: null, collapsedScrap: false,
+      expanded: isExpanded, child: content);
+
   }
 
   /// The broken badge (problem count) or load-error mark of a `.th2` file

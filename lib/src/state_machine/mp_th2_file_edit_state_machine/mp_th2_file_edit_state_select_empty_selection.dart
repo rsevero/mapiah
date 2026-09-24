@@ -33,6 +33,7 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
   @override
   void onStateExit(MPTH2FileEditState nextState) {
     if (nextState.type != MPTH2FileEditStateType.selectionWindowZoom) {
+      selectionController.clearSelectedScraps();
       onStateExitClearSelectionOnExit(nextState);
     }
     th2FileEditController.setStatusBarMessage('');
@@ -47,6 +48,10 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
 
   @override
   void onKeyDownEvent(KeyDownEvent event) {
+    if (handleDrawingOrderShortcut(event,
+        selectionController.selectedScrapMPIDsInFileOrder)) {
+      return;
+    }
     final bool isAltPressed = MPInteractionAux.isAltPressed();
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final bool isMetaPressed = MPInteractionAux.isMetaPressed();
@@ -105,7 +110,9 @@ class MPTH2FileEditStateSelectEmptySelection extends MPTH2FileEditState
 
     selectionController.clearClickedElementsAtPointerDown();
 
-    if (clickedElements.isNotEmpty) {
+    if (clickedElements.isEmpty) {
+      selectionController.clearSelectedScraps();
+    } else {
       selectionController.setSelectedElements(
         clickedElements.values,
         setState: true,

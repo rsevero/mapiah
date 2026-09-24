@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
@@ -521,7 +522,7 @@ void main() {
       );
     });
 
-    testWidgets('valid, loading, element and project rows open no menu', (
+    testWidgets('element rows open an order menu without opening a tab', (
       WidgetTester tester,
     ) async {
       final TH2TreeTestProject project = await openAndExpandA(tester);
@@ -530,18 +531,20 @@ void main() {
 
       for (final Finder target in <Finder>[
         find.byKey(ValueKey('THProjectTreeNodeWidget|${aNode.id}')),
-        elementRow(path, 'p1'),
         find.byKey(ValueKey('THProjectTreeNodeWidget|${aNode.parent!.id}')),
       ]) {
         await tester.tap(target, buttons: kSecondaryButton);
         await tester.pump();
         await tester.pump();
-
         expect(find.byType(MenuItemButton), findsNothing);
       }
 
+      await tester.tap(elementRow(path, 'p1'), buttons: kSecondaryButton);
+      await tester.pump();
+      await tester.pump();
+      expect(find.byType(MenuItemButton), findsWidgets);
       expect(controllerOf(path)!.selectionController.mpSelectedElementsLogical,
-          isEmpty);
+          isNotEmpty);
       expect(mpLocator.mpGeneralController.openFileOrder, isEmpty);
     });
 
@@ -908,6 +911,36 @@ void main() {
       await tester.tap(row);
       await tester.pump();
     }
+
+    testWidgets('Ctrl toggles and Shift extends element rows',
+        (WidgetTester tester) async {
+      final TH2TreeTestProject project = await openAndExpandA(tester);
+      final String path = project.pathOf('a.th2');
+      final TH2FileEditController controller = controllerOf(path)!;
+      final int p1 = controller.th2File.mpIDByTHID('p1')!;
+      final int l1 = controller.th2File.mpIDByTHID('l1')!;
+      final int p3 = controller.th2File.mpIDByTHID('p3')!;
+      await tester.tap(elementRow(path, 'p1'));
+      await tester.pump();
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+      await tester.tap(elementRow(path, 'p3'));
+      await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+      await tester.pump();
+      expect(controller.selectionController.mpSelectedElementsLogical.keys,
+        containsAll(<int>[p1, p3]));
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+      await tester.tap(elementRow(path, 'l1'));
+      await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+      await tester.pump();
+      expect(controller.selectionController.mpSelectedElementsLogical.keys,
+        containsAll(<int>[p1, l1, p3]));
+      await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+      await tester.tap(elementRow(path, 'p1'));
+      await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+      await tester.pump();
+      expect(controller.selectionController.mpSelectedElementsLogical.keys,
+        isNot(contains(p1)));
+    });
 
     testWidgets('a tab-less tap selects without opening a tab', (
       WidgetTester tester,

@@ -98,7 +98,8 @@ void main() {
 
   void expectRejected(MPHierarchyMoveCheck result, String reasonKey) {
     expect(result.ok, isFalse);
-    expect(result.reasonKey, reasonKey);
+    expect(result.rejection,
+      MPHierarchyMoveRejection.values.byName(_enumName(reasonKey)));
   }
 
   setUp(() async {
@@ -309,4 +310,10 @@ void main() {
       );
     });
   });
+}
+
+String _enumName(String key) {
+  final List<String> parts = key.split('_');
+  return parts.first + parts.skip(1).map((String part) =>
+    part[0].toUpperCase() + part.substring(1)).join();
 }

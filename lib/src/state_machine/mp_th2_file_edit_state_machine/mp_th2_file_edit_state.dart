@@ -92,6 +92,38 @@ abstract class MPTH2FileEditState {
           th2FileEditController.userInteractionController,
       th2File = th2FileEditController.th2File;
 
+  bool handleDrawingOrderShortcut(KeyDownEvent event, List<int> ids) {
+    if (ids.isEmpty || MPInteractionAux.isAltPressed() ||
+        !(MPInteractionAux.isCtrlPressed() ||
+          MPInteractionAux.isMetaPressed())) {
+      return false;
+    }
+    final bool right = event.logicalKey == LogicalKeyboardKey.bracketRight ||
+        event.logicalKey == LogicalKeyboardKey.braceRight;
+    final bool left = event.logicalKey == LogicalKeyboardKey.bracketLeft ||
+        event.logicalKey == LogicalKeyboardKey.braceLeft;
+    if (!right && !left) {
+      return false;
+    }
+    final bool shift = MPInteractionAux.isShiftPressed();
+    final MPDrawingOrderAction action = right
+        ? (shift ? MPDrawingOrderAction.bringToFront
+            : MPDrawingOrderAction.bringForward)
+        : (shift ? MPDrawingOrderAction.sendToBack
+            : MPDrawingOrderAction.sendBackward);
+    switch (action) {
+      case MPDrawingOrderAction.bringForward:
+        elementEditController.bringForward(elementMPIDs: ids);
+      case MPDrawingOrderAction.sendBackward:
+        elementEditController.sendBackward(elementMPIDs: ids);
+      case MPDrawingOrderAction.bringToFront:
+        elementEditController.bringToFront(elementMPIDs: ids);
+      case MPDrawingOrderAction.sendToBack:
+        elementEditController.sendToBack(elementMPIDs: ids);
+    }
+    return true;
+  }
+
   static MPTH2FileEditState getState({
     required MPTH2FileEditStateType type,
     required TH2FileEditController th2FileEditController,

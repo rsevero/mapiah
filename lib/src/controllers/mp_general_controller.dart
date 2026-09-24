@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
@@ -105,6 +106,18 @@ abstract class MPGeneralControllerBase with Store {
   @action
   void _bumpTH2ControllersRevision() {
     _th2ControllersRevision++;
+  }
+
+  TH2FileEditController? prepareTH2FileForTreeEdit(String th2FilePath) {
+    final TH2FileEditController? controller =
+        getTH2FileEditControllerIfExists(th2FilePath);
+    if (controller == null || !controller.isFileLoaded ||
+        controller.isBroken || controller.loadError != null) {
+      return null;
+    }
+    addFileTab(th2FilePath);
+    controller.stateController.onButtonPressed(MPButtonType.select);
+    return controller;
   }
 
   @action

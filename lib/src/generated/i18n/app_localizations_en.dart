@@ -3218,4 +3218,69 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get th2ElementTreeDrawingOrderTooltip =>
       'Rows are in file order: the top row is drawn first (bottom of the stack) and the last row is drawn last (on top).';
+
+  @override
+  String get th2ElementTreeBringForward => 'Bring forward';
+
+  @override
+  String get th2ElementTreeSendBackward => 'Send backward';
+
+  @override
+  String get th2ElementTreeBringToFront => 'Bring to front';
+
+  @override
+  String get th2ElementTreeSendToBack => 'Send to back';
+
+  @override
+  String get th2ElementTreeMoveToScrap => 'Move to scrap';
+
+  @override
+  String get th2MoveRejectedGeneric => 'Cannot be placed here';
+
+  @override
+  String get th2MoveRejectedCrossFile =>
+      'Elements can only be moved within their own file';
+
+  @override
+  String get th2MoveRejectedScrapPlacement =>
+      'Scraps can only be placed among scraps';
+
+  @override
+  String get th2MoveRejectedDrawablePlacement =>
+      'Points, lines and areas must be inside a scrap';
+
+  @override
+  String get th2MoveRejectedMixedScrapsAndDrawables =>
+      'Scraps cannot be moved together with points, lines or areas';
+
+  @override
+  String th2MoveRejectedLineBorderShared(String line, String area) {
+    return '$line borders $area; move every area using this border together';
+  }
+
+  @override
+  String th2MoveRejectedAreaBorderShared(String line, String area) {
+    return 'Border $line also borders $area; move every area using this border together';
+  }
+
+  @override
+  String th2MoveRejectedAreaBorderWrongScrap(String line) {
+    return 'Border $line is in another scrap';
+  }
+
+  @override
+  String th2MoveRejectedAreaBorderNotLine(String area) {
+    return '$area has a border reference that is not a line';
+  }
+
+  @override
+  String th2ElementTreeDragCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count elements',
+      one: '1 element',
+    );
+    return '$_temp0';
+  }
 }

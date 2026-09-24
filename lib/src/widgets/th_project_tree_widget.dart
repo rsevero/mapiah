@@ -16,6 +16,7 @@ import 'package:mapiah/src/elements/th_project/th_project_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_parse_error.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/th2_element_tree_row_widget.dart';
+import 'package:mapiah/src/widgets/th2_element_tree_drag_controller.dart';
 import 'package:mapiah/src/widgets/th_project_tree_node_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -33,6 +34,25 @@ class THProjectTreeWidget extends StatefulWidget {
 }
 
 class _THProjectTreeWidgetState extends State<THProjectTreeWidget> {
+  final TH2ElementTreeDragController _dragController =
+      TH2ElementTreeDragController();
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey _scrollViewportKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _dragController.scrollController = _scrollController;
+    _dragController.viewportKey = _scrollViewportKey;
+  }
+
+  @override
+  void dispose() {
+    _dragController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Observer(
@@ -88,7 +108,10 @@ class _THProjectTreeWidgetState extends State<THProjectTreeWidget> {
                   appLocalizations: appLocalizations,
                 ),
               Expanded(
-                child: ListView.builder(
+                child: SizedBox(
+                  key: _scrollViewportKey,
+                  child: ListView.builder(
+                  controller: _scrollController,
                   itemCount: visibleRows.length,
                   itemBuilder: (BuildContext context, int index) {
                     return _buildRow(
@@ -97,6 +120,7 @@ class _THProjectTreeWidgetState extends State<THProjectTreeWidget> {
                       dirtyFilePaths: dirtyFilePaths,
                     );
                   },
+                ),
                 ),
               ),
             ],
@@ -117,9 +141,10 @@ class _THProjectTreeWidgetState extends State<THProjectTreeWidget> {
         depth: nodeRow.depth,
         isSelected: nodeRow.node.id == activeSelectedNodeId,
         isDirty: _isDirtyNode(nodeRow.node, dirtyFilePaths),
+        dragController: _dragController,
       ),
-      TH2ElementTreeRow _ => TH2ElementTreeRowWidget(row: row),
-      TH2FileStatusTreeRow _ => TH2ElementTreeRowWidget(row: row),
+      TH2ElementTreeRow _ => TH2ElementTreeRowWidget(row: row, dragController: _dragController),
+      TH2FileStatusTreeRow _ => TH2ElementTreeRowWidget(row: row, dragController: _dragController),
     };
   }
 

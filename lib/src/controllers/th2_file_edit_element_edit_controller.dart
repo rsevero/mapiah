@@ -1359,7 +1359,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     required int newParentMPID,
     int? beforeSiblingMPID,
   }) => _th2FileEditController.isBroken
-      ? const MPHierarchyMoveCheck.rejected('broken_file')
+      ? const MPHierarchyMoveCheck.rejected(MPHierarchyMoveRejection.brokenFile)
       : TH2HierarchyAux.validateMove(
           _th2File,
           elementMPIDs: elementMPIDs,
@@ -1377,7 +1377,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       newParentMPID: newParentMPID,
       beforeSiblingMPID: beforeSiblingMPID,
     );
-    if (!check.ok) return MPMoveElementsResult.rejected(check.reasonKey!);
+    if (!check.ok) return MPMoveElementsResult.rejected(check.rejection!);
     final MPMoveElementsCommand? command = MPCommandFactory.moveElements(
       th2File: _th2File,
       elementMPIDs: elementMPIDs,
@@ -1440,74 +1440,116 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   );
 
   MPMoveElementsResult bringForward({required List<int> elementMPIDs}) =>
-      _moveRelative(elementMPIDs, forward: true);
+      _executeDrawingOrderAction(MPDrawingOrderAction.bringForward, elementMPIDs);
   MPMoveElementsResult sendBackward({required List<int> elementMPIDs}) =>
-      _moveRelative(elementMPIDs, forward: false);
+      _executeDrawingOrderAction(MPDrawingOrderAction.sendBackward, elementMPIDs);
   MPMoveElementsResult bringToFront({required List<int> elementMPIDs}) =>
-      _moveToBoundary(elementMPIDs, front: true);
+      _executeDrawingOrderAction(MPDrawingOrderAction.bringToFront, elementMPIDs);
   MPMoveElementsResult sendToBack({required List<int> elementMPIDs}) =>
-      _moveToBoundary(elementMPIDs, front: false);
+      _executeDrawingOrderAction(MPDrawingOrderAction.sendToBack, elementMPIDs);
 
-  /// The movable siblings (scraps at file level, points, lines and areas in
-  /// a scrap) of [parent], in file order.
-  List<int> _movableSiblingsOf(THIsParentMixin parent) {
-    return parent.childrenMPIDs.where((int id) {
-      final THElement child = _th2File.elementByMPID(id);
+  List<int> _movableSiblingsOf(THIsParentMixin parent) =>
+      parent.childrenMPIDs.where((int id) =>
+        TH2HierarchyAux.isMovable(_th2File.elementByMPID(id))).toList();
 
-      return child is THScrap ||
-          child is THPoint ||
-          child is THLine ||
-          child is THArea;
-    }).toList();
+  MPMoveElementsPreview previewDrawingOrderAction(
+    MPDrawingOrderAction action, {required List<int> elementMPIDs}
+  ) {
+    if (elementMPIDs.isEmpty) return const MPMoveElementsPreview.noOp();
+    if (_th2FileEditController.isBroken) {
+      return const MPMoveElementsPreview.rejected(
+        MPHierarchyMoveRejection.brokenFile);
+    }
+    bool hasScrap = false;
+    bool hasDrawable = false;
+    for (final int id in elementMPIDs) {
+      final THElement? element = _th2File.tryElementByMPID(id);
+      if (element == null) {
+        return const MPMoveElementsPreview.rejected(
+          MPHierarchyMoveRejection.unknownElement);
+      }
+      hasScrap |= element is THScrap;
+      hasDrawable |= element is THPoint || element is THLine || element is THArea;
+    }
+    if (hasScrap && hasDrawable) {
+      return const MPMoveElementsPreview.rejected(
+        MPHierarchyMoveRejection.mixedScrapsAndDrawables);
+    }
+    final THElement first = _th2File.elementByMPID(elementMPIDs.first);
+    final THIsParentMixin parent = first.parent(th2File: _th2File);
+    final int parentMPID = parent is TH2File ? _th2File.mpID : parent.mpID;
+    assert(elementMPIDs.every((int id) {
+      final THElement element = _th2File.elementByMPID(id);
+      return (element.parentMPID < 0 ? _th2File.mpID : element.parentMPID)
+          == parentMPID;
+    }));
+    final Set<int> selected = elementMPIDs.toSet();
+    final List<int> siblings = _movableSiblingsOf(parent);
+    if (action == MPDrawingOrderAction.bringToFront ||
+        action == MPDrawingOrderAction.sendToBack) {
+      final bool front = action == MPDrawingOrderAction.bringToFront;
+      final List<int> staying = siblings.where((int id) =>
+        !selected.contains(id)).toList();
+      if (!front && staying.isEmpty) {
+        return const MPMoveElementsPreview.noOp();
+      }
+      final int? before = front ? null : staying.first;
+      final MPHierarchyMoveCheck check = checkMoveElements(
+        elementMPIDs: elementMPIDs, newParentMPID: parentMPID,
+        beforeSiblingMPID: before);
+      if (!check.ok) return MPMoveElementsPreview.rejected(check.rejection!);
+      final List<MPElementMove> moves = TH2HierarchyAux.resolveMoves(_th2File,
+        elementMPIDs: elementMPIDs, newParentMPID: parentMPID,
+        beforeSiblingMPID: before);
+      return moves.isEmpty ? const MPMoveElementsPreview.noOp()
+          : MPMoveElementsPreview.moves(parentMPID: parentMPID,
+              elementMPIDs: elementMPIDs, beforeSiblingMPID: before,
+              moves: moves);
+    }
+    final bool forward = action == MPDrawingOrderAction.bringForward;
+    final List<MPMoveGroup> groups = <MPMoveGroup>[];
+    for (int i = 0; i < siblings.length;) {
+      if (!selected.contains(siblings[i])) { i++; continue; }
+      final int start = i;
+      while (i < siblings.length && selected.contains(siblings[i])) { i++; }
+      final int anchorIndex = forward ? i : start - 1;
+      if (anchorIndex < 0 || anchorIndex >= siblings.length) continue;
+      groups.add(MPMoveGroup(
+        elementMPIDs: siblings.sublist(start, i),
+        placement: forward ? MPMoveGroupPlacement.afterSibling
+            : MPMoveGroupPlacement.beforeSibling,
+        siblingMPID: siblings[anchorIndex]));
+    }
+    if (groups.isEmpty) return const MPMoveElementsPreview.noOp();
+    final MPHierarchyMoveCheck check = TH2HierarchyAux.validateMoveGroups(
+      _th2File, parentMPID: parentMPID, groups: groups);
+    if (!check.ok) return MPMoveElementsPreview.rejected(check.rejection!);
+    final List<MPElementMove> moves = TH2HierarchyAux.resolveMoveGroups(
+      _th2File, parentMPID: parentMPID, groups: groups);
+    return moves.isEmpty ? const MPMoveElementsPreview.noOp()
+        : MPMoveElementsPreview.moves(parentMPID: parentMPID,
+            groups: groups, moves: moves);
   }
 
-  /// Moves [ids] one movable sibling forward (later, drawn above) or
-  /// backward. A `null` before-sibling means the end of the parent.
-  MPMoveElementsResult _moveRelative(List<int> ids, {required bool forward}) {
-    if (ids.isEmpty) return const MPMoveElementsResult.noOp();
-    final THElement element = _th2File.elementByMPID(ids.first);
-    final THIsParentMixin parent = element.parent(th2File: _th2File);
-    final List<int> movable = _movableSiblingsOf(parent);
-    final int index = movable.indexOf(ids.first);
-    final bool isAtBoundary = forward
-        ? (index >= movable.length - 1)
-        : (index <= 0);
-
-    if ((index < 0) || isAtBoundary) {
-      return const MPMoveElementsResult.noOp();
+  MPMoveElementsResult _executeDrawingOrderAction(
+    MPDrawingOrderAction action, List<int> elementMPIDs
+  ) {
+    final MPMoveElementsPreview preview = previewDrawingOrderAction(action,
+      elementMPIDs: elementMPIDs);
+    if (preview.rejection != null) {
+      return MPMoveElementsResult.rejected(preview.rejection);
     }
-
-    final int? beforeSiblingMPID = forward
-        ? ((index + 2 < movable.length) ? movable[index + 2] : null)
-        : movable[index - 1];
-
-    return moveElements(
-      elementMPIDs: ids,
-      newParentMPID: parent is TH2File ? _th2File.mpID : parent.mpID,
-      beforeSiblingMPID: beforeSiblingMPID,
-    );
-  }
-
-  /// Moves [ids] to the end of their parent (front, drawn last) or to its
-  /// start (back, drawn first).
-  MPMoveElementsResult _moveToBoundary(List<int> ids, {required bool front}) {
-    if (ids.isEmpty) return const MPMoveElementsResult.noOp();
-    final THElement element = _th2File.elementByMPID(ids.first);
-    final THIsParentMixin parent = element.parent(th2File: _th2File);
-    final Set<int> moving = ids.toSet();
-    final List<int> stayingMovable = _movableSiblingsOf(
-      parent,
-    ).where((int id) => !moving.contains(id)).toList();
-
-    if (!front && stayingMovable.isEmpty) {
-      return const MPMoveElementsResult.noOp();
-    }
-
-    return moveElements(
-      elementMPIDs: ids,
-      newParentMPID: parent is TH2File ? _th2File.mpID : parent.mpID,
-      beforeSiblingMPID: front ? null : stayingMovable.first,
-    );
+    if (preview.noOp) return const MPMoveElementsResult.noOp();
+    final MPMoveElementsCommand? command = preview.groups != null
+        ? MPCommandFactory.moveElementGroups(th2File: _th2File,
+            parentMPID: preview.parentMPID!, groups: preview.groups!)
+        : MPCommandFactory.moveElements(th2File: _th2File,
+            elementMPIDs: preview.elementMPIDs!,
+            newParentMPID: preview.parentMPID!,
+            beforeSiblingMPID: preview.beforeSiblingMPID);
+    if (command == null) return const MPMoveElementsResult.noOp();
+    _th2FileEditController.execute(command);
+    return const MPMoveElementsResult.executed();
   }
 
   @action
@@ -2660,15 +2702,40 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   }
 }
 
+enum MPDrawingOrderAction {
+  bringForward, sendBackward, bringToFront, sendToBack,
+}
+
+class MPMoveElementsPreview {
+  final MPHierarchyMoveRejection? rejection;
+  final bool noOp;
+  final List<MPElementMove> moves;
+  final int? parentMPID;
+  final List<int>? elementMPIDs;
+  final int? beforeSiblingMPID;
+  final List<MPMoveGroup>? groups;
+  const MPMoveElementsPreview.noOp()
+      : rejection = null, noOp = true, moves = const <MPElementMove>[],
+        parentMPID = null, elementMPIDs = null, beforeSiblingMPID = null,
+        groups = null;
+  const MPMoveElementsPreview.rejected(this.rejection)
+      : noOp = false, moves = const <MPElementMove>[],
+        parentMPID = null, elementMPIDs = null, beforeSiblingMPID = null,
+        groups = null;
+  const MPMoveElementsPreview.moves({required this.parentMPID,
+    required this.moves, this.elementMPIDs, this.beforeSiblingMPID,
+    this.groups}) : rejection = null, noOp = false;
+}
+
 class MPMoveElementsResult {
   final bool executed;
   final bool noOp;
-  final String? reasonKey;
+  final MPHierarchyMoveRejection? rejection;
   const MPMoveElementsResult.executed()
-      : executed = true, noOp = false, reasonKey = null;
+      : executed = true, noOp = false, rejection = null;
   const MPMoveElementsResult.noOp()
-      : executed = false, noOp = true, reasonKey = null;
-  const MPMoveElementsResult.rejected(this.reasonKey)
+      : executed = false, noOp = true, rejection = null;
+  const MPMoveElementsResult.rejected(this.rejection)
       : executed = false, noOp = false;
 }
 

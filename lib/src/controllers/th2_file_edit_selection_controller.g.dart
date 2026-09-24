@@ -315,6 +315,51 @@ mixin _$TH2FileEditSelectionController
       );
 
   @override
+  void toggleSelectedScrap(int scrapMPID) {
+    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditSelectionControllerBase.toggleSelectedScrap',
+        );
+    try {
+      return super.toggleSelectedScrap(scrapMPID);
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void clearSelectedScraps() {
+    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditSelectionControllerBase.clearSelectedScraps',
+        );
+    try {
+      return super.clearSelectedScraps();
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void pruneSelectedScraps() {
+    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditSelectionControllerBase.pruneSelectedScraps',
+        );
+    try {
+      return super.pruneSelectedScraps();
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void substituteSelectedElementsByClickedElements() {
     final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
         .startAction(

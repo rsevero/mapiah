@@ -3255,4 +3255,69 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get th2ElementTreeDrawingOrderTooltip =>
       'As linhas seguem a ordem do arquivo: a primeira é desenhada primeiro (embaixo) e a última é desenhada por último (em cima).';
+
+  @override
+  String get th2ElementTreeBringForward => 'Avançar';
+
+  @override
+  String get th2ElementTreeSendBackward => 'Recuar';
+
+  @override
+  String get th2ElementTreeBringToFront => 'Trazer para a frente';
+
+  @override
+  String get th2ElementTreeSendToBack => 'Enviar para trás';
+
+  @override
+  String get th2ElementTreeMoveToScrap => 'Mover para o scrap';
+
+  @override
+  String get th2MoveRejectedGeneric => 'Não pode ser colocado aqui';
+
+  @override
+  String get th2MoveRejectedCrossFile =>
+      'Elementos só podem ser movidos dentro do próprio arquivo';
+
+  @override
+  String get th2MoveRejectedScrapPlacement =>
+      'Scraps só podem ser colocados entre scraps';
+
+  @override
+  String get th2MoveRejectedDrawablePlacement =>
+      'Pontos, linhas e áreas devem ficar dentro de um scrap';
+
+  @override
+  String get th2MoveRejectedMixedScrapsAndDrawables =>
+      'Scraps não podem ser movidos junto com pontos, linhas ou áreas';
+
+  @override
+  String th2MoveRejectedLineBorderShared(String line, String area) {
+    return '$line é borda de $area; mova juntas todas as áreas que usam essa borda';
+  }
+
+  @override
+  String th2MoveRejectedAreaBorderShared(String line, String area) {
+    return 'A borda $line também pertence a $area; mova juntas todas as áreas que usam essa borda';
+  }
+
+  @override
+  String th2MoveRejectedAreaBorderWrongScrap(String line) {
+    return 'A borda $line está em outro scrap';
+  }
+
+  @override
+  String th2MoveRejectedAreaBorderNotLine(String area) {
+    return '$area tem uma referência de borda que não é uma linha';
+  }
+
+  @override
+  String th2ElementTreeDragCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count elementos',
+      one: '1 elemento',
+    );
+    return '$_temp0';
+  }
 }

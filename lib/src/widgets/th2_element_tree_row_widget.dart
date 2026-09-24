@@ -1,6 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/gestures.dart';
+import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
+import 'package:mapiah/src/auxiliary/th2_element_tree_aux.dart';
+import 'package:mapiah/src/widgets/th2_element_tree_drag_controller.dart';
+import 'package:mapiah/src/selected/mp_selected_element.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
+import 'package:mapiah/src/auxiliary/th2_hierarchy_aux.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th_project_tree_visible_row.dart';
@@ -21,6 +28,8 @@ class TH2ElementTreeTapTracker {
   DateTime Function() now = DateTime.now;
 
   String? _rowId;
+
+  String? rangeAnchorRowId;
 
   DateTime? _time;
 
@@ -65,15 +74,18 @@ final TH2ElementTreeTapTracker th2ElementTreeTapTracker =
 /// loading, load-error or broken status of a `.th2` file.
 class TH2ElementTreeRowWidget extends StatelessWidget {
   final THProjectTreeVisibleRow row;
+  final TH2ElementTreeDragController? dragController;
 
-  const TH2ElementTreeRowWidget({super.key, required this.row});
+  const TH2ElementTreeRowWidget({super.key, required this.row,
+    this.dragController});
 
   @override
   Widget build(BuildContext context) {
     final THProjectTreeVisibleRow currentRow = row;
 
     return switch (currentRow) {
-      TH2ElementTreeRow elementRow => _TH2ElementRow(row: elementRow),
+      TH2ElementTreeRow elementRow => _TH2ElementRow(row: elementRow,
+        dragController: dragController),
       TH2FileStatusTreeRow statusRow => _TH2FileStatusRow(row: statusRow),
       THProjectTreeNodeRow _ => throw ArgumentError(
         'TH2ElementTreeRowWidget does not render project node rows.',
@@ -99,8 +111,9 @@ TH2FileEditController? _validControllerFor(String th2FilePath) {
 
 class _TH2ElementRow extends StatelessWidget {
   final TH2ElementTreeRow row;
+  final TH2ElementTreeDragController? dragController;
 
-  const _TH2ElementRow({required this.row});
+  const _TH2ElementRow({required this.row, this.dragController});
 
   @override
   Widget build(BuildContext context) {
@@ -121,12 +134,13 @@ class _TH2ElementRow extends StatelessWidget {
       ),
     );
     Offset tapPosition = Offset.zero;
+    int? dragPointerId;
 
     return Observer(
       builder: (_) {
         final bool isHighlighted = _isHighlighted();
 
-        return Material(
+        final Widget content = Material(
           key: ValueKey('TH2ElementTreeRowWidget|${row.rowId}'),
           color: isHighlighted
               ? colorScheme.secondaryContainer
@@ -139,8 +153,96 @@ class _TH2ElementRow extends StatelessWidget {
             child: shell,
           ),
         );
+        final Widget menu = THProjectTreeRowContextMenuWidget(
+          key: ValueKey('THProjectTreeRowContextMenu|${row.rowId}'),
+          rowId: row.rowId,
+          onBeforeOpen: _onBeforeOpenMenu,
+          menuChildrenBuilder: () => _menuItems(context),
+          child: content,
+        );
+        if (dragController == null) return menu;
+        final Widget target = TH2ElementTreeDropTarget(
+          controller: dragController!, rowId: row.rowId,
+          th2FilePath: row.th2FilePath,
+          targetMPID: row.elementMPID,
+          collapsedScrap: row.isScrap && !row.isExpanded,
+          expanded: row.isExpanded, child: menu);
+        if (mpLocator.thProjectTreeUIController.filterText.isNotEmpty) {
+          return target;
+        }
+        final TH2ElementTreeDragPayload? payload = _dragPayload();
+        if (payload == null) {
+          return target;
+        }
+        return Listener(
+          onPointerDown: (PointerDownEvent event) {
+            dragPointerId = event.pointer;
+          },
+          child: Draggable<TH2ElementTreeDragPayload>(
+          data: payload,
+          dragAnchorStrategy: pointerDragAnchorStrategy,
+          onDragStarted: () => dragController!.start(payload,
+            pointerId: dragPointerId),
+          onDragEnd: (_) => dragController!.end(),
+          onDraggableCanceled: (_, _) => dragController!.end(),
+          onDragCompleted: () => dragController!.end(),
+          feedback: Opacity(opacity: mpDragFeedbackOpacity,
+            child: Material(color: colorScheme.surface,
+              child: Padding(padding: const EdgeInsets.all(8),
+                child: AnimatedBuilder(animation: dragController!,
+                  builder: (BuildContext context, Widget? child) {
+                    final MPHierarchyMoveCheck? check =
+                        dragController!.hoverCheck;
+                    final String? reason = check != null && !check.ok
+                        ? TH2ElementTreeAux.moveRejectionMessage(check,
+                            payload.controller.th2File,
+                            AppLocalizations.of(context)) : null;
+                    return Column(mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(row.label.plainText),
+                        if (payload.elementMPIDs.length > 1)
+                          Text(AppLocalizations.of(context)
+                            .th2ElementTreeDragCount(payload.elementMPIDs.length)),
+                        if (reason != null) Text(reason),
+                      ]);
+                  })))),
+          childWhenDragging: Opacity(opacity: mpDragFeedbackOpacity,
+            child: target),
+          child: target));
+
       },
     );
+  }
+
+  TH2ElementTreeDragPayload? _dragPayload() {
+    final TH2FileEditController? controller = _validControllerFor(
+      row.th2FilePath);
+    if (controller == null || controller.th2File.tryElementByMPID(
+        row.elementMPID) == null) {
+      return null;
+    }
+    final List<int> ids;
+    if (row.isScrap) {
+      final List<int> selected = controller.selectionController
+          .selectedScrapMPIDsInFileOrder;
+      ids = selected.contains(row.elementMPID) ? selected
+          : <int>[row.elementMPID];
+    } else {
+      final THElement element = controller.th2File.elementByMPID(
+        row.elementMPID);
+      final THScrap scrap = controller.th2File.scrapByMPID(
+        element.parentMPID);
+      final Set<int> selected = controller.selectionController
+          .mpSelectedElementsLogical.keys.toSet();
+      ids = selected.contains(row.elementMPID)
+          ? <int>[
+              ...controller.th2File.childrenMPIDs.where(selected.contains),
+              ...scrap.childrenMPIDs.where(selected.contains),
+            ]
+          : <int>[row.elementMPID];
+    }
+    return TH2ElementTreeDragPayload(th2FilePath: row.th2FilePath,
+      controller: controller, elementMPIDs: ids, isScrap: row.isScrap);
   }
 
   /// Selected element rows and the active scrap row are highlighted.
@@ -154,7 +256,9 @@ class _TH2ElementRow extends StatelessWidget {
     }
 
     if (row.isScrap) {
-      return controller.activeScrapID == row.elementMPID;
+      final Set<int> scraps = controller.selectionController.selectedScrapMPIDs;
+      return scraps.isEmpty ? controller.activeScrapID == row.elementMPID
+          : scraps.contains(row.elementMPID);
     }
 
     return controller.selectionController.mpSelectedElementsLogical
@@ -219,6 +323,8 @@ class _TH2ElementRow extends StatelessWidget {
             ),
         ],
       ),
+      style: row.isScrap && _validControllerFor(row.th2FilePath)?.activeScrapID ==
+          row.elementMPID ? const TextStyle(fontWeight: FontWeight.bold) : null,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       semanticsLabel: row.label.plainText,
@@ -281,36 +387,106 @@ class _TH2ElementRow extends StatelessWidget {
     return false;
   }
 
+  void _bringOpenTabToFront() {
+    final MPGeneralController general = mpLocator.mpGeneralController;
+    if (general.openFileOrder.contains(row.th2FilePath)) {
+      general.addFileTab(row.th2FilePath);
+    }
+  }
+
+  void _leaveCreationMode(TH2FileEditController controller) {
+    final TH2FileEditSelectionController selection =
+        controller.selectionController;
+    final List<int> strayScraps = selection.mpSelectedElementsLogical.entries
+        .where((entry) => entry.value is MPSelectedScrap)
+        .map((entry) => entry.key).toList();
+    if (strayScraps.isNotEmpty) {
+      selection.removeSelectedElementsByMPIDs(strayScraps);
+    }
+    controller.stateController.onButtonPressed(MPButtonType.select);
+  }
+
   void _onTap(Offset tapPosition) {
-    if (row.isScrap) {
-      _onScrapTap();
-
-      return;
-    }
-
-    final bool isSecondTap = th2ElementTreeTapTracker.registerTap(
-      rowId: row.rowId,
-      position: tapPosition,
-    );
     final TH2FileEditController? controller = _validControllerFor(
-      row.th2FilePath,
-    );
-
-    if (controller == null) {
+      row.th2FilePath);
+    if (controller == null) return;
+    final bool ctrl = MPInteractionAux.isCtrlPressed() ||
+        MPInteractionAux.isMetaPressed();
+    final bool shift = MPInteractionAux.isShiftPressed();
+    if (row.isScrap) {
+      _leaveCreationMode(controller);
+      if (ctrl) {
+        if (controller.selectionController.mpSelectedElementsLogical.isNotEmpty) {
+          controller.selectionController.setSelectedElements(
+            <THElement>[], setState: true);
+        }
+        controller.selectionController.toggleSelectedScrap(row.elementMPID);
+      } else {
+        controller.selectionController.clearSelectedScraps();
+        controller.setActiveScrap(row.elementMPID);
+      }
+      _bringOpenTabToFront();
       return;
     }
-
     final THElement? element = controller.th2File.tryElementByMPID(
-      row.elementMPID,
-    );
-
-    if (element == null) {
+      row.elementMPID);
+    if (element == null) return;
+    if (ctrl || shift) {
+      bool replaceRangeAnchor = ctrl;
+      th2ElementTreeTapTracker.reset();
+      _leaveCreationMode(controller);
+      if (controller.activeScrapID != element.parentMPID) {
+        replaceRangeAnchor = true;
+        _applySingleTap(controller: controller, element: element);
+      } else if (ctrl) {
+        final TH2FileEditSelectionController selection =
+            controller.selectionController;
+        if (selection.mpSelectedElementsLogical.containsKey(element.mpID)) {
+          selection.removeSelectedElementsByMPIDs(<int>[element.mpID]);
+          selection.setSelectionState();
+        } else {
+          selection.addSelectedElement(element, setState: true);
+        }
+      } else {
+        final String? anchorId = th2ElementTreeTapTracker.rangeAnchorRowId;
+        final THScrap scrap = controller.th2File.scrapByMPID(element.parentMPID);
+        final List<int> visible = scrap.childrenMPIDs.where((int id) {
+          final THElement child = controller.th2File.elementByMPID(id);
+          return child is THPoint || child is THLine || child is THArea;
+        }).toList();
+        final int anchorIndex = visible.indexWhere((int id) =>
+          th2ElementTreeRowId(th2FilePath: row.th2FilePath,
+            elementMPID: id) == anchorId);
+        final int end = visible.indexOf(element.mpID);
+        if (anchorIndex < 0 || end < 0) {
+          replaceRangeAnchor = true;
+          _applySingleTap(controller: controller, element: element);
+        } else {
+          final int start = anchorIndex < end ? anchorIndex : end;
+          final int stop = anchorIndex > end ? anchorIndex : end;
+          for (final int id in visible.sublist(start, stop + 1)) {
+            if (!controller.selectionController.mpSelectedElementsLogical
+                .containsKey(id)) {
+              controller.selectionController.addSelectedElement(
+                controller.th2File.elementByMPID(id));
+            }
+          }
+          controller.selectionController.setSelectionState();
+        }
+      }
+      if (replaceRangeAnchor) {
+        th2ElementTreeTapTracker.rangeAnchorRowId = row.rowId;
+      }
+      _bringOpenTabToFront();
       return;
     }
-
+    final bool isSecondTap = th2ElementTreeTapTracker.registerTap(
+      rowId: row.rowId, position: tapPosition);
+    th2ElementTreeTapTracker.rangeAnchorRowId = row.rowId;
     if (isSecondTap) {
       _applyDoubleTapExtras(controller);
     } else {
+      _leaveCreationMode(controller);
       _applySingleTap(controller: controller, element: element);
     }
   }
@@ -324,7 +500,6 @@ class _TH2ElementRow extends StatelessWidget {
     final MPGeneralController generalController =
         mpLocator.mpGeneralController;
 
-    controller.stateController.onButtonPressed(MPButtonType.select);
     controller.setActiveScrapByChildElement(element);
     controller.selectionController.setSelectedElements(<THElement>[
       element,
@@ -347,25 +522,167 @@ class _TH2ElementRow extends StatelessWidget {
     controller.requestZoomToFit(MPZoomToFitType.selection);
   }
 
-  /// Makes the scrap active; an open file's tab is brought to the front.
-  void _onScrapTap() {
-    final TH2FileEditController? controller = _validControllerFor(
-      row.th2FilePath,
-    );
-
-    if (controller == null) {
-      return;
-    }
-
-    controller.setActiveScrap(row.elementMPID);
-
-    final MPGeneralController generalController =
-        mpLocator.mpGeneralController;
-
-    if (generalController.openFileOrder.contains(row.th2FilePath)) {
-      generalController.addFileTab(row.th2FilePath);
+  void _onBeforeOpenMenu() {
+    final TH2FileEditController? controller = _validControllerFor(row.th2FilePath);
+    if (controller == null) return;
+    _leaveCreationMode(controller);
+    if (!row.isScrap) {
+      final THElement? element = controller.th2File.tryElementByMPID(
+        row.elementMPID);
+      if (element == null) return;
+      if (!controller.selectionController.mpSelectedElementsLogical
+          .containsKey(row.elementMPID)) {
+        controller.setActiveScrapByChildElement(element);
+        controller.selectionController.setSelectedElements(
+          <THElement>[element], setState: true);
+      }
     }
   }
+
+  List<int> _menuSelection(TH2FileEditController controller) {
+    if (row.isScrap) {
+      final List<int> selected = controller.selectionController
+          .selectedScrapMPIDsInFileOrder;
+      return selected.contains(row.elementMPID) ? selected
+          : <int>[row.elementMPID];
+    }
+    final THElement? element = controller.th2File.tryElementByMPID(
+      row.elementMPID);
+    if (element == null) return const <int>[];
+    final Set<int> selected = controller.selectionController
+        .mpSelectedElementsLogical.keys.toSet();
+    if (!selected.contains(row.elementMPID)) return <int>[row.elementMPID];
+    final THScrap scrap = controller.th2File.scrapByMPID(element.parentMPID);
+    return scrap.childrenMPIDs.where(selected.contains).toList();
+  }
+
+  List<Widget> _menuItems(BuildContext context) {
+    final TH2FileEditController? controller = _validControllerFor(
+      row.th2FilePath);
+    if (controller == null || controller.th2File.tryElementByMPID(
+        row.elementMPID) == null) {
+      return const <Widget>[];
+    }
+    final AppLocalizations l10n = AppLocalizations.of(context);
+    final List<int> ids = _menuSelection(controller);
+    if (ids.isEmpty) {
+      return const <Widget>[];
+    }
+    final List<Widget> items = <Widget>[];
+    for (final MPDrawingOrderAction action in MPDrawingOrderAction.values) {
+      final MPMoveElementsPreview preview = controller.elementEditController
+          .previewDrawingOrderAction(action, elementMPIDs: ids);
+      final String title = switch (action) {
+        MPDrawingOrderAction.bringForward => l10n.th2ElementTreeBringForward,
+        MPDrawingOrderAction.sendBackward => l10n.th2ElementTreeSendBackward,
+        MPDrawingOrderAction.bringToFront => l10n.th2ElementTreeBringToFront,
+        MPDrawingOrderAction.sendToBack => l10n.th2ElementTreeSendToBack,
+      };
+      items.add(MenuItemButton(
+        key: ValueKey('THProjectTreeRowContextMenu${action.name[0].toUpperCase()}${action.name.substring(1)}|${row.rowId}'),
+        onPressed: preview.noOp || preview.rejection != null
+            ? null : () => _executeOrder(action),
+        leadingIcon: Icon(switch (action) {
+          MPDrawingOrderAction.bringForward => Icons.arrow_downward,
+          MPDrawingOrderAction.sendBackward => Icons.arrow_upward,
+          MPDrawingOrderAction.bringToFront => Icons.flip_to_front,
+          MPDrawingOrderAction.sendToBack => Icons.flip_to_back,
+        }),
+        child: preview.rejection == null ? Text(title)
+          : Column(crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(title),
+                Text(l10n.th2MoveRejectedGeneric,
+                  style: Theme.of(context).textTheme.bodySmall),
+              ])));
+    }
+    if (!row.isScrap) {
+      final THElement element = controller.th2File.elementByMPID(
+        row.elementMPID);
+      final List<Widget> targets = <Widget>[];
+      for (final int scrapID in controller.th2File.childrenMPIDs) {
+        final THElement target = controller.th2File.elementByMPID(scrapID);
+        if (target is! THScrap || scrapID == element.parentMPID) {
+          continue;
+        }
+        final MPHierarchyMoveCheck check = controller.elementEditController
+            .checkMoveElements(elementMPIDs: ids,
+              newParentMPID: scrapID);
+        targets.add(MenuItemButton(
+          key: ValueKey('THProjectTreeRowContextMenuMoveToScrap|${row.rowId}|$scrapID'),
+          onPressed: check.ok ? () => _executeMoveToScrap(scrapID) : null,
+          child: check.ok ? Text(TH2ElementTreeAux.buildLabel(target).plainText)
+            : Column(crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(TH2ElementTreeAux.buildLabel(target).plainText),
+                  Text(TH2ElementTreeAux.moveRejectionMessage(check,
+                    controller.th2File, l10n),
+                    style: Theme.of(context).textTheme.bodySmall),
+                ])));
+      }
+      if (targets.isNotEmpty) {
+        items.add(const Divider());
+        items.add(SubmenuButton(
+          key: ValueKey('THProjectTreeRowContextMenuMoveToScrap|${row.rowId}'),
+          menuChildren: targets,
+          leadingIcon: const Icon(Icons.drive_file_move_outline),
+          child: Text(l10n.th2ElementTreeMoveToScrap)));
+      }
+    }
+    return items;
+  }
+
+  void _selectMovedDrawables(TH2FileEditController controller,
+      List<int> ids, int parentMPID) {
+    if (row.isScrap) return;
+    controller.setActiveScrap(parentMPID);
+    controller.selectionController.setSelectedElements(
+      ids.map(controller.th2File.elementByMPID).toList(), setState: true);
+  }
+
+  void _executeOrder(MPDrawingOrderAction action) {
+    final TH2FileEditController? controller = mpLocator.mpGeneralController
+        .prepareTH2FileForTreeEdit(row.th2FilePath);
+    if (controller == null || controller.th2File.tryElementByMPID(
+        row.elementMPID) == null) {
+      return;
+    }
+    final List<int> ids = _menuSelection(controller);
+    if (ids.isEmpty) return;
+    final THElement element = controller.th2File.elementByMPID(ids.first);
+    final int parentMPID = row.isScrap ? controller.th2File.mpID
+        : element.parentMPID;
+    final MPMoveElementsResult result = switch (action) {
+      MPDrawingOrderAction.bringForward => controller.elementEditController
+          .bringForward(elementMPIDs: ids),
+      MPDrawingOrderAction.sendBackward => controller.elementEditController
+          .sendBackward(elementMPIDs: ids),
+      MPDrawingOrderAction.bringToFront => controller.elementEditController
+          .bringToFront(elementMPIDs: ids),
+      MPDrawingOrderAction.sendToBack => controller.elementEditController
+          .sendToBack(elementMPIDs: ids),
+    };
+    if (result.executed) {
+      _selectMovedDrawables(controller, ids, parentMPID);
+    }
+  }
+
+  void _executeMoveToScrap(int scrapMPID) {
+    final TH2FileEditController? controller = mpLocator.mpGeneralController
+        .prepareTH2FileForTreeEdit(row.th2FilePath);
+    if (controller == null || controller.th2File.tryElementByMPID(
+        row.elementMPID) == null) {
+      return;
+    }
+    final List<int> ids = _menuSelection(controller);
+    if (ids.isEmpty) return;
+    final MPMoveElementsResult result = controller.elementEditController
+        .moveElementsToScrap(elementMPIDs: ids, scrapMPID: scrapMPID);
+    if (result.executed) {
+      _selectMovedDrawables(controller, ids, scrapMPID);
+    }
+  }
+
 }
 
 class _TH2FileStatusRow extends StatelessWidget {

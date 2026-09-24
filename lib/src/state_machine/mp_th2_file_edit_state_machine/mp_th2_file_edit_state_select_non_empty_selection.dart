@@ -490,6 +490,10 @@ class MPTH2FileEditStateSelectNonEmptySelection extends MPTH2FileEditState
 
   @override
   void onKeyDownEvent(KeyDownEvent event) {
+    if (handleDrawingOrderShortcut(event,
+        selectionController.mpSelectedElementsLogical.keys.toList())) {
+      return;
+    }
     if (_handleArrowMoveKey(event.logicalKey)) {
       return;
     }

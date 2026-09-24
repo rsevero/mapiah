@@ -1519,6 +1519,7 @@ abstract class TH2FileEditControllerBase with Store {
 
   @action
   void bumpStructureRevision() {
+    selectionController.pruneSelectedScraps();
     if (!_isLoading) _structureRevision++;
   }
 

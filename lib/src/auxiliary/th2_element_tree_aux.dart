@@ -5,9 +5,28 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/auxiliary/th_project_tree_flatten_aux.dart';
+import 'package:mapiah/src/auxiliary/th2_hierarchy_aux.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+
+final class TH2ElementTreeDragPayload {
+  final String th2FilePath;
+  final TH2FileEditController controller;
+  final List<int> elementMPIDs;
+  final bool isScrap;
+  const TH2ElementTreeDragPayload({required this.th2FilePath,
+    required this.controller, required this.elementMPIDs,
+    required this.isScrap});
+}
+
+final class TH2ElementTreeDropRequest {
+  final int parentMPID;
+  final int? beforeSiblingMPID;
+  const TH2ElementTreeDropRequest({required this.parentMPID,
+    this.beforeSiblingMPID});
+}
 
 /// Labels of one controller's rows, valid for one structure revision and one
 /// locale.
@@ -28,6 +47,80 @@ class _TH2ElementTreeLabelCache {
 /// Only scraps (file children) and their points, lines and areas become rows,
 /// in exact `childrenMPIDs` order. Every other child stays hidden.
 class TH2ElementTreeAux {
+  static TH2ElementTreeDropRequest? dropRequest({
+    required TH2ElementTreeDragPayload payload,
+    required int? targetMPID,
+    required bool upper,
+  }) {
+    final TH2File file = payload.controller.th2File;
+    final Set<int> moving = payload.elementMPIDs.toSet();
+    if (targetMPID != null && moving.contains(targetMPID)) return null;
+    final THElement? target = targetMPID == null ? null
+        : file.tryElementByMPID(targetMPID);
+    if (targetMPID != null && target == null) return null;
+    int? firstMovableAfter(List<int> children, int start) {
+      for (int i = start; i < children.length; i++) {
+        final int id = children[i];
+        if (!moving.contains(id) && isMovable(file.elementByMPID(id))) {
+          return id;
+        }
+      }
+      return null;
+    }
+    if (target == null) {
+      return TH2ElementTreeDropRequest(parentMPID: file.mpID,
+        beforeSiblingMPID: upper
+            ? firstMovableAfter(file.childrenMPIDs, 0) : null);
+    }
+    if (target is THScrap && !payload.isScrap) {
+      final int? first = firstMovableAfter(target.childrenMPIDs, 0);
+      final int end = target.childrenMPIDs.firstWhere((int id) =>
+        file.elementByMPID(id).elementType == THElementType.endscrap);
+      return TH2ElementTreeDropRequest(parentMPID: target.mpID,
+        beforeSiblingMPID: upper ? first ?? end : end);
+    }
+    final int parentID = target is THScrap ? file.mpID : target.parentMPID;
+    final List<int> siblings = target is THScrap
+        ? file.childrenMPIDs : file.scrapByMPID(parentID).childrenMPIDs;
+    final int? next = firstMovableAfter(siblings,
+      siblings.indexOf(target.mpID) + 1);
+    final int? end = target is THScrap ? null : siblings.firstWhere(
+      (int id) => file.elementByMPID(id).elementType ==
+          THElementType.endscrap);
+    return TH2ElementTreeDropRequest(parentMPID: parentID,
+      beforeSiblingMPID: upper ? target.mpID : next ?? end);
+  }
+
+  static bool isMovable(THElement element) =>
+      TH2HierarchyAux.isMovable(element);
+
+  static String moveRejectionMessage(MPHierarchyMoveCheck check,
+      TH2File th2File, AppLocalizations appLocalizations) {
+    final String line = check.lineMPID == null ? '' : buildLabel(
+      th2File.elementByMPID(check.lineMPID!)).plainText;
+    final String area = check.areaMPID == null ? '' : buildLabel(
+      th2File.elementByMPID(check.areaMPID!)).plainText;
+    return switch (check.rejection) {
+      MPHierarchyMoveRejection.crossFile =>
+        appLocalizations.th2MoveRejectedCrossFile,
+      MPHierarchyMoveRejection.scrapParentMustBeFile =>
+        appLocalizations.th2MoveRejectedScrapPlacement,
+      MPHierarchyMoveRejection.drawableParentMustBeScrap =>
+        appLocalizations.th2MoveRejectedDrawablePlacement,
+      MPHierarchyMoveRejection.mixedScrapsAndDrawables =>
+        appLocalizations.th2MoveRejectedMixedScrapsAndDrawables,
+      MPHierarchyMoveRejection.lineBorderShared =>
+        appLocalizations.th2MoveRejectedLineBorderShared(line, area),
+      MPHierarchyMoveRejection.areaBorderShared =>
+        appLocalizations.th2MoveRejectedAreaBorderShared(line, area),
+      MPHierarchyMoveRejection.areaBorderWrongScrap =>
+        appLocalizations.th2MoveRejectedAreaBorderWrongScrap(line),
+      MPHierarchyMoveRejection.areaBorderNotLine =>
+        appLocalizations.th2MoveRejectedAreaBorderNotLine(area),
+      _ => appLocalizations.th2MoveRejectedGeneric,
+    };
+  }
+
   static final Expando<_TH2ElementTreeLabelCache> _labelCaches =
       Expando<_TH2ElementTreeLabelCache>('TH2ElementTreeLabelCache');
 
