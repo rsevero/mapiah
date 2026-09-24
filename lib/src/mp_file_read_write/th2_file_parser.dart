@@ -6,6 +6,7 @@ import 'package:charset/charset.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
+import 'package:mapiah/src/auxiliary/th_id_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_element_edit_controller.dart';
@@ -3212,6 +3213,45 @@ class TH2FileParser {
     );
   }
 
+  /// Makes a border reference name its line's stored id, so every later
+  /// lookup can compare them directly. Tried in order:
+  ///
+  /// * the reference already is the id of a line;
+  /// * a Therion `name@survey` reference: Therion only accepts a border line
+  ///   of the area's own scrap, so inside one file it can only mean the line
+  ///   `name`. The original text is kept for writing;
+  /// * the reference spells the invalid id of a line that Mapiah rewrote into
+  ///   a valid ext_keyword (for example `-id b@1`, stored as `b_1`). The
+  ///   reference is rewritten the same way, also when the file is written.
+  void _resolveBorderReference(THAreaBorderTHID border) {
+    final String reference = border.thID;
+
+    if (_isLineTHID(reference)) {
+      return;
+    }
+
+    final String objectName = THIDAux.objectNamePart(reference);
+
+    if ((objectName != reference) && _isLineTHID(objectName)) {
+      _parsedTH2File.substituteElement(border.copyWith(thID: objectName));
+
+      return;
+    }
+
+    final String repairedReference = THIDAux.toExtKeyword(reference);
+
+    if ((repairedReference != reference) && _isLineTHID(repairedReference)) {
+      _parsedTH2File.substituteElement(
+        border.copyWith(thID: repairedReference, originalLineInTH2File: ''),
+      );
+    }
+  }
+
+  bool _isLineTHID(String thID) {
+    return _parsedTH2File.hasElementByTHID(thID) &&
+        (_parsedTH2File.elementByTHID(thID) is THLine);
+  }
+
   void _areasCleanUp(THIsParentMixin parent) {
     final List<int> childrenMPIDs = parent.childrenMPIDs.toList();
 
@@ -3228,19 +3268,28 @@ class TH2FileParser {
             continue;
           }
 
-          if (!_parsedTH2File.hasElementByTHID(border.thID)) {
-            _reportDanglingRewrittenBorder(border.mpID);
-            _parsedTH2File.removeElement(border);
+          _resolveBorderReference(border);
+
+          final THAreaBorderTHID resolvedBorder =
+              _parsedTH2File.elementByMPID(border.mpID) as THAreaBorderTHID;
+
+          if (!_parsedTH2File.hasElementByTHID(resolvedBorder.thID)) {
+            _reportDanglingRewrittenBorder(resolvedBorder.mpID);
+            _parsedTH2File.removeElement(resolvedBorder);
 
             continue;
           }
 
-          final THElement line = _parsedTH2File.elementByTHID(border.thID);
+          final THElement line = _parsedTH2File.elementByTHID(
+            resolvedBorder.thID,
+          );
 
           if (line is! THLine) {
-            _parsedTH2File.removeElement(border);
+            _parsedTH2File.removeElement(resolvedBorder);
           }
         }
+
+        child.clearAreaXLineInfo();
 
         if (child.getAreaBorderTHIDMPIDs(_parsedTH2File).isEmpty) {
           _parsedTH2File.removeElement(child);

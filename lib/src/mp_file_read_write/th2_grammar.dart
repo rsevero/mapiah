@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:mapiah/src/auxiliary/th_id_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/mp_file_read_write/grammar_utils.dart';
 import 'package:petitparser/petitparser.dart';
@@ -290,7 +291,8 @@ class TH2Grammar extends GrammarDefinition {
       (whitespace().plus() & char('-') & pattern('A-Za-z').repeat(2)).and();
 
   /// ID value that may contain spaces until the next option marker (" -XX")
-  /// or end-of-line. Keeps interior spaces, trims the ends.
+  /// or end-of-line. Characters a Therion ext_keyword does not accept (spaces
+  /// included) are replaced by `_`.
   Parser idFreeString() => _idFreeStringTemplate().map((value) => value);
 
   Parser _idFreeStringTemplate() {
@@ -306,10 +308,7 @@ class TH2Grammar extends GrammarDefinition {
           message: 'Value cannot be empty or start with - or "',
         )
         .map((value) {
-          final String normalized = value.replaceAll(
-            RegExp(r'[^A-Za-z0-9/-]'),
-            '_',
-          );
+          final String normalized = THIDAux.toExtKeyword(value);
           final bool wasChanged = normalized != value;
 
           if (wasChanged) {
@@ -321,7 +320,8 @@ class TH2Grammar extends GrammarDefinition {
   }
 
   /// Reference value that may contain spaces until the next option marker
-  /// (" -XX") or end-of-line. Keeps interior spaces, trims the ends.
+  /// (" -XX") or end-of-line. Characters invalid in a Therion `name@survey`
+  /// reference (spaces included) are replaced by `_`.
   Parser referenceFreeString() {
     return any()
         .starLazy(optionMarkerLookahead | endWithTrailingSpaces)
@@ -336,7 +336,7 @@ class TH2Grammar extends GrammarDefinition {
         )
         .map((value) {
           final String normalized = value.replaceAll(
-            RegExp(r'[^A-Za-z0-9./@-]'),
+            RegExp(r"[^A-Za-z0-9_./@'*+,-]"),
             '_',
           );
           final bool wasChanged = normalized != value;

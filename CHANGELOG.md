@@ -50,6 +50,11 @@
     * An unknown option line inside an area (for example `weirdareaopt 5` or `clip middle`) is reported instead of being dropped silently.
     * A malformed `##XTHERION## xth_me_image_insert` line is reported instead of making the load fail.
     * Problems are listed in line order.
+  * Areas whose border lines use unusual ids are no longer deleted silently when a `.th2` file is opened, and valid ids are no longer changed (#32):
+    * `-id` values now follow Therion's ext_keyword rule. Valid ids such as `p.1`, `a+b` or `o'neil` are kept as written; before, every character other than letters, digits, `/` and `-` became `_` (so `p.1` was saved as `p_1`).
+    * A border reference written as `line@survey` now finds the line `line`, as in Therion, and is saved as written.
+    * When Mapiah has to repair an invalid line id (for example `-id b@1` becomes `b_1`), border references that spell the same id are repaired the same way. Before, the two sides were repaired differently, the reference no longer matched, and the area was removed.
+    * Added parser tests (`test/t3946`).
   * Save As is disabled for broken `.th2` files in the toolbar and the overflow menu, as the broken-file panel already promised.
   * Reloading a broken `.th2` file from its tab after fixing it on disk now shows the canvas. Before, the tab kept using the discarded controller and still showed the broken-file panel.
   * Fixed several problems in the element move commands added for #32 (Phase 2), which no user action reaches yet:

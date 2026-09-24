@@ -37,14 +37,14 @@ const String _validContents =
     '    10 20\n'
     '    30 40\n'
     '  endline\n'
-    '  line border -id b-1 -close on\n'
+    '  line border -id [b@1] -close on\n'
     '    0 0\n'
     '    10 0\n'
     '    10 10\n'
     '    0 0\n'
     '  endline\n'
     '  area water\n'
-    '    b-1\n'
+    '    [b@1]\n'
     '  endarea\n'
     '  point 2 2 label -id área@ç\n'
     'endscrap\n'
@@ -222,7 +222,9 @@ void main() {
       );
       expect(rows[2].label.primaryText, contains(':'));
       expect(rows[2].label.thID, 'w12');
-      expect(rows[3].label.thID, 'b-1');
+      expect(rows[1].label.thID, 'p.1');
+      expect(rows[3].label.thID, '_b_1_');
+      expect(rows[4].elementType, THElementType.area);
       expect(rows[4].label.thID, isNull);
       expect(rows[7].label.thID, isNull);
       expect(rows[7].label.plainText, rows[7].label.primaryText);
