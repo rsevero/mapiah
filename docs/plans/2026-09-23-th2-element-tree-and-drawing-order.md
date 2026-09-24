@@ -166,27 +166,34 @@ final class TH2FileStatusTreeRow extends THProjectTreeVisibleRow {
 
 ### 4.3 Drop semantics (valid files only)
 
-Every drop becomes one request: **move element E to parent P, just before sibling S (or at the end of P)**. The drop zone decides it:
+Every drop becomes one request: **move element E to parent P, just before sibling S (or at the end of P)**. The drop zone decides it.
 
-| Hover zone on target row T | Resulting request |
-|---|---|
-| upper third of T | before T, under T's parent |
-| lower third of T (T collapsed, or not a scrap) | after T, under T's parent |
-| middle of a **scrap** row | at the **end** of that scrap |
-| lower third of an **expanded** scrap row | at the **start** of that scrap |
-| middle of the **file** row | at the end of the file |
+A move never mixes scraps with points, lines or areas: such a selection is rejected for dragging and for the order actions. Every row has two zones, its upper and lower half; no row has three. On a scrap row, what the halves mean depends on what is dragged. Points, lines and areas can only go into a scrap, so the halves are its start and end. Scraps cannot go into a scrap, so the halves are before and after it. On the file row, "before" or "after" would mean leaving the file, which is not allowed, so the halves are the start and end of the file.
+
+| Hover zone on target row T | Dragging points, lines or areas | Dragging scraps |
+|---|---|---|
+| upper half of a **point, line or area** row | before T, under T's scrap | rejected |
+| lower half of a **point, line or area** row | after T, under T's scrap | rejected |
+| upper half of a **scrap** row | at the **start** of that scrap | before T, under the file |
+| lower half of a **scrap** row | at the **end** of that scrap | after T, under the file |
+| upper half of the **file** row | rejected | at the **start** of the file (before its first scrap) |
+| lower half of the **file** row | rejected | at the **end** of the file |
+
+"After T" means before the next movable sibling of T that is not being dragged, or at the end of the parent when there is none, so hidden children after T stay in place (§4.4). The [Phase 4 plan](2026-09-23-th2-element-tree-and-drawing-order-phase4-drag-drop-and-menu.md) §5.2 has the full translation into `validateMove` arguments.
 
 Validation happens in one pure function, `TH2HierarchyAux.validateMove(th2File, elementMPIDs, newParentMPID, beforeSiblingMPID) → MPHierarchyMoveCheck` (`ok` / `rejected(reasonKey)`). It is used both while hovering, for the indicator, and in the command, as a guard. Because the file starts valid and every move lands in a valid position, the file stays valid:
 
+- A move of both scraps and points, lines or areas is rejected (`mixedScrapsAndDrawables`, Phase 4 plan §3.1).
 - `scrap` → parent must be the file (`newParentMPID < 0`).
 - `point`/`line`/`area` → parent must be a `THScrap`.
 - An element cannot be dropped onto itself or into its own subtree.
 - A standalone dropped line that borders an area is rejected when the drop changes its scrap (§3.1). The same line may be reordered within its current scrap.
 - An area moved to another scrap is rejected when one of its border lines also borders an area that is not moving with it (§3.1).
 - `beforeSiblingMPID`, when given, must be a child of the target parent and not one of the moving elements. The scrap's `THEndscrap` is accepted and means "end of scrap".
+- Phase 4 adds an optional `afterSiblingMPID`, exclusive with `beforeSiblingMPID`, with the same checks except that `THEndscrap` is not accepted. Bring forward on several runs uses it to anchor each run on the sibling it steps over (Phase 4 plan §3.3).
 - Moving to the same position is a no-op and creates no command.
 
-Feedback: a valid drop shows the usual insertion line (as in `mp_available_scraps_widget.dart`). An invalid drop shows a "not allowed" cursor and a tooltip with the localized reason. Invalid drops never create a command.
+Feedback: a valid drop shows the usual insertion line (as in `mp_available_scraps_widget.dart`), where the elements will land. A drop at the start or end of a scrap or of the file also outlines the hovered row, with a start or end icon, since the line can be off screen. The start line goes below the scrap or file row; the end line goes below the scrap's or the file's last visible row. After a scrap, the line goes below the scrap's last visible row, at scrap-row indent. An invalid drop outlines the row under the pointer in the error color, and the drag feedback widget shows a block icon and the localized reason. The reason in the feedback widget is the main signal. A "not allowed" cursor is also set, but only as a best effort, because desktop platforms do not always update the cursor while a mouse button is held. No tooltip is used, because tooltips do not appear while a button is held. Invalid drops never create a command. Details are in the [Phase 4 plan](2026-09-23-th2-element-tree-and-drawing-order-phase4-drag-drop-and-menu.md) §5.4.
 
 ### 4.4 Non-tree children (comments, empty lines, settings)
 
@@ -194,7 +201,7 @@ Hidden children stay where they are. The move primitive resolves "before sibling
 
 ### 4.5 Multi-selection
 
-Rows support `Ctrl`/`Shift` multi-select, which mirrors the canvas selection (§4.6). Dragging a multi-selection moves all selected rows to the drop point in their current relative order, as **one** command. When the selection comes from several scraps, "current relative order" is file order: scraps in file order, then children in each scrap's order. The drop is rejected if any item fails validation.
+Rows support `Ctrl`/`Shift` multi-select, which mirrors the canvas selection (§4.6). Scrap rows support `Ctrl`+click only. It selects scraps in a separate per-file scrap selection, which the canvas never sees and which is never combined with a point, line or area selection ([Phase 4 plan](2026-09-23-th2-element-tree-and-drawing-order-phase4-drag-drop-and-menu.md) §3.6). Dragging a multi-selection moves all selected rows to the drop point in their current relative order, as **one** command. When the selection comes from several scraps, "current relative order" is file order: scraps in file order, then children in each scrap's order. The drop is rejected if any item fails validation.
 
 ### 4.6 Tree ↔ canvas selection sync
 
