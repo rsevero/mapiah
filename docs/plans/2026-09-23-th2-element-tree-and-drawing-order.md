@@ -241,7 +241,7 @@ Every `_addError(...)` call site counts, with no allow-list. If one of them late
 - **Readable messages.** Today's error strings are internal (`'petitparser returned a "Failure"' at '_injectContents()' …`) and have no line number. Each problem becomes a `TH2FileProblem(kind, lineNumber, sourceLine, detail)`. The panel shows the line number, the source line as written, and a localized one-line explanation per kind. The internal text goes in an expandable "Details" section, for bug reports.
 - **No canvas setup.** `_postParseInitialize` still runs `_initializeReactions()`, `setFilename(...)` and clears `_isLoading` for a broken file. It skips the canvas-only part of `_finalFilePreparations` (active scrap, snap targets, selectable elements, used types). The split keeps `createFromNewTH2File` (`th2_file_edit_controller.dart:630-638`) working unchanged, since a new file is always valid.
 - **Tree.** Badge and status row only (§4.2). No element rows, no context-menu actions except **Reload**.
-- **Run Therion.** The run dialog lists open broken files as a warning before running. Therion would fail on them anyway.
+- **Run Therion.** The run dialog lists open broken files as a warning before running. Therion would fail on them anyway. Phase 1 did not implement this; Phase 8 does.
 
 **Why the canvas must not see a broken file.** Several canvas paths assume that a PLA's parent is a scrap: active scrap, selection, snapping and the non-selected-elements painter. `addElementToParent`'s default insertion assumes the closing `end*` exists (§2.2). The parser has also dropped or misplaced lines while reading it (§2.3), so any save would lose data. Keeping broken files out of the editor entirely avoids both problems.
 
@@ -365,7 +365,7 @@ Each phase ends with:
 - Parser changes from §6.
 - `TH2FileProblem` type (§4.7), line tracking in the parser, `isBroken`/`problems` on the controller and the load result, and the split of `_finalFilePreparations` into the always-run part and the canvas-only part (§4.7).
 - `TH2BrokenFileBodyWidget` and the switch in `TH2FileEditBodyWidget`; no dirty state, Save/Save As/Save All skip or disable broken files; `MPGeneralController.reloadTH2File` and tab rebinding.
-- Run-Therion warning for open broken files.
+- Run-Therion warning for open broken files. Not implemented in Phase 1; moved to Phase 8.
 - Tests:
   - `t3939_th2_file_parser_hierarchy_violations_test.dart`. Cases, each asserting the violation kinds and line numbers, no exception, and that the load is reported broken:
     - PLA at file level;
@@ -533,7 +533,7 @@ Phase 4 lets users move scraps, points, lines and areas in the project sidebar. 
 
 Phase 4 is finished and its plan is left as written. Where Phase 7 changes what the Phase 4 plan describes (test numbers, the source of leftover scraps in the canvas selection), Phase 7 plan §9 says so.
 
-### Phase 8: Type preview icons on element rows
+### Phase 8: Type preview icons on element rows, and the Run Therion broken-file warning
 
 Each point, line and area row in the sidebar tree starts with a small icon that previews how that element's type (and subtype) is drawn on the canvas. It replaces the generic element-kind icon that Phase 3 uses for these rows. Scrap rows keep their Phase 3 icon, and file, status and project rows are unchanged.
 
@@ -562,6 +562,14 @@ Each point, line and area row in the sidebar tree starts with a small icon that 
 
 - **Localization:** no new strings, since icons are decorative and excluded from semantics.
 - **Help pages (EN/PT):** Phase 6 comes earlier, so this phase updates the "Drawing order and element tree" help section itself, to mention the type preview icons.
+**Run Therion broken-file warning (moved from Phase 1).** §4.7 asks the run dialog to warn about broken files, but Phase 1 never implemented it, and it is not localization, so Phase 6 left it out. It is done here:
+
+- `MPGeneralController` gains a read-only getter listing the filenames of the loaded TH2 controllers (with or without a tab) whose `isBroken` is true, in a stable (sorted) order. Files that were never loaded are not listed, since no project-wide pre-scan is done (§4.2); files whose load threw (`loadError`) are not broken and are not listed.
+- `MPRunTherionDialogWidget` reads that list when it opens and, when it is not empty, shows a warning above the output: a localized sentence saying these `.th2` files are broken and Therion will probably fail on them, followed by each path. The run still starts as today; the warning never blocks, cancels or delays it. Each path is plain text; clicking it does nothing.
+- EN/PT `.arb` entries for the warning (with a count placeholder, plural-aware), with EN descriptions naming `MPRunTherionDialogWidget`. Run `flutter gen-l10n`.
+- Help pages (EN/PT): `assets/help/{en,pt}/run_therion_help.md` mentions the warning; the "Broken files" section of the editor help (Phase 6) mentions it too.
+- Tests, added to `t3610_ui_therion_run_dialog_test.dart` with an injected runner: no warning without broken files; one loaded broken file (tab-less) is listed and the run still starts; a valid file and a load-error file are not listed.
+
 - CHANGELOG entry for Phase 8, referencing #32.
 - Tests (`t3952_th2_element_type_icon_test.dart`):
   - golden tests, following the existing Therion symbol golden tests (`t3764`–`t3766`), in light and dark mode, for:
@@ -589,7 +597,7 @@ Each point, line and area row in the sidebar tree starts with a small icon that 
 | Commands | new `lib/src/commands/mp_move_elements_command.dart`, `mp_command.dart`, `factories/mp_command_factory.dart`, `types/mp_command_type.dart`, `types/mp_command_description_type.dart` |
 | Controllers | `th2_file_edit_element_edit_controller.dart` (Phase 5: revision bump for `station`/`text` option edits), `th2_file_edit_controller.dart` (`_structureRevision`, `isBroken`, `problems`, `_finalFilePreparations` split, `dispose()`), `mp_general_controller.dart` (tab-less cleanup, open-on-edit helper, `reloadTH2File`), `th_project_controller.dart` (cleanup call, skip broken files on save) |
 | Aux | new `lib/src/auxiliary/th2_hierarchy_aux.dart`, new `th2_element_tree_aux.dart` (Phase 5: label details), `th_project_tree_flatten_aux.dart`, `mp_text_to_user.dart`, `mp_label_text_aux.dart` (reused as is in Phase 5) |
-| Widgets / pages | `th_project_tree_widget.dart`, `th_project_tree_node_widget.dart`, new `th2_element_tree_row_widget.dart`, new `th2_element_type_icon_widget.dart` (Phase 8), new `th2_broken_file_body_widget.dart`, `th2_file_edit_body_widget.dart`, `th2_file_tabs_page.dart` (Save As disabled for broken files), `mp_therion_run_dialog_widget.dart` (broken-file warning) |
+| Widgets / pages | `th_project_tree_widget.dart`, `th_project_tree_node_widget.dart`, new `th2_element_tree_row_widget.dart`, new `th2_element_type_icon_widget.dart` (Phase 8), new `th2_broken_file_body_widget.dart`, `th2_file_edit_body_widget.dart`, `th2_file_tabs_page.dart` (Save As disabled for broken files), `mp_therion_run_dialog_widget.dart` (Phase 8: broken-file warning) |
 | Constants | `mp_constants.dart` (drag hover delay, drop-zone fractions; Phase 8: type-icon sizes, preview symbol scale, line thickness, point radius and cache limit) |
 | Painters | Phase 8: `lib/src/painters/th_line_painter.dart` (path-drawing core moved into a static helper with explicit symbol unit and thickness), new `lib/src/painters/th2_element_type_icon_painter.dart` |
 | l10n | `lib/l10n/intl_en.arb`, `intl_pt.arb`, updated in each phase from Phase 3 on for that phase's strings, and in Phase 6 for the Phase 1 strings |
