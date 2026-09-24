@@ -182,7 +182,7 @@ New file `test/t3951_th2_element_tree_label_details_test.dart`. Fixtures are sma
 - Setting, changing and removing `-name` on a station, and `-text` on a label or remark, through `MPSetOptionToElementCommand` and `MPRemoveOptionFromElementCommand`, bumps `structureRevision` and updates the row text.
 - Undo and redo of each of those restore the previous row text.
 - The same edit wrapped in `MPMultipleElementsCommand` updates every affected row.
-- Changing a point's type from `station` to `label` and back through the type-edit command switches the detail source. The type edit keeps every option, so the fixture point has both `-name` and `-text`.
+- Changing a point's type from `station` to `label` and back through the type-edit command switches the detail source. The type edit keeps every option, so the fixture point has both `-name` and `-text`. The test calls `MPEditPointTypeCommand` directly: changing the type to `station` from the UI (`th2_file_edit_user_interaction_controller.dart:1300-1330`) also assigns a new station name through `getNextStationNameOptions`, which would replace the fixture's `-name`.
 
 ### Filtering
 

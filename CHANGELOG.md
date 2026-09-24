@@ -65,6 +65,7 @@
     * "Bring forward" now works on the next-to-last element, "Bring to front" and "Send to back" were swapped, and they report a no-op at the first or last position instead of a rejection.
     * A selected element that leaves the active scrap is deselected, the selection of a moved element stays current, and station names are updated when a station moves to another scrap.
 * Infrastructure maintenance:
+  * Clarified the Phase 5 TH2 element-tree plan (#32) after validating it against the code: the test that switches a point between `station` and `label` calls `MPEditPointTypeCommand` directly, because changing the type to `station` from the UI also assigns a new station name.
   * Added a Phase 7 to the TH2 element-tree plan (#32): decide whether the canvas's "Change active scrap" button and scrap dialog can be removed completely, now that scraps, points, lines and areas can be moved in the project sidebar.
     * It compares each dialog feature with the tree. Choosing the active scrap and reordering scraps are covered. Show/hide, copy, cut, duplicate, delete and scrap options are not.
     * It checks whether every open `.th2` tab has a tree row, lists the code, strings, tests and help that removal would touch, and ends with a decision and, if the dialog goes, a follow-up plan.
