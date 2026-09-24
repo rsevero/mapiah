@@ -47,7 +47,19 @@ class TH2FileWidget extends StatelessWidget {
           Size(constraints.maxWidth, constraints.maxHeight),
         );
 
-        if (th2FileEditController.canvasScaleTranslationUndefined) {
+        final MPZoomToFitType? pendingZoomType = th2FileEditController
+            .takePendingZoomToFitType();
+        final bool canApplyPendingZoom =
+            (pendingZoomType != null) &&
+            ((pendingZoomType != MPZoomToFitType.selection) ||
+                th2FileEditController
+                    .selectionController
+                    .mpSelectedElementsLogical
+                    .isNotEmpty);
+
+        if (canApplyPendingZoom) {
+          th2FileEditController.zoomToFit(zoomFitToType: pendingZoomType);
+        } else if (th2FileEditController.canvasScaleTranslationUndefined) {
           th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
         }
 

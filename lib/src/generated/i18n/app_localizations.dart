@@ -5727,6 +5727,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get projectSearchReplaceCompleteCloseButton;
+
+  /// Status row shown below a .th2 file in the project tree while it loads. Used on: TH2ElementTreeRowWidget._statusText
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get th2ElementTreeLoading;
+
+  /// Status row shown below a .th2 file in the project tree when loading it failed unexpectedly. Used on: TH2ElementTreeRowWidget._statusText
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load this file'**
+  String get th2ElementTreeLoadError;
+
+  /// Status row shown below a broken .th2 file in the project tree. Used on: TH2ElementTreeRowWidget._statusText
+  ///
+  /// In en, this message translates to:
+  /// **'Broken file: fix it outside Mapiah and reload'**
+  String get th2ElementTreeBrokenFile;
+
+  /// First line of the tooltip of the broken badge on a .th2 file row. Used on: THProjectTreeNodeWidget._brokenBadgeTooltip
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {1 problem} other {{count} problems}}'**
+  String th2ElementTreeBrokenBadgeTooltip(int count);
+
+  /// One problem line in the broken badge tooltip of a .th2 file row. Used on: THProjectTreeNodeWidget._brokenBadgeTooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Line {lineNumber}: {detail}'**
+  String th2ElementTreeProblemLine(int lineNumber, String detail);
+
+  /// Last line of the broken badge tooltip when not every problem is listed. Used on: THProjectTreeNodeWidget._brokenBadgeTooltip
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {…and 1 more} other {…and {count} more}}'**
+  String th2ElementTreeMoreProblems(int count);
+
+  /// Context menu entry that reloads a broken or failed .th2 file from disk. Used on: THProjectTreeRowContextMenuWidget.reloadMenuItem
+  ///
+  /// In en, this message translates to:
+  /// **'Reload'**
+  String get th2ElementTreeReload;
+
+  /// Tooltip and semantics label of the dot on a collapsed scrap row that contains selected elements. Used on: TH2ElementTreeRowWidget._buildContainsSelectionDot
+  ///
+  /// In en, this message translates to:
+  /// **'Contains selected elements'**
+  String get th2ElementTreeScrapContainsSelection;
+
+  /// Tooltip of the project tree header explaining the drawing order of .th2 element rows. Used on: THProjectTreeWidget._buildHeader
+  ///
+  /// In en, this message translates to:
+  /// **'Rows are in file order: the top row is drawn first (bottom of the stack) and the last row is drawn last (on top).'**
+  String get th2ElementTreeDrawingOrderTooltip;
 }
 
 class _AppLocalizationsDelegate

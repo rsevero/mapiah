@@ -204,11 +204,110 @@ void main() {
       expect(controller.isExpanded(surveyWithTH2.id), isTrue);
       expect(controller.isExpanded(siblingBranch.id), isTrue);
       expect(controller.isExpanded(th2Node.id), isFalse);
-      expect(controller.isExpanded(siblingChild.id), isFalse);
+      expect(controller.isExpanded(siblingChild.id), isTrue);
 
       projectController.projectRootNode = null;
 
       expect(controller.expandedNodeIds, isEmpty);
+    });
+
+    test('uses the shallowest th2 depth, not the first one in walk order', () {
+      final THProjectController projectController = THProjectController();
+      final THMissingFileNode config = buildFileNode(
+        id: 'file:/tmp/main.thconfig',
+        label: 'main.thconfig',
+        absolutePath: '/tmp/main.thconfig',
+      );
+      final THMissingFileNode cave = buildFileNode(
+        id: 'file:/tmp/cave.th',
+        label: 'cave.th',
+        absolutePath: '/tmp/cave.th',
+      );
+      final THMissingFileNode north = buildFileNode(
+        id: 'file:/tmp/north.th',
+        label: 'north.th',
+        absolutePath: '/tmp/north.th',
+      );
+      final TH2FileNode northTH2 = buildTH2FileNode(
+        id: 'file:/tmp/north.th2',
+        label: 'north.th2',
+        absolutePath: '/tmp/north.th2',
+      );
+      final TH2FileNode caveTH2 = buildTH2FileNode(
+        id: 'file:/tmp/cave.th2',
+        label: 'cave.th2',
+        absolutePath: '/tmp/cave.th2',
+      );
+
+      north.addChild(northTH2);
+      cave.addChild(north);
+      cave.addChild(caveTH2);
+      config.addChild(cave);
+      projectController.projectRootNode = config;
+
+      final THProjectTreeUIController controller = THProjectTreeUIController(
+        projectController: projectController,
+      );
+
+      addTearDown(controller.dispose);
+
+      expect(controller.isExpanded(config.id), isTrue);
+      expect(controller.isExpanded(cave.id), isTrue);
+      expect(controller.isExpanded(north.id), isTrue);
+      expect(controller.isExpanded(northTH2.id), isFalse);
+      expect(controller.isExpanded(caveTH2.id), isFalse);
+    });
+
+    test('never seeds a th2 file id, whatever the children order', () {
+      for (final bool th2First in <bool>[true, false]) {
+        final THProjectController projectController = THProjectController();
+        final THMissingFileNode root = buildFileNode(
+          id: 'file:/tmp/root.th',
+          label: 'root.th',
+          absolutePath: '/tmp/root.th',
+        );
+        final TH2FileNode shallowTH2 = buildTH2FileNode(
+          id: 'file:/tmp/shallow.th2',
+          label: 'shallow.th2',
+          absolutePath: '/tmp/shallow.th2',
+        );
+        final THMissingFileNode branch = buildFileNode(
+          id: 'file:/tmp/branch.th',
+          label: 'branch.th',
+          absolutePath: '/tmp/branch.th',
+        );
+        final TH2FileNode deepTH2 = buildTH2FileNode(
+          id: 'file:/tmp/deep.th2',
+          label: 'deep.th2',
+          absolutePath: '/tmp/deep.th2',
+        );
+        final THMissingFileNode deepBranch = buildFileNode(
+          id: 'file:/tmp/deep_branch.th',
+          label: 'deep_branch.th',
+          absolutePath: '/tmp/deep_branch.th',
+        );
+
+        branch.addChild(deepTH2);
+        branch.addChild(deepBranch);
+
+        if (th2First) {
+          root.addChild(shallowTH2);
+          root.addChild(branch);
+        } else {
+          root.addChild(branch);
+          root.addChild(shallowTH2);
+        }
+
+        projectController.projectRootNode = root;
+
+        final THProjectTreeUIController controller =
+            THProjectTreeUIController(projectController: projectController);
+
+        addTearDown(controller.dispose);
+
+        expect(controller.expandedNodeIds, <String>{root.id, branch.id});
+        expect(controller.isExpanded(deepBranch.id), isFalse);
+      }
     });
 
     test('expands the whole tree when the project has no th2 file', () {

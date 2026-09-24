@@ -167,9 +167,11 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
       );
     }
 
-    widget.onLoadFailed();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      /// Registry changes must not happen during a build, and the failed
+      /// load's cleanup must run even when this body is already unmounted.
+      widget.onLoadFailed();
+
       if (!mounted) {
         return;
       }

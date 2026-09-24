@@ -27,6 +27,28 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
     });
   }
 
+  late final _$collapsedTH2ScrapIdsAtom = Atom(
+    name: 'THProjectTreeUIControllerBase.collapsedTH2ScrapIds',
+    context: context,
+  );
+
+  @override
+  ObservableSet<String> get collapsedTH2ScrapIds {
+    _$collapsedTH2ScrapIdsAtom.reportRead();
+    return super.collapsedTH2ScrapIds;
+  }
+
+  @override
+  set collapsedTH2ScrapIds(ObservableSet<String> value) {
+    _$collapsedTH2ScrapIdsAtom.reportWrite(
+      value,
+      super.collapsedTH2ScrapIds,
+      () {
+        super.collapsedTH2ScrapIds = value;
+      },
+    );
+  }
+
   late final _$filterTextAtom = Atom(
     name: 'THProjectTreeUIControllerBase.filterText',
     context: context,
@@ -160,6 +182,19 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
   }
 
   @override
+  void toggleTH2ScrapCollapsed(String scrapRowId) {
+    final _$actionInfo = _$THProjectTreeUIControllerBaseActionController
+        .startAction(
+          name: 'THProjectTreeUIControllerBase.toggleTH2ScrapCollapsed',
+        );
+    try {
+      return super.toggleTH2ScrapCollapsed(scrapRowId);
+    } finally {
+      _$THProjectTreeUIControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void expandAncestorsOf(THProjectNode node) {
     final _$actionInfo = _$THProjectTreeUIControllerBaseActionController
         .startAction(name: 'THProjectTreeUIControllerBase.expandAncestorsOf');
@@ -242,6 +277,7 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
   String toString() {
     return '''
 expandedNodeIds: ${expandedNodeIds},
+collapsedTH2ScrapIds: ${collapsedTH2ScrapIds},
 filterText: ${filterText},
 isSidebarCollapsed: ${isSidebarCollapsed},
 sidebarMode: ${sidebarMode},

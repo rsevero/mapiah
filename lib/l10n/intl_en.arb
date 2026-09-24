@@ -4824,5 +4824,68 @@
   "@projectSearchReplaceCompleteCloseButton": {
     "description": "Close button of the Replace All completion dialog. Used on: THProjectSearchWidget",
     "type": "text"
+  },
+  "th2ElementTreeLoading": "Loading…",
+  "@th2ElementTreeLoading": {
+    "description": "Status row shown below a .th2 file in the project tree while it loads. Used on: TH2ElementTreeRowWidget._statusText",
+    "type": "text"
+  },
+  "th2ElementTreeLoadError": "Could not load this file",
+  "@th2ElementTreeLoadError": {
+    "description": "Status row shown below a .th2 file in the project tree when loading it failed unexpectedly. Used on: TH2ElementTreeRowWidget._statusText",
+    "type": "text"
+  },
+  "th2ElementTreeBrokenFile": "Broken file: fix it outside Mapiah and reload",
+  "@th2ElementTreeBrokenFile": {
+    "description": "Status row shown below a broken .th2 file in the project tree. Used on: TH2ElementTreeRowWidget._statusText",
+    "type": "text"
+  },
+  "th2ElementTreeBrokenBadgeTooltip": "{count, plural, one {1 problem} other {{count} problems}}",
+  "@th2ElementTreeBrokenBadgeTooltip": {
+    "description": "First line of the tooltip of the broken badge on a .th2 file row. Used on: THProjectTreeNodeWidget._brokenBadgeTooltip",
+    "type": "text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "th2ElementTreeProblemLine": "Line {lineNumber}: {detail}",
+  "@th2ElementTreeProblemLine": {
+    "description": "One problem line in the broken badge tooltip of a .th2 file row. Used on: THProjectTreeNodeWidget._brokenBadgeTooltip",
+    "type": "text",
+    "placeholders": {
+      "lineNumber": {
+        "type": "int"
+      },
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "th2ElementTreeMoreProblems": "{count, plural, one {…and 1 more} other {…and {count} more}}",
+  "@th2ElementTreeMoreProblems": {
+    "description": "Last line of the broken badge tooltip when not every problem is listed. Used on: THProjectTreeNodeWidget._brokenBadgeTooltip",
+    "type": "text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "th2ElementTreeReload": "Reload",
+  "@th2ElementTreeReload": {
+    "description": "Context menu entry that reloads a broken or failed .th2 file from disk. Used on: THProjectTreeRowContextMenuWidget.reloadMenuItem",
+    "type": "text"
+  },
+  "th2ElementTreeScrapContainsSelection": "Contains selected elements",
+  "@th2ElementTreeScrapContainsSelection": {
+    "description": "Tooltip and semantics label of the dot on a collapsed scrap row that contains selected elements. Used on: TH2ElementTreeRowWidget._buildContainsSelectionDot",
+    "type": "text"
+  },
+  "th2ElementTreeDrawingOrderTooltip": "Rows are in file order: the top row is drawn first (bottom of the stack) and the last row is drawn last (on top).",
+  "@th2ElementTreeDrawingOrderTooltip": {
+    "description": "Tooltip of the project tree header explaining the drawing order of .th2 element rows. Used on: THProjectTreeWidget._buildHeader",
+    "type": "text"
   }
 }

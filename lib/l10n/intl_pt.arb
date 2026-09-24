@@ -976,5 +976,14 @@
   "projectSearchReplaceCompleteSkipped": "{count, plural, one {1 arquivo foi ignorado} other {{count} arquivos foram ignorados}} porque seu conteúdo ou vínculo com o projeto mudou.",
   "projectSearchReplaceCompleteFailed": "{count, plural, one {1 arquivo não pôde ser salvo} other {{count} arquivos não puderam ser salvos}}.",
   "projectSearchReplaceCompleteMaterialized": "{count, plural, one {1 arquivo com substituições não salvas foi deixado aberto em uma aba de editor} other {{count} arquivos com substituições não salvas foram deixados abertos em abas de editor}} para recuperação.",
-  "projectSearchReplaceCompleteCloseButton": "Fechar"
+  "projectSearchReplaceCompleteCloseButton": "Fechar",
+  "th2ElementTreeLoading": "Carregando…",
+  "th2ElementTreeLoadError": "Não foi possível carregar este arquivo",
+  "th2ElementTreeBrokenFile": "Arquivo com problemas: corrija-o fora do Mapiah e recarregue",
+  "th2ElementTreeBrokenBadgeTooltip": "{count, plural, one {1 problema} other {{count} problemas}}",
+  "th2ElementTreeProblemLine": "Linha {lineNumber}: {detail}",
+  "th2ElementTreeMoreProblems": "{count, plural, one {…e mais 1} other {…e mais {count}}}",
+  "th2ElementTreeReload": "Recarregar",
+  "th2ElementTreeScrapContainsSelection": "Contém elementos selecionados",
+  "th2ElementTreeDrawingOrderTooltip": "As linhas seguem a ordem do arquivo: a primeira é desenhada primeiro (embaixo) e a última é desenhada por último (em cima)."
 }

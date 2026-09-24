@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th_project_tree_ui_controller.dart';
 import 'package:mapiah/src/controllers/th_text_editor_controller.dart';
 import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_centreline_node.dart';
@@ -13,7 +16,10 @@ import 'package:mapiah/src/elements/th_project/th_project_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_parse_error.dart';
 import 'package:mapiah/src/elements/th_project/th_scrap_node.dart';
 import 'package:mapiah/src/elements/th_project/th_survey_node.dart';
+import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_problem.dart';
 import 'package:mapiah/src/widgets/th_project_tree_node_icon_widget.dart';
+import 'package:mapiah/src/widgets/th_project_tree_row_context_menu_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// One visible project-tree row.
@@ -42,7 +48,8 @@ class THProjectTreeNodeWidget extends StatelessWidget {
         .isExpanded(node.id);
     final List<THProjectParseError> nodeErrors = _errorsForNode(node);
 
-    return Material(
+    final THProjectNode currentNode = node;
+    final Widget row = Material(
       key: ValueKey('THProjectTreeNodeWidget|${node.id}'),
       color: isSelected ? colorScheme.secondaryContainer : Colors.transparent,
       child: InkWell(
@@ -62,6 +69,8 @@ class THProjectTreeNodeWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
+              if (currentNode is TH2FileNode)
+                _buildTH2StatusBadge(context, currentNode),
               if (isDirty) _buildStatusDot(colorScheme.tertiary),
               if (nodeErrors.isNotEmpty) _buildErrorDot(context, nodeErrors),
               const SizedBox(width: 4),
@@ -69,6 +78,132 @@ class THProjectTreeNodeWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+
+    if (currentNode is! TH2FileNode) {
+      return row;
+    }
+
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+
+    return THProjectTreeRowContextMenuWidget(
+      key: ValueKey('THProjectTreeRowContextMenu|${node.id}'),
+      rowId: node.id,
+      menuChildrenBuilder: () =>
+          THProjectTreeRowContextMenuWidget.reloadMenuChildrenIfBrokenOrFailed(
+            rowId: node.id,
+            th2FilePath: currentNode.absolutePath,
+            appLocalizations: appLocalizations,
+          ),
+      child: row,
+    );
+  }
+
+  /// The broken badge (problem count) or load-error mark of a `.th2` file
+  /// row. It observes the file's controller on its own, so it also updates
+  /// while the row is collapsed.
+  Widget _buildTH2StatusBadge(BuildContext context, TH2FileNode th2Node) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final AppLocalizations appLocalizations = AppLocalizations.of(context);
+
+    return Observer(
+      builder: (_) {
+        final TH2FileEditController? controller = mpLocator
+            .mpGeneralController
+            .getTH2FileEditControllerIfExists(th2Node.absolutePath);
+
+        if (controller == null) {
+          return const SizedBox.shrink();
+        }
+
+        if (controller.loadError != null) {
+          return Tooltip(
+            key: ValueKey('THProjectTreeNodeLoadErrorBadge|${node.id}'),
+            message: appLocalizations.th2ElementTreeLoadError,
+            child: Icon(
+              Icons.error_outline,
+              size: mpSmallIconSize,
+              color: colorScheme.error,
+            ),
+          );
+        }
+
+        if (!controller.isFileLoaded || !controller.isBroken) {
+          return const SizedBox.shrink();
+        }
+
+        final List<TH2FileProblem> problems = controller.problems;
+
+        return Tooltip(
+          key: ValueKey('THProjectTreeNodeBrokenBadge|${node.id}'),
+          message: _brokenBadgeTooltip(appLocalizations, problems),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              color: colorScheme.error,
+              borderRadius: BorderRadius.circular(mpProjectTreeRowHeight),
+            ),
+            child: Text(
+              '${problems.length}',
+              style: TextStyle(color: colorScheme.onError),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  /// The problem count, then the first problems, then how many were left
+  /// out.
+  String _brokenBadgeTooltip(
+    AppLocalizations appLocalizations,
+    List<TH2FileProblem> problems,
+  ) {
+    final List<String> lines = <String>[
+      appLocalizations.th2ElementTreeBrokenBadgeTooltip(problems.length),
+    ];
+    final int shownCount =
+        (problems.length < mpTH2ElementTreeBadgeTooltipMaxProblems)
+        ? problems.length
+        : mpTH2ElementTreeBadgeTooltipMaxProblems;
+
+    for (final TH2FileProblem problem in problems.take(shownCount)) {
+      lines.add(
+        appLocalizations.th2ElementTreeProblemLine(
+          problem.lineNumber,
+          problem.detail,
+        ),
+      );
+    }
+
+    if (problems.length > shownCount) {
+      lines.add(
+        appLocalizations.th2ElementTreeMoreProblems(
+          problems.length - shownCount,
+        ),
+      );
+    }
+
+    return lines.join('\n');
+  }
+
+  /// Toggles the row. Expanding a `.th2` file row requests its tab-less
+  /// load and nothing else: no tab, no project-node selection.
+  void _onChevronTap() {
+    final THProjectTreeUIController uiController =
+        mpLocator.thProjectTreeUIController;
+    final THProjectNode currentNode = node;
+
+    uiController.toggleExpanded(node.id);
+
+    if ((currentNode is! TH2FileNode) || !uiController.isExpanded(node.id)) {
+      return;
+    }
+
+    uiController.loadTH2FileIfEligible(
+      currentNode.absolutePath,
+      projectEpoch: mpLocator.thProjectController.projectEpoch,
+      rootConfigPath: mpLocator.thProjectController.rootConfigPath,
     );
   }
 
@@ -149,17 +284,17 @@ class THProjectTreeNodeWidget extends StatelessWidget {
     }
   }
 
+  /// A `.th2` file row always has a chevron: expanding it is what loads the
+  /// file's elements.
   Widget _buildExpandControl(BuildContext context, bool isExpanded) {
-    if (node.children.isEmpty) {
+    if (node.children.isEmpty && (node is! TH2FileNode)) {
       return const SizedBox(width: mpSmallIconSize);
     }
 
     return GestureDetector(
       key: ValueKey('THProjectTreeNodeChevron|${node.id}'),
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        mpLocator.thProjectTreeUIController.toggleExpanded(node.id);
-      },
+      onTap: _onChevronTap,
       child: SizedBox(
         width: mpSmallIconSize,
         height: mpProjectTreeRowHeight,

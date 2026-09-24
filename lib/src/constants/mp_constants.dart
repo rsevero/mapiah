@@ -656,6 +656,9 @@ const String mpStationSourceXVI = 'XVI';
 const String mpXTherionImageInsertButtonImagePath =
     'assets/icons/change-image-tool.png';
 const String mpScrapButtonImagePath = 'assets/icons/change-scrap-tool.png';
+const String mpAddPointButtonImagePath = 'assets/icons/add_element-addPoint.png';
+const String mpAddLineButtonImagePath = 'assets/icons/add_element-addLine.png';
+const String mpAddAreaButtonImagePath = 'assets/icons/add_element-addArea.png';
 
 // Help page identifiers (match files under assets/help/<lang>/)
 const String mpHelpPageKeyboardShortcutsMain = 'keyboard_shortcuts_main';
@@ -823,6 +826,10 @@ const double mpProjectTreeResizeDividerWidth = 6.0;
 const double mpProjectTreeRowHeight = 28.0;
 const double mpProjectTreeIndent = 16.0;
 const double mpProjectTreeStatusDotSize = 8.0;
+
+/// How many problems the broken badge tooltip of a `.th2` file row lists
+/// before summarizing the rest.
+const int mpTH2ElementTreeBadgeTooltipMaxProblems = 5;
 const double mpProjectTreeRailWidth = 32.0;
 const double mpProjectTreeErrorSummaryMaxHeight = 120.0;
 const int mpProjectTreeFilterDebounceMilliseconds = 150;

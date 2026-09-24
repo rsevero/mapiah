@@ -8,6 +8,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Índice](#índice)
 - [Barra superior](#barra-superior)
 - [Abas de arquivo](#abas-de-arquivo)
+- [Elementos na árvore do projeto](#elementos-na-árvore-do-projeto)
 - [Imagens](#imagens)
   - [Modo de transformação da imagem](#modo-de-transformação-da-imagem)
   - [Movimento da imagem](#movimento-da-imagem)
@@ -82,6 +83,21 @@ A aba do arquivo atualmente ativo é destacada, facilitando ver qual arquivo voc
 Arquivos `thconfig` e `.th` do projeto são abertos em abas de texto. O realce de sintaxe e o recolhimento facilitam a leitura. Durante a edição, a análise é atrasada por alguns instantes e a árvore do projeto é atualizada depois dessa pausa. A aba fica marcada como alterada até ser salva ou revertida. Localizar e substituir se aplicam somente ao arquivo ativo; a pesquisa em todo o projeto não está disponível.
 
 Diagnósticos do analisador são produzidos ao carregar ou analisar novamente a fonte e aparecem no editor e na árvore do projeto. Diagnósticos do compilador são produzidos ao executar o Therion. Os dois tipos podem coexistir. Um diagnóstico com arquivo e linha conhecidos pode ser selecionado para navegar até esse local; sem uma linha de origem, ele permanece na saída da execução e não pode direcionar para uma linha da árvore.
+
+## Elementos na árvore do projeto
+
+Cada linha de arquivo `.th2` na árvore do projeto tem uma seta. Expandi-la mostra os croquis do arquivo e, abaixo de cada croqui, seus pontos, linhas e áreas. Comentários, linhas vazias, configurações, imagens e pontos de linha não são mostrados.
+
+* **Carregamento sem abrir aba**: expandir um arquivo faz sua leitura em segundo plano. A árvore mostra _Carregando…_ até terminar. Nenhuma aba é aberta e nada é alterado. Só os arquivos expandidos são lidos; arquivos nunca são lidos apenas para responder a uma pesquisa.
+* **Ordem de desenho**: as linhas seguem a ordem do arquivo, que é a ordem usada pelo XTherion. A primeira linha é desenhada primeiro (embaixo) e a última é desenhada por último (em cima). Esta não é a ordem de desenho do próprio Therion, que depende também dos tipos de símbolo.
+* **Rótulos**: cada linha mostra o tipo de elemento, seu tipo (e subtipo, se houver) e depois seu id Therion, se houver, exatamente como está no arquivo.
+* **Croquis**: os croquis começam expandidos. Clique na seta de um croqui para recolhê-lo ou expandi-lo. Um croqui recolhido mostra um ponto quando um de seus elementos está selecionado.
+* **Seleção**: clicar em um ponto, linha ou área o seleciona, como a ferramenta Selecionar seguida de um clique no elemento. Se o arquivo já tem uma aba, ela passa para a frente. Se não tem, o elemento é selecionado sem abrir aba. Clicar em um croqui o torna o croqui ativo.
+* **Clique duplo**: um clique duplo em um elemento também abre a aba do arquivo, se necessário, e aproxima a visualização da seleção.
+* **A seleção acompanha o desenho**: as linhas dos elementos selecionados no desenho ficam destacadas, assim como a linha do croqui ativo.
+* **Pesquisa**: o campo de pesquisa da árvore do projeto também encontra os rótulos dos croquis e elementos de arquivos já carregados e válidos. As linhas encontradas aparecem junto com seu croqui e arquivo.
+* **Arquivos com problemas**: um arquivo com erros de estrutura ou de interpretação mostra um indicador com o número de problemas (passe o mouse sobre ele para vê-los) e uma única linha explicando que ele deve ser corrigido fora do Mapiah. Depois de corrigi-lo, clique com o botão direito na linha do arquivo ou nessa linha e escolha _Recarregar_. O mesmo vale para um arquivo cujo carregamento falhou inesperadamente.
+* **Fechar uma aba**: fechar a aba de um arquivo cuja linha na árvore está expandida mantém seus elementos na árvore, a menos que o arquivo tivesse alterações não salvas, que são descartadas como de costume.
 
 ## Imagens
 A janela de imagens é aberta com o botão ![Botão imagens](assets/help/images/buttonImages.png "Imagens") (Alt+I) no canto inferior direito. Ela lista todas as imagens (fundos de levantamento XVI, imagens raster e imagens SVG exclusivas do Mapiah) inseridas no arquivo atual.

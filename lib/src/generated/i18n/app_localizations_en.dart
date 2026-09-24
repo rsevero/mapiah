@@ -3170,4 +3170,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get projectSearchReplaceCompleteCloseButton => 'Close';
+
+  @override
+  String get th2ElementTreeLoading => 'Loading…';
+
+  @override
+  String get th2ElementTreeLoadError => 'Could not load this file';
+
+  @override
+  String get th2ElementTreeBrokenFile =>
+      'Broken file: fix it outside Mapiah and reload';
+
+  @override
+  String th2ElementTreeBrokenBadgeTooltip(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count problems',
+      one: '1 problem',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String th2ElementTreeProblemLine(int lineNumber, String detail) {
+    return 'Line $lineNumber: $detail';
+  }
+
+  @override
+  String th2ElementTreeMoreProblems(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '…and $count more',
+      one: '…and 1 more',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get th2ElementTreeReload => 'Reload';
+
+  @override
+  String get th2ElementTreeScrapContainsSelection =>
+      'Contains selected elements';
+
+  @override
+  String get th2ElementTreeDrawingOrderTooltip =>
+      'Rows are in file order: the top row is drawn first (bottom of the stack) and the last row is drawn last (on top).';
 }

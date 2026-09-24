@@ -122,13 +122,20 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   int _structureRevision = 0;
 
-
+  @readonly
   bool _isFileLoaded = false;
 
-  bool get isFileLoaded => _isFileLoaded;
+  @readonly
+  bool _isBroken = false;
 
-  bool isBroken = false;
-  List<TH2FileProblem> problems = <TH2FileProblem>[];
+  /// Always replaced by a new unmodifiable list, never mutated in place.
+  @readonly
+  List<TH2FileProblem> _problems = const <TH2FileProblem>[];
+
+  /// The unexpected exception thrown by the last [load], if any. A failed
+  /// load is only retried by replacing this controller (Reload).
+  @readonly
+  Object? _loadError;
 
   Future<TH2FileEditControllerCreateResult>? _loadFuture;
 
@@ -249,6 +256,10 @@ abstract class TH2FileEditControllerBase with Store {
 
   @readonly
   bool _canvasScaleTranslationUndefined = true;
+
+  /// A zoom requested before the canvas was laid out. Only layout reads it,
+  /// so it is not observable.
+  MPZoomToFitType? _pendingZoomToFitType;
 
   @readonly
   Paint _selectionWindowFillPaint = mpSelectionWindowFillPaint;
@@ -517,7 +528,7 @@ abstract class TH2FileEditControllerBase with Store {
       mpLocator.mpGeneralController.hasClipboardContent;
 
   @computed
-  bool get enableSaveButton => !isBroken && _hasUndo && !_th2File.isNewFile;
+  bool get enableSaveButton => !_isBroken && _hasUndo && !_th2File.isNewFile;
 
   @readonly
   String _statusBarMessage = '';
@@ -704,12 +715,15 @@ abstract class TH2FileEditControllerBase with Store {
     _th2FileMPID = _th2File.mpID;
   }
 
+  @action
   void _preParseInitialize() {
     _isLoading = true;
     errorMessages.clear();
   }
 
   /// Returns the controller's single shared file-load operation.
+  ///
+  /// A failed load stays cached, so calling this again never parses again.
   Future<TH2FileEditControllerCreateResult> load() {
     final Future<TH2FileEditControllerCreateResult>? existingLoad = _loadFuture;
 
@@ -717,11 +731,28 @@ abstract class TH2FileEditControllerBase with Store {
       return existingLoad;
     }
 
-    final Future<TH2FileEditControllerCreateResult> newLoad = _loadOnce();
+    final Future<TH2FileEditControllerCreateResult> newLoad =
+        _loadOnceRecordingErrors();
 
     _loadFuture = newLoad;
 
     return newLoad;
+  }
+
+  /// Runs [_loadOnce], recording an unexpected exception in [loadError]
+  /// before rethrowing it.
+  Future<TH2FileEditControllerCreateResult> _loadOnceRecordingErrors() async {
+    try {
+      return await _loadOnce();
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        'Failed to load TH2 file ${_th2File.filename}',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      _commitLoadError(error);
+      rethrow;
+    }
   }
 
   /// Parses and initializes this controller once.
@@ -735,33 +766,65 @@ abstract class TH2FileEditControllerBase with Store {
       forceNewController: false,
     );
 
-    problems = List<TH2FileProblem>.of(parser.problems);
-    isBroken = problems.isNotEmpty || !isSuccessful;
-    _postParseInitialize(_th2File, isSuccessful, errors);
-
-    return TH2FileEditControllerCreateResult(
-      isSuccessful && !isBroken,
-      errors,
-      problems,
+    return _commitLoadResult(
+      parsedFile: _th2File,
+      isSuccessful: isSuccessful,
+      errors: errors,
+      parsedProblems: parser.problems,
     );
   }
 
-  void _postParseInitialize(
-    TH2File parsedFile,
-    bool isSuccessful,
-    List<String> errors,
-  ) {
+  /// Commits a finished parse as one observable transition, bumping the
+  /// structure revision last. A disposed controller commits nothing.
+  @action
+  TH2FileEditControllerCreateResult _commitLoadResult({
+    required TH2File parsedFile,
+    required bool isSuccessful,
+    required List<String> errors,
+    required List<TH2FileProblem> parsedProblems,
+  }) {
+    final List<TH2FileProblem> loadedProblems =
+        List<TH2FileProblem>.unmodifiable(parsedProblems);
+    final bool loadedIsBroken = loadedProblems.isNotEmpty || !isSuccessful;
+    final TH2FileEditControllerCreateResult result =
+        TH2FileEditControllerCreateResult(
+          isSuccessful && !loadedIsBroken,
+          errors,
+          loadedProblems,
+        );
+
+    if (_disposed) {
+      return result;
+    }
+
+    _problems = loadedProblems;
+    _isBroken = loadedIsBroken;
     _finalFilePreparations(parsedFile);
-    bumpStructureRevision();
     _isFileLoaded = true;
 
     if (!isSuccessful) {
       errorMessages.addAll(errors);
     }
+
+    bumpStructureRevision();
+
+    return result;
+  }
+
+  /// Records an unexpected load exception. A disposed controller records
+  /// nothing.
+  @action
+  void _commitLoadError(Object error) {
+    if (_disposed) {
+      return;
+    }
+
+    _loadError = error;
+    _isLoading = false;
   }
 
   void _finalFilePreparations(TH2File parsedFile) {
-    if (!isBroken && _th2File.scrapMPIDs.isNotEmpty) {
+    if (!_isBroken && _th2File.scrapMPIDs.isNotEmpty) {
       _activeScrapID = _th2File.scrapMPIDs.first;
       updateHasMultipleScraps();
 
@@ -775,7 +838,7 @@ abstract class TH2FileEditControllerBase with Store {
 
     _initializeReactions();
 
-    if (isBroken) {
+    if (_isBroken) {
       setFilename(_th2File.filename);
       _isLoading = false;
       return;
@@ -1421,11 +1484,37 @@ abstract class TH2FileEditControllerBase with Store {
     triggerAllElementsRedraw();
   }
 
+  /// Closes this file's tab. The reactions stay alive: the controller may be
+  /// kept tab-less for the sidebar tree, and [dispose] disposes them when the
+  /// controller is removed.
   void close() {
     overlayWindowController.clearOverlayWindows();
     visualController.patternCache.clear();
-    _disposeReactions();
     mpLocator.mpGeneralController.removeFileTab(filename: _th2File.filename);
+  }
+
+  /// Zooms to [type] now if the canvas is laid out, otherwise on the canvas'
+  /// first layout, instead of the default zoom to the whole file.
+  void requestZoomToFit(MPZoomToFitType type) {
+    final bool isLaidOut =
+        !_screenSize.isEmpty && !_canvasScaleTranslationUndefined;
+
+    if (isLaidOut) {
+      zoomToFit(zoomFitToType: type);
+
+      return;
+    }
+
+    _pendingZoomToFitType = type;
+  }
+
+  /// Returns and clears the zoom requested before the first layout.
+  MPZoomToFitType? takePendingZoomToFitType() {
+    final MPZoomToFitType? pendingType = _pendingZoomToFitType;
+
+    _pendingZoomToFitType = null;
+
+    return pendingType;
   }
 
   @action
@@ -1566,7 +1655,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void saveTH2File() {
-    if (isBroken) {
+    if (_isBroken) {
       return;
     }
     final File file = _localFile();
@@ -1579,7 +1668,7 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   Future<void> saveAsTH2File() async {
-    if (isBroken) {
+    if (_isBroken) {
       return;
     }
     final String filename = _th2File.isNewFile ? '' : _th2File.filename;
@@ -1639,11 +1728,17 @@ abstract class TH2FileEditControllerBase with Store {
       _actualSave(file);
 
       _th2File.isNewFile = false;
-      _isFileLoaded = true;
-      setFilename(_th2File.filename);
+      _markLoadedAfterSaveAs();
 
       overlayWindowController.closeAutoDismissOverlayWindows();
     }
+  }
+
+  /// Marks a file saved under a new name as loaded, in one transition.
+  @action
+  void _markLoadedAfterSaveAs() {
+    _isFileLoaded = true;
+    setFilename(_th2File.filename);
   }
 
   void _rebaseImportedImagePathsForSaveAs({

@@ -29,16 +29,19 @@ void main() {
     childA.addChild(grandchild);
   });
 
-  List<String> labelsOf(List<THProjectTreeVisibleNode> nodes) {
-    return nodes.map((node) => node.node.label).toList();
+  List<String> labelsOf(List<THProjectTreeVisibleRow> rows) {
+    return rows
+        .map((THProjectTreeVisibleRow row) => (row as THProjectTreeNodeRow))
+        .map((THProjectTreeNodeRow row) => row.node.label)
+        .toList();
   }
 
-  List<int> depthsOf(List<THProjectTreeVisibleNode> nodes) {
-    return nodes.map((node) => node.depth).toList();
+  List<int> depthsOf(List<THProjectTreeVisibleRow> rows) {
+    return rows.map((THProjectTreeVisibleRow row) => row.depth).toList();
   }
 
   test('flattens depth-first and honors expansion without filter', () {
-    final List<THProjectTreeVisibleNode> result = flattenVisibleNodes(
+    final List<THProjectTreeVisibleRow> result = flattenVisibleNodes(
       root: root,
       isExpanded: (THProjectNode node) =>
           node.id == 'root' || node.id == 'a',
@@ -51,7 +54,7 @@ void main() {
 
   test('filter shows matching leaves and auto-expands ancestors', () {
     final Set<String> expanded = <String>{};
-    final List<THProjectTreeVisibleNode> result = flattenVisibleNodes(
+    final List<THProjectTreeVisibleRow> result = flattenVisibleNodes(
       root: root,
       isExpanded: (THProjectNode node) => expanded.contains(node.id),
       matchesFilter: (THProjectNode node) => node.label == 'charlie',
@@ -64,7 +67,7 @@ void main() {
   });
 
   test('filter matching an ancestor hides non-matching descendants', () {
-    final List<THProjectTreeVisibleNode> result = flattenVisibleNodes(
+    final List<THProjectTreeVisibleRow> result = flattenVisibleNodes(
       root: root,
       isExpanded: (_) => false,
       matchesFilter: (THProjectNode node) => node.label == 'alpha',
@@ -77,7 +80,7 @@ void main() {
   test('clearing filter restores the prior manual expansion state', () {
     final Set<String> expanded = <String>{'root', 'a'};
 
-    final List<THProjectTreeVisibleNode> filtered = flattenVisibleNodes(
+    final List<THProjectTreeVisibleRow> filtered = flattenVisibleNodes(
       root: root,
       isExpanded: (THProjectNode node) => expanded.contains(node.id),
       matchesFilter: (THProjectNode node) => node.label == 'charlie',
@@ -86,7 +89,7 @@ void main() {
 
     expect(labelsOf(filtered), <String>['root', 'alpha', 'charlie']);
 
-    final List<THProjectTreeVisibleNode> unfiltered = flattenVisibleNodes(
+    final List<THProjectTreeVisibleRow> unfiltered = flattenVisibleNodes(
       root: root,
       isExpanded: (THProjectNode node) => expanded.contains(node.id),
       matchesFilter: (_) => false,
@@ -99,7 +102,7 @@ void main() {
 
   test('stale expansion ids after a reparse are inert', () {
     final Set<String> expanded = <String>{'stale-id'};
-    final List<THProjectTreeVisibleNode> result = flattenVisibleNodes(
+    final List<THProjectTreeVisibleRow> result = flattenVisibleNodes(
       root: root,
       isExpanded: (THProjectNode node) => expanded.contains(node.id),
       matchesFilter: (_) => false,

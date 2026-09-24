@@ -30,6 +30,12 @@ abstract class THProjectTreeUIControllerBase with Store {
   @observable
   ObservableSet<String> expandedNodeIds = ObservableSet<String>();
 
+  /// Row ids (`th2el:<canonicalPath>:<mpID>`) of the TH2 scrap rows the user
+  /// collapsed. Scraps start expanded, so only the exception is stored. Kept
+  /// apart from [expandedNodeIds] so default expansion never sees TH2 ids.
+  @observable
+  ObservableSet<String> collapsedTH2ScrapIds = ObservableSet<String>();
+
   @observable
   String filterText = '';
 
@@ -115,6 +121,85 @@ abstract class THProjectTreeUIControllerBase with Store {
   }
 
   @action
+  void toggleTH2ScrapCollapsed(String scrapRowId) {
+    if (!collapsedTH2ScrapIds.add(scrapRowId)) {
+      collapsedTH2ScrapIds.remove(scrapRowId);
+    }
+  }
+
+  bool isTH2ScrapCollapsed(String scrapRowId) =>
+      collapsedTH2ScrapIds.contains(scrapRowId);
+
+  /// Whether the project TH2 file at [canonicalPath] has its row expanded.
+  /// `false` with no project or for a file outside it.
+  bool isTH2FileRowExpanded(String canonicalPath) {
+    final THProjectFileNode? node = _projectController.nodeByCanonicalPath(
+      canonicalPath,
+    );
+
+    return (node is TH2FileNode) && expandedNodeIds.contains(node.id);
+  }
+
+  /// Whether a tree load of [canonicalPath] may start now: the project that
+  /// scheduled it ([projectEpoch], [rootConfigPath]) is still current and
+  /// idle, no filter is active, and the file's row is expanded and visible.
+  bool isTH2FileRowLoadEligible(
+    String canonicalPath, {
+    required int projectEpoch,
+    required String rootConfigPath,
+  }) {
+    final bool isSameProject =
+        (_projectController.projectEpoch == projectEpoch) &&
+        (_projectController.rootConfigPath == rootConfigPath) &&
+        (_projectController.projectRootNode != null);
+
+    if (!isSameProject ||
+        _projectController.isParsing ||
+        filterText.isNotEmpty ||
+        !isTH2FileRowExpanded(canonicalPath)) {
+      return false;
+    }
+
+    final THProjectFileNode node = _projectController.nodeByCanonicalPath(
+      canonicalPath,
+    )!;
+
+    return _areAncestorsExpanded(node);
+  }
+
+  /// Requests a tab-less load of the TH2 file at [canonicalPath] when
+  /// [isTH2FileRowLoadEligible] allows it.
+  void loadTH2FileIfEligible(
+    String canonicalPath, {
+    required int projectEpoch,
+    required String rootConfigPath,
+  }) {
+    if (!isTH2FileRowLoadEligible(
+      canonicalPath,
+      projectEpoch: projectEpoch,
+      rootConfigPath: rootConfigPath,
+    )) {
+      return;
+    }
+
+    MPLocator().mpGeneralController.ensureTH2FileLoaded(canonicalPath);
+  }
+
+  bool _areAncestorsExpanded(THProjectNode node) {
+    THProjectNode? ancestor = node.parent;
+
+    while (ancestor != null) {
+      if (!expandedNodeIds.contains(ancestor.id)) {
+        return false;
+      }
+
+      ancestor = ancestor.parent;
+    }
+
+    return true;
+  }
+
+  @action
   void expandAncestorsOf(THProjectNode node) {
     THProjectNode? ancestor = node.parent;
 
@@ -176,18 +261,23 @@ abstract class THProjectTreeUIControllerBase with Store {
 
   bool isExpanded(String nodeId) => expandedNodeIds.contains(nodeId);
 
-  bool matchesFilter(THProjectNode node) {
+  bool matchesFilter(THProjectNode node) => matchesFilterText(node.label);
+
+  /// Case-insensitive substring match of the filter against a row's full
+  /// label. Project rows and TH2 element rows both use it.
+  bool matchesFilterText(String label) {
     if (filterText.isEmpty) {
       return true;
     }
 
-    return node.label.toLowerCase().contains(filterText.toLowerCase());
+    return label.toLowerCase().contains(filterText.toLowerCase());
   }
 
   @action
   void _handleProjectRootChanged(THProjectFileNode? root) {
     if (root == null) {
       expandedNodeIds.clear();
+      collapsedTH2ScrapIds.clear();
 
       return;
     }
@@ -196,27 +286,36 @@ abstract class THProjectTreeUIControllerBase with Store {
       return;
     }
 
-    final int? firstTH2Depth = _firstTH2FileDepth(root, 0);
-    final int expansionDepth =
-        firstTH2Depth ?? _maximumDepth(root, 0) + 1;
+    final int? shallowestTH2Depth = _shallowestTH2FileDepth(root, 0);
 
-    _expandNodesAboveDepth(root, 0, expansionDepth);
+    if (shallowestTH2Depth == null) {
+      _expandNonTH2NodesUpToDepth(root, 0, _maximumDepth(root, 0));
+
+      return;
+    }
+
+    _expandNonTH2NodesUpToDepth(root, 0, shallowestTH2Depth);
   }
 
-  int? _firstTH2FileDepth(THProjectNode node, int depth) {
+  /// The smallest depth of any [TH2FileNode] under [node], or `null` when
+  /// there is none. Walk order does not matter.
+  int? _shallowestTH2FileDepth(THProjectNode node, int depth) {
     if (node is TH2FileNode) {
       return depth;
     }
 
-    for (final THProjectNode child in node.children) {
-      final int? childDepth = _firstTH2FileDepth(child, depth + 1);
+    int? shallowestDepth;
 
-      if (childDepth != null) {
-        return childDepth;
+    for (final THProjectNode child in node.children) {
+      final int? childDepth = _shallowestTH2FileDepth(child, depth + 1);
+
+      if ((childDepth != null) &&
+          ((shallowestDepth == null) || (childDepth < shallowestDepth))) {
+        shallowestDepth = childDepth;
       }
     }
 
-    return null;
+    return shallowestDepth;
   }
 
   int _maximumDepth(THProjectNode node, int depth) {
@@ -233,19 +332,21 @@ abstract class THProjectTreeUIControllerBase with Store {
     return deepestDepth;
   }
 
-  void _expandNodesAboveDepth(
+  /// Expands every non-TH2 node whose depth is at most [maximumDepth]. TH2
+  /// file rows are never expanded automatically: expanding one loads it.
+  void _expandNonTH2NodesUpToDepth(
     THProjectNode node,
     int depth,
-    int expansionDepth,
+    int maximumDepth,
   ) {
-    if (depth >= expansionDepth) {
+    if ((depth > maximumDepth) || (node is TH2FileNode)) {
       return;
     }
 
     expandedNodeIds.add(node.id);
 
     for (final THProjectNode child in node.children) {
-      _expandNodesAboveDepth(child, depth + 1, expansionDepth);
+      _expandNonTH2NodesUpToDepth(child, depth + 1, maximumDepth);
     }
   }
 

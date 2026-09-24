@@ -281,11 +281,11 @@ class _TH2FileEditLastUsedPLAButtonWidget extends StatelessWidget {
   String _buttonIconPath(MPPLAType plaType) {
     switch (plaType) {
       case MPPLAType.area:
-        return 'assets/icons/add_element-addArea.png';
+        return mpAddAreaButtonImagePath;
       case MPPLAType.line:
-        return 'assets/icons/add_element-addLine.png';
+        return mpAddLineButtonImagePath;
       case MPPLAType.point:
-        return 'assets/icons/add_element-addPoint.png';
+        return mpAddPointButtonImagePath;
     }
   }
 }

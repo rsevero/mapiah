@@ -5,17 +5,22 @@ import 'dart:async';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_dialog_aux.dart';
+import 'package:mapiah/src/auxiliary/th2_element_tree_aux.dart';
 import 'package:mapiah/src/auxiliary/th_project_tree_flatten_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:mapiah/src/controllers/th_project_controller.dart';
+import 'package:mapiah/src/controllers/th_project_tree_ui_controller.dart';
+import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_parse_error.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/widgets/th2_element_tree_row_widget.dart';
 import 'package:mapiah/src/widgets/th_project_tree_node_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The project-tree side column shown next to the tab workspace.
-class THProjectTreeWidget extends StatelessWidget {
+class THProjectTreeWidget extends StatefulWidget {
   final MPPickProjectAndRunTherion? pickProjectAndRunTherion;
 
   const THProjectTreeWidget({
@@ -24,24 +29,43 @@ class THProjectTreeWidget extends StatelessWidget {
   });
 
   @override
+  State<THProjectTreeWidget> createState() => _THProjectTreeWidgetState();
+}
+
+class _THProjectTreeWidgetState extends State<THProjectTreeWidget> {
+  @override
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
         final AppLocalizations appLocalizations = AppLocalizations.of(context);
-        final THProjectNode? root = mpLocator
-            .thProjectController
-            .projectRootNode;
-        final bool isParsing = mpLocator.thProjectController.isParsing;
+        final THProjectController projectController =
+            mpLocator.thProjectController;
+        final THProjectNode? root = projectController.projectRootNode;
+        final bool isParsing = projectController.isParsing;
+        final int projectEpoch = projectController.projectEpoch;
+        final String rootConfigPath = projectController.rootConfigPath;
         final List<THProjectParseError> allDiagnostics =
-            mpLocator.thProjectController.allDiagnostics;
-        final Set<String> dirtyFilePaths = mpLocator
-            .thProjectController
-            .dirtyFilePaths
+            projectController.allDiagnostics;
+        final Set<String> dirtyFilePaths = projectController.dirtyFilePaths
             .toSet();
         final String? activeSelectedNodeId =
-            mpLocator.thProjectController.activeSelectedNodeId;
-        final List<THProjectTreeVisibleNode> visibleNodes =
-            _buildVisibleNodes(root);
+            projectController.activeSelectedNodeId;
+        final bool filterActive =
+            mpLocator.thProjectTreeUIController.filterText.isNotEmpty;
+        final Set<String> pathsNeedingLoad = <String>{};
+        final List<THProjectTreeVisibleRow> visibleRows = _buildVisibleRows(
+          root,
+          filterActive: filterActive,
+          pathsNeedingLoad: pathsNeedingLoad,
+        );
+
+        if (pathsNeedingLoad.isNotEmpty && !filterActive && !isParsing) {
+          _scheduleTH2Loads(
+            pathsNeedingLoad,
+            projectEpoch: projectEpoch,
+            rootConfigPath: rootConfigPath,
+          );
+        }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -49,8 +73,7 @@ class THProjectTreeWidget extends StatelessWidget {
             _buildHeader(
               context,
               appLocalizations,
-              hasProject:
-                  mpLocator.thProjectController.rootConfigPath.isNotEmpty,
+              hasProject: rootConfigPath.isNotEmpty,
             ),
             const _THProjectTreeSearchField(),
             if (root == null)
@@ -66,20 +89,12 @@ class THProjectTreeWidget extends StatelessWidget {
                 ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: visibleNodes.length,
+                  itemCount: visibleRows.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final THProjectTreeVisibleNode visibleNode =
-                        visibleNodes[index];
-
-                    return THProjectTreeNodeWidget(
-                      node: visibleNode.node,
-                      depth: visibleNode.depth,
-                      isSelected:
-                          visibleNode.node.id == activeSelectedNodeId,
-                      isDirty: _isDirtyNode(
-                        visibleNode.node,
-                        dirtyFilePaths,
-                      ),
+                    return _buildRow(
+                      visibleRows[index],
+                      activeSelectedNodeId: activeSelectedNodeId,
+                      dirtyFilePaths: dirtyFilePaths,
                     );
                   },
                 ),
@@ -91,19 +106,82 @@ class THProjectTreeWidget extends StatelessWidget {
     );
   }
 
-  List<THProjectTreeVisibleNode> _buildVisibleNodes(THProjectNode? root) {
+  Widget _buildRow(
+    THProjectTreeVisibleRow row, {
+    required String? activeSelectedNodeId,
+    required Set<String> dirtyFilePaths,
+  }) {
+    return switch (row) {
+      THProjectTreeNodeRow nodeRow => THProjectTreeNodeWidget(
+        node: nodeRow.node,
+        depth: nodeRow.depth,
+        isSelected: nodeRow.node.id == activeSelectedNodeId,
+        isDirty: _isDirtyNode(nodeRow.node, dirtyFilePaths),
+      ),
+      TH2ElementTreeRow _ => TH2ElementTreeRowWidget(row: row),
+      TH2FileStatusTreeRow _ => TH2ElementTreeRowWidget(row: row),
+    };
+  }
+
+  /// Flattens the tree. The TH2 callback runs inside the tree observer, so
+  /// the rows follow controller creation, loads, reloads and structure
+  /// changes. Files that need a tree load are added to [pathsNeedingLoad].
+  List<THProjectTreeVisibleRow> _buildVisibleRows(
+    THProjectNode? root, {
+    required bool filterActive,
+    required Set<String> pathsNeedingLoad,
+  }) {
     if (root == null) {
-      return const <THProjectTreeVisibleNode>[];
+      return const <THProjectTreeVisibleRow>[];
     }
+
+    final THProjectTreeUIController uiController =
+        mpLocator.thProjectTreeUIController;
 
     return flattenVisibleNodes(
       root: root,
-      isExpanded: (THProjectNode node) {
-        return mpLocator.thProjectTreeUIController.isExpanded(node.id);
-      },
-      matchesFilter: mpLocator.thProjectTreeUIController.matchesFilter,
-      filterActive: mpLocator.thProjectTreeUIController.filterText.isNotEmpty,
+      isExpanded: (THProjectNode node) => uiController.isExpanded(node.id),
+      matchesFilter: uiController.matchesFilter,
+      filterActive: filterActive,
+      th2ElementRowsFor:
+          (TH2FileNode node, int depth, {required bool filterActive}) {
+            return TH2ElementTreeAux.rowsForFile(
+              th2FilePath: node.absolutePath,
+              controller: mpLocator.mpGeneralController
+                  .getTH2FileEditControllerIfExists(node.absolutePath),
+              fileDepth: depth,
+              filterActive: filterActive,
+              matchesFilterText: uiController.matchesFilterText,
+              isScrapCollapsed: uiController.isTH2ScrapCollapsed,
+              onNeedsLoad: pathsNeedingLoad.add,
+            );
+          },
     );
+  }
+
+  /// Requests the loads after the frame, never during the build. Each
+  /// request is revalidated against the captured project lifecycle and the
+  /// current tree right before it runs.
+  void _scheduleTH2Loads(
+    Set<String> paths, {
+    required int projectEpoch,
+    required String rootConfigPath,
+  }) {
+    final List<String> candidates = paths.toList();
+
+    WidgetsBinding.instance.addPostFrameCallback((Duration _) {
+      if (!mounted) {
+        return;
+      }
+
+      for (final String path in candidates) {
+        mpLocator.thProjectTreeUIController.loadTH2FileIfEligible(
+          path,
+          projectEpoch: projectEpoch,
+          rootConfigPath: rootConfigPath,
+        );
+      }
+    });
   }
 
   bool _isDirtyNode(
@@ -142,10 +220,14 @@ class THProjectTreeWidget extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           Expanded(
-            child: Text(
-              appLocalizations.projectTreeTitle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Tooltip(
+              key: const ValueKey('THProjectTreeHeaderDrawingOrderTooltip'),
+              message: appLocalizations.th2ElementTreeDrawingOrderTooltip,
+              child: Text(
+                appLocalizations.projectTreeTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           const SizedBox(width: 4),
@@ -220,7 +302,7 @@ class THProjectTreeWidget extends StatelessWidget {
               label: Text(appLocalizations.projectTreeRunTherionButton),
               onPressed: () {
                 final MPPickProjectAndRunTherion openProjectAndRunTherion =
-                    pickProjectAndRunTherion ??
+                    widget.pickProjectAndRunTherion ??
                     MPDialogAux.pickProjectFileAndRunTherion;
 
                 openProjectAndRunTherion(context);

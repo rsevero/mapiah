@@ -876,13 +876,22 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       loadFuture: future,
       onLoadFailed: () =>
           _discardFailedFileLoad(filename: filename, controller: controller),
-      onReload: () {
-        unawaited(
-          mpLocator.mpGeneralController.reloadTH2File(filename),
-        );
-        setState(() {});
-      },
+      onReload: () => unawaited(_reloadTH2File(filename)),
     );
+  }
+
+  /// Reloads [filename] from disk. The tab-content observer rebuilds the tab
+  /// for the replacement controller, whose body shows any load failure.
+  Future<void> _reloadTH2File(String filename) async {
+    try {
+      await mpLocator.mpGeneralController.reloadTH2File(filename);
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        'Reload of $filename failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   /// Evicts only the load state owned by the controller that failed.
@@ -900,7 +909,10 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         .mpGeneralController
         .getTH2FileEditControllerIfExists(filename);
 
-    if (identical(cachedController, controller)) {
+    if (identical(cachedController, controller) &&
+        !mpLocator.mpGeneralController.shouldKeepTablessTH2Controller(
+          filename,
+        )) {
       mpLocator.mpGeneralController.removeFileController(filename: filename);
     }
   }

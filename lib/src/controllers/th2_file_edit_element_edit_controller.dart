@@ -795,6 +795,12 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.triggerAllElementsRedraw();
   }
 
+  /// Options shown in the sidebar tree's element labels (id and subtype).
+  bool _isTreeLabelOption(THCommandOptionType optionType) {
+    return (optionType == THCommandOptionType.id) ||
+        (optionType == THCommandOptionType.subtype);
+  }
+
   @action
   void executeSetOptionToElement({
     required THCommandOption option,
@@ -825,7 +831,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     if (parentMPID >= 0) {
       _th2File.substituteElement(parentElement);
-      if (option.type == THCommandOptionType.id) {
+      if (_isTreeLabelOption(option.type)) {
         _th2FileEditController.bumpStructureRevision();
       }
 
@@ -868,7 +874,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
     newParentElement.removeOption(optionType);
     _th2File.substituteElement(newParentElement);
-    if (optionType == THCommandOptionType.id) {
+    if (_isTreeLabelOption(optionType)) {
       _th2FileEditController.bumpStructureRevision();
     }
 

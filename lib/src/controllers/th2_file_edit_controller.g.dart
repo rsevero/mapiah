@@ -453,6 +453,86 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_isFileLoadedAtom = Atom(
+    name: 'TH2FileEditControllerBase._isFileLoaded',
+    context: context,
+  );
+
+  bool get isFileLoaded {
+    _$_isFileLoadedAtom.reportRead();
+    return super._isFileLoaded;
+  }
+
+  @override
+  bool get _isFileLoaded => isFileLoaded;
+
+  @override
+  set _isFileLoaded(bool value) {
+    _$_isFileLoadedAtom.reportWrite(value, super._isFileLoaded, () {
+      super._isFileLoaded = value;
+    });
+  }
+
+  late final _$_isBrokenAtom = Atom(
+    name: 'TH2FileEditControllerBase._isBroken',
+    context: context,
+  );
+
+  bool get isBroken {
+    _$_isBrokenAtom.reportRead();
+    return super._isBroken;
+  }
+
+  @override
+  bool get _isBroken => isBroken;
+
+  @override
+  set _isBroken(bool value) {
+    _$_isBrokenAtom.reportWrite(value, super._isBroken, () {
+      super._isBroken = value;
+    });
+  }
+
+  late final _$_problemsAtom = Atom(
+    name: 'TH2FileEditControllerBase._problems',
+    context: context,
+  );
+
+  List<TH2FileProblem> get problems {
+    _$_problemsAtom.reportRead();
+    return super._problems;
+  }
+
+  @override
+  List<TH2FileProblem> get _problems => problems;
+
+  @override
+  set _problems(List<TH2FileProblem> value) {
+    _$_problemsAtom.reportWrite(value, super._problems, () {
+      super._problems = value;
+    });
+  }
+
+  late final _$_loadErrorAtom = Atom(
+    name: 'TH2FileEditControllerBase._loadError',
+    context: context,
+  );
+
+  Object? get loadError {
+    _$_loadErrorAtom.reportRead();
+    return super._loadError;
+  }
+
+  @override
+  Object? get _loadError => loadError;
+
+  @override
+  set _loadError(Object? value) {
+    _$_loadErrorAtom.reportWrite(value, super._loadError, () {
+      super._loadError = value;
+    });
+  }
+
   late final _$_th2FileAtom = Atom(
     name: 'TH2FileEditControllerBase._th2File',
     context: context,
@@ -1604,6 +1684,49 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   );
 
   @override
+  void _preParseInitialize() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase._preParseInitialize');
+    try {
+      return super._preParseInitialize();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  TH2FileEditControllerCreateResult _commitLoadResult({
+    required TH2File parsedFile,
+    required bool isSuccessful,
+    required List<String> errors,
+    required List<TH2FileProblem> parsedProblems,
+  }) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase._commitLoadResult');
+    try {
+      return super._commitLoadResult(
+        parsedFile: parsedFile,
+        isSuccessful: isSuccessful,
+        errors: errors,
+        parsedProblems: parsedProblems,
+      );
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _commitLoadError(Object error) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase._commitLoadError');
+    try {
+      return super._commitLoadError(error);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setShowImages(bool shouldShow) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.setShowImages');
@@ -1950,6 +2073,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.moveCanvasHorizontally');
     try {
       return super.moveCanvasHorizontally(left: left);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _markLoadedAfterSaveAs() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase._markLoadedAfterSaveAs');
+    try {
+      return super._markLoadedAfterSaveAs();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

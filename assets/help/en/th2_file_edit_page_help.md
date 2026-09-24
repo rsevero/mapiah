@@ -8,6 +8,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 - [Index](#index)
 - [Top bar](#top-bar)
 - [File tabs](#file-tabs)
+- [Elements in the project tree](#elements-in-the-project-tree)
 - [Edit window](#edit-window)
   - [Top right corner](#top-right-corner)
   - [Bottom right corner](#bottom-right-corner)
@@ -82,6 +83,21 @@ The currently active file's tab is highlighted, making it easy to see which file
 Project `thconfig` and `.th` files open in text tabs. Syntax highlighting and folding make the source easier to read. While you edit, parsing is debounced and the project tree is refreshed after the pause. The tab becomes dirty until you save or revert it. Find and replace apply to the active file only; project-wide search is not available.
 
 Parser diagnostics are produced while loading or re-parsing source and are shown in the editor and project tree. Compiler diagnostics are produced by running Therion. Both kinds can coexist. A diagnostic with a known file and line can be selected to navigate to that location; a diagnostic without a source line remains in the run output and cannot target a tree line.
+
+## Elements in the project tree
+
+Each `.th2` file row in the project tree has an arrow. Expanding it shows the file's scraps and, below each scrap, its points, lines and areas. Comments, empty lines, settings, images and line points are not shown.
+
+* **Loading without opening a tab**: expanding a file reads it in the background. The tree shows _Loading…_ until it is ready. No tab opens and nothing is changed. Only files you expand are read; files are never read just to answer a search.
+* **Drawing order**: rows are in file order, which is the order XTherion uses. The top row is drawn first (bottom of the stack) and the last row is drawn last (on top). This is not Therion's own rendering order, which also depends on the symbol types.
+* **Labels**: each row shows the element kind, its type (and subtype, if any) and then its Therion id, if it has one, exactly as written in the file.
+* **Scraps**: scraps start expanded. Click the arrow of a scrap to collapse or expand it. A collapsed scrap shows a dot when one of its elements is selected.
+* **Selecting**: clicking a point, line or area selects it, as the Select tool followed by a click on the element would. If the file already has a tab, that tab is brought to the front. If it has no tab, the element is selected without opening one. Clicking a scrap makes it the active scrap.
+* **Double-click**: double-clicking an element also opens the file's tab if needed and zooms to the selection.
+* **Selection follows the canvas**: the rows of elements selected on the canvas are highlighted, and the active scrap's row is highlighted too.
+* **Search**: the project tree search field also matches the labels of the scraps and elements of files that are already loaded and valid. Matching rows are shown together with their scrap and file.
+* **Broken files**: a file with structural or parsing errors shows a badge with its number of problems (hover over it to see them) and a single row explaining that it must be fixed outside Mapiah. After fixing it, right-click the file row or that row and choose _Reload_. The same applies to a file whose loading failed unexpectedly.
+* **Closing a tab**: closing the tab of a file whose tree row is expanded keeps its elements in the tree, unless the file had unsaved changes, which are discarded as usual.
 
 ## Edit window
 

@@ -58,6 +58,30 @@ mixin _$MPGeneralController on MPGeneralControllerBase, Store {
     });
   }
 
+  late final _$_th2ControllersRevisionAtom = Atom(
+    name: 'MPGeneralControllerBase._th2ControllersRevision',
+    context: context,
+  );
+
+  int get th2ControllersRevision {
+    _$_th2ControllersRevisionAtom.reportRead();
+    return super._th2ControllersRevision;
+  }
+
+  @override
+  int get _th2ControllersRevision => th2ControllersRevision;
+
+  @override
+  set _th2ControllersRevision(int value) {
+    _$_th2ControllersRevisionAtom.reportWrite(
+      value,
+      super._th2ControllersRevision,
+      () {
+        super._th2ControllersRevision = value;
+      },
+    );
+  }
+
   late final _$_clipboardAtom = Atom(
     name: 'MPGeneralControllerBase._clipboard',
     context: context,
@@ -82,6 +106,18 @@ mixin _$MPGeneralController on MPGeneralControllerBase, Store {
     name: 'MPGeneralControllerBase',
     context: context,
   );
+
+  @override
+  void _bumpTH2ControllersRevision() {
+    final _$actionInfo = _$MPGeneralControllerBaseActionController.startAction(
+      name: 'MPGeneralControllerBase._bumpTH2ControllersRevision',
+    );
+    try {
+      return super._bumpTH2ControllersRevision();
+    } finally {
+      _$MPGeneralControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void addFileTab(String filename) {
@@ -144,12 +180,108 @@ mixin _$MPGeneralController on MPGeneralControllerBase, Store {
   }
 
   @override
+  void reset() {
+    final _$actionInfo = _$MPGeneralControllerBaseActionController.startAction(
+      name: 'MPGeneralControllerBase.reset',
+    );
+    try {
+      return super.reset();
+    } finally {
+      _$MPGeneralControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void closeProjectFileTabs(Iterable<String> canonicalPaths) {
     final _$actionInfo = _$MPGeneralControllerBaseActionController.startAction(
       name: 'MPGeneralControllerBase.closeProjectFileTabs',
     );
     try {
       return super.closeProjectFileTabs(canonicalPaths);
+    } finally {
+      _$MPGeneralControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  TH2FileEditController getTH2FileEditController({
+    required String filename,
+    Uint8List? fileBytes,
+    bool forceNewController = false,
+  }) {
+    final _$actionInfo = _$MPGeneralControllerBaseActionController.startAction(
+      name: 'MPGeneralControllerBase.getTH2FileEditController',
+    );
+    try {
+      return super.getTH2FileEditController(
+        filename: filename,
+        fileBytes: fileBytes,
+        forceNewController: forceNewController,
+      );
+    } finally {
+      _$MPGeneralControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  TH2FileEditController _replaceTH2ControllerForReload(
+    String normalizedFilename,
+  ) {
+    final _$actionInfo = _$MPGeneralControllerBaseActionController.startAction(
+      name: 'MPGeneralControllerBase._replaceTH2ControllerForReload',
+    );
+    try {
+      return super._replaceTH2ControllerForReload(normalizedFilename);
+    } finally {
+      _$MPGeneralControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  TH2FileEditController getTH2FileEditControllerForNewFile({
+    required String scrapTHID,
+    required List<THCommandOption> scrapOptions,
+    required String encoding,
+  }) {
+    final _$actionInfo = _$MPGeneralControllerBaseActionController.startAction(
+      name: 'MPGeneralControllerBase.getTH2FileEditControllerForNewFile',
+    );
+    try {
+      return super.getTH2FileEditControllerForNewFile(
+        scrapTHID: scrapTHID,
+        scrapOptions: scrapOptions,
+        encoding: encoding,
+      );
+    } finally {
+      _$MPGeneralControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void renameFileController({
+    required String oldFilename,
+    required String newFilename,
+  }) {
+    final _$actionInfo = _$MPGeneralControllerBaseActionController.startAction(
+      name: 'MPGeneralControllerBase.renameFileController',
+    );
+    try {
+      return super.renameFileController(
+        oldFilename: oldFilename,
+        newFilename: newFilename,
+      );
+    } finally {
+      _$MPGeneralControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeFileController({required String filename}) {
+    final _$actionInfo = _$MPGeneralControllerBaseActionController.startAction(
+      name: 'MPGeneralControllerBase.removeFileController',
+    );
+    try {
+      return super.removeFileController(filename: filename);
     } finally {
       _$MPGeneralControllerBaseActionController.endAction(_$actionInfo);
     }

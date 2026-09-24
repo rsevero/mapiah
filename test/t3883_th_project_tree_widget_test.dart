@@ -177,6 +177,27 @@ void main() {
     );
   });
 
+  testWidgets('a th2 file row always has an expansion chevron', (
+    WidgetTester tester,
+  ) async {
+    final THProjectFileNode root =
+        loadFixture('mixed-logical/cave.th').rootNode;
+
+    mpLocator.thProjectController.projectRootNode = root;
+
+    final TH2FileNode th2Node = firstWhere<TH2FileNode>(root) as TH2FileNode;
+
+    await tester.pumpWidget(buildTestApp());
+    await tester.pump();
+
+    expect(th2Node.children, isEmpty);
+    expect(
+      find.byKey(ValueKey('THProjectTreeNodeChevron|${th2Node.id}')),
+      findsOneWidget,
+    );
+    expect(mpLocator.thProjectTreeUIController.isExpanded(th2Node.id), isFalse);
+  });
+
   testWidgets('renders dirty and error status dots', (
     WidgetTester tester,
   ) async {

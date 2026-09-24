@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
@@ -16,6 +17,7 @@ import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/th_project/th_project_file_node.dart';
+import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
@@ -48,6 +50,12 @@ abstract class MPGeneralControllerBase with Store {
 
   final HashMap<String, TH2FileEditController> _t2hFileEditControllers =
       HashMap<String, TH2FileEditController>();
+
+  /// Bumped whenever the set of TH2 controllers or their keys changes, so
+  /// observers of [getTH2FileEditControllerIfExists] see creation, removal,
+  /// rename, reset and Reload replacement.
+  @readonly
+  int _th2ControllersRevision = 0;
 
   final HashMap<String, THTextEditorController> _textEditorControllers =
       HashMap<String, THTextEditorController>();
@@ -83,12 +91,20 @@ abstract class MPGeneralControllerBase with Store {
     }
   }
 
+  /// Returns the canonical path of [filename] (absolute and normalized, no
+  /// symlink resolution or case folding), the same definition the project
+  /// tree uses. Empty and new-file names are returned unchanged.
   String _normalizeFilename(String filename) {
     if (filename.isEmpty || filename.startsWith(mpNewFilePrefix)) {
       return filename;
     }
 
-    return p.normalize(File(filename).absolute.path);
+    return THProjectPathResolver.canonicalize(p.absolute(filename));
+  }
+
+  @action
+  void _bumpTH2ControllersRevision() {
+    _th2ControllersRevision++;
   }
 
   @action
@@ -128,7 +144,10 @@ abstract class MPGeneralControllerBase with Store {
     if (indexToRemove != -1) {
       _openFileOrder.removeAt(indexToRemove);
       MPLocator().mpTelemetryController.recordTH2Closed(normalizedFilename);
-      removeFileController(filename: normalizedFilename);
+
+      if (!shouldKeepTablessTH2Controller(normalizedFilename)) {
+        removeFileController(filename: normalizedFilename);
+      }
 
       if (_openFileOrder.isEmpty) {
         _activeTabIndex = 0;
@@ -140,6 +159,55 @@ abstract class MPGeneralControllerBase with Store {
         _syncProjectTreeSelectionToActiveTab(_openFileOrder[_activeTabIndex]);
       }
     }
+  }
+
+  /// Whether the TH2 controller of [filename] survives its tab closing: a
+  /// saved project file whose sidebar row is expanded keeps its controller
+  /// tab-less, so the tree keeps its rows, MPIDs, collapsed scraps and
+  /// selection, and a failed load is not retried automatically.
+  bool shouldKeepTablessTH2Controller(String filename) {
+    final String normalizedFilename = _normalizeFilename(filename);
+
+    if (!isTH2Tab(normalizedFilename) ||
+        normalizedFilename.startsWith(mpNewFilePrefix)) {
+      return false;
+    }
+
+    final TH2FileEditController? controller =
+        _t2hFileEditControllers[normalizedFilename];
+
+    if ((controller == null) || controller.enableSaveButton) {
+      return false;
+    }
+
+    return MPLocator().thProjectTreeUIController.isTH2FileRowExpanded(
+      normalizedFilename,
+    );
+  }
+
+  /// Starts the tab-less tree load of [filename] when its controller is
+  /// missing, or neither loaded nor loading and never failed. Opens no tab,
+  /// activates nothing and dirties nothing. At most one parse per controller.
+  void ensureTH2FileLoaded(String filename) {
+    final TH2FileEditController controller = getTH2FileEditController(
+      filename: filename,
+    );
+
+    if (controller.isFileLoaded ||
+        controller.isLoading ||
+        (controller.loadError != null)) {
+      return;
+    }
+
+    unawaited(
+      controller.load().then<void>(
+        (_) {},
+        onError: (Object error, StackTrace stackTrace) {
+          // Already logged by the load and recorded in its loadError, which
+          // the tree shows; handled here so it is not an unhandled error.
+        },
+      ),
+    );
   }
 
   @action
@@ -239,6 +307,7 @@ abstract class MPGeneralControllerBase with Store {
 
   /// Reset the Mapiah ID for elements to the first value.
   /// Should only be used for tests.
+  @action
   void reset() {
     _nextMPIDForElements = mpFirstMPIDForElements;
     _nextMPIDForTH2Files = mpFirstMPIDForTH2Files;
@@ -247,6 +316,9 @@ abstract class MPGeneralControllerBase with Store {
     _t2hFileEditControllers.clear();
     for (final TH2FileEditController controller in th2Controllers) {
       controller.dispose();
+    }
+    if (th2Controllers.isNotEmpty) {
+      _bumpTH2ControllersRevision();
     }
 
     for (final THTextEditorController controller
@@ -333,12 +405,19 @@ abstract class MPGeneralControllerBase with Store {
     return null;
   }
 
+  /// The registered controller for [filename], if any. Reads
+  /// [th2ControllersRevision] first, so an observer rebuilds when the
+  /// controller is created, replaced or removed.
   TH2FileEditController? getTH2FileEditControllerIfExists(String filename) {
     final String normalizedFilename = _normalizeFilename(filename);
+
+    // Tracked read: registry changes must rerun observers of this lookup.
+    _th2ControllersRevision;
 
     return _t2hFileEditControllers[normalizedFilename];
   }
 
+  @action
   TH2FileEditController getTH2FileEditController({
     required String filename,
     final Uint8List? fileBytes,
@@ -363,26 +442,41 @@ abstract class MPGeneralControllerBase with Store {
         );
 
     _t2hFileEditControllers[normalizedFilename] = createdController;
+    _bumpTH2ControllersRevision();
 
     return createdController;
   }
 
-  /// Replaces a broken TH2 controller with a fresh load from disk.
+  /// Replaces a TH2 controller with a fresh load from disk.
+  ///
+  /// The replacement is one observable transition. Completion never adds,
+  /// reopens or activates a tab: an open tab observes the replacement and a
+  /// tab-less file stays tab-less.
   Future<TH2FileEditController> reloadTH2File(String filename) async {
-    final String normalizedFilename = _normalizeFilename(filename);
-    final bool wasOpen = _openFileOrder.contains(normalizedFilename);
-    removeFileController(filename: normalizedFilename);
-    final TH2FileEditController controller = getTH2FileEditController(
-      filename: normalizedFilename,
-      forceNewController: true,
+    final TH2FileEditController controller = _replaceTH2ControllerForReload(
+      _normalizeFilename(filename),
     );
+
     await controller.load();
-    if (wasOpen) {
-      addFileTab(normalizedFilename);
-    }
+
     return controller;
   }
 
+  /// Disposes the controller registered at [normalizedFilename], if any, and
+  /// registers a new one, in one action.
+  @action
+  TH2FileEditController _replaceTH2ControllerForReload(
+    String normalizedFilename,
+  ) {
+    removeFileController(filename: normalizedFilename);
+
+    return getTH2FileEditController(
+      filename: normalizedFilename,
+      forceNewController: true,
+    );
+  }
+
+  @action
   TH2FileEditController getTH2FileEditControllerForNewFile({
     required String scrapTHID,
     required List<THCommandOption> scrapOptions,
@@ -432,6 +526,7 @@ abstract class MPGeneralControllerBase with Store {
     createdController.setFilename(filename);
 
     _t2hFileEditControllers[filename] = createdController;
+    _bumpTH2ControllersRevision();
 
     return createdController;
   }
@@ -444,6 +539,7 @@ abstract class MPGeneralControllerBase with Store {
   /// to its new map key — it is never disposed or recreated — so any
   /// per-controller state (cursor/fold/scroll/find, overlay windows) is
   /// preserved automatically.
+  @action
   void renameFileController({
     required String oldFilename,
     required String newFilename,
@@ -457,6 +553,7 @@ abstract class MPGeneralControllerBase with Store {
       )!;
 
       _t2hFileEditControllers[normalizedNewFilename] = controller;
+      _bumpTH2ControllersRevision();
     }
 
     if (_textEditorControllers.containsKey(normalizedOldFilename)) {
@@ -473,6 +570,7 @@ abstract class MPGeneralControllerBase with Store {
     }
   }
 
+  @action
   void removeFileController({required String filename}) {
     final String normalizedFilename = _normalizeFilename(filename);
 
@@ -480,6 +578,7 @@ abstract class MPGeneralControllerBase with Store {
         _t2hFileEditControllers.remove(normalizedFilename);
     if (controller != null) {
       controller.dispose();
+      _bumpTH2ControllersRevision();
     }
 
     _textEditorControllers.remove(normalizedFilename)?.dispose();
@@ -488,11 +587,16 @@ abstract class MPGeneralControllerBase with Store {
   @action
   void disposeTablessTH2Controllers(Iterable<String> canonicalPaths) {
     final Set<String> targets = canonicalPaths.map(_normalizeFilename).toSet();
+    bool disposedAny = false;
     for (final String path in List<String>.of(_t2hFileEditControllers.keys)) {
       if (!targets.contains(path) || _openFileOrder.contains(path)) continue;
       final TH2FileEditController? controller =
           _t2hFileEditControllers.remove(path);
       controller?.dispose();
+      disposedAny = true;
+    }
+    if (disposedAny) {
+      _bumpTH2ControllersRevision();
     }
   }
 
