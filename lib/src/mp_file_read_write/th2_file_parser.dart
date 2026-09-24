@@ -67,9 +67,10 @@ class TH2FileParser {
   final List<TH2FileProblem> problems = <TH2FileProblem>[];
   final Set<int> _problemLines = <int>{};
 
-  /// Line number and source line of area border references whose free text
-  /// was rewritten by the grammar, keyed by the border MPID.
-  final Map<int, (int, String)> _rewrittenBorderLines = <int, (int, String)>{};
+  /// Line number, source line and whether the grammar rewrote the text, of
+  /// every area border reference, keyed by the border MPID.
+  final Map<int, (int, String, bool)> _borderSourceLines =
+      <int, (int, String, bool)>{};
   int _currentLineNumber = 0;
 
   final Set<int> _mpIDsToCleanOriginalLine = {};
@@ -988,16 +989,15 @@ class TH2FileParser {
       originalLineInTH2File: _currentOriginalLine,
     );
 
-    /// The border reference grammar accepts free text (rewriting its spaces),
-    /// so an unknown area option line such as "weirdareaopt 5" becomes a
-    /// reference to no line. `_areasCleanUp` reports it if it stays dangling.
-    if (changedFromOriginalInFile &&
-        !_currentParseableLine.trim().startsWith('"')) {
-      _rewrittenBorderLines[newElement.mpID] = (
-        _currentLineNumber,
-        _currentOriginalLine,
-      );
-    }
+    /// `_areasCleanUp` reports references that name no line at this line.
+    /// The grammar accepts free text (rewriting its spaces), so an unknown
+    /// area option line such as "weirdareaopt 5" also arrives here.
+    _borderSourceLines[newElement.mpID] = (
+      _currentLineNumber,
+      _currentOriginalLine,
+      changedFromOriginalInFile &&
+          !_currentParseableLine.trim().startsWith('"'),
+    );
 
     if (changedFromOriginalInFile) {
       _addToMPIDsToCleanOriginalLine(newElement.mpID);
@@ -3009,7 +3009,7 @@ class TH2FileParser {
     _parseErrors.clear();
     problems.clear();
     _problemLines.clear();
-    _rewrittenBorderLines.clear();
+    _borderSourceLines.clear();
 
     try {
       if (fileBytes == null) {
@@ -3195,10 +3195,10 @@ class TH2FileParser {
     }
   }
 
-  /// Reports a dangling border reference whose text had spaces: it is an
-  /// unknown area option line, not a reference to a line.
-  void _reportDanglingRewrittenBorder(int borderMPID) {
-    final (int, String)? origin = _rewrittenBorderLines[borderMPID];
+  /// Reports a border reference that names no line of the file. A rewritten
+  /// multi-word text is an unknown area option line rather than a reference.
+  void _reportUnresolvedBorder(THAreaBorderTHID border, {required bool isMissing}) {
+    final (int, String, bool)? origin = _borderSourceLines[border.mpID];
 
     if (origin == null) {
       return;
@@ -3206,10 +3206,22 @@ class TH2FileParser {
 
     _currentLineNumber = origin.$1;
     _currentOriginalLine = origin.$2;
-    _addError(
-      'unrecognized area option or invalid border reference',
-      '_areasCleanUp',
-      'Line: "${origin.$2}"',
+
+    if (isMissing && origin.$3) {
+      _addError(
+        'unrecognized area option or invalid border reference',
+        '_areasCleanUp',
+        'Line: "${origin.$2}"',
+      );
+
+      return;
+    }
+
+    _addProblem(
+      kind: TH2FileProblemKind.invalidBorderReference,
+      detail: isMissing
+          ? 'Area border line not found: ${border.thID}'
+          : 'Area border reference is not a line: ${border.thID}',
     );
   }
 
@@ -3274,7 +3286,7 @@ class TH2FileParser {
               _parsedTH2File.elementByMPID(border.mpID) as THAreaBorderTHID;
 
           if (!_parsedTH2File.hasElementByTHID(resolvedBorder.thID)) {
-            _reportDanglingRewrittenBorder(resolvedBorder.mpID);
+            _reportUnresolvedBorder(resolvedBorder, isMissing: true);
             _parsedTH2File.removeElement(resolvedBorder);
 
             continue;
@@ -3285,6 +3297,7 @@ class TH2FileParser {
           );
 
           if (line is! THLine) {
+            _reportUnresolvedBorder(resolvedBorder, isMissing: false);
             _parsedTH2File.removeElement(resolvedBorder);
           }
         }

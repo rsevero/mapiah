@@ -174,6 +174,45 @@ void main() {
       });
     }
 
+    for (final String reference in <String>['missing', 'b2@cave']) {
+      test('a reference "$reference" to a missing line is reported', () async {
+        final (TH2File _, List<TH2FileProblem> problems) = await parse(
+          _areaFixture(lineID: 'b1', reference: reference),
+        );
+
+        expect(
+          problems
+              .map((TH2FileProblem problem) => (problem.kind, problem.lineNumber))
+              .toList(),
+          <(TH2FileProblemKind, int)>[
+            (TH2FileProblemKind.invalidBorderReference, 10),
+          ],
+        );
+        expect(problems.single.detail, contains(reference.split('@').first));
+      });
+    }
+
+    test('a reference to a point is reported', () async {
+      const String contents =
+          'encoding utf-8\n'
+          'scrap s1\n'
+          '  point 1 1 station -id p1\n'
+          '  area water\n'
+          '    p1\n'
+          '  endarea\n'
+          'endscrap\n';
+      final (TH2File _, List<TH2FileProblem> problems) = await parse(contents);
+
+      expect(
+        problems
+            .map((TH2FileProblem problem) => (problem.kind, problem.lineNumber))
+            .toList(),
+        <(TH2FileProblemKind, int)>[
+          (TH2FileProblemKind.invalidBorderReference, 5),
+        ],
+      );
+    });
+
     test('a reference to a missing line is still reported when rewritten', () async {
       final (TH2File _, List<TH2FileProblem> problems) = await parse(
         _areaFixture(lineID: 'b1', reference: 'weirdareaopt 5'),

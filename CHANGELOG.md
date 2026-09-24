@@ -55,6 +55,7 @@
     * A border reference written as `line@survey` now finds the line `line`, as in Therion, and is saved as written.
     * When Mapiah has to repair an invalid line id (for example `-id b@1` becomes `b_1`), border references that spell the same id are repaired the same way. Before, the two sides were repaired differently, the reference no longer matched, and the area was removed.
     * Added parser tests (`test/t3946`).
+  * An area border reference that names no line of the `.th2` file, or names something that is not a line (for example a point), now marks the file as broken with an "invalid border reference" problem at that line. Before, the reference was dropped silently when the file was opened, and the area too when it had no border left, so saving lost them. The affected `test/t0600` cases now expect a broken file, and `test/t3158` uses a new valid fixture.
   * Save As is disabled for broken `.th2` files in the toolbar and the overflow menu, as the broken-file panel already promised.
   * Reloading a broken `.th2` file from its tab after fixing it on disk now shows the canvas. Before, the tab kept using the discarded controller and still showed the broken-file panel.
   * Fixed several problems in the element move commands added for #32 (Phase 2), which no user action reaches yet:

@@ -47,7 +47,7 @@ void main() {
 
       final TH2FileWriter writer = TH2FileWriter();
       final String testFilename = THTestAux.testPath(
-        '2025-09-20-001-area_line_exists_but_has_no_id.th2',
+        '2026-09-23-001-area_with_border_line_and_line_without_id.th2',
       );
       final TH2FileEditController th2Controller = mpLocator.mpGeneralController
           .getTH2FileEditController(filename: testFilename);
@@ -55,6 +55,8 @@ void main() {
       await tester.runAsync(() async {
         await th2Controller.load();
       });
+
+      expect(th2Controller.isBroken, isFalse);
 
       final TH2FileEditSelectionController selectionController =
           th2Controller.selectionController;
@@ -139,7 +141,7 @@ void main() {
 
       final TH2FileWriter writer = TH2FileWriter();
       final String testFilename = THTestAux.testPath(
-        '2025-09-20-001-area_line_exists_but_has_no_id.th2',
+        '2026-09-23-001-area_with_border_line_and_line_without_id.th2',
       );
       final TH2FileEditController th2Controller = mpLocator.mpGeneralController
           .getTH2FileEditController(filename: testFilename);
@@ -147,6 +149,8 @@ void main() {
       await tester.runAsync(() async {
         await th2Controller.load();
       });
+
+      expect(th2Controller.isBroken, isFalse);
 
       final TH2FileEditSelectionController selectionController =
           th2Controller.selectionController;

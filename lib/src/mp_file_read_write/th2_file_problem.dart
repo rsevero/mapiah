@@ -8,6 +8,10 @@ enum TH2FileProblemKind {
   missingEndline,
   missingEndarea,
   missingEndscrap,
+
+  /// An area border reference that names no line of the file, or names
+  /// something that is not a line.
+  invalidBorderReference,
   parseError,
 }
 

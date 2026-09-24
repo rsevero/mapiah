@@ -40,6 +40,7 @@ endscrap
       {
         'file': 'th_file_parser-00091-area_with_line_id.th2',
         'length': 3,
+        'isSuccessful': false,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
@@ -68,6 +69,7 @@ endscrap
       {
         'file': '2025-09-17-001-line_included_in_area_without_id.th2',
         'length': 9,
+        'isSuccessful': false,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap poco_surubim_SCP03 -projection plan -scale [ -164 -2396 3308 -2396 0 0 \
@@ -84,6 +86,7 @@ endscrap
       {
         'file': '2025-09-20-001-area_line_exists_but_has_no_id.th2',
         'length': 17,
+        'isSuccessful': false,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
@@ -126,6 +129,7 @@ endscrap
       {
         'file': '2025-09-20-003-area_border_th_id_exists_but_in_a_point.th2',
         'length': 14,
+        'isSuccessful': false,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test

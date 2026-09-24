@@ -215,6 +215,7 @@ Rows support `Ctrl`/`Shift` multi-select, which mirrors the canvas selection (§
 | `missingEndline` | a line is still open when a line that belongs to an enclosing context, or the end of the file, is reached |
 | `missingEndarea` | the same, for an area |
 | `missingEndscrap` | the same, for a scrap (at end of file) |
+| `invalidBorderReference` | an area border reference names no line of the file, or names something that is not a line, after `name@survey` references and repaired line ids are resolved |
 | `parseError` | anything else the parser reports today through `_addError(...)` (`th2_file_parser.dart:2454-2459`): a line that fails every applicable grammar, an option that cannot be created, a line-segment option without a segment, an `endline` without a line, a malformed `##XTHERION##`/`##MAPIAH##` setting, or a multiline comment still open at the end of the file |
 
 Every `_addError(...)` call site counts, with no allow-list. If one of them later turns out to be too strict for real files, the fix is to make the parser accept that input properly, not to let the file open with a line missing.
