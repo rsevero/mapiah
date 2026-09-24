@@ -153,7 +153,7 @@ final class TH2FileStatusTreeRow extends THProjectTreeVisibleRow {
 - Element row ids are `th2el:<canonicalPath>:<mpID>` and status row ids are `th2status:<canonicalPath>:<kind>`. `canonicalPath` is `THProjectPathResolver.canonicalize(p.absolute(path))`, which for project files equals `TH2FileNode.absolutePath` (Phase 3 plan §3.1 item 5).
 - Scrap rows can be collapsed and start expanded. Their collapsed state is kept in a separate `THProjectTreeUIController.collapsedTH2ScrapIds` set, keyed by scrap row id, not in `expandedNodeIds`, so project default-expansion seeding never sees TH2 ids. MPIDs only exist while the app runs and are never reused, so a stale id after reloading a file is harmless. Both sets are cleared on project close (Phase 3 plan §6.1).
 - The builder lives in a new `lib/src/auxiliary/th2_element_tree_aux.dart`. For a valid file it walks `TH2File.childrenMPIDs` and each scrap's `childrenMPIDs`, and keeps only `THScrap`, `THPoint`, `THLine` and `THArea` rows. For a broken file it returns one `TH2FileStatusTreeRow(broken)` (§4.2). It runs inside the tree's `Observer`, so structural changes must be observable (§5.4).
-- **Labels:** `<kind> <type[:subtype]?> <thID?>`. Kind and type/subtype come from the existing localized `MPTextToUser` helpers. The Therion id is shown exactly as stored, in a muted span with no `id=` prefix or brackets, for example `line wall:blocks w12` (`w12` muted), `point station` or `scrap s1`. Therion ids are free form, so the tree never validates, changes or generates them; elements without `-id` show no id. Scraps always have an id. Phase 3 labels leave out station `-name` values and other option values. Phase 5 adds the station `-name` and the `-text` of `label`/`remark` points as an extra detail part. Rows use the existing PLA type icons where they exist; Phase 7 replaces them on point, line and area rows with previews of how each type is drawn. Details: Phase 3 plan §6.2.
+- **Labels:** `<kind> <type[:subtype]?> <thID?>`. Kind and type/subtype come from the existing localized `MPTextToUser` helpers. The Therion id is shown exactly as stored, in a muted span with no `id=` prefix or brackets, for example `line wall:blocks w12` (`w12` muted), `point station` or `scrap s1`. Therion ids are free form, so the tree never validates, changes or generates them; elements without `-id` show no id. Scraps always have an id. Phase 3 labels leave out station `-name` values and other option values. Phase 5 adds the station `-name` and the `-text` of `label`/`remark` points as an extra detail part. Rows use the existing PLA type icons where they exist; Phase 8 replaces them on point, line and area rows with previews of how each type is drawn. Details: Phase 3 plan §6.2.
 - **Filter:** the sidebar search filter also matches element and scrap labels of **loaded, valid** files. It follows the existing project-tree rule: a row is shown only if it or a descendant matches, so a file or scrap that matches by its own name does not reveal its non-matching children. Status rows are hidden while filtering, and no file is loaded while a filter is active. Details: Phase 3 plan §7.
 
 ### 4.2 Loading a file's elements, and the broken badge
@@ -466,7 +466,70 @@ In the examples, italics show the detail span and the trailing muted part is the
 - Keyboard shortcuts page with the new shortcuts in alphabetical order.
 - CHANGELOG entry for Phase 6 (help pages, shortcuts page, remaining localization), referencing #32. Also check that the CHANGELOG as a whole calls out the broken-file behavior change (§9, risk 1); if Phase 1's entry does not, Phase 6's entry does.
 
-### Phase 7: Type preview icons on element rows
+### Phase 7: Evaluate removing the scrap button and dialog
+
+Phase 4 lets users move scraps, points, lines and areas in the project sidebar. That overlaps with the canvas's "Change active scrap" button, the scrap button in the right-hand action column (`_changeScrapButton` in `th2_file_edit_action_buttons_widget.dart`), and the dialog it opens (`MPWindowType.availableScraps` → `MPAvailableScrapsWidget`). This phase decides **whether** the button and dialog can be removed completely, and **how**. The deliverable is a decision, plus a follow-up implementation plan when the answer is yes. This phase changes no code.
+
+**What the dialog does today, and what the tree offers after Phase 4:**
+
+| Dialog feature (`mp_available_scraps_widget.dart`) | Code today | Tree after Phase 4 |
+|---|---|---|
+| Choose the active scrap (radio) | `setActiveScrap` | Plain click on a scrap row (Phase 4 plan §3.6). **Covered.** |
+| Reorder scraps by drag | `reorderScraps` through `MPReversedListIndexHelper` | Scrap drag, context menu and shortcuts (Phase 4). **Covered**, but the dialog lists scraps in **reverse** file order (the scrap drawn on top first) and the tree lists them in file order. |
+| Show/hide one scrap (checkbox), show/hide all | `hideElementController.toggleScrapVisibility`, `toggleAllScrapsVisibility` | **Missing.** |
+| Copy, Cut, Duplicate a scrap | `copyPasteController.copyScrap`, `cutScrap`, `duplicateScrap` | **Missing.** |
+| Remove a scrap | `elementEditController.removeScrap` | **Missing.** |
+| Edit scrap options (right-click on a scrap row) | `setSelectedScrapByMPID`, then `perfomToggleScrapOptionsOverlayWindow` → `MPScrapOptionsEditWidget` | **Missing.** |
+| Add a scrap | `MPButtonType.addScrap` | `K` and the add-scrap action button stay. The tree has no entry. |
+
+`Alt+K` (`toggleToNextAvailableScrap`, also reached through `MPButtonType.changeScrap`) does not use the dialog and stays whatever the decision.
+
+**Questions this phase answers:**
+
+1. **Can the tree always stand in for the dialog?** The tree only shows files that belong to the loaded project, and the sidebar can be collapsed. Check whether a `.th2` tab can still be open without a matching tree row: startup file arguments, tabs left open after a project was closed or replaced, and new files not yet saved into the project. If one of these remains, removal needs one of: making sure every open `.th2` tab has a tree row, a fallback (for example, the sidebar expands and reveals the file when the user asks for scraps), or keeping a smaller dialog for those tabs.
+2. **Where does each missing feature go?** The expected answer is:
+   - scrap-row context menu: Copy, Cut, Duplicate, Delete, Options…, and Show/Hide, next to the Phase 4 order items. For a scrap selection (Phase 4 plan §3.6), items that make sense for several scraps act on all of them, as the order items do;
+   - an eye toggle at the end of each scrap row, so visibility can be seen without opening a menu;
+   - file-row context menu: Add scrap and Show all scraps / Hide all scraps.
+
+   Check each against Phase 4's rules: the tab opens on the first edit of a tab-less file (Phase 4 plan §3.5); the tree mode exit and the right-click selection rules apply (Phase 4 plan §6.2); items are disabled when they would do nothing.
+3. **Scrap options without a dialog anchor.** `MPScrapOptionsEditWidget` is an overlay window of the canvas, positioned next to the dialog row. Decide whether the tree opens it on the canvas (it then needs an open, active tab and a position that does not depend on the dialog), or whether scrap options get an editor of their own in the sidebar.
+4. **Visibility is canvas view state.** Scrap visibility lives in `hideElementController`, is not saved, and is not undoable. Check that it works for tab-less controllers, that the tree shows the right state after undo, redo and reload, and whether toggling it should open a tab.
+5. **Copy, Cut and Duplicate from the tree.** These helpers put the scrap into `mpSelectedElementsLogical` and remove it right away (Phase 4 plan §3.6). Check that calling them from the tree keeps the tree's scrap selection and the active scrap as Phase 4 expects, and that pasting still goes to the active file.
+6. **Code that removal would touch.** Removing the dialog also removes:
+   - `MPWindowType.availableScraps`, its factory case, `MPGlobalKeyWidgetType.changeScrapButton`, and its entries in `autoDismissOverlayWindowTypes` and `_getMutuallyExclusiveOverlayWindowTypes`;
+   - `showChangeScrapOverlayWindow` / `_isChangeScrapWindowShown`, and their use in `showRemoveButton` and `showSnapButton` (`th2_file_edit_controller.dart`);
+   - `MPReversedListIndexHelper`, if nothing else uses it;
+   - the `th2FileEditPageChangeActiveScrapTool` and `th2FileEditPageChangeActiveScrapTitle` `.arb` keys (EN/PT, then `flutter gen-l10n`).
+
+   `mpScrapButtonImagePath` stays, because the add-scrap button uses it too. `setSelectedScrapByMPID` is the only source of stray `MPSelectedScrap` entries (Phase 4 plan §3.4, §3.6). Once the dialog is gone, decide whether Phase 4's clean-up of those entries stays as a safety net or is removed.
+7. **Tests and help that mention the dialog.** List the tests that open it or depend on its button (for example the `test/t3xxx_ui_*` tests found with `grep -rlE 'availableScraps|changeScrapButton|MPAvailableScraps' test`). List the help text in `assets/help/{en,pt}/th2_file_edit_page_help.md` and `keyboard_shortcuts_edit.md`.
+
+**Possible outcomes:**
+
+- **A. Remove it completely.** Every row of the table has a tree equivalent, and question 1 shows that every open `.th2` tab has a tree row. This is the preferred outcome.
+- **B. Remove it in steps.** First add the missing features to the tree and ship them next to the dialog, then remove the dialog in a later release, once users have had time to switch.
+- **C. Keep a smaller dialog.** Question 1 finds tabs with no tree row that cannot be avoided. The dialog then keeps only what those tabs need.
+
+**Deliverables:**
+
+- A "Decision" note added to this phase: the outcome chosen, the answers to questions 1–7, and the reasons.
+- For outcome A or B, a new sub-plan `2026-09-23-th2-element-tree-and-drawing-order-phase7-scrap-dialog-removal.md`, written like the Phase 4 plan. It lists the new menu items and row controls, their EN/PT strings, the code removed, the help and CHANGELOG changes, and tests. It is expected to include `t3953_th2_element_tree_scrap_actions_test.dart` for the new scrap and file actions, and updates to or removal of the tests from question 7.
+- A CHANGELOG entry for this phase's evaluation, referencing #32.
+
+**Decision (2026-09-24): outcome A, remove completely.** Details and implementation: [Phase 7 plan](2026-09-23-th2-element-tree-and-drawing-order-phase7-scrap-dialog-removal.md). Answers:
+
+1. **Tabs with no tree row do exist:** `.th2` files given on the command line, files saved with TH2 Save As to a path the project does not reference, and those tabs after the project is closed or replaced. The sidebar gets an "Open files outside the project" section that lists them with the same element tree (Phase 7 plan §3). A collapsed sidebar is the user's choice and is one click away; `Alt+K` still works without it.
+2. **Placement:** Copy, Cut, Duplicate, Delete, Hide/Show and Options… go in the scrap-row menu. An eye toggle goes on scrap rows. Add scrap and Hide all but active / Show all scraps go in a new file-row menu.
+3. **Scrap options:** the existing canvas overlay is kept. The tree opens the tab if needed, waits for the canvas to lay out, and anchors the window at the canvas's left edge, level with the row.
+4. **Visibility** stays view state per file controller. Toggling it from the tree opens no tab.
+5. **Copy, Cut, Duplicate** get list versions that act on the whole scrap selection. They must leave Phase 4's scrap selection alone.
+6. **Code:** the removal list is in Phase 7 plan §8. Scrap option edits get an explicit target instead of the canvas selection, so `setSelectedScrapByMPID`, the only source of stray `MPSelectedScrap` entries, is removed. Phase 4's clean-up of those entries stays as a safety net. `MPReversedListIndexHelper` stays, because the images dialog uses it.
+7. **Tests and help:** `t3741` loses its scrap-dialog cases. The help's scrap sections are rewritten around the sidebar; they also mention an `Alt+C` shortcut and a right-click on the scrap button that the code does not have.
+
+Phase 4 was being implemented when this was decided, so the Phase 4 plan was not edited. The edits it needs are listed in Phase 7 plan §9.
+
+### Phase 8: Type preview icons on element rows
 
 Each point, line and area row in the sidebar tree starts with a small icon that previews how that element's type (and subtype) is drawn on the canvas. It replaces the generic element-kind icon that Phase 3 uses for these rows. Scrap rows keep their Phase 3 icon, and file, status and project rows are unchanged.
 
@@ -495,7 +558,7 @@ Each point, line and area row in the sidebar tree starts with a small icon that 
 
 - **Localization:** no new strings, since icons are decorative and excluded from semantics.
 - **Help pages (EN/PT):** Phase 6 comes earlier, so this phase updates the "Drawing order and element tree" help section itself, to mention the type preview icons.
-- CHANGELOG entry for Phase 7, referencing #32.
+- CHANGELOG entry for Phase 8, referencing #32.
 - Tests (`t3952_th2_element_type_icon_test.dart`):
   - golden tests, following the existing Therion symbol golden tests (`t3764`–`t3766`), in light and dark mode, for:
     - a point with a Therion symbol (for example `station`);
@@ -522,11 +585,11 @@ Each point, line and area row in the sidebar tree starts with a small icon that 
 | Commands | new `lib/src/commands/mp_move_elements_command.dart`, `mp_command.dart`, `factories/mp_command_factory.dart`, `types/mp_command_type.dart`, `types/mp_command_description_type.dart` |
 | Controllers | `th2_file_edit_element_edit_controller.dart` (Phase 5: revision bump for `station`/`text` option edits), `th2_file_edit_controller.dart` (`_structureRevision`, `isBroken`, `problems`, `_finalFilePreparations` split, `dispose()`), `mp_general_controller.dart` (tab-less cleanup, open-on-edit helper, `reloadTH2File`), `th_project_controller.dart` (cleanup call, skip broken files on save) |
 | Aux | new `lib/src/auxiliary/th2_hierarchy_aux.dart`, new `th2_element_tree_aux.dart` (Phase 5: label details), `th_project_tree_flatten_aux.dart`, `mp_text_to_user.dart`, `mp_label_text_aux.dart` (reused as is in Phase 5) |
-| Widgets / pages | `th_project_tree_widget.dart`, `th_project_tree_node_widget.dart`, new `th2_element_tree_row_widget.dart`, new `th2_element_type_icon_widget.dart` (Phase 7), new `th2_broken_file_body_widget.dart`, `th2_file_edit_body_widget.dart`, `th2_file_tabs_page.dart` (Save As disabled for broken files), `mp_therion_run_dialog_widget.dart` (broken-file warning) |
-| Constants | `mp_constants.dart` (drag hover delay, drop-zone fractions; Phase 7: type-icon sizes, preview symbol scale, line thickness, point radius and cache limit) |
-| Painters | Phase 7: `lib/src/painters/th_line_painter.dart` (path-drawing core moved into a static helper with explicit symbol unit and thickness), new `lib/src/painters/th2_element_type_icon_painter.dart` |
+| Widgets / pages | `th_project_tree_widget.dart`, `th_project_tree_node_widget.dart`, new `th2_element_tree_row_widget.dart`, new `th2_element_type_icon_widget.dart` (Phase 8), new `th2_broken_file_body_widget.dart`, `th2_file_edit_body_widget.dart`, `th2_file_tabs_page.dart` (Save As disabled for broken files), `mp_therion_run_dialog_widget.dart` (broken-file warning) |
+| Constants | `mp_constants.dart` (drag hover delay, drop-zone fractions; Phase 8: type-icon sizes, preview symbol scale, line thickness, point radius and cache limit) |
+| Painters | Phase 8: `lib/src/painters/th_line_painter.dart` (path-drawing core moved into a static helper with explicit symbol unit and thickness), new `lib/src/painters/th2_element_type_icon_painter.dart` |
 | l10n | `lib/l10n/intl_en.arb`, `intl_pt.arb`, updated in each phase from Phase 3 on for that phase's strings, and in Phase 6 for the Phase 1 strings |
-| Docs | help pages EN/PT and keyboard-shortcuts page (Phase 6) |
+| Docs | help pages EN/PT and keyboard-shortcuts page (Phase 6); Phase 7: its decision note and, for outcomes A and B, the scrap-dialog removal sub-plan |
 | Changelog | `CHANGELOG.md`, one entry per phase |
 
 ## 9. Risks and Open Questions
