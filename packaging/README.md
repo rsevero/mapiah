@@ -8,6 +8,7 @@
 4. Update `TODO.md` with changes.
 5. Update Flutter and Mapiah version in the action/workflow files with:
    1. dart run ./scripts/update_flutter_and_mapiah_version.dart
+   2. This also regenerates the English and Portuguese user guide PDFs in the repository root. Google Chrome is required (or set `CHROME_BIN` to its executable). Include both PDFs in the release commit.
 6. Commit the previous changes with a comment like 'v0.3.0'
 7. Push the previous changes
 8. Create a new tag with the new version:
@@ -24,6 +25,7 @@
 1. Update Mapiah version in `pubspec.yaml` to some `-rcXX` version.
 2. Update Flutter and Mapiah version in the action/workflow files with:
    1. dart run ./scripts/update_flutter_and_mapiah_version.dart
+   2. This also regenerates both user guide PDFs and requires Google Chrome (or `CHROME_BIN`).
 3. Commit the previous changes with a comment like 'v0.3.0'
 4. Push the previous changes
 5. Create a new lightweight tag with the new version:

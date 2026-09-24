@@ -2,7 +2,7 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 Página inicial do espaço de trabalho, onde são apresentados a árvore do projeto, as abas de arquivos e as ações principais.
 
-A documentação completa para impressão, incluindo instruções de instalação, páginas de ajuda e atalhos de teclado, está em `Mapiah-User-Guide-pt.pdf` na raiz do [repositório do Mapiah](https://github.com/rsevero/mapiah). Uma cópia acompanha cada versão lançada.
+A documentação completa para impressão, incluindo instruções de instalação, páginas de ajuda e atalhos de teclado, está em `MApiah-Guia_do_usuario-pt.pdf` na raiz do [repositório do Mapiah](https://github.com/rsevero/mapiah). Uma cópia acompanha cada versão lançada.
 
 _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercambiáveis. Nas menções de atalhos abaixo usa-se "Ctrl" por brevidade._
 

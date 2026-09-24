@@ -22,6 +22,8 @@ const String flatpakManifestPath =
     'packaging/linux/flatpak/built-locally/org.mapiah.mapiah.yml';
 const String releaseConstantsPath = 'lib/src/constants/mp_constants.dart';
 const String releaseSummaryPath = 'releases/releases_summary.json';
+const String englishGuidePath = 'Mapiah-User-Guide-en.pdf';
+const String portugueseGuidePath = 'MApiah-Guia_do_usuario-pt.pdf';
 
 Future<int> main(List<String> args) async {
   final String? version = await getFlutterVersion();
@@ -115,6 +117,14 @@ Future<int> main(List<String> args) async {
   } else {
     stdout.writeln('No change: $releaseSummaryPath');
   }
+
+  final int guideExitCode = await runUserGuideGenerator();
+
+  if (guideExitCode != 0) {
+    return guideExitCode;
+  }
+
+  changedFiles.addAll(<String>[englishGuidePath, portugueseGuidePath]);
 
   stdout.writeln('\nSummary:');
   stdout.writeln('Flutter version: $version');
@@ -227,6 +237,30 @@ Future<int> runReleaseBriefGenerator() async {
     return 0;
   } catch (e) {
     stderr.writeln('Failed to run scripts/generate_releases_brief.dart: $e');
+
+    return 2;
+  }
+}
+
+/// Runs the PDF generator as part of release preparation.
+Future<int> runUserGuideGenerator() async {
+  try {
+    final ProcessResult result = await Process.run('dart', <String>[
+      'run',
+      'scripts/generate_user_guides.dart',
+    ]);
+
+    if (result.exitCode != 0) {
+      stderr.writeln('User guide generation failed:\n${result.stderr}');
+
+      return result.exitCode;
+    }
+
+    stdout.write(result.stdout);
+
+    return 0;
+  } catch (error) {
+    stderr.writeln('Could not generate user guides: $error');
 
     return 2;
   }

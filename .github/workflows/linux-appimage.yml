@@ -41,6 +41,17 @@ jobs:
         channel: stable
         flutter-version: 3.47.1
 
+    - name: Set up Chrome for user guides
+      id: setup-chrome
+      uses: browser-actions/setup-chrome@v2
+
+    - name: Generate user guide PDFs
+      env:
+        CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
+      run: |
+        flutter pub get
+        dart run scripts/generate_user_guides.dart
+
     - name: Install dependencies
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
@@ -116,4 +127,6 @@ jobs:
 
         gh release upload "$TAG" \
             --clobber \
-            "$INSTALLER_APPIMAGE"
+            "$INSTALLER_APPIMAGE" \
+            Mapiah-User-Guide-en.pdf \
+            MApiah-Guia_do_usuario-pt.pdf

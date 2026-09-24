@@ -25,6 +25,7 @@ dependencies:
   intl: any
   intl_utils: ^2.8.7
   logger: ^2.5.0
+  markdown: ^7.3.1
   markdown_widget: ^2.3.2+8
   material_ui: ^1.2.0
   meta: ^1.0.0
