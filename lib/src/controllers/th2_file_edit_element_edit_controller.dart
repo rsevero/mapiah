@@ -795,10 +795,13 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     _th2FileEditController.triggerAllElementsRedraw();
   }
 
-  /// Options shown in the sidebar tree's element labels (id and subtype).
+  /// Options shown in the sidebar tree's element labels (id, subtype, station
+  /// name and text).
   bool _isTreeLabelOption(THCommandOptionType optionType) {
     return (optionType == THCommandOptionType.id) ||
-        (optionType == THCommandOptionType.subtype);
+        (optionType == THCommandOptionType.subtype) ||
+        (optionType == THCommandOptionType.station) ||
+        (optionType == THCommandOptionType.text);
   }
 
   @action

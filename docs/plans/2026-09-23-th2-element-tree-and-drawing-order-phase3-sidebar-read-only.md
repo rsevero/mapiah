@@ -3,7 +3,7 @@
 # TH2 Element Tree and Drawing Order — Phase 3: Read-only Sidebar
 
 **Date:** 2026-09-23  
-**Status:** Proposed  
+**Status:** Implemented  
 **Parent plan:** [TH2 Element Tree in the Project Sidebar](2026-09-23-th2-element-tree-and-drawing-order.md)  
 **Prerequisite:** Phase 1 broken-file handling and Phase 2 model/controller revision support. Their code is in place, but their planned tests were never added; §10 step 1 adds them before any Phase 3 change (§3.5).  
 **Issue:** [#32: Provide move object up/down drawing stack and awareness of relative stack order between objects](https://github.com/rsevero/mapiah/issues/32)

@@ -3,13 +3,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_command_option_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_label_text_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/auxiliary/th_project_tree_flatten_aux.dart';
 import 'package:mapiah/src/auxiliary/th2_hierarchy_aux.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
+import 'package:mapiah/src/controllers/auxiliary/mp_label_data.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/th_element.dart';
+import 'package:mapiah/src/elements/types/th_point_type.dart';
 
 final class TH2ElementTreeDragPayload {
   final String th2FilePath;
@@ -410,12 +414,17 @@ class TH2ElementTreeAux {
       case THScrap scrap:
         return TH2ElementTreeLabel(primaryText: kind, thID: scrap.thID);
       case THPoint point:
+        final ({String? detail, String? tooltipText}) pointDetail =
+            _pointDetail(point);
+
         return TH2ElementTreeLabel(
           primaryText: _joinNonEmpty(
             kind,
             MPTextToUser.getPointTypeSubtypeFromPoint(point),
           ),
+          detail: pointDetail.detail,
           thID: MPCommandOptionAux.getID(point),
+          tooltipText: pointDetail.tooltipText,
         );
       case THLine line:
         return TH2ElementTreeLabel(
@@ -436,6 +445,50 @@ class TH2ElementTreeAux {
       default:
         return TH2ElementTreeLabel(primaryText: kind);
     }
+  }
+
+  /// The detail of a station, label or remark point: the station's `-name`,
+  /// or the `-text` lines joined with spaces. Multi-line texts also get a
+  /// tooltip with one line per `<br>` part. Other points get neither.
+  static ({String? detail, String? tooltipText}) _pointDetail(THPoint point) {
+    switch (point.pointType) {
+      case THPointType.station:
+        if (!point.hasOption(THCommandOptionType.station)) {
+          break;
+        }
+
+        final String name =
+            (point.getOption(THCommandOptionType.station)
+                    as THStationNameCommandOption)
+                .name
+                .trim();
+
+        return (detail: name.isEmpty ? null : name, tooltipText: null);
+      case THPointType.label:
+      case THPointType.remark:
+        final MPLabelData? labelData = MPLabelTextAux.resolve(point);
+
+        if (labelData == null) {
+          break;
+        }
+
+        final List<String> lines = labelData.lines
+            .where((String line) => line.isNotEmpty)
+            .toList();
+
+        if (lines.isEmpty) {
+          break;
+        }
+
+        return (
+          detail: lines.join(' '),
+          tooltipText: (lines.length > 1) ? lines.join('\n') : null,
+        );
+      default:
+        break;
+    }
+
+    return (detail: null, tooltipText: null);
   }
 
   /// Joins [first] and [second] with a space, leaving empty parts out.

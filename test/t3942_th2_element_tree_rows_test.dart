@@ -230,11 +230,13 @@ void main() {
       expect(rows[7].label.plainText, rows[7].label.primaryText);
     });
 
-    test('a station name never appears in its label', () async {
+    test('a station name appears only as the label detail', () async {
       final TH2FileEditController controller = await load(_validContents);
-      final List<String> labels = labelsOf(rowsFor(controller));
+      final TH2ElementTreeRow station =
+          rowsFor(controller).rows[1] as TH2ElementTreeRow;
 
-      expect(labels[1], isNot(contains('1.3')));
+      expect(station.label.primaryText, isNot(contains('1.3')));
+      expect(station.label.detail, '1.3');
     });
 
     test('plain text is the concatenation of the spans', () async {
@@ -243,11 +245,11 @@ void main() {
       for (final TH2ElementTreeRow row in rowsFor(
         controller,
       ).rows.cast<TH2ElementTreeRow>()) {
-        final String? thID = row.label.thID;
-
         expect(
           row.label.plainText,
-          (thID == null) ? row.label.primaryText : '${row.label.primaryText} $thID',
+          <String?>[row.label.primaryText, row.label.detail, row.label.thID]
+              .whereType<String>()
+              .join(' '),
         );
       }
     });

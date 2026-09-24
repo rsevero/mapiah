@@ -3,7 +3,7 @@
 # TH2 Element Tree and Drawing Order — Phase 5: Station Names and Label/Remark Text in Element Labels
 
 **Date:** 2026-09-24  
-**Status:** Proposed. Checked against the code at `65e8d164` on 2026-09-24.  
+**Status:** Implemented on 2026-09-24. The label tooltip uses `TooltipTriggerMode.manual`, because the §8 "hold, then drag" test failed with the default trigger. Two Phase 3 tests were updated, contrary to §8 Acceptance: `t3942` expected station names to stay out of labels, and `t3944` used a station-name edit as its example of an option that does not bump the revision. Checked against the code at `65e8d164` on 2026-09-24.  
 **Parent plan:** [TH2 Element Tree in the Project Sidebar](2026-09-23-th2-element-tree-and-drawing-order.md) (§4.1 labels, §7 Phase 5)  
 **Prerequisite:** Phases 1–4 are in place: the read-only sidebar tree with its label cache ([Phase 3 plan](2026-09-23-th2-element-tree-and-drawing-order-phase3-sidebar-read-only.md) §6.2, §7) and drag and drop with row feedback ([Phase 4 plan](2026-09-23-th2-element-tree-and-drawing-order-phase4-drag-drop-and-menu.md)).  
 **Issue:** [#32: Provide move object up/down drawing stack and awareness of relative stack order between objects](https://github.com/rsevero/mapiah/issues/32)

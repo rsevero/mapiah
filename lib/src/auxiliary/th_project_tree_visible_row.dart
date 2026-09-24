@@ -28,29 +28,35 @@ final class THProjectTreeNodeRow extends THProjectTreeVisibleRow {
 }
 
 /// The text of a TH2 element row: the localized kind and type[:subtype],
-/// then the Therion id exactly as stored, if any.
+/// then an optional detail, then the Therion id exactly as stored, if any.
 class TH2ElementTreeLabel {
   /// Localized kind and, for points, lines and areas, type[:subtype].
   final String primaryText;
 
+  /// User data that identifies the element: a station's `-name`, or the
+  /// `-text` of a label or remark point on one line. `null` when there is none.
+  final String? detail;
+
   /// The Therion id shown verbatim, or `null` when the element has none.
   final String? thID;
 
-  const TH2ElementTreeLabel({required this.primaryText, this.thID});
+  /// The full `-text` of a label or remark point, one `<br>` line per line,
+  /// for the row tooltip. `null` when the row needs no tooltip.
+  final String? tooltipText;
 
-  /// The plain row text used for filtering and semantics.
+  const TH2ElementTreeLabel({
+    required this.primaryText,
+    this.detail,
+    this.thID,
+    this.tooltipText,
+  });
+
+  /// The plain row text used for filtering, semantics and drag feedback.
   String get plainText {
-    final String? currentTHID = thID;
-
-    if ((currentTHID == null) || currentTHID.isEmpty) {
-      return primaryText;
-    }
-
-    if (primaryText.isEmpty) {
-      return currentTHID;
-    }
-
-    return '$primaryText $currentTHID';
+    return <String?>[primaryText, detail, thID]
+        .whereType<String>()
+        .where((String part) => part.isNotEmpty)
+        .join(' ');
   }
 }
 

@@ -542,7 +542,7 @@ void main() {
       expect(seen, <(String, String)>[(target, 'fresh')]);
     });
 
-    test('subtype-only edits bump structureRevision, other options do not', () async {
+    test('subtype edits bump structureRevision, non-label options do not', () async {
       final TH2FileEditController controller = controllerFor(_validContents);
 
       await controller.load();
@@ -571,7 +571,10 @@ void main() {
 
       controller.execute(
         MPSetOptionToElementCommand(
-          toOption: THStationNameCommandOption(parentMPID: point, name: '1'),
+          toOption: THClipCommandOption(
+            parentMPID: point,
+            choice: THOptionChoicesOnOffType.off,
+          ),
         ),
       );
       expect(controller.structureRevision, start + 3);

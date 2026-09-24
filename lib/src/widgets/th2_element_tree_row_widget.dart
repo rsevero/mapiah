@@ -310,15 +310,23 @@ class _TH2ElementRow extends StatelessWidget {
   Widget _buildLabel(ColorScheme colorScheme) {
     final String? thID = row.label.thID;
     final bool hasTHID = (thID != null) && thID.isNotEmpty;
+    final String? detail = row.label.detail;
+    final bool hasDetail = (detail != null) && detail.isNotEmpty;
     final bool hasPrimaryText = row.label.primaryText.isNotEmpty;
+    final String? tooltipText = row.label.tooltipText;
 
-    return Text.rich(
+    final Widget label = Text.rich(
       TextSpan(
         children: <InlineSpan>[
           TextSpan(text: row.label.primaryText),
+          if (hasDetail)
+            TextSpan(
+              text: hasPrimaryText ? ' $detail' : detail,
+              style: const TextStyle(fontStyle: FontStyle.italic),
+            ),
           if (hasTHID)
             TextSpan(
-              text: hasPrimaryText ? ' $thID' : thID,
+              text: (hasPrimaryText || hasDetail) ? ' $thID' : thID,
               style: TextStyle(color: colorScheme.onSurfaceVariant),
             ),
         ],
@@ -328,6 +336,20 @@ class _TH2ElementRow extends StatelessWidget {
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       semanticsLabel: row.label.plainText,
+    );
+
+    if (tooltipText == null) {
+      return label;
+    }
+
+    return Tooltip(
+      key: ValueKey('TH2ElementTreeLabelTooltip|${row.rowId}'),
+      message: tooltipText,
+      excludeFromSemantics: true,
+      // Hover only: the default long-press trigger would take a held press
+      // away from the row's drag.
+      triggerMode: TooltipTriggerMode.manual,
+      child: label,
     );
   }
 
