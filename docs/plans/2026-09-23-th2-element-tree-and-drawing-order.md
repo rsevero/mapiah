@@ -414,10 +414,11 @@ Each phase ends with:
 - Row context menu (§4.8) and canvas shortcuts for forward/backward/front/back on the current selection. Element-row menu items go into Phase 3's `THProjectTreeRowContextMenuWidget`; the "Move to scrap… ▸" list uses `SubmenuButton`. Phase 4 decides whether right-clicking an element row also selects it.
 - EN/PT strings for every drop-rejection reason, context-menu item and other text this phase introduces.
 - CHANGELOG entry for Phase 4, referencing #32.
-- Tests:
-  - widget drag tests: valid reorder, valid move between scraps, same-scrap border-line reorder, and rejected drops (scrap into scrap, PLA onto the file row, border line alone across scraps). Each asserts the resulting `childrenMPIDs` or that no command was pushed;
-  - menu actions;
-  - shortcuts.
+- Tests (details: [Phase 4 plan](2026-09-23-th2-element-tree-and-drawing-order-phase4-drag-drop-and-menu.md) §11):
+  - `t3947_th2_move_resolution_test.dart`: typed rejection reasons, no-op detection and multi-element bring forward/send backward;
+  - `t3948_th2_element_tree_drag_drop_test.dart`: valid reorder, valid move between scraps, same-scrap border-line reorder, and rejected drops (scrap into scrap, PLA onto the file row, border line alone across scraps). Each asserts the resulting `childrenMPIDs` or that no command was pushed;
+  - `t3949_th2_element_tree_context_menu_test.dart`: menu actions;
+  - `t3950_th2_drawing_order_shortcuts_test.dart`: shortcuts.
 
 ### Phase 5: Station names and label/remark text in element labels
 
@@ -438,7 +439,7 @@ In the examples, italics show the detail span and the trailing muted part is the
 - **Keeping labels current.** Today `executeSetOptionToElement` and `executeRemoveOptionFromElement` in `th2_file_edit_element_edit_controller.dart` call `bumpStructureRevision()` only for `THCommandOptionType.id`. This phase extends that to `THCommandOptionType.station` and `THCommandOptionType.text`, for any element type (checking the element type is not worth it, since these edits are rare). This covers edits from the options dialog, undo/redo of those commands, and commands wrapped in `MPMultipleElementsCommand`. Changing a point's type to or from `station`/`label`/`remark` already bumps the revision through the type-edit commands (Phase 2). The Phase 3 label cache, keyed by `structureRevision`, then picks up the new detail.
 - **Row data:** the row builder in `th2_element_tree_aux.dart` computes the detail next to the rest of the label, and `TH2ElementTreeRowWidget` renders it as a third span in the existing `Text.rich`.
 - CHANGELOG entry for Phase 5, referencing #32.
-- Tests (`t3945_th2_element_tree_label_details_test.dart`):
+- Tests (`t3951_th2_element_tree_label_details_test.dart`):
   - a station with `-name` shows the name verbatim, including `@` and dots; a station without `-name` shows no detail;
   - label and remark points with `-text` show the text; `<br>` becomes a single space in the row and a line break in the tooltip; other tags stay literal; empty or whitespace-only text shows no detail;
   - a line `label` with `-text`, a `continuation` point with `-text`, and points of other types show no detail;
@@ -488,7 +489,7 @@ Each point, line and area row in the sidebar tree starts with a small icon that 
 - **Localization:** no new strings, since icons are decorative and excluded from semantics.
 - **Help pages (EN/PT):** Phase 6 comes earlier, so this phase updates the "Drawing order and element tree" help section itself, to mention the type preview icons.
 - CHANGELOG entry for Phase 7, referencing #32.
-- Tests (`t3946_th2_element_type_icon_test.dart`):
+- Tests (`t3952_th2_element_type_icon_test.dart`):
   - golden tests, following the existing Therion symbol golden tests (`t3764`–`t3766`), in light and dark mode, for:
     - a point with a Therion symbol (for example `station`);
     - a label-mode point (placeholder fallback);
