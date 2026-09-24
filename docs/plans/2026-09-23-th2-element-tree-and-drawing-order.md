@@ -459,6 +459,8 @@ In the examples, italics show the detail span and the trailing muted part is the
 
 ### Phase 6: Documentation and remaining localization
 
+Detailed implementation: [Phase 6 plan](2026-09-24-th2-element-tree-and-drawing-order-phase6-documentation-and-localization.md).
+
 - Localize the strings Phase 1 hard-coded in `TH2BrokenFileBodyWidget` (the explanatory sentence, the `Line …:` problem line and `Reload`) and the user-visible problem-kind names, followed by `flutter gen-l10n`. Reuse the Phase 3 keys `th2ElementTreeProblemLine` and `th2ElementTreeReload` where the wording matches.
 - Check that no hard-coded user-visible string from Phases 1–5 remains.
 - Help pages (EN/PT):
