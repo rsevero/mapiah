@@ -33,7 +33,7 @@ Linux AppImage and Flatpak/Flathub and Windows versions are being used regularly
 
 ## User documentation
 
-The installation instructions, complete help pages, and keyboard shortcut sheets are available as PDFs in the repository root: [English user guide](Mapiah-User-Guide-en.pdf) and [Portuguese user guide](MApiah-Guia_do_usuario-pt.pdf). Each release also includes both PDFs as downloadable assets.
+The installation instructions, complete help pages, and keyboard shortcut sheets are available as PDFs in the repository root: [English user guide](Mapiah-User-Guide-en.pdf) and [Portuguese user guide](Mapiah-Guia_do_usuario-pt.pdf). Each release also includes both PDFs as downloadable assets.
 
 Release maintainers regenerate them before tagging by running `dart run scripts/update_flutter_and_mapiah_version.dart` as described in `packaging/README.md` (requires Google Chrome); the AppImage release workflow regenerates and uploads them to the GitHub release.
 

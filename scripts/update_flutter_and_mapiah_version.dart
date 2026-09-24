@@ -23,7 +23,7 @@ const String flatpakManifestPath =
 const String releaseConstantsPath = 'lib/src/constants/mp_constants.dart';
 const String releaseSummaryPath = 'releases/releases_summary.json';
 const String englishGuidePath = 'Mapiah-User-Guide-en.pdf';
-const String portugueseGuidePath = 'MApiah-Guia_do_usuario-pt.pdf';
+const String portugueseGuidePath = 'Mapiah-Guia_do_usuario-pt.pdf';
 
 Future<int> main(List<String> args) async {
   final String? version = await getFlutterVersion();

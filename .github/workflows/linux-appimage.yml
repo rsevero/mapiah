@@ -129,4 +129,4 @@ jobs:
             --clobber \
             "$INSTALLER_APPIMAGE" \
             Mapiah-User-Guide-en.pdf \
-            MApiah-Guia_do_usuario-pt.pdf
+            Mapiah-Guia_do_usuario-pt.pdf

@@ -80,7 +80,7 @@ Future<void> main() async {
       await htmlFile.writeAsString(html);
 
       final String fileName = language == 'pt'
-          ? 'MApiah-Guia_do_usuario-pt.pdf'
+          ? 'Mapiah-Guia_do_usuario-pt.pdf'
           : 'Mapiah-User-Guide-en.pdf';
 
       final File generated = File('${temporary.path}/$fileName');
