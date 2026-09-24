@@ -429,6 +429,8 @@ Each phase ends with:
 
 ### Phase 5: Station names and label/remark text in element labels
 
+Details and implementation: [Phase 5 plan](2026-09-23-th2-element-tree-and-drawing-order-phase5-label-details.md). It also updates the help page's existing "Labels" bullet itself, since Phase 3 already wrote that section.
+
 Phase 3 labels are `<kind> <type[:subtype]> <thID?>` (Phase 3 plan §6.2). This phase adds one extra *detail* part for three point types, so surveyors can recognize stations and text points in the tree without selecting them:
 
 | Point type | Detail source | Example row |
