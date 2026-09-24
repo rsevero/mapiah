@@ -70,7 +70,7 @@ Change:
   | `brokenFile` | `broken_file` | generic |
   | `crossFile` | new, set by the tree (§5.3) | specific |
 
-- `MPHierarchyMoveCheck.rejected(rejection, {int? lineMPID, int? areaMPID})` carries the MPIDs of the elements the message names. For `lineBorderShared` and `areaBorderShared` the area is the first **non-moving** area that borders the line, so the message names the area the user must add to the selection.
+- `MPHierarchyMoveCheck.rejected(rejection, {int? lineMPID, int? areaMPID})` carries the MPIDs of the elements the message names. For `lineBorderShared` and `areaBorderShared` the area is the first **non-moving** area that borders the line. It is one example of a missing area, not necessarily the only one: every area using the border must move together.
 - `MPMoveElementsResult` changes the same way. Existing tests in `t2462` and `t3941` that assert string keys are updated to the enum.
 - `TH2ElementTreeAux.moveRejectionMessage(check, th2File, appLocalizations)` builds the localized text (§8.1). Named elements use the row's plain label from the Phase 3 label builder (kind, type[:subtype], Therion id), so the message names them exactly as the tree shows them.
 
@@ -93,7 +93,8 @@ Semantics for several selected siblings (all selected elements of a canvas selec
 
 Implementation:
 
-- Add `MPCommandFactory.moveElementGroups(th2File:, parentMPID:, groups:)`, where each group is `(elementMPIDs, beforeSiblingMPID)`. It resolves every group with `resolveMoves` against the state left by the previous groups (the same sequential simulation `MPMoveElementsCommand` already uses for indices, Phase 2 plan §5.2) and emits one `MPMoveElementsCommand` with all moves. Bring forward processes runs from the last to the first, and send backward from the first to the last, so a run never steps over another run's new position.
+- Add `TH2HierarchyAux.resolveMoveGroups(th2File, parentMPID:, groups:)`, where each group is `(elementMPIDs, beforeSiblingMPID)`. It copies the affected parents' **full** `childrenMPIDs` lists once, then resolves each group against those same simulated lists, removing and inserting each element before calculating the next move's index. It never mutates `th2File`. `resolveMoves` delegates its single request to this shared resolver; `MPCommandFactory.moveElementGroups` calls it once and emits one `MPMoveElementsCommand` with the resulting moves, or no command when the final movable order is unchanged. Do not call the public `resolveMoves(th2File, ...)` separately for each group: each call would start from the original order. `MPMoveElementsCommand._prepareUndoRedoInfo` simulates the already resolved moves to record inverse positions; it does not resolve the forward indices.
+- For example, to move `B` and `D` forward in `[a, B, c, D, e]`, resolve `D` past `e` first, then calculate `B`'s insertion index from `[a, B, c, e, D]`. Calculating both indices from the original list can produce `[a, c, e, B, D]` instead of `[a, c, B, e, D]`. Bring forward processes runs from the last to the first, and send backward from the first to the last, so a run never steps over another run's new position.
 - `_moveRelative` builds the runs from `_movableSiblingsOf(parent)` and calls it. Elements with different parents are not a valid input (assert); the tree and the canvas never produce them.
 
 ### 3.4 The tree has no multi-selection
@@ -122,7 +123,7 @@ Every Phase 4 edit from the tree (drop, menu item) calls it first and does nothi
 ## 4. Where the edit lands and what is selected afterwards
 
 - **Undo location:** the file's own `MPUndoRedoController`, as for any canvas edit. Because the tab is active after §3.5, `Ctrl+Z` undoes the tree edit right away.
-- **Selection after a drop or a menu action on points, lines and areas:** the active scrap becomes the target scrap and the moved elements become the selection (`setActiveScrap`, then `setSelectedElements(..., setState: true)`). The user sees where the elements went, on the canvas and in the tree. Border lines folded into an area move (Phase 2) are not added to the selection.
+- **Selection after an executed drop or menu action on points, lines and areas:** the active scrap becomes the target scrap and the moved elements become the selection (`setActiveScrap`, then `setSelectedElements(..., setState: true)`). A rejected or no-op result does not apply this selection change. The user sees where executed moves went, on the canvas and in the tree. Border lines folded into an area move (Phase 2) are not added to the selection.
 - **Scrap moves** change neither the active scrap nor the selection.
 - **Undo and redo** keep today's rule from `executeMoveElements`: an element that leaves the active scrap is deselected.
 
@@ -204,9 +205,10 @@ The per-drag hover state (target row id, zone, cached result) lives in a small `
 
 On an accepted, valid, non-no-op drop:
 
-1. `prepareTH2FileForTreeEdit(path)` (§3.5). Stop if it returns `null`.
-2. `elementEditController.moveElements(...)` with the §5.2 arguments. The result is `executed`, because step 4 of §5.3 has just passed on the same model.
-3. Apply the §4 selection.
+1. `prepareTH2FileForTreeEdit(path)` (§3.5). Stop if it returns `null`. Exiting line or area creation can finalize an element and change the model after the hover check.
+2. Against the returned controller's **current** model, confirm the payload still belongs to its registered controller, the target row still exists, and the §5.2 request is still valid and non-no-op. Recompute the target sibling from the current `childrenMPIDs`; do not reuse the hover's cached request or move list. Stop without issuing a move if any check fails.
+3. Call `elementEditController.moveElements(...)` with that current request. It validates again and returns `executed`, `noOp` or `rejected`; only `executed` proceeds to step 4.
+4. Apply the §4 selection.
 
 ## 6. Context menus
 
@@ -224,7 +226,7 @@ Element and scrap rows of loaded, valid files are wrapped in the Phase 3 `THProj
 - **Move to scrap ▸** is a `SubmenuButton` listing every other scrap of the file, in file order, by its row label. The current scrap is left out. Each entry calls `moveElementsToScrap` with no `beforeSiblingMPID` (end of the target scrap). The submenu is not shown when the file has only one scrap.
 - **Disabled items:** an item whose action would be a no-op (already first or last) is disabled (`onPressed: null`). A "Move to scrap" entry that `checkMoveElements` rejects is disabled, and its label is followed by the reason in a second, smaller line. A second line is used instead of a tooltip because it is visible without hovering and also works with keyboard navigation inside the open menu.
 - Icons: `Icons.flip_to_front` (bring to front), `Icons.flip_to_back` (send to back), `Icons.arrow_upward`/`Icons.arrow_downward` for forward/backward, `Icons.drive_file_move_outline` for Move to scrap. Up and down follow the tree, where later (drawn on top) is lower; so **Bring forward uses `Icons.arrow_downward`** and Send backward uses `Icons.arrow_upward`. The help page explains this, and the menu labels, not the icons, carry the meaning.
-- Every action runs `prepareTH2FileForTreeEdit` first and then applies the §4 selection.
+- Every action runs `prepareTH2FileForTreeEdit` first. It then checks that the menu target still exists and resolves the action against the current model, because leaving creation mode can change the file after the menu was built. It applies the §4 selection only when the action returns `executed`; a stale disabled/enabled state in the open menu cannot bypass move validation.
 - Keys follow the Phase 3 convention: `ValueKey('THProjectTreeRowContextMenuBringForward|<rowId>')`, `…SendBackward|…`, `…BringToFront|…`, `…SendToBack|…`, `…MoveToScrap|<rowId>` for the submenu and `…MoveToScrap|<rowId>|<scrapMPID>` for its entries.
 
 ### 6.2 Does right-click select? (the decision Phase 3 left to Phase 4)
@@ -271,8 +273,8 @@ All in `lib/l10n/intl_en.arb` and `intl_pt.arb`, each with an `@key` description
 | `th2MoveRejectedCrossFile` | `Elements can only be moved within their own file` | `Elementos só podem ser movidos dentro do próprio arquivo` |
 | `th2MoveRejectedScrapPlacement` | `Scraps can only be placed among scraps` | `Scraps só podem ser colocados entre scraps` |
 | `th2MoveRejectedDrawablePlacement` | `Points, lines and areas must be inside a scrap` | `Pontos, linhas e áreas devem ficar dentro de um scrap` |
-| `th2MoveRejectedLineBorderShared` | `{line} is a border of {area}; move the area instead` | `{line} é borda de {area}; mova a área` |
-| `th2MoveRejectedAreaBorderShared` | `Border {line} also borders {area}; move both areas together` | `A borda {line} também é borda de {area}; mova as duas áreas juntas` |
+| `th2MoveRejectedLineBorderShared` | `{line} borders {area}; move every area using this border together` | `{line} é borda de {area}; mova juntas todas as áreas que usam essa borda` |
+| `th2MoveRejectedAreaBorderShared` | `Border {line} also borders {area}; move every area using this border together` | `A borda {line} também pertence a {area}; mova juntas todas as áreas que usam essa borda` |
 | `th2MoveRejectedAreaBorderWrongScrap` | `Border {line} is in another scrap` | `A borda {line} está em outro scrap` |
 | `th2MoveRejectedAreaBorderNotLine` | `{area} has a border reference that is not a line` | `{area} tem uma referência de borda que não é uma linha` |
 
@@ -292,7 +294,7 @@ One Phase 4 entry in the unreleased section, under "New features", next to the P
 
 ## 9. Implementation order
 
-1. **Model/aux** (no UI): the `MPHierarchyMoveRejection` enum with element MPIDs (§3.1), `TH2HierarchyAux.resolveMoves` and the factory refactor (§3.2), `MPCommandFactory.moveElementGroups` and the new `_moveRelative` (§3.3). Update `t2462` and `t3941`, and add `t3947`. Everything must stay green before any widget change.
+1. **Model/aux** (no UI): the `MPHierarchyMoveRejection` enum with element MPIDs (§3.1), `TH2HierarchyAux.resolveMoves`/`resolveMoveGroups` and the factory refactor (§3.2–§3.3), `MPCommandFactory.moveElementGroups` and the new `_moveRelative` (§3.3). Update `t2462` and `t3941`, and add `t3947`. Everything must stay green before any widget change.
 2. `MPGeneralController.prepareTH2FileForTreeEdit` (§3.5) with its tests.
 3. Tree multi-selection (§3.4) and its tests.
 4. Context menus (§6), with the right-click selection rule and the §4 selection after actions. At this point the feature is usable without drag and drop.
@@ -307,7 +309,7 @@ One Phase 4 entry in the unreleased section, under "New features", next to the P
 
 | Area | Files |
 |---|---|
-| Aux | `lib/src/auxiliary/th2_hierarchy_aux.dart` (enum, element MPIDs, `resolveMoves`), `lib/src/auxiliary/th2_element_tree_aux.dart` (drag payload, `moveRejectionMessage`, drop-request resolution) |
+| Aux | `lib/src/auxiliary/th2_hierarchy_aux.dart` (enum, element MPIDs, `resolveMoves`, `resolveMoveGroups`), `lib/src/auxiliary/th2_element_tree_aux.dart` (drag payload, `moveRejectionMessage`, drop-request resolution) |
 | Commands | `lib/src/commands/factories/mp_command_factory.dart` (`moveElements` uses `resolveMoves`; new `moveElementGroups`) |
 | Controllers | `lib/src/controllers/th2_file_edit_element_edit_controller.dart` (`MPMoveElementsResult` with the enum, new `_moveRelative`), `lib/src/controllers/mp_general_controller.dart` (`prepareTH2FileForTreeEdit`) |
 | State machine | `lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_select_non_empty_selection.dart` (shortcuts) |
@@ -324,11 +326,11 @@ One Phase 4 entry in the unreleased section, under "New features", next to the P
 
 ### Move resolution (`t3947`, pure)
 
-- Every `MPHierarchyMoveRejection` value is produced by at least one fixture; `lineBorderShared` and `areaBorderShared` carry the right line and the first non-moving area.
+- Every rejection produced by `TH2HierarchyAux.validateMove` has a fixture; `lineBorderShared` and `areaBorderShared` carry the right line and the first non-moving area. A border shared by three areas verifies that the localized guidance requires **all** areas to move. `brokenFile` is tested through `TH2FileEditElementEditController.checkMoveElements` in `t2462`; `crossFile` is tested through tree drag feedback in `t3948`, because neither is returned by `validateMove`.
 - `resolveMoves` returns an empty list for: before the element's own next movable sibling, after its own previous one, end of scrap for the last child, start of scrap for the first child, and a multi-selection dropped inside its own contiguous run.
 - "After T" with comments between T and its next sibling places the element before that sibling and leaves the comments in place.
 - The factory produces the same command as before the refactor for all existing `t2462` fixtures.
-- **Order actions with several elements:** `[a, B, c, D, e]` forward → `[a, c, B, e, D]`; backward → `[B, a, D, c, e]`; a run already last stays while another run moves; all runs at the boundary is a no-op with no command; one undo restores the original `childrenMPIDs` exactly; a point brought forward past a line is written after that line's `endline`.
+- **Order actions with several elements:** `[a, B, c, D, e]` forward → `[a, c, B, e, D]`; backward → `[B, a, D, c, e]`; assert that the second group's concrete insertion index uses the list after the first group; a run already last stays while another run moves; all runs at the boundary is a no-op with no command; one undo restores the original `childrenMPIDs` exactly; a point brought forward past a line is written after that line's `endline`.
 
 ### Tree edit preparation and multi-selection (`t3943`, updated)
 
@@ -348,6 +350,7 @@ Each case asserts the resulting `childrenMPIDs`, or that the undo stack is uncha
 - dragging a selected row drags the whole selection in file order; dragging an unselected row drags only it and does not change the selection until the drop;
 - after a drop the moved PLAs are selected and their scrap is active; a scrap drop changes neither;
 - a drop on a tab-less file opens and activates its tab, and one `Ctrl+Z` undoes the move;
+- a hover accepted before `prepareTH2FileForTreeEdit` finalizes an in-progress line or area is rechecked against the changed model; if the move becomes a no-op or is rejected, no move command or post-drop selection change occurs;
 - a drop after the file was reloaded during the drag does nothing;
 - hovering the middle of a collapsed scrap for the delay expands it; leaving earlier does not;
 - rows are not draggable while the filter is active;
@@ -362,6 +365,7 @@ Auto-scroll is covered by a test that drags to the bottom edge of a tree taller 
 - Move to scrap lists the other scraps in file order, not the current one; it moves to the end of the target scrap, makes it active and selects the moved elements; a rejected entry is disabled and shows the reason; the submenu is absent with a single scrap.
 - Scrap rows show the four order items and no Move to scrap.
 - A menu action on a tab-less file opens and activates its tab.
+- A menu built before preparation finalizes an in-progress line or area resolves its action again against the current model; a no-op or rejected result does not apply the §4 post-action selection.
 
 ### Shortcuts (`t3950`, widget)
 
