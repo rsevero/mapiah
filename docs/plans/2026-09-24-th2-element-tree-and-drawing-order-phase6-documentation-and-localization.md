@@ -4,7 +4,7 @@
 
 **Date:** 2026-09-24
 
-**Status:** Proposed; checked against the working tree on 2026-09-24.
+**Status:** Proposed; checked against the code at `c197db71` on 2026-09-24.
 
 **Parent plan:** [TH2 Element Tree in the Project Sidebar](2026-09-23-th2-element-tree-and-drawing-order.md) (§7, Phase 6; §4.7 broken files)
 
@@ -36,11 +36,11 @@ Add one shared formatter, for example `TH2FileProblemTextAux.userMessage(TH2File
 | `invalidBorderReference` | Area border does not refer to a valid line | Borda de área não aponta para uma linha válida |
 | `parseError` | Unrecognized or invalid TH2 content | Conteúdo TH2 não reconhecido ou inválido |
 
-Use distinct `.arb` keys named `th2FileProblemPlaOutsideScrap` through `th2FileProblemParseError`, with EN descriptions and PT translations. The generic `parseError` message must not guess which command failed; the source line and expandable technical detail give the specifics. Do not expose enum names in the UI. For the badge, keep the existing problem count and truncation limit, but pass the localized category to `th2ElementTreeProblemLine(lineNumber, detail)`. That key's existing `detail` placeholder can hold the localized category; its description should say so.
+Use distinct `.arb` keys named `th2FileProblemPlaOutsideScrap` through `th2FileProblemParseError`, with EN descriptions and PT translations. The generic `parseError` message must not guess which command failed; the source line and expandable technical detail give the specifics. Do not expose enum names in the UI. For the badge, keep the existing problem count and truncation limit, but pass the localized category to `th2ElementTreeProblemLine(lineNumber, detail)`. That key's existing `detail` placeholder can hold the localized category; its description should say so and list the broken-file body as a second user.
 
 ### 2.2 Broken-file body
 
-Add one EN/PT key for the body explanation: the file has structural or parsing errors, Mapiah cannot display, edit, or save it, and the user should fix it in a text editor and reload. Reuse `th2ElementTreeProblemLine` and `th2ElementTreeReload` for each problem row and the button. Put the source line on its own line without trimming leading indentation; `trimRight()` may remove trailing whitespace for display only. Show the localized category in the main problem row and put `problem.detail` behind a localized **Details** disclosure. This prevents raw diagnostic text from being presented as the translated explanation while preserving it for reports. The body remains scrollable and the Reload callback behavior stays as it is.
+Add one EN/PT key for the body explanation: the file has structural or parsing errors, Mapiah cannot display, edit, or save it, and the user should fix it in a text editor and reload. Reuse `th2ElementTreeProblemLine` and `th2ElementTreeReload` for each problem row and the button. Update the `th2ElementTreeReload` description, which today names only the context menu, to also name the body button. Put the source line on its own line without trimming leading indentation; `trimRight()` may remove trailing whitespace for display only. Show the localized category in the main problem row and put `problem.detail` behind a localized **Details** disclosure. This prevents raw diagnostic text from being presented as the translated explanation while preserving it for reports. The body remains scrollable and the Reload callback behavior stays as it is.
 
 The parent plan's §4.7 also specifies the file path and a **Copy path** button, but the current body has neither. Add both as part of completing that user guidance. Use a selectable path, `Clipboard.setData`, and a localized button/tooltip label; do not add a success toast unless a matching established pattern is found. The path comes from the controller's loaded filename, and the button is available for a broken file opened without a project. Use existing `mpLocator.appLocalizations` access as the project convention requires. Do not hard-code any displayed English or Portuguese string.
 
@@ -48,16 +48,16 @@ The sidebar row and tab should continue to indicate broken status, and the curre
 
 ### 2.3 String audit and generated files
 
-Search the Phase 1–5 affected UI paths for string literals that reach `Text`, `Tooltip`, `Semantics`, menu items, `SnackBar`, or dialogs. At minimum inspect `TH2BrokenFileBodyWidget`, `THProjectTreeNodeWidget`, `TH2ElementTreeRowWidget`, `TH2ElementTreeDragController`, `THProjectTreeWidget`, the row context menu, and the Therion run warning. Ignore code keys, log messages, source data, and tests; localize any newly found user-facing literal. Preserve existing Phase 3–4 keys where wording fits. Add matching EN/PT `.arb` values and EN placeholder descriptions, then run `flutter gen-l10n`. Do not edit generated localization files by hand.
+Search the Phase 1–5 affected UI paths for string literals that reach `Text`, `Tooltip`, `Semantics`, menu items, `SnackBar`, or dialogs. At minimum inspect `TH2BrokenFileBodyWidget`, `THProjectTreeNodeWidget`, `TH2ElementTreeRowWidget`, `TH2ElementTreeDragController`, `THProjectTreeWidget`, and the row context menu. (No Therion-run warning mentions broken files today; `mp_therion_runner.dart` uses the word only for a broken pipe.) Ignore code keys, log messages, source data, and tests; localize any newly found user-facing literal. Preserve existing Phase 3–4 keys where wording fits. Add matching EN/PT `.arb` values and EN placeholder descriptions, then run `flutter gen-l10n`. Do not edit generated localization files by hand.
 
 ## 3. Help and shortcut pages
 
 ### 3.1 `.th2` editor help, EN and PT
 
-Split the existing **Elements in the project tree** material into a dedicated **Drawing order and element tree** section and a dedicated **Broken files** section, and update the index anchors. Move and refine the current bullets instead of copying them, so the help does not give two competing explanations. Cover:
+Split the existing **Elements in the project tree** material into a dedicated **Drawing order and element tree** section and a dedicated **Broken files** section, and update the index anchors. Also add the missing EN index link to the existing **Project text editor** section, and check the PT index for the same gap. Move and refine the current bullets instead of copying them, so the help does not give two competing explanations. Cover:
 
 - Expand a `.th2` file to load and see scraps, then points, lines, and areas; collapsing a scrap hides its rows. Loaded standalone files are described only after Phase 7 implements its planned standalone section. A file opened outside a project can still show the broken-file body even without a tree row.
-- Rows follow XTherion file order, first drawn at the bottom and last on top. Therion's own rendered layering may differ. Selected elements are temporarily painted above others on Mapiah's canvas, and changing an area's row order alone may have no visible canvas effect because areas are not currently filled there.
+- Rows follow XTherion file order, first drawn at the bottom and last on top. Therion's own rendered layering may differ. Selected elements are temporarily painted above others on Mapiah's canvas, and changing an area's row order alone may have no visible canvas effect: areas are not drawable children (`th_is_parent_mixin.dart:17-21`), and each area's fill is painted together with its border line (`mp_line_painting_mixin.dart:153-165`). Moving the border line's row is what changes where the fill is layered.
 - Row label: kind, type and optional subtype, optional station `-name` or label/remark `-text` detail, and optional Therion id. Search matches the full label; a multiline label or remark has a tooltip.
 - Click, Ctrl/Shift selection, active scrap, double-click zoom, drag upper/lower drop zones, Move to scrap, invalid-drop feedback, and the four order actions. Order actions move whole sibling elements, including a line or area's internal content, and edits are undoable. Comments and settings are not tree rows and stay at their file positions. Moving an area between scraps carries its border lines; moves that would leave a border line in a different scrap from any area using it are rejected.
 - A loaded file with any parse or hierarchy problem is marked broken; its element rows and canvas editor are unavailable, and Mapiah cannot save it. Give examples (outside-scrap elements, nested scraps, stray/missing `end*`, invalid area border reference, malformed or unknown option/command). The badge lists problem line numbers, while the body also shows source lines; fix the source in a text editor outside Mapiah, then use Reload in the body or the tree context menu. Unknown point/line/area *types* alone remain accepted; unknown *options* are errors. Explain that Mapiah does not repair the file.
@@ -92,7 +92,7 @@ Add one entry in the current unreleased section, referencing #32, for the locali
 | Problem presentation | new `lib/src/auxiliary/th2_file_problem_text_aux.dart`, `lib/src/widgets/th2_broken_file_body_widget.dart`, `th_project_tree_node_widget.dart` |
 | Help | `assets/help/{en,pt}/th2_file_edit_page_help.md`, `mapiah_home_help.md`, `keyboard_shortcuts_edit.md` |
 | Release notes | `CHANGELOG.md` |
-| Tests | a focused new test alongside `test/t3940_th2_broken_file_body_widget_test.dart`, or additions to `t3940` and `t3943` if those fixtures cover both surfaces cleanly |
+| Tests | a focused new `test/t3954_th2_file_problem_localization_test.dart` (`t3951` is Phase 5, `t3952` is reserved for Phase 8 and `t3953` for Phase 7), or additions to `t3940` and `t3943` if those fixtures cover both surfaces cleanly |
 
 No MobX annotations or `.g.dart` files should change.
 
