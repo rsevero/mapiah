@@ -55,33 +55,60 @@ class MPCommandFactory {
       }
     }
     addTopLevel(th2File);
-    final List<int> effective = <int>[];
-    for (final int id in order) {
-      if (!selected.contains(id)) continue;
-      final THElement element = th2File.elementByMPID(id);
-      if (element is THArea && element.parentMPID != newParentMPID) {
-        for (final int lineID in element.getLineMPIDs(th2File)) {
-          final THElement? line = th2File.tryElementByMPID(lineID);
-          if (line is THLine && line.parentMPID == element.parentMPID) {
-            effective.add(lineID);
-          }
-        }
+    /// Border lines of areas changing scraps move only inside their area's
+    /// block; each is emitted once, in the block of its first area.
+    List<int> foldedBorderLinesOf(THElement element) {
+      if ((element is! THArea) || (element.parentMPID == newParentMPID)) {
+        return const <int>[];
       }
-      effective.add(id);
+
+      return element.getLineMPIDs(th2File).where((int lineID) {
+        final THElement? line = th2File.tryElementByMPID(lineID);
+
+        return (line is THLine) && (line.parentMPID == element.parentMPID);
+      }).toList();
+    }
+
+    final Set<int> foldedLines = <int>{};
+    for (final int id in order) {
+      if (selected.contains(id)) {
+        foldedLines.addAll(foldedBorderLinesOf(th2File.elementByMPID(id)));
+      }
+    }
+    final List<int> effective = <int>[];
+    final Set<int> emitted = <int>{};
+    for (final int id in order) {
+      if (!selected.contains(id) || foldedLines.contains(id)) continue;
+      for (final int lineID in foldedBorderLinesOf(th2File.elementByMPID(id))) {
+        if (emitted.add(lineID)) effective.add(lineID);
+      }
+      if (emitted.add(id)) effective.add(id);
     }
     for (final int id in elementMPIDs) {
-      if (!effective.contains(id)) effective.add(id);
+      if (!foldedLines.contains(id) && emitted.add(id)) effective.add(id);
     }
     final Map<int, List<int>> lists = <int, List<int>>{};
-    List<int> listFor(int parent) => lists.putIfAbsent(parent, () =>
-        parent == th2File.mpID ? th2File.childrenMPIDs.toList() :
-        th2File.parentByMPID(parent).childrenMPIDs.toList());
-    final Map<int, List<int>> initialLists = <int, List<int>>{
-      th2File.mpID: th2File.childrenMPIDs.toList(),
-    };
-    if (newParentMPID != th2File.mpID) {
-      initialLists[newParentMPID] = listFor(newParentMPID).toList();
-    }
+    final Map<int, List<int>> initialLists = <int, List<int>>{};
+    List<int> listFor(int parent) => lists.putIfAbsent(parent, () {
+      final List<int> children = parent == th2File.mpID
+          ? th2File.childrenMPIDs.toList()
+          : th2File.parentByMPID(parent).childrenMPIDs.toList();
+
+      initialLists[parent] = children.toList();
+
+      return children;
+    });
+
+    /// Hidden children (comments, empty lines, settings, end* elements) never
+    /// make a move effective: a no-op is decided on the movable siblings.
+    List<int> movableOf(List<int> children) => children.where((int childMPID) {
+      final THElement child = th2File.elementByMPID(childMPID);
+
+      return (child is THScrap) ||
+          (child is THPoint) ||
+          (child is THLine) ||
+          (child is THArea);
+    }).toList();
     final List<MPElementMove> moves = <MPElementMove>[];
     for (final int id in effective) {
       final THElement element = th2File.elementByMPID(id);
@@ -113,7 +140,10 @@ class MPCommandFactory {
         positionInNewParent: position));
     }
     if (moves.isEmpty || initialLists.entries.every((MapEntry<int, List<int>> entry) =>
-        const ListEquality<int>().equals(entry.value, listFor(entry.key)))) {
+        const ListEquality<int>().equals(
+          movableOf(entry.value),
+          movableOf(listFor(entry.key)),
+        ))) {
       return null;
     }
     return MPMoveElementsCommand(moves: moves);

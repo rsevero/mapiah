@@ -65,8 +65,11 @@ class TH2FileParser {
   final List<String> _parseErrors = [];
   final List<TH2FileProblem> problems = <TH2FileProblem>[];
   final Set<int> _problemLines = <int>{};
+
+  /// Line number and source line of area border references whose free text
+  /// was rewritten by the grammar, keyed by the border MPID.
+  final Map<int, (int, String)> _rewrittenBorderLines = <int, (int, String)>{};
   int _currentLineNumber = 0;
-  int _recoveryEndDepth = 0;
 
   final Set<int> _mpIDsToCleanOriginalLine = {};
 
@@ -162,134 +165,294 @@ class TH2FileParser {
         trace(_currentParser).parse(_currentParseableLine);
       }
 
-      _parsedContents = _currentParser.parse(_currentParseableLine);
-
       if (isFirst) {
+        _parsedContents = _currentParser.parse(_currentParseableLine);
         isFirst = false;
         _resetParsersLineage();
-      }
-      if (_parsedContents is Failure) {
-        if (_recoveryEndDepth > 0) {
-          final String command = _commandName(_currentParseableLine);
-          if ((command == 'endline') ||
-              (command == 'endarea') ||
-              (command == 'endscrap')) {
-            _recoveryEndDepth--;
-          }
-          continue;
+
+        if (_parsedContents is Failure) {
+          _handleFailedLine();
+        } else {
+          _injectParsedContents();
         }
-        final String failedCommand = _commandName(_currentParseableLine);
-        if ((failedCommand == 'scrap') ||
-            (failedCommand == 'line') ||
-            (failedCommand == 'area') ||
-            (_currentParent is THLine) ||
-            (_currentParent is THArea) ||
-            (_currentParent is THScrap)) {
-          _recoveryEndDepth = 1;
-        }
-        _addError(
-          'petitparser returned a "Failure"',
-          '_injectContents()',
-          'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine": {$_parsedContents}',
-        );
 
         continue;
       }
 
-      /// '_parsedContents' holds the complete result of the grammar parsing on
-      /// 'line'.
-      /// 'element' holds the the 'command' part of the parsed line, i.e., the
-      /// content minus the eventual comment.
-      final element = _parsedContents.value[0];
-
-      if (element.isEmpty) {
-        _addError(
-          'element.isEmpty',
-          '_injectContents()',
-          'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
-        );
-
-        continue;
-      }
-
-      _commentContentToParse =
-          ((_parsedContents.value is List) &&
-              ((_parsedContents.value as List).length > 1))
-          ? _parsedContents.value[1]
-          : null;
-
-      final String elementType = (element[0] as String).toLowerCase();
-
-      if (_recoveryEndDepth > 0 &&
-          ((elementType == 'endline') ||
-              (elementType == 'endarea') ||
-              (elementType == 'endscrap'))) {
-        _recoveryEndDepth = 0;
-      }
-
-      switch (elementType) {
-        case 'area':
-          _injectArea(element);
-        case 'areaborderthid':
-          _injectAreaBorderTHID(element);
-        case 'areacommandlikeoption':
-          _injectAreaCommandLikeOption(element);
-        case 'beziercurvelinesegment':
-          _injectBezierCurveLineSegment(element);
-
-          /// Line data injects same line comment by themselves.
-          continue;
-        case 'encoding':
-          _injectEncoding(element);
-        case 'endarea':
-          _injectEndArea();
-        case 'endmultilinecomment':
-          _injectEndMultiLineComment();
-        case 'endline':
-          _injectEndLine();
-        case 'endscrap':
-          _injectEndScrap();
-        case 'fulllinecomment':
-          _commentContentToParse = element;
-          _injectComment();
-
-          /// Full line commments have no same line comments.
-          continue;
-        case 'line':
-          _injectLine(element);
-        case 'linecommandlikeoption':
-          _injectLineCommandLikeOption(element);
-
-          /// Line data injects same line comment by themselves.
-          continue;
-        case 'multilinecomment':
-          _injectStartMultiLineComment();
-        case 'multilinecommentline':
-          _injectMultiLineCommentContent(element);
-
-          /// Multiline commments have no same line comments.
-          continue;
-        case 'point':
-          _injectPoint(element);
-        case 'scrap':
-          _injectScrap(element);
-        case 'straightlinesegment':
-          _injectStraightLineSegment(element);
-
-          /// Line data injects same line comment by themselves.
-          continue;
-        case '##mapiah##':
-          _injectMapiahSetting(element);
-        case '##xtherion##':
-          _injectXTherionSetting(element);
-        default:
-          _injectUnknown(element);
-          continue;
-      }
-
-      /// The second part of '_parsedContents' holds the comment, if any.
-      _injectComment();
+      _dispatchCurrentLine();
     }
+  }
+
+  /// Parses the current line in the current context and injects it, applying
+  /// the broken-file recovery rules when it does not parse.
+  void _dispatchCurrentLine() {
+    if (_closesOpenAreaImplicitly()) {
+      _closeOpenLineOrAreaImplicitly();
+    }
+
+    _parsedContents = _currentParser.parse(_currentParseableLine);
+
+    if (_parsedContents is Failure) {
+      _handleFailedLine();
+
+      return;
+    }
+
+    _injectParsedContents();
+  }
+
+  /// A structural keyword inside an area would parse as a border reference,
+  /// so it is checked before the area grammar sees it.
+  bool _closesOpenAreaImplicitly() {
+    if (_currentParent is! THArea) {
+      return false;
+    }
+
+    final String command = _commandName(_currentParseableLine);
+
+    if ((command == 'endscrap') || (command == 'endline')) {
+      return true;
+    }
+
+    return (command == 'scrap') &&
+        (_th2FileParser.parse(_currentParseableLine) is Success);
+  }
+
+  /// Applies the recovery rules to a line that failed the current grammar.
+  ///
+  /// The problems themselves were already recorded by
+  /// [_scanStructureProblems]; this only keeps the parser in sync with the
+  /// file's real structure so later lines are not reported as a cascade.
+  void _handleFailedLine() {
+    final String command = _commandName(_currentParseableLine);
+    final bool isInLineOrArea =
+        (_currentParent is THLine) || (_currentParent is THArea);
+
+    if (isInLineOrArea && _parsesInEnclosingContext()) {
+      _closeOpenLineOrAreaImplicitly();
+      _dispatchCurrentLine();
+
+      return;
+    }
+
+    final Result<dynamic>? alternative = _parseInAlternativeContext(command);
+
+    if (alternative != null) {
+      _parsedContents = alternative;
+      _injectParsedContents();
+
+      return;
+    }
+
+    if (command == 'endscrap') {
+      _addProblem(
+        kind: TH2FileProblemKind.strayEndscrap,
+        detail: 'Stray endscrap',
+      );
+
+      return;
+    }
+
+    if (_tryRelaxedOpenerRecovery(command)) {
+      return;
+    }
+
+    _addError(
+      'petitparser returned a "Failure"',
+      '_injectContents()',
+      'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine": {$_parsedContents}',
+    );
+  }
+
+  /// Whether the current line parses in the scrap or file context enclosing
+  /// the open line or area.
+  bool _parsesInEnclosingContext() {
+    final String command = _commandName(_currentParseableLine);
+    final bool isStructuralCommand = <String>{
+      'point',
+      'line',
+      'area',
+      'scrap',
+      'endscrap',
+    }.contains(command);
+
+    if (!isStructuralCommand) {
+      return false;
+    }
+
+    return (_scrapContentParser.parse(_currentParseableLine) is Success) ||
+        (_th2FileParser.parse(_currentParseableLine) is Success) ||
+        (_relaxedOpenerLine(command) != null);
+  }
+
+  /// Closes the open line or area without adding its `end*` element.
+  void _closeOpenLineOrAreaImplicitly() {
+    setCurrentParent(
+      (_currentParent as THElement).parent(th2File: _parsedTH2File),
+    );
+    _returnToParentParser();
+    _lastLineSegment = null;
+  }
+
+  /// Parses a point, line or area at file level, or a scrap inside a scrap,
+  /// so their bodies are consumed without further errors.
+  Result<dynamic>? _parseInAlternativeContext(String command) {
+    final bool isPLA =
+        (command == 'point') || (command == 'line') || (command == 'area');
+    Parser? alternativeParser;
+
+    if ((_currentParent is TH2File) && isPLA) {
+      alternativeParser = _scrapContentParser;
+    } else if ((_currentParent is THScrap) && (command == 'scrap')) {
+      alternativeParser = _th2FileParser;
+    }
+
+    if (alternativeParser == null) {
+      return null;
+    }
+
+    final Result<dynamic> result = alternativeParser.parse(
+      _currentParseableLine,
+    );
+
+    return (result is Success) ? result : null;
+  }
+
+  /// Returns the `scrap`/`line`/`area` opener reduced to its keyword and first
+  /// argument, or `null` when [command] is not an opener.
+  String? _relaxedOpenerLine(String command) {
+    if ((command != 'scrap') && (command != 'line') && (command != 'area')) {
+      return null;
+    }
+
+    final List<String> tokens = _currentParseableLine
+        .trim()
+        .split(RegExp(r'\s+'));
+
+    if (tokens.length < 2) {
+      return null;
+    }
+
+    return '${tokens[0]} ${tokens[1]}';
+  }
+
+  /// Opens a `scrap`/`line`/`area` block whose opening line has an unknown
+  /// option or an invalid option value, reporting one problem for it.
+  bool _tryRelaxedOpenerRecovery(String command) {
+    final String? relaxedLine = _relaxedOpenerLine(command);
+
+    if (relaxedLine == null) {
+      return false;
+    }
+
+    final Parser relaxedParser = (command == 'scrap')
+        ? _th2FileParser
+        : _scrapContentParser;
+    final Result<dynamic> relaxedResult = relaxedParser.parse(relaxedLine);
+
+    if (relaxedResult is Failure) {
+      return false;
+    }
+
+    _addError(
+      'unrecognized option or invalid option value',
+      '_injectContents()',
+      'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
+    );
+    _parsedContents = relaxedResult;
+    _injectParsedContents();
+
+    return true;
+  }
+
+  /// Injects the successfully parsed [_parsedContents] of the current line.
+  void _injectParsedContents() {
+    /// '_parsedContents' holds the complete result of the grammar parsing on
+    /// 'line'.
+    /// 'element' holds the the 'command' part of the parsed line, i.e., the
+    /// content minus the eventual comment.
+    final element = _parsedContents.value[0];
+
+    if (element.isEmpty) {
+      _addError(
+        'element.isEmpty',
+        '_injectContents()',
+        'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
+      );
+
+      return;
+    }
+
+    _commentContentToParse =
+        ((_parsedContents.value is List) &&
+            ((_parsedContents.value as List).length > 1))
+        ? _parsedContents.value[1]
+        : null;
+
+    final String elementType = (element[0] as String).toLowerCase();
+
+    switch (elementType) {
+      case 'area':
+        _injectArea(element);
+      case 'areaborderthid':
+        _injectAreaBorderTHID(element);
+      case 'areacommandlikeoption':
+        _injectAreaCommandLikeOption(element);
+      case 'beziercurvelinesegment':
+        _injectBezierCurveLineSegment(element);
+
+        /// Line data injects same line comment by themselves.
+        return;
+      case 'encoding':
+        _injectEncoding(element);
+      case 'endarea':
+        _injectEndArea();
+      case 'endmultilinecomment':
+        _injectEndMultiLineComment();
+      case 'endline':
+        _injectEndLine();
+      case 'endscrap':
+        _injectEndScrap();
+      case 'fulllinecomment':
+        _commentContentToParse = element;
+        _injectComment();
+
+        /// Full line commments have no same line comments.
+        return;
+      case 'line':
+        _injectLine(element);
+      case 'linecommandlikeoption':
+        _injectLineCommandLikeOption(element);
+
+        /// Line data injects same line comment by themselves.
+        return;
+      case 'multilinecomment':
+        _injectStartMultiLineComment();
+      case 'multilinecommentline':
+        _injectMultiLineCommentContent(element);
+
+        /// Multiline commments have no same line comments.
+        return;
+      case 'point':
+        _injectPoint(element);
+      case 'scrap':
+        _injectScrap(element);
+      case 'straightlinesegment':
+        _injectStraightLineSegment(element);
+
+        /// Line data injects same line comment by themselves.
+        return;
+      case '##mapiah##':
+        _injectMapiahSetting(element);
+      case '##xtherion##':
+        _injectXTherionSetting(element);
+      default:
+        _injectUnknown(element);
+        return;
+    }
+
+    /// The second part of '_parsedContents' holds the comment, if any.
+    _injectComment();
   }
 
   void _injectEmptyLine() {
@@ -379,7 +542,17 @@ class TH2FileParser {
     final String xTherionConfigID = element[1][0].toLowerCase();
 
     if (xTherionConfigID == mpXTherionImageInsertConfigID) {
-      return _injectXTherionImageInsertConfig(element);
+      try {
+        _injectXTherionImageInsertConfig(element);
+      } catch (e) {
+        _addError(
+          'Malformed XTherion image insert setting: $e',
+          '_injectXTherionSetting',
+          'Line being parsed: "$_currentParseableLine" created from "$_currentOriginalLine"',
+        );
+      }
+
+      return;
     }
 
     final THXTherionConfig newElement = THXTherionConfig(
@@ -808,12 +981,22 @@ class TH2FileParser {
             (element[1][1] is bool)
         ? element[1][1] as bool
         : false;
-
     final THAreaBorderTHID newElement = THAreaBorderTHID(
       parentMPID: _currentParentMPID,
       thID: areaBorderID,
       originalLineInTH2File: _currentOriginalLine,
     );
+
+    /// The border reference grammar accepts free text (rewriting its spaces),
+    /// so an unknown area option line such as "weirdareaopt 5" becomes a
+    /// reference to no line. `_areasCleanUp` reports it if it stays dangling.
+    if (changedFromOriginalInFile &&
+        !_currentParseableLine.trim().startsWith('"')) {
+      _rewrittenBorderLines[newElement.mpID] = (
+        _currentLineNumber,
+        _currentOriginalLine,
+      );
+    }
 
     if (changedFromOriginalInFile) {
       _addToMPIDsToCleanOriginalLine(newElement.mpID);
@@ -2825,7 +3008,7 @@ class TH2FileParser {
     _parseErrors.clear();
     problems.clear();
     _problemLines.clear();
-    _recoveryEndDepth = 0;
+    _rewrittenBorderLines.clear();
 
     try {
       if (fileBytes == null) {
@@ -2857,14 +3040,18 @@ class TH2FileParser {
     _linesCleanUp(_parsedTH2File);
     _areasCleanUp(_parsedTH2File);
 
-    if (!(_parsedTH2File).isSameClass(_currentParent) ||
-        (_currentParent != _parsedTH2File)) {
+    if (_hasUnreportedOpenMultilineCommand()) {
       _addError(
         'Multiline commmands left open at end of file',
         'parse',
         'Unclosed multiline command: "${_currentParent.toString()}"',
       );
     }
+
+    problems.sort(
+      (TH2FileProblem a, TH2FileProblem b) =>
+          a.lineNumber.compareTo(b.lineNumber),
+    );
 
     return (
       _th2FileElementEditController.th2File,
@@ -2900,6 +3087,31 @@ class TH2FileParser {
       _parsedTH2File.substituteElement(elementWithoutOriginalLine);
     }
     _mpIDsToCleanOriginalLine.clear();
+  }
+
+  /// Whether a multiline command is still open at end of file and was not
+  /// already reported by [_scanStructureProblems], which reports unclosed
+  /// scraps, lines and areas itself.
+  bool _hasUnreportedOpenMultilineCommand() {
+    if (identical(_currentParent, _parsedTH2File)) {
+      return false;
+    }
+
+    THIsParentMixin parent = _currentParent;
+
+    for (int depth = 0; depth < mpMaxParseNestingDepth; depth++) {
+      if (parent is THMultiLineComment) {
+        return true;
+      }
+
+      if (parent is! THElement) {
+        break;
+      }
+
+      parent = (parent as THElement).parent(th2File: _parsedTH2File);
+    }
+
+    return problems.isEmpty;
   }
 
   void _linesCleanUp(THIsParentMixin parent) {
@@ -2982,6 +3194,24 @@ class TH2FileParser {
     }
   }
 
+  /// Reports a dangling border reference whose text had spaces: it is an
+  /// unknown area option line, not a reference to a line.
+  void _reportDanglingRewrittenBorder(int borderMPID) {
+    final (int, String)? origin = _rewrittenBorderLines[borderMPID];
+
+    if (origin == null) {
+      return;
+    }
+
+    _currentLineNumber = origin.$1;
+    _currentOriginalLine = origin.$2;
+    _addError(
+      'unrecognized area option or invalid border reference',
+      '_areasCleanUp',
+      'Line: "${origin.$2}"',
+    );
+  }
+
   void _areasCleanUp(THIsParentMixin parent) {
     final List<int> childrenMPIDs = parent.childrenMPIDs.toList();
 
@@ -2999,6 +3229,7 @@ class TH2FileParser {
           }
 
           if (!_parsedTH2File.hasElementByTHID(border.thID)) {
+            _reportDanglingRewrittenBorder(border.mpID);
             _parsedTH2File.removeElement(border);
 
             continue;

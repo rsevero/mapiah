@@ -59,6 +59,10 @@ class TH2FileEditController = TH2FileEditControllerBase
 
 abstract class TH2FileEditControllerBase with Store {
   bool _disposed = false;
+
+  /// Whether [dispose] already ran for this controller.
+  bool get isDisposed => _disposed;
+
   late final MPDefaultOptionsController defaultOptionsController;
   late final TH2FilePropertiesController propertiesController;
   late final TH2FileEditAreaLineCreationController areaLineCreationController;

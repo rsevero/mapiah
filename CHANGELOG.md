@@ -35,7 +35,21 @@
   * Added deterministic action-routing coverage for Run Therion: the loaded project path is now verified through an injected run starter, while the expanded toolbar button, compact overflow-menu item, and empty-project tree action are tapped through injected page/tree callbacks without spawning a real Therion process.
   * On Windows (and other desktop platforms), closing Mapiah via the window's close button, taskbar control, or Alt+F4/Ctrl+F4 no longer leaves the window visibly frozen on screen for several seconds before it vanishes; the window is now hidden right after its placement is persisted, so the Flutter engine's shutdown happens invisibly in the background afterward instead of behind a still-visible, unresponsive window. [reported by CaverBruce]
   * The project-tree Open project action now always treats the selected file as a `thconfig` root, including files with arbitrary extensions or no extension. Project shape detection also now recognizes `.thconfig`-suffixed filenames, so showcase configs such as `therion_uis_showcase.thconfig` load their `source`/`input` tree instead of being misdetected as `.th` data files. Added parser and controller regression coverage.
+  * Broken `.th2` files (#32, Phase 1) are now reported more precisely:
+    * A structural error no longer produces extra errors further down the file. A `point`, `line` or `area` outside any scrap, a scrap inside another scrap, and a missing `endline`/`endarea` are each reported once, at the right line. An unclosed scrap, line or area at the end of the file no longer adds a generic "multiline commands left open" error.
+    * An unknown option on a `scrap`, `line` or `area` line is reported once at that line, and the rest of the block is read normally instead of being skipped. A misspelled command inside a scrap no longer hides the lines after it.
+    * An unknown option line inside an area (for example `weirdareaopt 5` or `clip middle`) is reported instead of being dropped silently.
+    * A malformed `##XTHERION## xth_me_image_insert` line is reported instead of making the load fail.
+    * Problems are listed in line order.
+  * Save As is disabled for broken `.th2` files in the toolbar and the overflow menu, as the broken-file panel already promised.
+  * Reloading a broken `.th2` file from its tab after fixing it on disk now shows the canvas. Before, the tab kept using the discarded controller and still showed the broken-file panel.
+  * Fixed several problems in the element move commands added for #32 (Phase 2), which no user action reaches yet:
+    * A move that only steps over a comment or another hidden line is now a no-op.
+    * Moving an area to another scrap together with its selected border line, or two areas that share a border line, no longer moves that line several times.
+    * "Bring forward" now works on the next-to-last element, "Bring to front" and "Send to back" were swapped, and they report a no-op at the first or last position instead of a rejection.
+    * A selected element that leaves the active scrap is deselected, the selection of a moved element stays current, and station names are updated when a station moves to another scrap.
 * Infrastructure maintenance:
+  * Added the Phase 1 and Phase 2 tests of the TH2 element tree plan (#32) that were never written: parser hierarchy violations and unknown types/options (`test/t3939`), the broken-file body (`test/t3940`), `MPMoveElementsCommand` (`test/t2462`), move validation (`test/t3941`), and controller disposal and structure revision (`test/t3945`). Three `test/t0600` cases now expect files with invalid area options to be reported as broken.
   * Clarified the Phase 3 read-only sidebar plan for #32: test-only controller resets now advance the planned registry revision when they clear controllers, and context menus build their current items on right-click before opening after the frame. Added acceptance checks for both cases.
   * Revised the Phase 3 read-only sidebar plan for #32 after another validation against the code:
     * Its first step now adds the Phase 1 and Phase 2 tests that were planned but never written (`t3939`, `t3940`, `t2462`, `t3941` and the Phase 2 lifecycle tests), before any Phase 3 change.

@@ -156,6 +156,18 @@ mixin _$MPGeneralController on MPGeneralControllerBase, Store {
   }
 
   @override
+  void disposeTablessTH2Controllers(Iterable<String> canonicalPaths) {
+    final _$actionInfo = _$MPGeneralControllerBaseActionController.startAction(
+      name: 'MPGeneralControllerBase.disposeTablessTH2Controllers',
+    );
+    try {
+      return super.disposeTablessTH2Controllers(canonicalPaths);
+    } finally {
+      _$MPGeneralControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 hasClipboardContent: ${hasClipboardContent}

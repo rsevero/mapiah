@@ -378,7 +378,9 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                       color: colorScheme.onSecondaryContainer,
                     ),
                     onPressed: isTH2
-                        ? () => controller?.saveAsTH2File()
+                        ? ((controller?.isBroken ?? false)
+                              ? null
+                              : () => controller?.saveAsTH2File())
                         : () => unawaited(textController?.saveAs()),
                     tooltip: isTH2
                         ? appLocalizations.th2FileEditPageSaveAs
@@ -683,7 +685,9 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         label: (controller != null)
             ? appLocalizations.th2FileEditPageSaveAs
             : appLocalizations.textEditorTabSaveAs,
-        enabled: (controller != null) || (textController != null),
+        enabled:
+            ((controller != null) && !controller.isBroken) ||
+            (textController != null),
       ),
     ];
   }
@@ -867,7 +871,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         _fileLoads[filename]!.future;
 
     return TH2FileEditBodyWidget(
-      key: ValueKey<String>(filename),
+      key: ObjectKey(controller),
       th2FileEditController: controller,
       loadFuture: future,
       onLoadFailed: () =>

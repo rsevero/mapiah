@@ -147,6 +147,10 @@ const int mpArcBezierLengthSteps = 5;
 const int mpSplitBezierCurveAtHalfLengthIterations = 5;
 const double mpConvertBezierToStraightFactor = 10.0;
 
+/// Maximum element nesting depth walked when checking which multiline
+/// command is still open at the end of a parsed TH2 file.
+const int mpMaxParseNestingDepth = 64;
+
 /// Maximum recursion depth for the Bézier-Bézier AABB subdivision algorithm.
 const int mpBezierBezierMaxDepth = 50;
 

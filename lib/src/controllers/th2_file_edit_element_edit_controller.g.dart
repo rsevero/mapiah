@@ -519,6 +519,21 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void executeMoveElements(List<MPElementMove> moves) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditElementEditControllerBase.executeMoveElements',
+        );
+    try {
+      return super.executeMoveElements(moves);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void executeReorderScraps({required int oldIndex, required int newIndex}) {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(
@@ -555,6 +570,38 @@ mixin _$TH2FileEditElementEditController
         );
     try {
       return super.toggleSelectedLinesReverseOption();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void toggleSelectedLinesBorderOption() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.toggleSelectedLinesBorderOption',
+        );
+    try {
+      return super.toggleSelectedLinesBorderOption();
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void toggleSelectedElementsVisibilityOption() {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.toggleSelectedElementsVisibilityOption',
+        );
+    try {
+      return super.toggleSelectedElementsVisibilityOption();
     } finally {
       _$TH2FileEditElementEditControllerBaseActionController.endAction(
         _$actionInfo,

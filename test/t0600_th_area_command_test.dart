@@ -154,7 +154,7 @@ endscrap
           THTestAux.testPath(success['file'] as String),
         );
         print(errors);
-        expect(isSuccessful, true);
+        expect(isSuccessful, success['isSuccessful'] ?? true);
         expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
@@ -196,7 +196,7 @@ endscrap
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
-        expect(isSuccessful, true);
+        expect(isSuccessful, success['isSuccessful'] ?? true);
         expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
@@ -254,6 +254,7 @@ endscrap
         'file':
             'th_file_parser-03232-area_with_invalid_command_like_clip_option-failure.th2',
         'length': 3,
+        'isSuccessful': false,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
@@ -267,7 +268,7 @@ endscrap
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
-        expect(isSuccessful, true);
+        expect(isSuccessful, success['isSuccessful'] ?? true);
         expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
@@ -346,7 +347,7 @@ endscrap
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
-        expect(isSuccessful, true);
+        expect(isSuccessful, success['isSuccessful'] ?? true);
         expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
@@ -407,7 +408,7 @@ endscrap
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
-        expect(isSuccessful, true);
+        expect(isSuccessful, success['isSuccessful'] ?? true);
         expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
@@ -485,6 +486,7 @@ endscrap
         'file':
             'th_file_parser-03222-area_with_invalid_command_like_place_option-failure.th2',
         'length': 3,
+        'isSuccessful': false,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
@@ -498,7 +500,7 @@ endscrap
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
-        expect(isSuccessful, true);
+        expect(isSuccessful, success['isSuccessful'] ?? true);
         expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);
@@ -574,6 +576,7 @@ endscrap
         'file':
             'th_file_parser-03242-area_with_invalid_command_like_visibility_option-failure.th2',
         'length': 3,
+        'isSuccessful': false,
         'encoding': 'UTF-8',
         'asFile': r'''encoding UTF-8
 scrap test
@@ -587,7 +590,7 @@ endscrap
         final (file, isSuccessful, _) = await parser.parse(
           THTestAux.testPath(success['file'] as String),
         );
-        expect(isSuccessful, true);
+        expect(isSuccessful, success['isSuccessful'] ?? true);
         expect(file, isA<TH2File>());
         expect(file.encoding, (success['encoding'] as String));
         expect(file.countElements(), success['length']);

@@ -1388,17 +1388,36 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     if (_th2FileEditController.isBroken) {
       throw StateError('Cannot structurally edit a broken TH2 file.');
     }
-    final Set<int> oldParents = <int>{};
+    final TH2FileEditSelectionController selectionController =
+        _th2FileEditController.selectionController;
+    final int activeScrapID = _th2FileEditController.activeScrapID;
+    bool changedScrap = false;
     for (final MPElementMove move in moves) {
       final THElement element = _th2File.elementByMPID(move.elementMPID);
-      oldParents.add(element.parentMPID < 0 ? _th2File.mpID : element.parentMPID);
+      final int oldParentMPID =
+          element.parentMPID < 0 ? _th2File.mpID : element.parentMPID;
       _th2File.moveElementToParent(
         elementMPID: move.elementMPID,
         newParentMPID: move.newParentMPID,
         positionInNewParent: move.positionInNewParent,
       );
+      if (oldParentMPID != move.newParentMPID) {
+        changedScrap = true;
+      }
+
+      /// Selection only works inside the active scrap.
+      if ((move.newParentMPID != activeScrapID) && (element is! THScrap)) {
+        selectionController.removeElementFromSelectedLogical(move.elementMPID);
+      } else {
+        selectionController.updateSelectedElementLogicalClone(
+          move.elementMPID,
+        );
+      }
     }
-    _th2FileEditController.selectionController.resetSelectableElements();
+    if (changedScrap) {
+      _markTherionStationPointNameCoordinateCacheDirty();
+    }
+    selectionController.resetSelectableElements();
     _th2FileEditController.snapController.updateSnapTargets();
     _th2FileEditController.triggerAllElementsRedraw();
     _th2FileEditController.bumpStructureRevision();
@@ -1423,39 +1442,65 @@ abstract class TH2FileEditElementEditControllerBase with Store {
   MPMoveElementsResult sendToBack({required List<int> elementMPIDs}) =>
       _moveToBoundary(elementMPIDs, front: false);
 
+  /// The movable siblings (scraps at file level, points, lines and areas in
+  /// a scrap) of [parent], in file order.
+  List<int> _movableSiblingsOf(THIsParentMixin parent) {
+    return parent.childrenMPIDs.where((int id) {
+      final THElement child = _th2File.elementByMPID(id);
+
+      return child is THScrap ||
+          child is THPoint ||
+          child is THLine ||
+          child is THArea;
+    }).toList();
+  }
+
+  /// Moves [ids] one movable sibling forward (later, drawn above) or
+  /// backward. A `null` before-sibling means the end of the parent.
   MPMoveElementsResult _moveRelative(List<int> ids, {required bool forward}) {
     if (ids.isEmpty) return const MPMoveElementsResult.noOp();
     final THElement element = _th2File.elementByMPID(ids.first);
     final THIsParentMixin parent = element.parent(th2File: _th2File);
-    final List<int> movable = parent.childrenMPIDs.where((int id) {
-      final THElement child = _th2File.elementByMPID(id);
-      return child is THScrap || child is THPoint || child is THLine || child is THArea;
-    }).toList();
+    final List<int> movable = _movableSiblingsOf(parent);
     final int index = movable.indexOf(ids.first);
-    final int targetIndex = forward ? index + 2 : index - 1;
-    if (index < 0 || targetIndex < 0 || targetIndex >= movable.length) {
+    final bool isAtBoundary = forward
+        ? (index >= movable.length - 1)
+        : (index <= 0);
+
+    if ((index < 0) || isAtBoundary) {
       return const MPMoveElementsResult.noOp();
     }
+
+    final int? beforeSiblingMPID = forward
+        ? ((index + 2 < movable.length) ? movable[index + 2] : null)
+        : movable[index - 1];
+
     return moveElements(
       elementMPIDs: ids,
       newParentMPID: parent is TH2File ? _th2File.mpID : parent.mpID,
-      beforeSiblingMPID: movable[targetIndex],
+      beforeSiblingMPID: beforeSiblingMPID,
     );
   }
 
+  /// Moves [ids] to the end of their parent (front, drawn last) or to its
+  /// start (back, drawn first).
   MPMoveElementsResult _moveToBoundary(List<int> ids, {required bool front}) {
     if (ids.isEmpty) return const MPMoveElementsResult.noOp();
     final THElement element = _th2File.elementByMPID(ids.first);
     final THIsParentMixin parent = element.parent(th2File: _th2File);
-    final List<int> movable = parent.childrenMPIDs.where((int id) {
-      final THElement child = _th2File.elementByMPID(id);
-      return child is THScrap || child is THPoint || child is THLine || child is THArea;
-    }).toList();
-    if (movable.isEmpty) return const MPMoveElementsResult.noOp();
+    final Set<int> moving = ids.toSet();
+    final List<int> stayingMovable = _movableSiblingsOf(
+      parent,
+    ).where((int id) => !moving.contains(id)).toList();
+
+    if (!front && stayingMovable.isEmpty) {
+      return const MPMoveElementsResult.noOp();
+    }
+
     return moveElements(
       elementMPIDs: ids,
       newParentMPID: parent is TH2File ? _th2File.mpID : parent.mpID,
-      beforeSiblingMPID: front ? movable.first : null,
+      beforeSiblingMPID: front ? null : stayingMovable.first,
     );
   }
 

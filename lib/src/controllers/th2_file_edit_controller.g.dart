@@ -423,6 +423,16 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     return super._isLoading;
   }
 
+  @override
+  bool get _isLoading => isLoading;
+
+  @override
+  set _isLoading(bool value) {
+    _$_isLoadingAtom.reportWrite(value, super._isLoading, () {
+      super._isLoading = value;
+    });
+  }
+
   late final _$_structureRevisionAtom = Atom(
     name: 'TH2FileEditControllerBase._structureRevision',
     context: context,
@@ -440,16 +450,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   set _structureRevision(int value) {
     _$_structureRevisionAtom.reportWrite(value, super._structureRevision, () {
       super._structureRevision = value;
-    });
-  }
-
-  @override
-  bool get _isLoading => isLoading;
-
-  @override
-  set _isLoading(bool value) {
-    _$_isLoadingAtom.reportWrite(value, super._isLoading, () {
-      super._isLoading = value;
     });
   }
 
@@ -1912,6 +1912,17 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void bumpStructureRevision() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.bumpStructureRevision');
+    try {
+      return super.bumpStructureRevision();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _calculateCanvasOffset() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase._calculateCanvasOffset');
@@ -1939,17 +1950,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         .startAction(name: 'TH2FileEditControllerBase.moveCanvasHorizontally');
     try {
       return super.moveCanvasHorizontally(left: left);
-    } finally {
-      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void bumpStructureRevision() {
-    final _$actionInfo = _$TH2FileEditControllerBaseActionController
-        .startAction(name: 'TH2FileEditControllerBase.bumpStructureRevision');
-    try {
-      return super.bumpStructureRevision();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }
