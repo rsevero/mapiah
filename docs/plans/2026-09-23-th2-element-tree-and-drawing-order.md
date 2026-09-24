@@ -527,7 +527,7 @@ Phase 4 lets users move scraps, points, lines and areas in the project sidebar. 
 6. **Code:** the removal list is in Phase 7 plan §8. Scrap option edits get an explicit target instead of the canvas selection, so `setSelectedScrapByMPID`, the only source of stray `MPSelectedScrap` entries, is removed. Phase 4's clean-up of those entries stays as a safety net. `MPReversedListIndexHelper` stays, because the images dialog uses it.
 7. **Tests and help:** `t3741` loses its scrap-dialog cases. The help's scrap sections are rewritten around the sidebar; they also mention an `Alt+C` shortcut and a right-click on the scrap button that the code does not have.
 
-Phase 4 was being implemented when this was decided, so the Phase 4 plan was not edited. The edits it needs are listed in Phase 7 plan §9.
+Phase 4 is finished and its plan is left as written. Where Phase 7 changes what the Phase 4 plan describes (test numbers, the source of leftover scraps in the canvas selection), Phase 7 plan §9 says so.
 
 ### Phase 8: Type preview icons on element rows
 

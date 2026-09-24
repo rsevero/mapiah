@@ -130,12 +130,12 @@ The window is a canvas overlay, so it needs the file's tab to be open and laid o
 - `MPButtonType.changeScrap` and `toggleToNextAvailableScrap` (`Alt+K`).
 - The dialog's copy/cut/duplicate/remove/visibility `.arb` keys, reused by §4–§6 with updated `Used on:` descriptions.
 
-## 9. Pending edits to other plans
+## 9. Changes to what Phase 4 describes
 
-Phase 4 is being implemented while this plan is written, so the Phase 4 plan is not edited now. Apply these edits after Phase 4 is merged:
+Phase 4 is finished, and its plan stays as it was written. These points supersede it, and this phase carries them out:
 
-- Phase 4 plan §10, last paragraph: "the parent plan's §7 now gives Phase 5 `t3951` and Phase 7 `t3952`" → "the parent plan's §7 now gives Phase 5 `t3951`, Phase 7 `t3953` and Phase 8 `t3952`". The type preview icons phase was renumbered from Phase 7 to Phase 8.
-- Phase 4 plan §3.4 and §3.6: note that the scraps dialog, named there as the source of stray `MPSelectedScrap` entries, is removed in Phase 7, and that the clean-up stays as a safety net (§7.1).
+- **Test numbers.** The Phase 4 plan (§10) gives Phase 7 `t3952`. Since this phase was added, the type preview icons phase is Phase 8 and keeps `t3952`; this phase uses `t3953`.
+- **Leftover scraps in the canvas selection.** The Phase 4 plan (§3.4, §3.6) names the scraps dialog's `setSelectedScrapByMPID` as the source of an `MPSelectedScrap` left in `mpSelectedElementsLogical`. This phase removes the dialog and that method (§7.1), so the copy, cut and duplicate helpers become the only way a scrap enters that map, and only for a moment. Phase 4's clean-up of such entries and its rejection of mixed selections stay as a safety net.
 
 ## 10. Localization, help and changelog
 
@@ -179,7 +179,7 @@ One Phase 7 entry in the unreleased section, under "New features", referencing #
 6. Remove the button, dialog and related code (§8). Update or remove the tests that depend on them (§12).
 7. Strings (§10.1) together with steps 3–5, never as a later clean-up. Help pages (§10.2).
 8. Run the focused tests, `flutter analyze` and the full test suite. Do not run `build_runner` manually or `dart format`.
-9. CHANGELOG entry (§10.3). Apply the pending plan edits (§9) if Phase 4 is merged by then.
+9. CHANGELOG entry (§10.3).
 
 ## 12. Tests
 
