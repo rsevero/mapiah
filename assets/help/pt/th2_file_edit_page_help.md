@@ -350,7 +350,7 @@ Para editar opções do scrap, clique com o botão direito em:
 * o botão de seleção de scrap no canto inferior direito, caso exista apenas um scrap no arquivo, ou
 * o nome do scrap na caixa de diálogo de seleção de scrap apresentada ao clicar no botão de seleção de scrap, caso existam múltiplos scraps no arquivo.
 
-A opção _Esboço_ do scrap define a imagem de fundo que o Therion desenha sob o scrap quando o layout tem `sketches on`. Após escolher _Definido_, selecione em _Imagem carregada_ uma imagem já carregada no arquivo para preencher seu nome de arquivo e as coordenadas do seu canto inferior esquerdo, ou digite-os ou use _Escolher arquivo_. Os arquivos escolhidos são armazenados com caminho relativo ao arquivo TH2. O Therion não redimensiona nem rotaciona esboços, então um aviso é apresentado quando a imagem carregada está redimensionada ou rotacionada no Mapiah.
+A opção _Esboço_ do scrap define as imagens de fundo que o Therion desenha sob o scrap quando o layout tem `sketches on`. Após escolher _Definido_, use _Adicionar esboço_ para adicionar mais imagens, selecione uma entrada para editá-la ou use _Remover esboço_ para excluí-la. Para cada entrada, selecione em _Imagem carregada_ uma imagem já carregada no arquivo para preencher seu nome de arquivo e as coordenadas do seu canto inferior esquerdo, ou digite-os ou use _Escolher arquivo_. Os arquivos escolhidos são armazenados com caminho relativo ao arquivo TH2. O Therion não redimensiona nem rotaciona esboços, então um aviso é apresentado quando a imagem carregada está redimensionada ou rotacionada no Mapiah.
 
 ## Opções padrão
 

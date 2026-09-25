@@ -1104,6 +1104,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSettingsSettingTherionDebugLog1 => 'Debug log 1';
 
   @override
+  String get mpSketchAddButtonLabel => 'Adicionar esboço';
+
+  @override
+  String get mpSketchRemoveButtonLabel => 'Remover esboço';
+
+  @override
   String get mpSketchChooseFileButtonLabel => 'Escolher arquivo';
 
   @override

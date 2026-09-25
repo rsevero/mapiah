@@ -2099,6 +2099,18 @@ abstract class AppLocalizations {
   /// **'Debug log 1'**
   String get mpSettingsSettingTherionDebugLog1;
 
+  /// Button to add another background sketch to a scrap. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Add sketch'**
+  String get mpSketchAddButtonLabel;
+
+  /// Button to remove the selected background sketch from a scrap. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Remove sketch'**
+  String get mpSketchRemoveButtonLabel;
+
   /// The label for the choose file button. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
   ///
   /// In en, this message translates to:

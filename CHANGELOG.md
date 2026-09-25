@@ -4,6 +4,7 @@
 
 ## 1.0.1 - not yet released
 * New features:
+  * Scraps now support multiple background sketches (#45). Mapiah preserves every `-sketch` option when reading and writing TH2 files, and the _Sketch_ dialog lets users select, add, edit, and remove each sketch.
   * Added an "Add line segments" button to the line edit panel, matching the existing `/` shortcut that adds line segments between the selected line segments. The button is enabled when two or more end points are selected.
   * The scrap _Sketch_ option dialog can now fill the sketch filename and lower left corner coordinates from a raster image already loaded in the file, warning when that image is scaled or rotated since Therion doesn't support it (#44).
 * Fixes:

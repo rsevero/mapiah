@@ -2050,13 +2050,22 @@ class TH2FileParser {
 
     final String filename = _parseTHString(_currentSpec[0]);
 
-    MPElementEditAux.addOptionToElement(
-      option: THSketchCommandOption.fromString(
+    final THSketchCommandOption newSketch = THSketchCommandOption.fromString(
         parentMPID: _currentHasOptions.mpID,
         filename: filename,
         pointList: _currentSpec[1],
         originalLineInTH2File: _currentOriginalLine,
-      ),
+      );
+    final THSketchCommandOption? existingSketch =
+        _currentHasOptions.getOption(THCommandOptionType.sketch)
+            as THSketchCommandOption?;
+
+    MPElementEditAux.addOptionToElement(
+      option: existingSketch == null
+          ? newSketch
+          : existingSketch.copyWith(
+              sketches: [...existingSketch.sketches, ...newSketch.sketches],
+            ),
       element: _currentHasOptions,
     );
   }

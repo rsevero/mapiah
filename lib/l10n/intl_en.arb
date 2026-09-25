@@ -1656,6 +1656,14 @@
     "description": "Label for the Therion debug log 1 setting. Used on: lib/src/pages/mp_settings_page.dart",
     "type": "text"
   },
+  "mpSketchAddButtonLabel": "Add sketch",
+  "@mpSketchAddButtonLabel": {
+    "description": "Button to add another background sketch to a scrap. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart"
+  },
+  "mpSketchRemoveButtonLabel": "Remove sketch",
+  "@mpSketchRemoveButtonLabel": {
+    "description": "Button to remove the selected background sketch from a scrap. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart"
+  },
   "mpSketchChooseFileButtonLabel": "Choose file",
   "@mpSketchChooseFileButtonLabel": {
     "description": "The label for the choose file button. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart",

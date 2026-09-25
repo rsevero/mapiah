@@ -9,6 +9,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/parts/th_position_part.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_parser.dart';
@@ -76,6 +77,7 @@ void main() {
   Future<void> pumpSketchWidget(
     WidgetTester tester,
     TH2FileEditController controller,
+    {MPOptionInfo? optionInfo}
   ) async {
     tester.view.physicalSize = const Size(1600, 1000);
     tester.view.devicePixelRatio = 1.0;
@@ -98,7 +100,7 @@ void main() {
               if (showSketchWidget)
                 MPSketchOptionWidget(
                   th2FileEditController: controller,
-                  optionInfo: MPOptionInfo(
+                  optionInfo: optionInfo ?? MPOptionInfo(
                     type: THCommandOptionType.sketch,
                     state: MPOptionStateType.unset,
                   ),
@@ -196,5 +198,118 @@ void main() {
     );
 
     expect(okButton.onPressed, isNull);
+  });
+
+  testWidgets('multiple sketches can be selected and edited independently', (
+    WidgetTester tester,
+  ) async {
+    final TH2FileEditController controller = (await tester.runAsync(
+      () => loadController('1'),
+    ))!;
+    final THSketchCommandOption option =
+        THSketchCommandOption.fromStringWithParentMPID(
+      parentMPID: mpParentMPIDPlaceholder,
+      filename: './first.png',
+      pointList: ['1', '2'],
+    ).copyWith(sketches: [
+      THSketchSpec(
+        filename: './first.png',
+        point: THPositionPart.fromStringList(list: ['1', '2']),
+      ),
+      THSketchSpec(
+        filename: './second.png',
+        point: THPositionPart.fromStringList(list: ['3', '4']),
+      ),
+    ]);
+
+    await pumpSketchWidget(
+      tester,
+      controller,
+      optionInfo: MPOptionInfo(
+        type: THCommandOptionType.sketch,
+        state: MPOptionStateType.set,
+        option: option,
+      ),
+    );
+
+    expect(textFieldValue(tester, 'Filename'), './first.png');
+    await tester.tap(find.byKey(
+      const ValueKey('MPSketchOptionWidget|SketchSelector'),
+    ));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('2: ./second.png').last);
+    await tester.pumpAndSettle();
+
+    expect(textFieldValue(tester, 'Filename'), './second.png');
+    expect(textFieldValue(tester, 'X'), '3');
+    expect(textFieldValue(tester, 'Y'), '4');
+
+    await tester.enterText(
+      find.ancestor(
+        of: find.text('X'),
+        matching: find.byType(TextField),
+      ),
+      '30',
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(
+      const ValueKey('MPSketchOptionWidget|SketchSelector'),
+    ));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('1: ./first.png').last);
+    await tester.pumpAndSettle();
+
+    expect(textFieldValue(tester, 'X'), '1');
+    await tester.tap(find.byKey(
+      const ValueKey('MPSketchOptionWidget|SketchSelector'),
+    ));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('2: ./second.png').last);
+    await tester.pumpAndSettle();
+    expect(textFieldValue(tester, 'X'), '30');
+  });
+
+  testWidgets('adding and removing sketches updates validation', (
+    WidgetTester tester,
+  ) async {
+    final TH2FileEditController controller = (await tester.runAsync(
+      () => loadController('1'),
+    ))!;
+
+    await pumpSketchWidget(tester, controller);
+    await pickLoadedImage(tester);
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Add sketch'));
+    await tester.pumpAndSettle();
+
+    ElevatedButton okButton = tester.widget<ElevatedButton>(
+      find.widgetWithText(ElevatedButton, 'OK'),
+    );
+
+    expect(okButton.onPressed, isNull);
+
+    await tester.enterText(
+      find.ancestor(of: find.text('Filename'), matching: find.byType(TextField)),
+      './second.png',
+    );
+    await tester.enterText(
+      find.ancestor(of: find.text('X'), matching: find.byType(TextField)),
+      '30',
+    );
+    await tester.enterText(
+      find.ancestor(of: find.text('Y'), matching: find.byType(TextField)),
+      '40',
+    );
+    await tester.pumpAndSettle();
+
+    okButton = tester.widget<ElevatedButton>(
+      find.widgetWithText(ElevatedButton, 'OK'),
+    );
+    expect(okButton.onPressed, isNotNull);
+
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Remove sketch'));
+    await tester.pumpAndSettle();
+    expect(textFieldValue(tester, 'Filename'), './sketch.png');
+    expect(textFieldValue(tester, 'X'), '10');
+    expect(textFieldValue(tester, 'Y'), '17');
   });
 }

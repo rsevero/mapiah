@@ -506,6 +506,41 @@ endscrap
         expect(asFile, success['asFile']);
       });
     }
+
+    test('multiple sketches survive parsing, serialization, and model copy', () async {
+      final TH2FileParser parser = TH2FileParser();
+      final TH2FileWriter writer = TH2FileWriter();
+
+      mpLocator.mpGeneralController.reset();
+
+      final (TH2File file, bool isSuccessful, List<String> errors) =
+          await parser.parse(
+        THTestAux.testPath(
+          'th_file_parser-00301-scrap_with_multiple_sketch_options.th2',
+        ),
+      );
+
+      expect(isSuccessful, isTrue, reason: '$errors');
+
+      final THScrap scrap = file.getScraps().first;
+      final THSketchCommandOption sketch =
+          scrap.getOption(THCommandOptionType.sketch)! as THSketchCommandOption;
+
+      expect(sketch.sketches.length, 2);
+      expect(sketch.sketches.first.filename.content, './first.png');
+      expect(sketch.sketches.last.filename.content, './second.png');
+      expect(sketch.sketches.last.point.x, 40);
+      expect(sketch.sketches.last.point.y, 50);
+      expect(THSketchCommandOption.fromMap(sketch.toMap()), sketch);
+      expect(scrap.copyWith().getOption(THCommandOptionType.sketch), sketch);
+      expect(
+        writer.serialize(file),
+        'encoding UTF-8\n'
+        'scrap araras15 -sketch ./first.png 12 32 '
+        '-sketch ./second.png 40 50\n'
+        'endscrap\n',
+      );
+    });
   });
 
   group('scrap -station-names', () {
