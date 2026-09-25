@@ -27,7 +27,7 @@
     * Default project-tree expansion now opens every non-`.th2` node down to the shallowest `.th2` depth and never expands a `.th2` row.
     * Added EN/PT strings and editor help, and tests `test/t3942`–`t3944` (plus updates to `test/t3880`, `t3881` and `t3883`).
 * Fixed bugs:
-  * The README now links to the English and Portuguese user guides through their explicit GitHub PDF viewing pages.
+  * The README now links directly to browser-viewable English and Portuguese PDFs because GitHub's repository PDF viewer failed to render them.
   * On Windows, Save As of an existing `.th2` file no longer breaks or lowercases its image paths.
     * Relative image paths could be rewritten into broken paths such as `../../../../c:/caves/…`, so the images stopped loading. They now point to the same file, with the original letter case.
     * Absolute image paths were rewritten in lowercase. They are now left exactly as written, and their lines keep their original formatting.
