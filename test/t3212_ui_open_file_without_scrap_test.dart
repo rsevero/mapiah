@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/pages/th2_file_tabs_page.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
@@ -151,5 +152,142 @@ void main() {
         },
       );
     }
+
+    for (final bool createScrap in [true, false]) {
+      testWidgets('pasting a point asks for a scrap first (create: $createScrap)', (
+        WidgetTester tester,
+      ) async {
+        tester.view.physicalSize = const Size(1280, 1000);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() {
+          tester.view.resetPhysicalSize();
+          tester.view.resetDevicePixelRatio();
+        });
+
+        await tester.pumpWidget(const MapiahApp());
+        await tester.pumpAndSettle();
+
+        final TH2FileEditController sourceController = mpLocator
+            .mpGeneralController
+            .getTH2FileEditController(
+              filename: THTestAux.testPath('2025-10-07-002-point.th2'),
+            );
+        final String targetFilename = THTestAux.testPath(
+          '2026-09-25-001-no_scrap_with_xvi_image.th2',
+        );
+        final TH2FileEditController targetController = mpLocator
+            .mpGeneralController
+            .getTH2FileEditController(filename: targetFilename);
+
+        await tester.runAsync(() async {
+          await sourceController.load();
+          await targetController.load();
+        });
+
+        mpLocator.mpGeneralController.addFileTab(targetFilename);
+        await tester.pumpAndSettle();
+
+        sourceController.selectionController.setSelectedElements([
+          sourceController.th2File.getPoints().first,
+        ]);
+        sourceController.copyPasteController.copySelectedElements();
+
+        final List<int> pastedMPIDs = targetController.copyPasteController
+            .pasteElements();
+        await tester.pumpAndSettle();
+
+        expect(pastedMPIDs, isEmpty);
+        expect(targetController.th2File.getPoints(), isEmpty);
+
+        final Finder dialog = find.byType(MPAddScrapDialogOverlayWindowWidget);
+
+        expect(dialog, findsOneWidget);
+
+        await tester.tap(
+          find.descendant(
+            of: dialog,
+            matching: createScrap
+                ? find.byType(ElevatedButton)
+                : find.byType(TextButton),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(dialog, findsNothing);
+        expect(tester.takeException(), isNull);
+
+        if (createScrap) {
+          final List<int> scrapMPIDs = targetController.th2File.scrapMPIDs;
+          final List<THPoint> points = targetController.th2File
+              .getPoints()
+              .toList();
+
+          expect(scrapMPIDs.length, 1);
+          expect(points.length, 1);
+          expect(points.first.parentMPID, scrapMPIDs.first);
+        } else {
+          expect(targetController.th2File.scrapMPIDs, isEmpty);
+          expect(targetController.th2File.getPoints(), isEmpty);
+        }
+
+        targetController.close();
+        sourceController.close();
+        await tester.pumpAndSettle();
+      });
+    }
+
+    testWidgets('pasting a scrap needs no existing scrap', (
+      WidgetTester tester,
+    ) async {
+      tester.view.physicalSize = const Size(1280, 1000);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      await tester.pumpWidget(const MapiahApp());
+      await tester.pumpAndSettle();
+
+      final TH2FileEditController sourceController = mpLocator
+          .mpGeneralController
+          .getTH2FileEditController(
+            filename: THTestAux.testPath('2025-10-07-002-point.th2'),
+          );
+      final String targetFilename = THTestAux.testPath(
+        '2026-09-25-001-no_scrap_with_xvi_image.th2',
+      );
+      final TH2FileEditController targetController = mpLocator
+          .mpGeneralController
+          .getTH2FileEditController(filename: targetFilename);
+
+      await tester.runAsync(() async {
+        await sourceController.load();
+        await targetController.load();
+      });
+
+      mpLocator.mpGeneralController.addFileTab(targetFilename);
+      await tester.pumpAndSettle();
+
+      sourceController.selectionController.setSelectedElements([
+        sourceController.th2File.getScraps().first,
+      ]);
+      sourceController.copyPasteController.copySelectedElements();
+
+      final List<int> pastedMPIDs = targetController.copyPasteController
+          .pasteElements();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(MPAddScrapDialogOverlayWindowWidget), findsNothing);
+      expect(tester.takeException(), isNull);
+      expect(pastedMPIDs.length, 1);
+      expect(targetController.th2File.scrapMPIDs, pastedMPIDs);
+      expect(targetController.activeScrapID, pastedMPIDs.first);
+      expect(targetController.th2File.getPoints().length, 1);
+
+      targetController.close();
+      sourceController.close();
+      await tester.pumpAndSettle();
+    });
   });
 }

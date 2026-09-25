@@ -169,6 +169,21 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
 
     final int activeScrapMPID = _th2FileEditController.activeScrapID;
 
+    /// Pasted scraps go straight into the file, but any other element needs a
+    /// parent scrap: in a file without one, ask for a scrap first and only
+    /// then paste.
+    if ((activeScrapMPID <= 0) &&
+        clipboard.any(
+          (MPCopyElementWithChildren entry) =>
+              THElement.fromMap(entry.template.elementMap) is! THScrap,
+        )) {
+      _th2FileEditController.elementEditController.addScrap(
+        onScrapCreated: pasteElements,
+      );
+
+      return const [];
+    }
+
     /// Materialize and build commands from clipboard.
     final MPTHElementPasteAux pasteAux = MPTHElementPasteAux(
       copyResult: clipboard,
