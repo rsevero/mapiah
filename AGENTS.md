@@ -106,7 +106,8 @@ MPLocator (global mpLocator) provides:
 
 ### Prompt Abbreviations
 
-* cc: Update CHANGELOG.md + prepare commit. Always asks for confirmation of commit message before actually commiting.
+* cc: Update CHANGELOG.md + prepare commit. Always asks for confirmation of commit message before actually commiting. Keep the changes on its separate branch.
+* ccm: Like cc but merges the branch after commiting.
 * Commit messages should include Assisted_By/Signed-off-by (first Assisted_By: and then finish with Signed-off-by:) when appliable.
 * hpcc: Update help pages (EN/PT) + keyboard shortcuts + cc above
 
@@ -124,6 +125,7 @@ Full rules in coding-guidelines.md. Critical rules:
 * Update help pages (EN/PT) + keyboard shortcuts (alphabetical order)
 * URLs → MPURLTextWidget
 * Formatting handled automatically on commit: never run "dart format".
+* Lets create a separate branch for each feature/bugfix.
 
 ### For every prompt:
 
