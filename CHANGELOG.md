@@ -2,7 +2,12 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 1.0.1 - not yet released
+## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
+* Highlights:
+  * Scraps can now have several background sketches (#45). The scrap _Sketch_ dialog can take the filename and position from a raster image already loaded in the file (#44), and several problems in that dialog were fixed.
+  * Background images that are only moved are saved in the `##XTHERION##` format again, so files stay compatible with XTherion (#46).
+  * Files without scraps now work properly. They open without errors, and adding or pasting points, lines or areas into them first asks you to create a scrap.
+  * Redo is now `Ctrl+Shift+Z` everywhere, and the line edit panel has a new "Add line segments" button.
 * New features:
   * Scraps now support multiple background sketches (#45). Mapiah preserves every `-sketch` option when reading and writing TH2 files, and the _Sketch_ dialog lets users select, add, edit, and remove each sketch.
   * Added an "Add line segments" button to the line edit panel, matching the existing `/` shortcut that adds line segments between the selected line segments. The button is enabled when two or more end points are selected.
