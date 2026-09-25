@@ -2,6 +2,10 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
+## 1.0.1 - not yet released
+* New features:
+  * Added an "Add line segments" button to the line edit panel, matching the existing `/` shortcut that adds line segments between the selected line segments. The button is enabled when two or more end points are selected.
+
 ## 1.0.0 - 2026-09-24 - The [Frankfurt School](https://en.wikipedia.org/wiki/Frankfurt_School) release
 * Highlights:
   * Whole Therion projects can now be opened and worked on: a resizable project-tree sidebar shows the `thconfig`/`.th`/`.th2`/survey/scrap hierarchy with search, dirty and error markers, and a Close project action. The separate initial window was replaced by an always-available tabbed workspace, and running Therion uses the loaded project, with its compiler diagnostics shown in the tree and editors.

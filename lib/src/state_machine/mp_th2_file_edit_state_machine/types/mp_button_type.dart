@@ -6,6 +6,7 @@ enum MPButtonType {
   addFreehandLine,
   addImage,
   addLine,
+  addLineSegments,
   addLineToArea,
   addPoint,
   addScrap,

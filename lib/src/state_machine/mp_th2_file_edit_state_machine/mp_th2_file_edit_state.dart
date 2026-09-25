@@ -298,6 +298,9 @@ abstract class MPTH2FileEditState {
           MPTH2FileEditStateType.addLine,
         );
         return true;
+      case MPButtonType.addLineSegments:
+        elementEditController.applyAddLineSegmentsBetweenSelectedLineSegments();
+        return true;
       case MPButtonType.addLineToArea:
         th2FileEditController.stateController.setState(
           MPTH2FileEditStateType.addLineToArea,

@@ -2060,6 +2060,11 @@
     "description": "The label for the add line button. Used on: lib/src/pages/th2_file_edit_page.dart",
     "type": "text"
   },
+  "th2FileEditPageAddLineSegments": "Add line segments between selected line segments (/)",
+  "@th2FileEditPageAddLineSegments": {
+    "description": "Tooltip for the add line segments FAB. Used on: lib/src/widgets/th2_file_edit_state_context_fabs/single_line_panel.dart",
+    "type": "text"
+  },
   "th2FileEditPageAddLineStatusBarMessage": "Click to add a {type} line",
   "@th2FileEditPageAddLineStatusBarMessage": {
     "description": "The status bar message for the add line tool. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_add_line.dart",

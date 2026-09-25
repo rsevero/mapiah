@@ -25,6 +25,8 @@ class TH2FileEditSingleLineContextFABsPanel extends StatelessWidget {
         final AppLocalizations appLocalizations = mpLocator.appLocalizations;
         final bool allEndPointsSelected =
             th2FileEditController.areAllEndPointsSelected;
+        final bool hasMultipleSelectedEndPoints =
+            th2FileEditController.hasMultipleSelectedEndPoints;
         final bool hasSelectedEndPoints =
             th2FileEditController.hasSelectedEndPoints;
         final bool hasSelectedNonStartEndPoints =
@@ -72,6 +74,16 @@ class TH2FileEditSingleLineContextFABsPanel extends StatelessWidget {
             ),
             TH2FileEditStateContextFABCategoryRow(
               buttons: <Widget>[
+                TH2FileEditStateContextFABButton(
+                  context: context,
+                  heroTag: '${heroPrefix}_ctx_add_line_segments',
+                  onPressed: hasMultipleSelectedEndPoints
+                      ? () => _onButtonPressed(MPButtonType.addLineSegments)
+                      : null,
+                  category: TH2FileEditStateContextFABCategory.editTools,
+                  icon: Icons.add,
+                  tooltip: appLocalizations.th2FileEditPageAddLineSegments,
+                ),
                 TH2FileEditStateContextFABButton(
                   context: context,
                   heroTag: '${heroPrefix}_ctx_open_option_window',

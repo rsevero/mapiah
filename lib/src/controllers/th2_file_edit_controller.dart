@@ -393,6 +393,9 @@ abstract class TH2FileEditControllerBase with Store {
   bool get hasSelectedEndPoints =>
       selectionController.selectedEndControlPoints.isNotEmpty;
 
+  bool get hasMultipleSelectedEndPoints =>
+      selectionController.selectedEndControlPoints.length > 1;
+
   bool get hasSelectedNonStartEndPoints {
     if (selectionController.selectedEndControlPoints.isEmpty) {
       return false;

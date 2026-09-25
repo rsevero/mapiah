@@ -2537,6 +2537,12 @@ abstract class AppLocalizations {
   /// **'Add line (L)'**
   String get th2FileEditPageAddLine;
 
+  /// Tooltip for the add line segments FAB. Used on: lib/src/widgets/th2_file_edit_state_context_fabs/single_line_panel.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Add line segments between selected line segments (/)'**
+  String get th2FileEditPageAddLineSegments;
+
   /// The status bar message for the add line tool. Used on: lib/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state_add_line.dart
   ///
   /// In en, this message translates to:

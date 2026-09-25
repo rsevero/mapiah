@@ -261,7 +261,9 @@ class MPTH2FileEditStateEditSingleLine extends MPTH2FileEditState
     /// example (AltRght + Q) on one of my keyboards.
     switch (event.character) {
       case '/':
-        elementEditController.applyAddLineSegmentsBetweenSelectedLineSegments();
+        th2FileEditController.stateController.onButtonPressed(
+          MPButtonType.addLineSegments,
+        );
         keyProcessed = true;
     }
 

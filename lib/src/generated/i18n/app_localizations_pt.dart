@@ -1370,6 +1370,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageAddLine => 'Criar linha (L)';
 
   @override
+  String get th2FileEditPageAddLineSegments =>
+      'Criar segmentos de linha entre segmentos de linha selecionados (/)';
+
+  @override
   String th2FileEditPageAddLineStatusBarMessage(Object type) {
     return 'Clique para criar uma linha do tipo $type';
   }

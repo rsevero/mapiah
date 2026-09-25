@@ -8,7 +8,7 @@
 [X] - Show shortcuts related to current state on status bar. [requested by Edvard]
 [ ] - Overlay dialogs should be draggable outside the main Mapiah Window.
 [ ] - Create text editor font settings
-[ ] - Add line segments "/" keyboard shortcut has no button when editing line segments.
+[X] - "Add line segments" (/ keyboard shortcut) has no button when editing line segments.
 
 ## Version 2.0
 [X] - Open/edit/save thconfig files.
