@@ -2414,7 +2414,7 @@
     "description": "Tooltip for the paste elements FAB. Used on: lib/src/widgets/th2_file_edit_body_widget.dart",
     "type": "text"
   },
-  "th2FileEditPageRedo": "Redo '{redoDescription}' (Ctrl+Y)",
+  "th2FileEditPageRedo": "Redo '{redoDescription}' (Ctrl+Shift+Z)",
   "@th2FileEditPageRedo": {
     "description": "The label for the redo shortcut. Used on: TH2FileEditControllerBase.updateUndoRedoStatus",
     "type": "text",

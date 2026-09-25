@@ -2954,7 +2954,7 @@ abstract class AppLocalizations {
   /// The label for the redo shortcut. Used on: TH2FileEditControllerBase.updateUndoRedoStatus
   ///
   /// In en, this message translates to:
-  /// **'Redo \'{redoDescription}\' (Ctrl+Y)'**
+  /// **'Redo \'{redoDescription}\' (Ctrl+Shift+Z)'**
   String th2FileEditPageRedo(Object redoDescription);
 
   /// The label for the remove tool button. Used on: _TH2FileEditPageState._stateActionButtons

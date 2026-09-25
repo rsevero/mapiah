@@ -494,6 +494,26 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                 const _THTextEditorFindIntent(),
             const SingleActivator(LogicalKeyboardKey.keyF, meta: true):
                 const _THTextEditorFindIntent(),
+            // Flutter binds undo/redo to Ctrl on Linux/Windows and to Cmd on
+            // macOS only; Mapiah accepts both everywhere, as on the canvas.
+            const SingleActivator(LogicalKeyboardKey.keyZ, control: true):
+                const UndoTextIntent(SelectionChangedCause.keyboard),
+            const SingleActivator(LogicalKeyboardKey.keyZ, meta: true):
+                const UndoTextIntent(SelectionChangedCause.keyboard),
+            const SingleActivator(
+              LogicalKeyboardKey.keyZ,
+              control: true,
+              shift: true,
+            ): const RedoTextIntent(
+              SelectionChangedCause.keyboard,
+            ),
+            const SingleActivator(
+              LogicalKeyboardKey.keyZ,
+              meta: true,
+              shift: true,
+            ): const RedoTextIntent(
+              SelectionChangedCause.keyboard,
+            ),
           },
           child: Actions(
             actions: <Type, Action<Intent>>{

@@ -7,6 +7,8 @@
   * Scraps now support multiple background sketches (#45). Mapiah preserves every `-sketch` option when reading and writing TH2 files, and the _Sketch_ dialog lets users select, add, edit, and remove each sketch.
   * Added an "Add line segments" button to the line edit panel, matching the existing `/` shortcut that adds line segments between the selected line segments. The button is enabled when two or more end points are selected.
   * The scrap _Sketch_ option dialog can now fill the sketch filename and lower left corner coordinates from a raster image already loaded in the file, warning when that image is scaled or rotated since Therion doesn't support it (#44).
+* Changes:
+  * Redo is now `Ctrl+Shift+Z` everywhere: the canvas no longer uses `Ctrl+Y`, matching the text editor tabs. Text tabs now also accept both Ctrl and Cmd for undo and redo on every platform, as the canvas does.
 * Fixes:
   * Fixed the scrap _Sketch_ option dialog (#44): long filenames no longer push the dialog off screen, files picked with _Choose file_ are stored relative to the TH2 file, the filename field no longer loses its cursor while typing, and switching between _Unset_ and _Set_ now updates the OK button correctly.
 

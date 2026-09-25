@@ -203,21 +203,17 @@ mixin MPTH2FileEditStateKeyDownMixin on MPTH2FileEditState {
           th2FileEditController.copyPasteController.pasteElements();
           keyProcessed = true;
         }
-      case LogicalKeyboardKey.keyY:
-        if ((isCtrlPressed || isMetaPressed) &&
-            !isAltPressed &&
-            !isShiftPressed &&
-            th2FileEditController.hasRedo) {
-          th2FileEditController.redo();
-          keyProcessed = true;
-        }
       case LogicalKeyboardKey.keyZ:
-        if ((isCtrlPressed || isMetaPressed) &&
-            !isAltPressed &&
-            !isShiftPressed &&
-            th2FileEditController.hasUndo) {
-          th2FileEditController.undo();
-          keyProcessed = true;
+        if ((isCtrlPressed || isMetaPressed) && !isAltPressed) {
+          if (isShiftPressed) {
+            if (th2FileEditController.hasRedo) {
+              th2FileEditController.redo();
+              keyProcessed = true;
+            }
+          } else if (th2FileEditController.hasUndo) {
+            th2FileEditController.undo();
+            keyProcessed = true;
+          }
         }
       case LogicalKeyboardKey.backspace:
       case LogicalKeyboardKey.delete:

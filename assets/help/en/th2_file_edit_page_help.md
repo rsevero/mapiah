@@ -82,7 +82,7 @@ The currently active file's tab is highlighted, making it easy to see which file
 
 ## Project text editor
 
-Project `thconfig` and `.th` files open in text tabs. Syntax highlighting and folding make the source easier to read. While you edit, parsing is debounced and the project tree is refreshed after the pause. The tab becomes dirty until you save or revert it. Find and replace apply to the active file only; project-wide search is not available.
+Project `thconfig` and `.th` files open in text tabs. Syntax highlighting and folding make the source easier to read. While you edit, parsing is debounced and the project tree is refreshed after the pause. The tab becomes dirty until you save or revert it. _Ctrl+Z_ undoes and _Ctrl+Shift+Z_ redoes text edits, as on the canvas. Find and replace apply to the active file only; project-wide search is not available.
 
 Parser diagnostics are produced while loading or re-parsing source and are shown in the editor and project tree. Compiler diagnostics are produced by running Therion. Both kinds can coexist. A diagnostic with a known file and line can be selected to navigate to that location; a diagnostic without a source line remains in the run output and cannot target a tree line.
 
@@ -132,7 +132,7 @@ Unknown point, line or area types alone are still accepted; unknown options are 
 * _Default options_: opens the default options overlay window where default option values can be set for new points, lines, and areas. (O with no elements selected)
 * ![Delete button](assets/help/images/buttonDelete.png "Delete")  _Delete_: deletes the currently selected elements. Only enabled if there is at least one element selected. (Delete/Backspace)
 * ![Undo button](assets/help/images/buttonUndo.png "Undo")  _Undo_: undos the last executed edit operation. Only enabled if there is at elast one edit operation to be undone. (Ctrl+Z)
-* ![Redo button](assets/help/images/buttonRedo.png "Redo")  _Redo_: redoes the last undone edit operation. Only enabled if there is at least one edit operation to be redone. (Ctrl+Y)
+* ![Redo button](assets/help/images/buttonRedo.png "Redo")  _Redo_: redoes the last undone edit operation. Only enabled if there is at least one edit operation to be redone. (Ctrl+Shift+Z)
 
 In case there are available redoes when a new edit operation is performed, the redo stack is migrated to the undo stack making redoes still accessible.
 

@@ -82,7 +82,7 @@ A aba do arquivo atualmente ativo é destacada, facilitando ver qual arquivo voc
 
 ## Editor de texto do projeto
 
-Arquivos `thconfig` e `.th` do projeto são abertos em abas de texto. O realce de sintaxe e o recolhimento facilitam a leitura. Durante a edição, a análise é atrasada por alguns instantes e a árvore do projeto é atualizada depois dessa pausa. A aba fica marcada como alterada até ser salva ou revertida. Localizar e substituir se aplicam somente ao arquivo ativo; a pesquisa em todo o projeto não está disponível.
+Arquivos `thconfig` e `.th` do projeto são abertos em abas de texto. O realce de sintaxe e o recolhimento facilitam a leitura. Durante a edição, a análise é atrasada por alguns instantes e a árvore do projeto é atualizada depois dessa pausa. A aba fica marcada como alterada até ser salva ou revertida. _Ctrl+Z_ desfaz e _Ctrl+Shift+Z_ refaz edições de texto, como no desenho. Localizar e substituir se aplicam somente ao arquivo ativo; a pesquisa em todo o projeto não está disponível.
 
 Diagnósticos do analisador são produzidos ao carregar ou analisar novamente a fonte e aparecem no editor e na árvore do projeto. Diagnósticos do compilador são produzidos ao executar o Therion. Os dois tipos podem coexistir. Um diagnóstico com arquivo e linha conhecidos pode ser selecionado para navegar até esse local; sem uma linha de origem, ele permanece na saída da execução e não pode direcionar para uma linha da árvore.
 
@@ -318,7 +318,7 @@ Para os pontos do tipo Corte selectionados, ao pressionar Ctrl+X, o Mapiah procu
 * _Opções padrão_: abre a janela de opções padrão, onde é possível configurar valores padrão de opções para novos pontos, linhas e áreas. (O sem elementos selecionados)
 * ![Botão deletar](assets/help/images/buttonDelete.png "Deletar")  _Deletar_: apaga os elementos atualmente selecionados. Só fica habilitado se houver pelo menos um elemento selecionado. (Delete/Backspace)
 * ![Botão desfazer](assets/help/images/buttonUndo.png "Desfazer")  _Desfazer_: desfaz a última operação de edição executada. Só fica habilitado se houver pelo menos uma operação a desfazer. (Ctrl+Z)
-* ![Botão refazer](assets/help/images/buttonRedo.png "Refazer")  _Refazer_: refaz a última operação desfeita. Só fica habilitado se houver pelo menos uma operação a refazer. (Ctrl+Y)
+* ![Botão refazer](assets/help/images/buttonRedo.png "Refazer")  _Refazer_: refaz a última operação desfeita. Só fica habilitado se houver pelo menos uma operação a refazer. (Ctrl+Shift+Z)
 
 Caso existam operações no stack de refazer e uma nova operação de edição seja executada, o stack de refazer é migrado para o stack de desfazer, mantendo os “refazer” acessíveis.
 

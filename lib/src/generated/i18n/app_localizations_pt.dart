@@ -1623,7 +1623,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String th2FileEditPageRedo(Object redoDescription) {
-    return 'Refazer \'$redoDescription\' (Ctrl+Y)';
+    return 'Refazer \'$redoDescription\' (Ctrl+Shift+Z)';
   }
 
   @override

@@ -1601,7 +1601,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String th2FileEditPageRedo(Object redoDescription) {
-    return 'Redo \'$redoDescription\' (Ctrl+Y)';
+    return 'Redo \'$redoDescription\' (Ctrl+Shift+Z)';
   }
 
   @override
