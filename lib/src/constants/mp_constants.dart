@@ -10,9 +10,9 @@ import 'package:material_ui/material_ui.dart';
 
 // Optional release information constants. If empty, they are not shown
 // in the About dialog.
-const String mpReleaseName = '';
+const String mpReleaseName = 'Frankfurt School';
 const String mpReleaseURL =
-    '';
+    'https://en.wikipedia.org/wiki/Frankfurt_School';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';

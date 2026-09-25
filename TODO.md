@@ -11,7 +11,7 @@
 [ ] - Add line segments "/" keyboard shortcut has no button when editing line segments.
 
 ## Version 2.0
-[ ] - Open/edit/save thconfig files.
+[X] - Open/edit/save thconfig files.
 [X] - Run Therion using the opened thconfig file.
 [X] - Show Therion output log while running Therion from Mapiah.
 [ ] - Show points, lines and areas using Therion symbology [requested by Marco Corvi]

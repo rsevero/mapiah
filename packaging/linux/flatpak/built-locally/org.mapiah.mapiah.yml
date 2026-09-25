@@ -56,5 +56,5 @@ modules:
         path: ../../../..
       - type: git
         url: https://github.com/flutter/flutter.git
-        tag: 3.47.1
+        tag: 3.47.5
         dest: flutter
