@@ -39,7 +39,7 @@ class MPNonSelectedElementsWidget extends StatelessWidget
         th2FileEditController.redrawTriggerAllElements;
         th2FileEditController.redrawTriggerNonSelectedElements;
         th2FileEditController.redrawTriggerSelectedElementsListChanged;
-        th2FileEditController.activeScrapID;
+        final int activeScrapID = th2FileEditController.activeScrapID;
 
         final bool showDirectionTicksOnNonSelected = mpLocator
             .mpSettingsController
@@ -48,12 +48,14 @@ class MPNonSelectedElementsWidget extends StatelessWidget
             );
         final List<CustomPainter> painters = [];
 
-        addChildrenPainters(
-          parent: th2File.scrapByMPID(th2FileEditController.activeScrapID),
-          painters: painters,
-          isFromActiveScrap: true,
-          showDirectionTicks: showDirectionTicksOnNonSelected,
-        );
+        if (activeScrapID > 0) {
+          addChildrenPainters(
+            parent: th2File.scrapByMPID(activeScrapID),
+            painters: painters,
+            isFromActiveScrap: true,
+            showDirectionTicks: showDirectionTicksOnNonSelected,
+          );
+        }
 
         return RepaintBoundary(
           child: CustomPaint(
