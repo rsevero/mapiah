@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 
 class MPAddScrapDialogOverlayWindowWidget extends StatefulWidget {
   final VoidCallback onPressedClose;
+  final VoidCallback? onScrapCreated;
   final String? initialScrapTHID;
   final TH2FileEditController th2FileEditController;
 
@@ -15,6 +16,7 @@ class MPAddScrapDialogOverlayWindowWidget extends StatefulWidget {
     required this.onPressedClose,
     required this.th2FileEditController,
     this.initialScrapTHID,
+    this.onScrapCreated,
   });
 
   @override
@@ -47,6 +49,7 @@ class _MPAddScrapDialogOverlayWindowWidgetState
     );
 
     widget.onPressedClose();
+    widget.onScrapCreated?.call();
   }
 
   @override

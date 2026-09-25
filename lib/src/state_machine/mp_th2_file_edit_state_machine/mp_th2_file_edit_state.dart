@@ -205,6 +205,19 @@ abstract class MPTH2FileEditState {
     }
   }
 
+  static bool isAddElementType(MPTH2FileEditStateType type) {
+    switch (type) {
+      case MPTH2FileEditStateType.addArea:
+      case MPTH2FileEditStateType.addFreehandLine:
+      case MPTH2FileEditStateType.addLine:
+      case MPTH2FileEditStateType.addLineToArea:
+      case MPTH2FileEditStateType.addPoint:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   void setCursor() {
     th2FileEditController.setCanvasCursor(SystemMouseCursors.basic);
   }

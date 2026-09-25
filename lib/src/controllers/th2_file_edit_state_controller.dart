@@ -40,6 +40,17 @@ abstract class TH2FileEditStateControllerBase
       'Use setImageOperationState() for image operation states.',
     );
 
+    /// New elements need a parent scrap: in a file without one, ask for a
+    /// scrap first and only then enter the requested add element state.
+    if (MPTH2FileEditState.isAddElementType(type) &&
+        (_th2FileEditController.activeScrapID <= 0)) {
+      _th2FileEditController.elementEditController.addScrap(
+        onScrapCreated: () => setState(type),
+      );
+
+      return false;
+    }
+
     return _setState(type: type);
   }
 

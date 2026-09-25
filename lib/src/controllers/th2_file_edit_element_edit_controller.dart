@@ -1250,7 +1250,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     return addLineSegmentsCommand;
   }
 
-  void addScrap() {
+  void addScrap({VoidCallback? onScrapCreated}) {
     final BuildContext? currentContext = _th2FileEditController
         .getTH2FileWidgetGlobalKey()
         .currentContext;
@@ -1273,6 +1273,7 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       childBuilder: (onPressedClose) => MPAddScrapDialogOverlayWindowWidget(
         initialScrapTHID: initialScrapTHID,
         onPressedClose: onPressedClose,
+        onScrapCreated: onScrapCreated,
         th2FileEditController: _th2FileEditController,
       ),
     );
