@@ -120,7 +120,7 @@ void main() {
     );
 
     test(
-      'prepareImageRotateState switches image state context without replacing image again',
+      'prepareImageRotateState switches image state context without converting the image',
       () async {
         final TH2FileEditController controller = await loadController();
         final int imageMPID = controller.th2File.imageMPIDs.first;
@@ -128,13 +128,13 @@ void main() {
         final MPRuntimeImageInsertConfigMixin movedImage = controller
             .moveScaleRotateElementController
             .prepareImageMoveState(imageMPID);
-        final MPImageInsertConfig rotatedImage = controller
+        final MPRuntimeImageInsertConfigMixin rotatedImage = controller
             .moveScaleRotateElementController
             .prepareImageRotateState(imageMPID);
 
         expect(movedImage, isA<THXVIXTherionImageInsertConfig>());
-        expect(rotatedImage, isA<MPImageInsertConfig>());
-        expect(rotatedImage.mpID, movedImage.mpID);
+        expect(rotatedImage, same(movedImage));
+        expect(controller.th2File.imageByMPID(imageMPID), same(movedImage));
         expect(
           controller.stateController.state.type,
           MPTH2FileEditStateType.imageRotate,
@@ -168,7 +168,7 @@ void main() {
         );
         expect(
           controller.th2File.imageByMPID(imageMPID),
-          isA<MPImageInsertConfig>(),
+          same(image),
         );
 
         await controller.stateController.onPrimaryButtonClick(
@@ -378,14 +378,7 @@ void main() {
         closeTo(originalBoundingBox.center.dy, 0.0001),
       );
 
-      controller.undo();
-
-      final MPImageInsertConfig undoneScale =
-          controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
-
-      expect(undoneScale.xScale.value, closeTo(1.0, 0.0001));
-      expect(undoneScale.yScale.value, closeTo(1.0, 0.0001));
-
+      /// Conversion and mirroring are a single undoable step.
       controller.undo();
 
       expect(
@@ -436,14 +429,7 @@ void main() {
         closeTo(originalBoundingBox.center.dy, 0.0001),
       );
 
-      controller.undo();
-
-      final MPImageInsertConfig undoneScale =
-          controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
-
-      expect(undoneScale.xScale.value, closeTo(1.0, 0.0001));
-      expect(undoneScale.yScale.value, closeTo(1.0, 0.0001));
-
+      /// Conversion and mirroring are a single undoable step.
       controller.undo();
 
       expect(
@@ -971,14 +957,7 @@ void main() {
         expect(scaledImage.yScale.value, closeTo(1.0, 0.0001));
         expect(scaledImage.xx.value, closeTo(image.xx.value, 0.0001));
 
-        controller.undo();
-
-        final MPImageInsertConfig undoneScale =
-            controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
-
-        expect(undoneScale.xScale.value, closeTo(1.0, 0.0001));
-        expect(undoneScale.yScale.value, closeTo(1.0, 0.0001));
-
+        /// Conversion and scaling are a single undoable step.
         controller.undo();
 
         expect(
@@ -1007,12 +986,14 @@ void main() {
           PointerUpEvent(position: clickScreenPosition),
         );
 
-        final MPImageInsertConfig rotatedImage =
-            controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+        /// Entering rotate mode must not convert the image by itself.
+        expect(controller.th2File.imageByMPID(imageMPID), same(image));
+
         final MPImageRotationGeometry geometry =
             MPImageRotationGeometry.forImage(
               th2FileEditController: controller,
-              image: rotatedImage,
+              image: controller.moveScaleRotateElementController
+                  .imageAsMPImageInsertConfig(imageMPID),
             )!;
         final Offset dragStartScreenPosition = geometry
             .screenHandleRects[MPImageRotationHandleType.topRight]!
@@ -1042,19 +1023,47 @@ void main() {
 
         expect(committedImage.rotationDeg.value.abs(), greaterThan(1.0));
 
-        controller.undo();
-
-        final MPImageInsertConfig undoneRotation =
-            controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
-
-        expect(undoneRotation.rotationDeg.value, closeTo(0.0, 0.0001));
-
+        /// Conversion and rotation are a single undoable step.
         controller.undo();
 
         expect(
           controller.th2File.imageByMPID(imageMPID),
           isA<THXVIXTherionImageInsertConfig>(),
         );
+      },
+    );
+
+    test(
+      'pressing a rotate handle without dragging keeps the XTherion image',
+      () async {
+        final TH2FileEditController controller = await loadController();
+        final int imageMPID = controller.th2File.imageMPIDs.first;
+        final MPRuntimeImageInsertConfigMixin image = controller
+            .moveScaleRotateElementController
+            .prepareImageRotateState(imageMPID);
+        final MPImageRotationGeometry geometry =
+            MPImageRotationGeometry.forImage(
+              th2FileEditController: controller,
+              image: controller.moveScaleRotateElementController
+                  .imageAsMPImageInsertConfig(imageMPID),
+            )!;
+        final Offset handleScreenPosition = geometry
+            .screenHandleRects[MPImageRotationHandleType.topRight]!
+            .center;
+
+        controller.stateController.onPrimaryButtonPointerDown(
+          PointerDownEvent(
+            position: handleScreenPosition,
+            buttons: kPrimaryButton,
+          ),
+        );
+        controller.stateController.onPrimaryButtonDragEnd(
+          PointerUpEvent(position: handleScreenPosition),
+        );
+
+        expect(image, isA<THXVIXTherionImageInsertConfig>());
+        expect(controller.th2File.imageByMPID(imageMPID), same(image));
+        expect(controller.hasUndo, isFalse);
       },
     );
 

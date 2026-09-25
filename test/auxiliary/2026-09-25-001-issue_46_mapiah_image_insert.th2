@@ -1,0 +1,7 @@
+encoding  utf-8
+##XTHERION## xth_me_area_adjust -128 -1454 1585.27 652.95
+##XTHERION## xth_me_area_zoom_to 100
+##XTHERION## xth_me_image_insert {-348.6 0 1} 628.6 "./ptopo/1-150TomoPlanSketch-300-01of02-transparent.png" 0 {}
+##MAPIAH## image_insert_v1 {format=raster;filename=.%2Fptopo%2F1-150TomoPlanSketch-300-02of02-transparent.png;xx=125.75;yy=1394.83;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0;pivotSet=false}
+##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fnear_identity.png;xx=1;yy=2;xScale=1.00001;yScale=0.99999;rotationCenterDx=5;rotationCenterDy=6;rotationDeg=359.9999;pivotSet=true}
+##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fmirrored.png;xx=1;yy=2;xScale=-1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0;pivotSet=false}

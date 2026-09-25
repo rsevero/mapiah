@@ -92,6 +92,27 @@ abstract class MPImageInsertConfig extends THElement
   @override
   THElementType get elementType => THElementType.mapiahImageInsertConfig;
 
+  /// True when this image has no scale, mirror or rotation, i.e., when its
+  /// transform is a pure translation that the XTherion image insert format can
+  /// represent. SVG images are not supported by XTherion.
+  bool get isXTherionRepresentable {
+    if (this is MPSVGImageInsertConfig) {
+      return false;
+    }
+
+    if (((xScale.value - 1.0).abs() > mpImageInsertXTherionScaleTolerance) ||
+        ((yScale.value - 1.0).abs() > mpImageInsertXTherionScaleTolerance)) {
+      return false;
+    }
+
+    final double normalizedRotationDeg = rotationDeg.value % 360.0;
+
+    return (normalizedRotationDeg <=
+            mpImageInsertXTherionRotationDegTolerance) ||
+        ((360.0 - normalizedRotationDeg) <=
+            mpImageInsertXTherionRotationDegTolerance);
+  }
+
   @override
   String get format;
 

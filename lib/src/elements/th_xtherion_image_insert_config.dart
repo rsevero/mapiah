@@ -300,6 +300,54 @@ abstract class THXTherionImageInsertConfig extends THElement
     return newImage;
   }
 
+  /// Converts a Mapiah image insert config back to the XTherion format. Only
+  /// valid for images whose [MPImageInsertConfig.isXTherionRepresentable] is
+  /// true: scale, rotation and pivot are dropped.
+  static THXTherionImageInsertConfig fromMapiahImageInsertConfig({
+    required MPImageInsertConfig mapiahImageInsertConfig,
+  }) {
+    switch (mapiahImageInsertConfig) {
+      case MPXVIImageInsertConfig xviImage:
+        return THXVIXTherionImageInsertConfig.forCWJM(
+          mpID: xviImage.mpID,
+          parentMPID: xviImage.parentMPID,
+          sameLineComment: xviImage.sameLineComment,
+          filename: xviImage.filename,
+          xx: xviImage.xx,
+          isVisible: xviImage.isVisible,
+          isGridVisible: xviImage.isGridVisible,
+          igamma: THDoublePart.fromString(valueString: '1.0'),
+          yy: xviImage.yy,
+          xviRoot: xviImage.xviRoot,
+          iidx: 0,
+          imgx: '',
+          xData: '',
+          xImage: false,
+          originalLineInTH2File: '',
+        );
+      case MPRasterImageInsertConfig rasterImage:
+        return THRasterXTherionImageInsertConfig.forCWJM(
+          mpID: rasterImage.mpID,
+          parentMPID: rasterImage.parentMPID,
+          sameLineComment: rasterImage.sameLineComment,
+          filename: rasterImage.filename,
+          xx: rasterImage.xx,
+          isVisible: rasterImage.isVisible,
+          igamma: THDoublePart.fromString(valueString: '1.0'),
+          yy: rasterImage.yy,
+          iidx: 0,
+          imgx: '',
+          xData: '',
+          xImage: false,
+          originalLineInTH2File: '',
+        );
+    }
+
+    throw ArgumentError(
+      'Unsupported Mapiah image insert config type for XTherion conversion: ${mapiahImageInsertConfig.runtimeType}',
+    );
+  }
+
   @override
   THElementType get elementType => THElementType.xTherionImageInsertConfig;
 

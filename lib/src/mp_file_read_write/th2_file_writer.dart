@@ -217,12 +217,23 @@ class TH2FileWriter {
   }
 
   String _serializeMapiahImageInsertConfig(THElement thElement) {
+    final MPImageInsertConfig imageInsertConfig =
+        thElement as MPImageInsertConfig;
+
+    /// Images whose transform is a pure translation are always saved in the
+    /// XTherion format to keep the file interoperable with XTherion, even if
+    /// they were read as ##MAPIAH## lines.
+    if (imageInsertConfig.isXTherionRepresentable) {
+      return _serializeXTherionImageInsertConfig(
+        THXTherionImageInsertConfig.fromMapiahImageInsertConfig(
+          mapiahImageInsertConfig: imageInsertConfig,
+        ),
+      );
+    }
+
     String asString = _elementOriginalLineRepresentation(thElement);
 
     if (asString.isEmpty) {
-      final MPImageInsertConfig imageInsertConfig =
-          thElement as MPImageInsertConfig;
-
       asString = "${imageInsertConfig.toMetadataLine()}$_lineEnding";
     }
 

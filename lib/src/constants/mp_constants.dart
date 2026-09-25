@@ -130,6 +130,11 @@ const double mpImageTransformHandleLengthOnScreen = 16.0;
 const double mpImageTransformHandleThicknessOnScreen = 10.0;
 const double mpImageTransformHandleOffsetOnScreen = 10.0;
 
+/// Tolerances used to decide if a Mapiah image transform is close enough to
+/// identity to be saved in the XTherion image insert format.
+const double mpImageInsertXTherionScaleTolerance = 1e-4;
+const double mpImageInsertXTherionRotationDegTolerance = 1e-3;
+
 const double mpDoubleNextEpsilon = 2.220446049250313e-16;
 const double mpDoubleUpEpsilonFactor = 1.0 + mpDoubleNextEpsilon;
 const double mpDoubleDownEpsilonFactor = 1.0 - mpDoubleNextEpsilon;

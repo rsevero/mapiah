@@ -212,6 +212,140 @@ void main() {
     });
   });
 
+  group('MPImageInsertConfig XTherion representability', () {
+    MPRasterImageInsertConfig raster({
+      double xScale = 1.0,
+      double yScale = 1.0,
+      double rotationDeg = 0.0,
+    }) {
+      return MPRasterImageInsertConfig(
+        parentMPID: mpParentMPIDPlaceholder,
+        filename: 'images/photo.png',
+        xx: 10.0,
+        yy: 20.0,
+        xScale: xScale,
+        yScale: yScale,
+        rotationCenterDx: 3.0,
+        rotationCenterDy: 4.0,
+        rotationDeg: rotationDeg,
+      );
+    }
+
+    test('pure translations are representable', () {
+      expect(raster().isXTherionRepresentable, isTrue);
+      expect(raster(rotationDeg: 360.0).isXTherionRepresentable, isTrue);
+      expect(raster(rotationDeg: -720.0).isXTherionRepresentable, isTrue);
+    });
+
+    test('values within tolerance of identity are representable', () {
+      expect(
+        raster(
+          xScale: 1.0 + (mpImageInsertXTherionScaleTolerance / 2.0),
+          yScale: 1.0 - (mpImageInsertXTherionScaleTolerance / 2.0),
+        ).isXTherionRepresentable,
+        isTrue,
+      );
+      expect(
+        raster(
+          rotationDeg: mpImageInsertXTherionRotationDegTolerance / 2.0,
+        ).isXTherionRepresentable,
+        isTrue,
+      );
+      expect(
+        raster(
+          rotationDeg: 360.0 - (mpImageInsertXTherionRotationDegTolerance / 2.0),
+        ).isXTherionRepresentable,
+        isTrue,
+      );
+    });
+
+    test('scale, mirror and rotation are not representable', () {
+      expect(raster(xScale: 2.0).isXTherionRepresentable, isFalse);
+      expect(raster(yScale: 0.5).isXTherionRepresentable, isFalse);
+      expect(raster(xScale: -1.0).isXTherionRepresentable, isFalse);
+      expect(raster(rotationDeg: 90.0).isXTherionRepresentable, isFalse);
+      expect(
+        raster(
+          xScale: 1.0 + (mpImageInsertXTherionScaleTolerance * 2.0),
+        ).isXTherionRepresentable,
+        isFalse,
+      );
+      expect(
+        raster(
+          rotationDeg: mpImageInsertXTherionRotationDegTolerance * 2.0,
+        ).isXTherionRepresentable,
+        isFalse,
+      );
+    });
+
+    test('SVG images are never representable', () {
+      final MPSVGImageInsertConfig svg = MPSVGImageInsertConfig(
+        parentMPID: mpParentMPIDPlaceholder,
+        filename: 'images/plan.svg',
+        xx: 12.0,
+        yy: 30.0,
+        intrinsicSizeInfo: const MPSVGIntrinsicSizeInfo(
+          width: 120.0,
+          height: 60.0,
+          sourceViewBox: Rect.fromLTWH(0.0, 0.0, 120.0, 60.0),
+        ),
+      );
+
+      expect(svg.isXTherionRepresentable, isFalse);
+    });
+
+    test('raster and XVI images round-trip through the XTherion format', () {
+      final THXTherionImageInsertConfig originalRaster =
+          THXTherionImageInsertConfig(
+            parentMPID: mpParentMPIDPlaceholder,
+            filename: 'images/photo.png',
+            xx: THDoublePart(value: 125.75),
+            yy: THDoublePart(value: 1394.83),
+            isVisible: false,
+          );
+      final THXTherionImageInsertConfig originalXVI =
+          THXTherionImageInsertConfig(
+            parentMPID: mpParentMPIDPlaceholder,
+            filename: 'images/survey.xvi',
+            xx: THDoublePart(value: -36.0),
+            yy: THDoublePart(value: 28.0),
+            isGridVisible: false,
+            xviRoot: 'station_A',
+          );
+
+      for (final THXTherionImageInsertConfig original
+          in <THXTherionImageInsertConfig>[originalRaster, originalXVI]) {
+        final THXTherionImageInsertConfig roundTripped =
+            THXTherionImageInsertConfig.fromMapiahImageInsertConfig(
+              mapiahImageInsertConfig:
+                  MPImageInsertConfig.fromXTherionImageInsertConfig(
+                    xtherionImageInsertConfig: original,
+                  ),
+            );
+
+        expect(roundTripped.runtimeType, original.runtimeType);
+        expect(roundTripped.mpID, original.mpID);
+        expect(roundTripped.filename, original.filename);
+        expect(roundTripped.xx, original.xx);
+        expect(roundTripped.yy, original.yy);
+        expect(roundTripped.isVisible, original.isVisible);
+        expect(roundTripped.asXVIImage?.xviRoot, original.asXVIImage?.xviRoot);
+      }
+
+      expect(
+        (THXTherionImageInsertConfig.fromMapiahImageInsertConfig(
+                  mapiahImageInsertConfig:
+                      MPImageInsertConfig.fromXTherionImageInsertConfig(
+                        xtherionImageInsertConfig: originalXVI,
+                      ),
+                )
+                as THXVIXTherionImageInsertConfig)
+            .isGridVisible,
+        isFalse,
+      );
+    });
+  });
+
   group('MPImageInsertConfig runtime preparation', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();

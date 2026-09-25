@@ -5,6 +5,7 @@ import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/elements/parts/th_double_part.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_parser.dart';
@@ -52,9 +53,26 @@ void main() {
           final int imageMPID = parsedFile.imageMPIDs.first;
           final String originalFile = writer.serialize(controller.th2File);
 
-          final MPImageInsertConfig convertedImage = controller
+          /// A rotated image, as untransformed Mapiah images are saved in the
+          /// XTherion format.
+          final MPImageInsertConfig rotatedImage = controller
               .moveScaleRotateElementController
-              .prepareImageForMPOnlyTransformActions(imageMPID);
+              .imageAsMPImageInsertConfig(imageMPID)
+              .copyWithImageTransform(
+                rotationDeg: THDoublePart(value: 30.0),
+                originalLineInTH2File: '',
+              );
+
+          controller.execute(
+            MPCommandFactory.convertXTherionImageInsertConfigToMapiahImageInsertConfig(
+              existingXTherionImageInsertConfigMPID: imageMPID,
+              th2FileEditController: controller,
+              mapiahImageInsertConfig: rotatedImage,
+            ),
+          );
+
+          final MPImageInsertConfig convertedImage =
+              controller.th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
 
           expect(convertedImage.mpID, imageMPID);
           expect(convertedImage, isA<MPXVIImageInsertConfig>());

@@ -214,12 +214,9 @@ class MPTH2FileEditStateImageMoveScale extends MPTH2FileEditStateImageOperation
   }
 
   void _startScaleDrag({required MPImageTransformHandleType handleType}) {
-    final MPRuntimeImageInsertConfigMixin currentImage = imageConfig;
-    final MPImageInsertConfig editableImage =
-        (currentImage is MPImageInsertConfig)
-        ? currentImage
-        : th2FileEditController.moveScaleRotateElementController
-              .prepareImageForMPOnlyTransformActions(imageMPID);
+    final MPImageInsertConfig editableImage = th2FileEditController
+        .moveScaleRotateElementController
+        .imageAsMPImageInsertConfig(imageMPID);
     final MPImageTransformGeometry? geometry =
         MPImageTransformGeometry.forImage(
           th2FileEditController: th2FileEditController,
@@ -443,17 +440,22 @@ class MPTH2FileEditStateImageMoveScale extends MPTH2FileEditStateImageOperation
       return;
     }
 
-    final MPScaleImageInsertConfigCommand scaleCommand =
-        MPCommandFactory.scaleImageInsertConfig(
+    th2FileEditController.moveScaleRotateElementController
+        .executeMPOnlyImageTransform(
           imageMPID: imageMPID,
-          toXX: previewImage.xx,
-          toYY: previewImage.yy,
-          toXScale: previewImage.xScale,
-          toYScale: previewImage.yScale,
-          th2File: th2File,
+          transformedImage: previewImage,
+          buildMapiahImageCommand: () =>
+              MPCommandFactory.scaleImageInsertConfig(
+                imageMPID: imageMPID,
+                toXX: previewImage.xx,
+                toYY: previewImage.yy,
+                toXScale: previewImage.xScale,
+                toYScale: previewImage.yScale,
+                th2File: th2File,
+              ),
+          descriptionType:
+              MPScaleImageInsertConfigCommand.defaultDescriptionType,
         );
-
-    th2FileEditController.execute(scaleCommand);
   }
 
   ({double xScale, double yScale}) _resolveScales({

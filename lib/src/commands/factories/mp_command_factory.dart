@@ -2295,6 +2295,7 @@ class MPCommandFactory {
   static MPCommand convertXTherionImageInsertConfigToMapiahImageInsertConfig({
     required int existingXTherionImageInsertConfigMPID,
     required TH2FileEditController th2FileEditController,
+    MPImageInsertConfig? mapiahImageInsertConfig,
     MPCommandDescriptionType descriptionType =
         MPCommandDescriptionType.multipleElements,
   }) {
@@ -2304,6 +2305,7 @@ class MPCommandFactory {
     final THIsParentMixin parent = existingImage.parent(th2File: th2File);
     final int imagePositionInParent = parent.getChildPosition(existingImage);
     final MPImageInsertConfig mapiahImage =
+        mapiahImageInsertConfig ??
         MPImageInsertConfig.fromXTherionImageInsertConfig(
           xtherionImageInsertConfig: existingImage,
           th2FileEditController: th2FileEditController,

@@ -217,10 +217,41 @@ endscrap
       final String asFile = writer.serialize(file);
 
       expect(asFile, """encoding UTF-8
-##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fphoto.png;xx=10;yy=20;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0;pivotSet=false}
-##MAPIAH## image_insert_v1 {format=xvi;filename=images%2Fsurvey.xvi;xx=-36;yy=28;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0;pivotSet=true;xviRoot=station_A}
+##XTHERION## xth_me_image_insert {10 1 1} 20 "images/photo.png" 0 {}
+##XTHERION## xth_me_image_insert {-36 1 1} {28 station_A} "images/survey.xvi" 0 {}
 """);
     });
+
+    test(
+      'Mapiah image inserts without scale or rotation are saved as XTherion (#46)',
+      () async {
+        final TH2FileParser parser = TH2FileParser();
+        final TH2FileWriter writer = TH2FileWriter();
+
+        mpLocator.mpGeneralController.reset();
+
+        final (
+          TH2File file,
+          bool isSuccessful,
+          List<String> errors,
+        ) = await parser.parse(
+          THTestAux.testPath('2026-09-25-001-issue_46_mapiah_image_insert.th2'),
+        );
+
+        expect(isSuccessful, true, reason: 'Parser errors: $errors');
+
+        final String asFile = writer.serialize(file);
+
+        expect(asFile, """encoding UTF-8
+##XTHERION## xth_me_area_adjust -128 -1454 1585.27 652.95
+##XTHERION## xth_me_area_zoom_to 100
+##XTHERION## xth_me_image_insert {-348.6 0 1} 628.6 "./ptopo/1-150TomoPlanSketch-300-01of02-transparent.png" 0 {}
+##XTHERION## xth_me_image_insert {125.75 1 1} 1394.83 "./ptopo/1-150TomoPlanSketch-300-02of02-transparent.png" 0 {}
+##XTHERION## xth_me_image_insert {1 1 1} 2 "images/near_identity.png" 0 {}
+##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fmirrored.png;xx=1;yy=2;xScale=-1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0;pivotSet=false}
+""");
+      },
+    );
 
     test('malformed Mapiah image insert reports a parser error', () async {
       final TH2FileParser parser = TH2FileParser();
@@ -314,6 +345,7 @@ endscrap
           filename: 'images/photo.png',
           xx: 10.0,
           yy: 20.0,
+          rotationDeg: 30.0,
         );
         final THXTherionImageInsertConfig xtherionImage =
             THXTherionImageInsertConfig(
@@ -334,7 +366,7 @@ endscrap
         final String asFile = writer.serialize(file);
 
         expect(asFile, """encoding UTF-8
-##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fphoto.png;xx=10;yy=20;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0;pivotSet=false}
+##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fphoto.png;xx=10;yy=20;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=30;pivotSet=false}
 ##XTHERION## xth_me_image_insert {-36 1 1} 28 "croquis/croqui-007.jpg" 0 {}
 scrap poco_surubim_SCP01
 endscrap

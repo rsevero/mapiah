@@ -71,7 +71,13 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
         THElementType.point;
   }
 
-  MPImageInsertConfig prepareImageForMPOnlyTransformActions(int imageMPID) {
+  /// Returns the image as an [MPImageInsertConfig] without changing the file.
+  ///
+  /// XTherion images are converted into a detached copy so Mapiah-only
+  /// transform handles (scale, rotate) can be shown and previewed without
+  /// switching the image to the ##MAPIAH## format before anything actually
+  /// changes.
+  MPImageInsertConfig imageAsMPImageInsertConfig(int imageMPID) {
     final MPRuntimeImageInsertConfigMixin image = _th2File.imageByMPID(
       imageMPID,
     );
@@ -80,17 +86,12 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
       return image;
     }
 
-    final MPCommand convertImageCommand =
-        MPCommandFactory.convertXTherionImageInsertConfigToMapiahImageInsertConfig(
-          existingXTherionImageInsertConfigMPID: imageMPID,
-          th2FileEditController: _th2FileEditController,
-        );
-
-    _th2FileEditController.execute(convertImageCommand);
-    _th2FileEditController.triggerImagesRedraw();
-
     final MPImageInsertConfig convertedImage =
-        _th2File.imageByMPID(imageMPID) as MPImageInsertConfig;
+        MPImageInsertConfig.fromXTherionImageInsertConfig(
+          xtherionImageInsertConfig: _th2File.xtherionImageInsertConfigByMPID(
+            imageMPID,
+          ),
+        );
 
     image.copyRuntimeImageCacheTo(
       targetImage: convertedImage,
@@ -98,6 +99,43 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     );
 
     return convertedImage;
+  }
+
+  /// Executes a Mapiah-only image transform (scale, mirror, rotate).
+  ///
+  /// If the image is already an [MPImageInsertConfig], the command built by
+  /// [buildMapiahImageCommand] is executed. Otherwise the XTherion image is
+  /// replaced by [transformedImage] in a single undoable command.
+  void executeMPOnlyImageTransform({
+    required int imageMPID,
+    required MPImageInsertConfig transformedImage,
+    required MPCommand Function() buildMapiahImageCommand,
+    required MPCommandDescriptionType descriptionType,
+  }) {
+    final MPRuntimeImageInsertConfigMixin image = _th2File.imageByMPID(
+      imageMPID,
+    );
+
+    if (image is MPImageInsertConfig) {
+      _th2FileEditController.execute(buildMapiahImageCommand());
+
+      return;
+    }
+
+    final MPCommand convertImageCommand =
+        MPCommandFactory.convertXTherionImageInsertConfigToMapiahImageInsertConfig(
+          existingXTherionImageInsertConfigMPID: imageMPID,
+          th2FileEditController: _th2FileEditController,
+          mapiahImageInsertConfig: transformedImage,
+          descriptionType: descriptionType,
+        );
+
+    _th2FileEditController.execute(convertImageCommand);
+    image.copyRuntimeImageCacheTo(
+      targetImage: _th2File.imageByMPID(imageMPID),
+      th2FileEditController: _th2FileEditController,
+    );
+    _th2FileEditController.triggerImagesRedraw();
   }
 
   MPRuntimeImageInsertConfigMixin prepareImageMoveState(int imageMPID) {
@@ -113,11 +151,17 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     return image;
   }
 
-  MPImageInsertConfig prepareImageRotateState(int imageMPID) {
-    return _prepareImageOperationState(
-      imageMPID: imageMPID,
-      stateType: MPTH2FileEditStateType.imageRotate,
+  MPRuntimeImageInsertConfigMixin prepareImageRotateState(int imageMPID) {
+    final MPRuntimeImageInsertConfigMixin image = _th2File.imageByMPID(
+      imageMPID,
     );
+
+    _th2FileEditController.stateController.setImageOperationState(
+      type: MPTH2FileEditStateType.imageRotate,
+      imageMPID: image.mpID,
+    );
+
+    return image;
   }
 
   MPRuntimeImageInsertConfigMixin prepareImageScaleState(int imageMPID) {
@@ -217,22 +261,6 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
     return resetImage;
   }
 
-  MPImageInsertConfig _prepareImageOperationState({
-    required int imageMPID,
-    required MPTH2FileEditStateType stateType,
-  }) {
-    final MPImageInsertConfig image = prepareImageForMPOnlyTransformActions(
-      imageMPID,
-    );
-
-    _th2FileEditController.stateController.setImageOperationState(
-      type: stateType,
-      imageMPID: image.mpID,
-    );
-
-    return image;
-  }
-
   void _mirrorImage({
     required int imageMPID,
     required bool mirrorX,
@@ -240,9 +268,7 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
   }) {
     assert(mirrorX != mirrorY, 'Exactly one mirror axis must be enabled.');
 
-    final MPImageInsertConfig image = prepareImageForMPOnlyTransformActions(
-      imageMPID,
-    );
+    final MPImageInsertConfig image = imageAsMPImageInsertConfig(imageMPID);
     final Rect? localBounds = image.getLocalBounds(_th2FileEditController);
 
     if (localBounds == null) {
@@ -274,17 +300,27 @@ abstract class TH2FileEditMoveScaleRotateElementControllerBase with Store {
       value: translation.dy,
       decimalPositions: _th2FileEditController.currentDecimalPositions,
     );
-    final MPScaleImageInsertConfigCommand mirrorCommand =
-        MPCommandFactory.scaleImageInsertConfig(
-          imageMPID: imageMPID,
-          toXX: toXX,
-          toYY: toYY,
-          toXScale: toXScale,
-          toYScale: toYScale,
-          th2File: _th2File,
-        );
+    final MPImageInsertConfig mirroredImage = image.copyWithImageTransform(
+      xx: toXX,
+      yy: toYY,
+      xScale: toXScale,
+      yScale: toYScale,
+      originalLineInTH2File: '',
+    );
 
-    _th2FileEditController.execute(mirrorCommand);
+    executeMPOnlyImageTransform(
+      imageMPID: imageMPID,
+      transformedImage: mirroredImage,
+      buildMapiahImageCommand: () => MPCommandFactory.scaleImageInsertConfig(
+        imageMPID: imageMPID,
+        toXX: toXX,
+        toYY: toYY,
+        toXScale: toXScale,
+        toYScale: toYScale,
+        th2File: _th2File,
+      ),
+      descriptionType: MPScaleImageInsertConfigCommand.defaultDescriptionType,
+    );
   }
 
   Offset _translationForAnchor({

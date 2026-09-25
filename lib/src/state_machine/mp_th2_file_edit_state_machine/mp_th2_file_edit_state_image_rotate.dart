@@ -27,6 +27,12 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
   @override
   MPRuntimeImageInsertConfigMixin? get renderedImageConfig => _previewImage;
 
+  /// The image as an [MPImageInsertConfig]. XTherion images are only
+  /// converted in the file when a rotation or pivot change is committed.
+  MPImageInsertConfig get _rotatableImage => th2FileEditController
+      .moveScaleRotateElementController
+      .imageAsMPImageInsertConfig(imageMPID);
+
   @override
   void setCursor() {
     if (_dragMode == _MPImageRotationDragMode.movePivot) {
@@ -41,9 +47,10 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
       return;
     }
 
+    final MPImageInsertConfig image = _rotatableImage;
     final MPImageRotationGeometry? geometry = MPImageRotationGeometry.forImage(
       th2FileEditController: th2FileEditController,
-      image: imageConfig,
+      image: image,
     );
 
     if (geometry == null) {
@@ -60,7 +67,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
 
     if (geometry.hitTestPivot(th2FileEditController.mousePosition)) {
       th2FileEditController.setCanvasCursor(
-        _isPivotDraggable(imageConfig)
+        _isPivotDraggable(image)
             ? SystemMouseCursors.move
             : SystemMouseCursors.forbidden,
       );
@@ -71,7 +78,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
     final MPImageTransformGeometry? transformGeometry =
         MPImageTransformGeometry.forImage(
           th2FileEditController: th2FileEditController,
-          image: imageConfig,
+          image: image,
         );
 
     if ((transformGeometry != null) &&
@@ -89,9 +96,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
 
   @override
   void onPrimaryButtonPointerDown(PointerDownEvent event) {
-    final MPImageInsertConfig image = th2FileEditController
-        .moveScaleRotateElementController
-        .prepareImageForMPOnlyTransformActions(imageMPID);
+    final MPImageInsertConfig image = _rotatableImage;
     final MPImageRotationGeometry? geometry = MPImageRotationGeometry.forImage(
       th2FileEditController: th2FileEditController,
       image: image,
@@ -157,14 +162,15 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
 
   @override
   Future<void> onPrimaryButtonClick(PointerUpEvent event) {
+    final MPImageInsertConfig image = _rotatableImage;
     final MPImageRotationGeometry? geometry = MPImageRotationGeometry.forImage(
       th2FileEditController: th2FileEditController,
-      image: imageConfig,
+      image: image,
     );
     final MPImageTransformGeometry? transformGeometry =
         MPImageTransformGeometry.forImage(
           th2FileEditController: th2FileEditController,
-          image: imageConfig,
+          image: image,
         );
 
     if ((geometry == null) || (transformGeometry == null)) {
@@ -201,7 +207,7 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
 
     final MPImageRotationGeometry? geometry = MPImageRotationGeometry.forImage(
       th2FileEditController: th2FileEditController,
-      image: imageConfig,
+      image: _rotatableImage,
     );
 
     if ((geometry != null) &&
@@ -378,19 +384,24 @@ class MPTH2FileEditStateImageRotate extends MPTH2FileEditStateImageOperation {
       return;
     }
 
-    final MPRotateImageInsertConfigCommand rotateCommand =
-        MPCommandFactory.rotateImageInsertConfig(
+    th2FileEditController.moveScaleRotateElementController
+        .executeMPOnlyImageTransform(
           imageMPID: imageMPID,
-          toXX: previewImage.xx,
-          toYY: previewImage.yy,
-          toRotationCenterDx: previewImage.rotationCenterDx,
-          toRotationCenterDy: previewImage.rotationCenterDy,
-          toRotationDeg: previewImage.rotationDeg,
-          toPivotSet: previewImage.pivotSet,
-          th2File: th2File,
+          transformedImage: previewImage,
+          buildMapiahImageCommand: () =>
+              MPCommandFactory.rotateImageInsertConfig(
+                imageMPID: imageMPID,
+                toXX: previewImage.xx,
+                toYY: previewImage.yy,
+                toRotationCenterDx: previewImage.rotationCenterDx,
+                toRotationCenterDy: previewImage.rotationCenterDy,
+                toRotationDeg: previewImage.rotationDeg,
+                toPivotSet: previewImage.pivotSet,
+                th2File: th2File,
+              ),
+          descriptionType:
+              MPRotateImageInsertConfigCommand.defaultDescriptionType,
         );
-
-    th2FileEditController.execute(rotateCommand);
   }
 
   MPImageInsertConfig _copyImage({

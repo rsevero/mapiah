@@ -11,6 +11,7 @@
   * Redo is now `Ctrl+Shift+Z` everywhere: the canvas no longer uses `Ctrl+Y`, matching the text editor tabs. Text tabs now also accept both Ctrl and Cmd for undo and redo on every platform, as the canvas does.
 * Fixes:
   * Fixed the scrap _Sketch_ option dialog (#44): long filenames no longer push the dialog off screen, files picked with _Choose file_ are stored relative to the TH2 file, the filename field no longer loses its cursor while typing, and switching between _Unset_ and _Set_ now updates the OK button correctly.
+  * Background images are saved in the `##XTHERION##` format again whenever they are only moved, keeping files compatible with XTherion (#46). Images with no scale, mirror or rotation (within a small tolerance) are always written as `##XTHERION##`, which also fixes files already saved with such `##MAPIAH##` lines. Clicking an image to enter rotate mode, or pressing a scale or rotate handle without dragging, no longer switches it to the `##MAPIAH##` format, and scaling, rotating or mirroring an XTherion image is now a single undo step.
 
 ## 1.0.0 - 2026-09-24 - The [Frankfurt School](https://en.wikipedia.org/wiki/Frankfurt_School) release
 * Highlights:
