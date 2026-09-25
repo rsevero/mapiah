@@ -5,7 +5,7 @@
 **Date:** 2026-09-25
 **Status:** Proposed. Checked against the codebase on 2026-09-25 (`main` at `0e0ca067`). Revised the same day with these decisions:
 
-- edits on different lines become **separate undo steps** (§4.6);
+- text edits become undo steps **line by line, each one closed when the cursor leaves the edited line**, so the same line can give several steps in one session (§4.6);
 - text that doesn't parse is **never saved** (§3.6);
 - a selected line point **round-trips** between the two views (§3.2, §3.3);
 - the mode toggle uses **F2** instead of `Ctrl+E` (§3.1).
@@ -28,7 +28,7 @@ The two views are **synchronized at each switch**, not while typing:
 3. **Lossless generation.** The text shown on entering text mode is exactly the output of the save path (`TH2FileWriter` with `includeEmptyLines: true, useOriginalRepresentation: true`). Unchanged lines keep their original formatting.
 4. **Graphical → text selection.** The first selected element or line point in file order decides the scroll position and the cursor line.
 5. **Text → graphical selection.** The element owning the cursor's line is selected, as if clicked in the element tree. A line point opens _Line edit_ mode with that point selected.
-6. **Per-line undo.** Each changed line, or each group of lines that can only change together (§4.6), is one command on the file's undo stack. Undoing on the canvas goes back through the text edits one line at a time.
+6. **Line-by-line undo.** An undo step is closed each time the cursor leaves a line it changed (§4.6). Each step is one command on the file's undo stack, in the order the edits were made. Editing a line, leaving it and returning to edit it again gives two steps. `Ctrl+Z`/`Ctrl+Y` step through the same units in text mode and on the canvas.
 7. **Safe apply.** Text that doesn't parse cleanly is never applied and never saved. The tab stays in text mode, and each problem is marked at its line.
 8. **Stable identity.** Unchanged elements keep their MPIDs, so their selection, hidden state and the element tree's collapsed scraps survive a text edit.
 9. **Save, dirty state and projects.** Unsaved text edits count as unsaved changes everywhere: the Save button, the project tree's dirty dot, Save All and the unsaved-changes guard.
@@ -41,7 +41,7 @@ The two views are **synchronized at each switch**, not while typing:
 - **Split view** (canvas and text side by side). The design leaves room for it (§4.1), but it is not built here.
 - **An option-entry box on the canvas** (the literal proposal in #38). Text mode covers the need. A per-element text box can be a later follow-up that reuses this plan's parser and apply path.
 - **Autocompletion or option validation while typing.** Validation is the parser's, at apply time.
-- **Per-keystroke undo on the canvas.** Inside text mode, the `TextField`'s own undo handles keystrokes (§3.5). On the canvas, several edits to the same line during one text session are one step, because only the line's final text is compared.
+- **Per-keystroke undo.** Keystrokes on one line, before the cursor leaves it, are one undo step, in text mode and on the canvas (§3.5).
 - **Text editing of files that are not `.th2`.** `thconfig`/`.th` files already have their own text tabs.
 
 ## 2. Grounding: Current State
@@ -51,6 +51,7 @@ The two views are **synchronized at each switch**, not while typing:
 - `THTextEditorWidget` (`lib/src/widgets/th_text_editor_widget.dart`, 928 lines) is a self-built editor with no code-editor dependency. It has a line-number gutter, a `TextField` with a syntax-highlighting overlay, diagnostic line markers, folding, and a find/replace bar.
 - It takes a concrete `THTextEditorController` (`lib/src/controllers/th_text_editor_controller.dart`). It uses only these members: `content`, `setContent`, `isDirty`, `cursorLine`, `setCursorPosition`, `pendingScrollToLine`/`clearPendingScrollToLine`, `pendingSelectionRange`/`clearPendingSelectionRange`, `diagnostics`, `textEditorFocusNode`, `save`, `revert`, and the find members (`findQuery`, `replaceQuery`, `findCaseSensitive`, `findMatches`, `activeMatchIndex`, `isFindBarVisible`, `openFindBar`, `closeFindBar`, `findNext`, `findPrevious`, `replaceActiveMatch`, `replaceAllMatches`, `setFindQuery`, `setReplaceQuery`, `setFindCaseSensitive`).
 - `THTextEditorController` is bound to `THProjectController`. It owns a project epoch/root identity, calls `registerTextContentChange` and a debounced `reparseFile`, and saves through the project. None of that applies to a `.th2` file, whose model is owned by `TH2FileEditController`.
+- The widget listens to its `TextEditingController` (`_onTextEditingChanged`, `:75`) and relies on the `TextField`'s built-in undo history. It sets no `undoController` and doesn't override `UndoTextIntent`/`RedoTextIntent`.
 - `diagnostics` is `List<THProjectParseError>`. The widget renders them in `_buildDiagnosticBackground` (`:749-783`) and `THTextEditorDiagnosticMarkerWidget`.
 - `tokenizeTherionText` (`lib/src/auxiliary/th_text_editor_syntax_highlighter.dart`) is a stateless, per-line lexer. Its keyword set is for `thconfig`/`.th` (`survey`, `centreline`, `map`, `scrap`, `layout`, `input`, …). It has no `point`, `line`, `area`, `endline`, `endarea`, `comment`/`endcomment`. Anything from `#` to the end of the line is a comment, so `##XTHERION##` settings would be colored as comments. It keeps no state across lines, so it can't color a multiline `comment … endcomment` block.
 - `buildFoldRegions` (`lib/src/auxiliary/th_text_editor_fold_aux.dart:30-34`) folds `survey`, `centreline`, `map`, `scrap` and `layout`. `line`, `area` and `comment` are not included.
@@ -139,12 +140,16 @@ If the selection is outside the visible canvas area, the canvas is centered on i
 - If the text is unchanged since entering text mode, nothing is parsed or applied. The line map from §3.2 is used in reverse.
 - If the text changed, the whole new text is parsed into a detached model first (§4.5).
   - **Any error or problem:** nothing is applied. The tab stays in text mode. Each `TH2FileProblem` is marked at its line, and errors without a line number are listed in a message above the editor. The message offers _Keep editing_ and _Discard text changes_.
-  - **No errors and no problems:** the old and new texts are compared line by line (§4.6), and each changed line or group becomes one command on the undo stack, applied top to bottom. The canvas, the element tree and the dirty state update. The cursor line is then mapped on the updated model (§4.4).
+  - **No errors and no problems:** each step recorded during the session (§4.6) becomes one command on the undo stack, applied in the order the edits were made. The canvas, the element tree and the dirty state update. The cursor line is then mapped on the updated model (§4.4).
 
 ### 3.5 Undo
 
-- **In text mode**, `Ctrl+Z`/`Ctrl+Y` are handled by the `TextField`'s own undo history, as in the `thconfig` editor.
-- **On the canvas**, each changed line from the last text session is one undo step (§4.6). The step's description names the line, for example "Text edit (line 42)". Undoing steps one by one walks back through the text edits from the bottom of the file up. Older, canvas-made steps below them stay valid, because unchanged elements keep their MPIDs.
+An undo step is closed **when the cursor leaves a line it changed**, whether by arrow keys, a click, `Enter`, `Tab` or scrolling and clicking elsewhere. All the typing on that line until then is one step. Coming back to the same line and changing it again starts a new step. An edit that itself spans several lines (a multi-line paste, deleting a selection across lines, a replace) is one step. Leaving text mode, saving and `F2` close the step in progress.
+
+- **In text mode**, `Ctrl+Z`/`Ctrl+Y` move through these steps. If the current line has edits that aren't closed yet, `Ctrl+Z` first closes them as a step and undoes it. The cursor goes to the line the undone or redone step changed. Typing after an undo drops the steps that could have been redone. `Ctrl+Z` does nothing at the start of the session: the edits made before it are undone on the canvas.
+- **On the canvas**, the same steps are commands on the file's undo stack, in the order they were made, so the last text edit is undone first. The step's description names the line, for example "Text edit (line 42)". Older, canvas-made steps below them stay valid, because unchanged elements keep their MPIDs.
+
+The two lists can differ in one way. A step that leaves the text unparseable, such as a new `line` header typed before its `endline`, can't be applied to the model on its own. On the canvas, it is joined with the following steps until the text parses again (§4.6). In text mode, it stays a separate step.
 
 ### 3.6 Save in text mode
 
@@ -154,7 +159,7 @@ Save (button, `Ctrl+S`, Save All) first applies the text as in §3.4, then saves
 
 The broken-file tab body (`TH2BrokenFileBodyWidget`) gets an **Edit as text** button. It opens text mode with the **raw file content from disk**, decoded with the file's encoding. It can't use the writer, because a broken model is missing the lines the parser dropped. The problem list is shown as line markers. Applying or saving works as in §3.4 and §3.6. Once the text parses cleanly, the controller stops being broken, and the canvas becomes available.
 
-A broken model can't be compared line by line with the fixed text, because the model doesn't match the disk text. So the first apply of a broken file is **one** whole-file step (§4.7). After that, the file is valid, and later text sessions use per-line steps.
+A broken model can't be compared line by line with the fixed text, because the model doesn't match the disk text. So the first apply of a broken file is **one** whole-file step (§4.7). After that, the file is valid, and later text sessions use line steps (§4.6).
 
 ## 4. Design Decisions
 
@@ -166,7 +171,7 @@ A broken model can't be compared line by line with the fixed text, because the m
 
 ### 4.2 The text source
 
-- **Valid file:** a new `TH2FileEditController.serializeForTextMode()` returns `TH2FileWriter().serializeWithLineMap(_th2File, includeEmptyLines: true, useOriginalRepresentation: true)`, with the line ending normalized to `\n`. It shares its writer options with `_encodedFileContents()`, so the two can't drift apart. `TH2TextEditController.initialContent` keeps this text for the comparison in §4.6.
+- **Valid file:** a new `TH2FileEditController.serializeForTextMode()` returns `TH2FileWriter().serializeWithLineMap(_th2File, includeEmptyLines: true, useOriginalRepresentation: true)`, with the line ending normalized to `\n`. It shares its writer options with `_encodedFileContents()`, so the two can't drift apart. `TH2TextEditController.initialContent` keeps this text as the first checkpoint (§4.6).
 - **Broken file:** the raw bytes from disk (or `_th2File.fileBytes` when it's set), decoded with the parser's encoding detection, which becomes a public static helper.
 - On apply and save, the text is converted back to the file's line ending. It is encoded with the encoding its own `encoding` line names, as the parser already does on load.
 
@@ -196,13 +201,29 @@ A broken model can't be compared line by line with the fixed text, because the m
 
 `TH2FileParser.parse` gains an optional `TH2FileEditController? targetController`. When it's given, the parser uses that controller instead of looking one up in `MPGeneralController`. Text mode creates a **scratch controller**, `TH2FileEditControllerBase.createForDetachedParse(filename, th2FileMPID)`. It is never registered and never gets a tab. Its `TH2File` uses the real file's MPID, so top-level `parentMPID`s already point at the real file. MPIDs come from the global counter (`nextMPIDForElements`), so they can't collide with the live model. The scratch controller is disposed after the apply.
 
-The detached parse is both the validation (§3.4) and the source of new elements for the steps in §4.6. Parsing happens **once** per apply, whatever the number of changed lines.
+Each closed step's text gets its own detached parse (§4.6). The parse is both the validation and the source of new elements for that step.
 
-### 4.6 Per-line apply: diff, units and steps
+### 4.6 Line checkpoints, units and steps
 
-**1. Diff.** `MPLineDiffAux` (new, pure, `lib/src/auxiliary/mp_line_diff_aux.dart`) compares `initialContent` with the new text, split into lines, using Myers' O(ND) algorithm. No package is needed. It returns the matched (unchanged) line pairs and the hunks between them. Inside a hunk, lines are paired one to one as **modified** lines while both sides have lines left. The remainder are **inserted** or **deleted** lines.
+**1. Checkpoints.** `TH2TextEditController` keeps a list of `TH2TextCheckpoint`s (text, cursor line, and the line range changed since the previous checkpoint) and the index of the current one. Checkpoint 0 is `initialContent`. It also keeps the line of the edit in progress, if any.
 
-**2. Units.** Each changed line is turned into a **unit**, the smallest element that can be replaced on its own:
+- A text change sets the line in progress if none is set.
+- A cursor move to a different line, with the text different from the current checkpoint, **records a checkpoint**. Line numbers shift with inserted or deleted lines, so "a different line" is decided on the text after the change: `Enter` at the end of line 5 closes the edit of line 5 when the cursor lands on line 6.
+- An edit that spans lines (multi-line paste, cross-line delete, replace, replace all) records a checkpoint right after it, closing any edit in progress on another line first.
+- Leaving text mode, saving, `F2`, and the find/replace actions record a checkpoint for the edit in progress.
+- A checkpoint equal to the current one is not recorded. Recording after an undo drops the checkpoints after the current index.
+
+The editor's undo uses these checkpoints instead of the `TextField`'s history (§2.1). `THTextEditorWidget` gets an `Actions` override for `UndoTextIntent` and `RedoTextIntent` when the buffer provides checkpoint undo (§4.9). The `thconfig` editor keeps its current behavior.
+
+**2. Diff.** `MPLineDiffAux` (new, pure, `lib/src/auxiliary/mp_line_diff_aux.dart`) compares two consecutive checkpoints' texts line by line, using Myers' O(ND) algorithm. No package is needed. It returns the matched (unchanged) line pairs and the hunks between them. Inside a hunk, lines are paired one to one as **modified** lines while both sides have lines left. The remainder are **inserted** or **deleted** lines. Consecutive checkpoints usually differ in one line, so this is fast.
+
+**3. Parsing checkpoints.** Each checkpoint's text is parsed into a detached model (§4.5) once the user has stopped typing for `mpTH2TextCheckpointParseIdleMilliseconds`. The result (valid or not, problems, the detached model and its `TH2TextLineMap`) is cached on the checkpoint. So:
+- the apply at the mode switch reuses the cached parses, and only parses checkpoints that aren't cached yet;
+- the problem markers in the editor update as the user works, not only when leaving text mode.
+
+Cached models are dropped when their checkpoint is dropped or the session ends. If more than `mpTH2TextMaxCachedCheckpointModels` are cached, the oldest models are dropped and parsed again at apply time. Their valid flag and problems are kept.
+
+**4. Units.** Each changed line is turned into a **unit**, the smallest element that can be replaced on its own:
 
 | Changed line (old side and/or new side) | Unit |
 |---|---|
@@ -213,37 +234,34 @@ The detached parse is both the validation (§3.4) and the source of new elements
 | an empty line, comment line or setting | that element |
 | `endline`, `endarea`, `endscrap`, `comment`/`endcomment`, or any change that adds or removes one of them | the smallest **whole block** (line, area, multiline comment or scrap) that contains the change on both sides; a change that moves scrap boundaries becomes the whole-file step (§4.7) |
 
-Units are found through the old text's `TH2TextLineMap` (§4.3) for deleted and modified lines, and through the detached parse's map (§4.4) for inserted and modified lines. Unchanged lines map old → new through the diff's matched pairs. The elements on them are **not touched**, so they keep their MPIDs.
+For the pair of checkpoints *k−1 → k*, units are found through the **live** model's line map for deleted and modified lines, and through checkpoint *k*'s detached model for inserted and modified lines. The live model at that point is the result of the previous steps, and its line map comes from the check in item 7. Unchanged lines map old → new through the diff's matched pairs. The elements on them are **not touched**, so they keep their MPIDs.
 
-**3. Steps.** Units are grouped into steps:
+**5. Steps.** Each pair of consecutive checkpoints is **one step**, containing all the units its diff touches. If checkpoint *k* doesn't parse, it is skipped: the pair *k−1 → k+1* is used instead, and so on until a checkpoint that parses. The last checkpoint is the current text, which must parse, or the apply is rejected (§3.4). Steps whose diffs cancel out (a line changed and then changed back) still apply, as two steps, because that is what the user did. The only exception is a session whose final text equals `initialContent`: nothing is applied (§3.4).
 
-- each modified line whose old and new units are the same kind of self-contained element is **one step**;
-- a run of inserted or deleted lines forms one step with the units it covers (for example, a whole new `line … endline` block is one step that adds one line);
-- steps whose units overlap (for example, two changed header lines of the same line block) are merged.
+Every step replaces whole units between two valid texts, so the model is structurally valid after each step, in both undo and redo.
 
-Every step replaces whole units, so the model is structurally valid after each step, in both undo and redo. **No intermediate parsing is needed.**
-
-**4. Commands.** Each step is one command, or one `MPMultipleElementsCommand` when it has several parts (one undo step). It is built from:
+**6. Commands.** Each step is one command, or one `MPMultipleElementsCommand` when it has several parts (one undo step). It is built from:
 
 - `MPRemoveElementCommand` for a removed unit (its undo re-adds it, descendants included);
 - `MPAddElementCommand` for a new unit without children, with its position taken from the new text. A new unit with children uses the existing type-specific commands, which already add the children: `MPAddLineCommand` (`newLine`, `lineChildren`), `MPAddAreaCommand` and `MPAddScrapCommand` (`addScrapChildrenCommand`);
 - a new `MPReplaceElementCommand(oldElement, newElement)` for a modified unit. It uses `TH2File.substituteElement` with `newElement.copyWith(mpID: old.mpID, parentMPID: old.parentMPID)`, keeping the old element's children. Its undo substitutes the old element back. It also serves header-only changes.
 
-Each step has the description "Text edit (line N)", where N is the first changed line of the step in the new text. Steps are executed top to bottom through `MPUndoRedoController`, so `enableSaveButton`, the dirty dot and Save All follow without changes.
+Each step has the description "Text edit (line N)", where N is the first changed line of the step in the checkpoint it leads to. Steps are executed in checkpoint order through `MPUndoRedoController`, so `enableSaveButton`, the dirty dot and Save All follow without changes.
 
-**5. Check.** After the last step, `serializeWithLineMap` on the live model must return exactly the new text. Parsed elements carry their source text (§2.3), so this holds whenever the steps are correct. A mismatch is a bug. It is logged with both texts, and the steps are undone and replaced by one whole-file step (§4.7) so the user's text is never lost. Tests cover the same check over the fixture set.
+**7. Check.** After **each** step, `serializeWithLineMap` on the live model must return exactly that checkpoint's text. Parsed elements carry their source text (§2.3), so this holds whenever the step is correct. The line map it returns is the one the next step uses (item 4). A mismatch is a bug. It is logged with both texts, and the steps applied so far are undone and replaced by one whole-file step (§4.7) so the user's text is never lost. Tests cover the same check over the fixture set.
 
-**6. After applying**, the controller:
+**8. After applying**, the controller:
 - drops selection entries, hidden elements and selected scraps whose MPIDs no longer exist;
 - resets the selectable elements and refreshes snap targets;
 - calls `bumpStructureRevision()` so the element tree and canvas rebuild;
-- maps the cursor with the live model's line map from the check above (§4.4).
+- maps the cursor with the live model's line map from the last check (§4.4);
+- ends the session: the checkpoints and their cached models are dropped, and the next text session starts from newly generated text.
 
 ### 4.7 Whole-file step (fallback)
 
 `MPReplaceTH2FileContentsCommand` (new) holds two deep snapshots, `before` and `after` (`TH2File.toMap()` maps). It applies one with `TH2File.replaceContentsFrom(TH2File.fromMap(...))`. That new method clears this file's contents without touching `filename`, `mpID` or `isNewFile`, adopts the source's elements, children, thID registries, encoding and line ending, and rebuilds the derived caches with the existing `_updateSupportMaps` path. The live `TH2File` object never changes, so the sub-controllers' references (§2.5) stay valid. Undo restores `before` with its original MPIDs, so older commands stay valid.
 
-It is used only when per-line steps can't be: for the first apply of a broken file (§3.7), for a change that moves scrap boundaries (§4.6), and as the recovery path for a failed check (§4.6). After it runs, `_isBroken`/`_problems` are cleared if the file was broken.
+It is used only when line steps can't be: for the first apply of a broken file (§3.7), for a step that moves scrap boundaries (§4.6), and as the recovery path for a failed check (§4.6). After it runs, `_isBroken`/`_problems` are cleared if the file was broken.
 
 **Rejected alternative:** reusing Reload (`MPGeneralController.reloadTH2File`) to build a new controller from the text. It throws away the undo history and all per-controller view state (zoom, active scrap, overlays), and the text edits could not be undone.
 
@@ -256,7 +274,7 @@ It is used only when per-line steps can't be: for the first apply of a broken fi
 
 ### 4.9 Editor widget reuse
 
-- Extract `THTextEditorBuffer`, an abstract class with the members listed in §2.1, plus `List<THTextEditorDiagnostic> get diagnostics` and `THTextEditorLanguage get language`. `THTextEditorController` and the new `TH2TextEditController` implement it. `THTextEditorWidget` takes `THTextEditorBuffer`.
+- Extract `THTextEditorBuffer`, an abstract class with the members listed in §2.1, plus `List<THTextEditorDiagnostic> get diagnostics`, `THTextEditorLanguage get language`, and optional checkpoint undo (`bool get providesUndo`, `undo()`, `redo()`, `canUndo`, `canRedo`, `onCursorLineChanged(int line)`). `THTextEditorController` and the new `TH2TextEditController` implement it. `THTextEditorWidget` takes `THTextEditorBuffer`.
 - The find/replace state and logic move from `THTextEditorController` into a `THTextEditorFindMixin` used by both, so they behave the same.
 - `THTextEditorDiagnostic` (line, message, severity) replaces the widget's direct use of `THProjectParseError`. `THTextEditorController` maps its project errors to it. `TH2TextEditController` maps `TH2FileProblem`s (with the localized category from `TH2FileProblemTextAux`) and line-less parser errors.
 - `THTextEditorLanguage { therion, th2 }` chooses the tokenizer and fold keywords. `tokenizeTherionText(text, language:)` keeps its default, so current callers don't change.
@@ -288,32 +306,35 @@ Each phase ends with `flutter analyze` clean and `flutter test` green. New tests
   - `t3962`: the parser's map agrees with the writer's map on a round-tripped fixture (after matching MPIDs by position).
   - `t3963`: every row of the table in §3.3.
 
-### Phase 2: Detached parse, diff and per-line apply
+### Phase 2: Detached parse, diff and step apply
 
 - `targetController` on `TH2FileParser.parse`, and `createForDetachedParse` (§4.5).
 - `MPLineDiffAux` (§4.6).
 - The unit and step builder, `MPReplaceElementCommand` with its factory entry, and the step description type and EN/PT description string (§4.6).
 - `TH2File.replaceContentsFrom` and `MPReplaceTH2FileContentsCommand` (§4.7).
-- `TH2FileEditController.applyText(String text)`, which returns `applied(lineMap)` or `rejected(problems, errors)`, with the check and cleanup from §4.6.
+- `TH2FileEditController.applyTextSteps(List<TH2TextCheckpoint> checkpoints)`, which returns `applied(lineMap)` or `rejected(problems, errors)`, with the per-step check and cleanup from §4.6. The checkpoints here are built directly by the tests. Recording them from the editor comes in Phase 3.
 - Tests:
   - `t3964`: a detached parse doesn't register or replace any controller in `MPGeneralController`.
   - `t3965`: `MPLineDiffAux` on insertions, deletions, modifications, mixed hunks, empty texts and identical texts.
-  - `t3966`: editing three separate lines gives three undo steps. Undoing them one by one gives back each intermediate text, and redo gives the final one. Older canvas-made commands still undo correctly afterwards.
+  - `t3966`: three checkpoints give three undo steps, including two for the same line. Undoing them one by one gives back each checkpoint's text, and redo gives the final one. Older canvas-made commands still undo correctly afterwards.
   - `t3967`: unchanged elements keep their MPIDs. Changing a line's header keeps the line's MPID and its segments' MPIDs. Changing one line point replaces only that segment.
-  - `t3968`: adding a whole `line … endline` block is one step. Removing an `endline` together with other lines falls back to a block step. Moving an `endscrap` falls back to the whole-file step.
+  - `t3968`: a checkpoint that doesn't parse (a `line` header without its `endline`) is joined with the next one into one step. A whole `line … endline` block pasted at once is one step. Moving an `endscrap` falls back to the whole-file step.
   - `t3969`: text with a problem or error is rejected, and the model is unchanged.
-  - `t3970`: after every apply in these tests, the live model serializes back to the applied text (§4.6 check).
-  - `t3971`: performance guard on a large generated fixture with many scattered edits.
+  - `t3970`: after every step in these tests, the live model serializes back to that checkpoint's text (§4.6 check).
+  - `t3971`: performance guard on a large generated fixture with many checkpoints, with and without cached parses.
 
 ### Phase 3: Editor generalization and TH2 highlighting
 
 - `THTextEditorBuffer`, `THTextEditorFindMixin`, `THTextEditorDiagnostic` and `THTextEditorLanguage` (§4.9). Refactor `THTextEditorController` and `THTextEditorWidget` onto them with no behavior change.
 - The TH2 tokenizer and folds (§4.10).
-- `TH2TextEditController` (MobX): `content`, `initialContent`, `isDirty` (`content != initialContent`), cursor, pending scroll/selection, diagnostics, find, and the owning `TH2FileEditController`. `save` and `revert` delegate to the owner (§3.6, discard).
+- `TH2TextEditController` (MobX): `content`, `initialContent`, `isDirty` (`content != initialContent`), cursor, pending scroll/selection, diagnostics, find, the owning `TH2FileEditController`, and the checkpoints with their idle-time parsing and cache (§4.6). `save` and `revert` delegate to the owner (§3.6, discard).
+- Checkpoint undo in `THTextEditorWidget`: the `UndoTextIntent`/`RedoTextIntent` override and the cursor-line notifications (§4.6).
 - Tests:
   - the existing text editor tests (`t3900`–`t3937`) pass unchanged;
   - `t3972`: TH2 tokens, including `##XTHERION##` lines, multiline comments, options and line-option words;
   - `t3973`: TH2 fold regions.
+  - `t3982`: checkpoint recording: typing on one line and moving away records one checkpoint; returning to the line and typing again records another; `Enter`, a multi-line paste and Replace All each close a step; moving without changes records nothing.
+  - `t3983`: text-mode `Ctrl+Z`/`Ctrl+Y` walk the checkpoints, close an edit in progress first, move the cursor to the changed line, and drop the redo tail when typing after an undo. The `thconfig` editor's undo is unchanged.
 
 ### Phase 4: Mode switching, synchronization and saving
 
@@ -324,7 +345,7 @@ Each phase ends with `flutter analyze` clean and `flutter test` green. New tests
 - Tests (widget tests use the `TH2FileTabsPage` setup of `t3950`):
   - `t3974`: with two elements selected in reverse file order, text mode puts the cursor on the one nearer the top. In _Line edit_ mode, the cursor goes to the first selected line point.
   - `t3975`: returning with the cursor on each kind of line from §3.3 gives the listed result. A selected line point round-trips: canvas → text → canvas leaves the same point selected in _Line edit_ mode.
-  - `t3976`: typing options on two lines and returning applies them. The first `Ctrl+Z` on the canvas removes only the lower edit, and the second removes the upper one.
+  - `t3976`: editing line 10, then line 20, then line 10 again, and returning to the canvas gives three undo steps. `Ctrl+Z` on the canvas undoes them in reverse order: the second edit of line 10, then line 20, then the first edit of line 10.
   - `t3977`: invalid text stays in text mode with markers. Discard returns with the model unchanged.
   - `t3978`: the dirty dot, Save, Save All and the unsaved-changes guard see text-only edits. Save with problems writes nothing and reports `textHasProblems`.
   - `t3979`: the mode is kept across tab switches. Tree clicks while in text mode move the cursor to the clicked element, using §3.2 with that element. `F2` toggles from both the canvas and the text field.
@@ -334,7 +355,7 @@ Each phase ends with `flutter analyze` clean and `flutter test` green. New tests
 - _Edit as text_ on `TH2BrokenFileBodyWidget`, with the raw disk text source (§3.7, §4.2).
 - The whole-file first apply, and clearing the broken state (§4.7).
 - Tests:
-  - `t3980`: a broken fixture opens in text mode with its problems marked at the right lines. Fixing and applying makes the canvas available. Saving writes the fixed text. The next text session uses per-line steps.
+  - `t3980`: a broken fixture opens in text mode with its problems marked at the right lines. Fixing and applying makes the canvas available. Saving writes the fixed text. The next text session uses line steps.
   - `t3981`: a broken file's text is never saved while problems remain.
 
 ### Phase 6: Documentation and localization
@@ -348,5 +369,7 @@ Each phase ends with `flutter analyze` clean and `flutter test` green. New tests
 
 1. **Unit rules for unusual edits** (§4.6). The table covers the common cases. Unusual ones, such as splitting one line block into two or joining two points into one line, fall back to block steps or the whole-file step. They stay correct but give coarser undo. The `t3968` and `t3970` tests are where new cases are pinned down.
 2. **References across steps.** An area's border references point at lines by thID. If the user adds a line and the area referencing it in one text session, undoing only the line's step leaves the area referring to a missing line. Mapiah already opens files in that state, so it is tolerated. The tree and canvas must not fail on it (checked in `t3966`).
-3. **Diff pairing inside a hunk.** Pairing modified lines one to one inside a hunk can pair unrelated lines when the user rewrote a region heavily. This gives a correct but less natural split into steps. If it becomes a problem, pairing can prefer lines with the same first word (`point` with `point`).
+3. **Diff pairing inside a hunk.** Pairing modified lines one to one inside a hunk can pair unrelated lines, for example after a large paste over several lines. The step stays correct, but it may replace more elements than needed. If it becomes a problem, pairing can prefer lines with the same first word (`point` with `point`).
+5. **Parsing cost per checkpoint** (§4.6). Every checkpoint is parsed once, in idle time. For very large files this may be noticeable after each line change. The idle delay and the model cache limit are constants that can be tuned. `t3971` measures both.
+6. **Different step counts in the two views.** A checkpoint that doesn't parse is its own step in text mode but is joined with the next one on the canvas (§3.5). This is the only way the two lists differ.
 4. **Memory of the whole-file step's snapshots** for very large files (§4.7). It is used rarely, and `t3971` covers the size.
