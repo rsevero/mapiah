@@ -244,6 +244,8 @@ To edit scrap options, right click on:
 * the scrap select button on the right bottom corner in case there is only one scrap in the file, or
 * the scrap name in the scrap select dialog box presented when clicking on the scrap select button in case there are multiple scraps in the file.
 
+The scrap _Sketch_ option sets the background image Therion draws under the scrap when the layout has `sketches on`. After choosing _Set_, pick an image already loaded in the file from _Loaded image_ to fill in its filename and its lower left corner coordinates, or type them in or use _Choose file_. Chosen files are stored relative to the TH2 file. Therion doesn't scale or rotate sketches, so a warning is shown when the loaded image is scaled or rotated in Mapiah.
+
 ## Default options
 
 Default options are option values that are automatically applied to newly created points, lines, or areas of matching types. They are set once and reused across all subsequent element creations until changed or removed.

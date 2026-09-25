@@ -421,6 +421,7 @@ const double mpSettingsPageCardPadding = 12;
 const double mpSettingsPageFieldSpacing = 8;
 const double mpSettingsPageButtonSpacing = 8;
 const double mpSettingsEditableFieldMinWidth = 320;
+const double mpSketchFilenameFieldWidth = 320;
 const int mpDefaultMinDigitsForTextFields = 6;
 const int mpDefaultMinCharsForTextFields = 10;
 const int mpDefaultMaxCharsForTextFields = 20;

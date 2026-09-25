@@ -2117,6 +2117,18 @@ abstract class AppLocalizations {
   /// **'Filename'**
   String get mpSketchFilenameLabel;
 
+  /// The label for the dropdown that lets the user pick an image already loaded in the file as the scrap sketch. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Loaded image'**
+  String get mpSketchLoadedImageLabel;
+
+  /// Warning shown when the loaded image picked as a scrap sketch is scaled or rotated. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'This image is scaled or rotated in Mapiah. Therion doesn\'t scale or rotate sketches, so it will use the image at its original size, from its current lower left corner.'**
+  String get mpSketchTransformedImageWarning;
+
   /// The label for the X coordinate type. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
   ///
   /// In en, this message translates to:

@@ -1113,6 +1113,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSketchFilenameLabel => 'Arquivo';
 
   @override
+  String get mpSketchLoadedImageLabel => 'Imagem carregada';
+
+  @override
+  String get mpSketchTransformedImageWarning =>
+      'Esta imagem está redimensionada ou rotacionada no Mapiah. O Therion não redimensiona nem rotaciona esboços, então usará a imagem no seu tamanho original, a partir do seu canto inferior esquerdo atual.';
+
+  @override
   String get mpSketchXLabel => 'X';
 
   @override

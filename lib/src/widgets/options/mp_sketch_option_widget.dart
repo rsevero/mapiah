@@ -3,11 +3,15 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_option_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_window_type.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
+import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/inputs/mp_text_field_input_widget.dart';
 import 'package:mapiah/src/widgets/mp_overlay_window_block_widget.dart';
@@ -41,6 +45,10 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
     with MPOptionTypeBeingEditedTrackingMixin<MPSketchOptionWidget> {
   late String _filename;
   late String _selectedChoice;
+  late final TextEditingController _filenameController;
+  late final List<MPRuntimeImageInsertConfigMixin> _rasterImages;
+  int? _selectedImageMPID;
+  String? _imageWarningMessage;
   late TextEditingController _xController;
   late TextEditingController _yController;
   final FocusNode _xFieldFocusNode = FocusNode();
@@ -85,6 +93,15 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
         _selectedChoice = mpUnsetOptionID;
     }
 
+    _filenameController = TextEditingController(text: _filename);
+    _rasterImages = widget.th2FileEditController.th2File
+        .getImages()
+        .where(
+          (MPRuntimeImageInsertConfigMixin image) =>
+              image.asRasterImage != null,
+        )
+        .toList();
+
     _initialFilename = _filename;
     _initialX = _xController.text;
     _initialY = _yController.text;
@@ -102,6 +119,7 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
 
   @override
   void dispose() {
+    _filenameController.dispose();
     _xController.dispose();
     _xFieldFocusNode.dispose();
     _yController.dispose();
@@ -148,9 +166,86 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
     _yWarningMessage = (y == null)
         ? appLocalizations.mpSketchCoordinateInvalid
         : null;
-    _isValid = (_xWarningMessage == null) && (_yWarningMessage == null);
+    _isValid =
+        (_selectedChoice != mpNonMultipleChoiceSetID) ||
+        ((_filename.trim().isNotEmpty) &&
+            (_xWarningMessage == null) &&
+            (_yWarningMessage == null));
 
     _updateIsOkButtonEnabled();
+  }
+
+  void _setFilename(String filename) {
+    _filename = filename;
+
+    if (_filenameController.text != filename) {
+      _filenameController.text = filename;
+    }
+  }
+
+  /// Returns [pickedFile] relative to the TH2 file directory, as Therion
+  /// resolves sketch filenames relative to the file that references them.
+  String _filenameForTH2File(String pickedFile) {
+    final TH2File th2File = widget.th2FileEditController.th2File;
+
+    if (th2File.isNewFile) {
+      return pickedFile;
+    }
+
+    return MPDirectoryAux.relativePathFromReferencePath(
+      targetPath: pickedFile,
+      referencePath: th2File.filename,
+    );
+  }
+
+  /// Fills filename and lower left corner coordinates from an image already
+  /// loaded in the file.
+  Future<void> _useLoadedImage(int imageMPID) async {
+    final TH2FileEditController th2FileEditController =
+        widget.th2FileEditController;
+    final MPRuntimeImageInsertConfigMixin image = _rasterImages.firstWhere(
+      (MPRuntimeImageInsertConfigMixin image) => image.mpID == imageMPID,
+    );
+
+    final MPRuntimeRasterImageInsertConfigMixin rasterImage =
+        image.asRasterImage!;
+
+    if (rasterImage.decodedRasterImage == null) {
+      await rasterImage.getRasterImageFrameInfo(th2FileEditController);
+    }
+
+    final Rect? localBounds = image.getLocalBounds(th2FileEditController);
+
+    if (!mounted || (localBounds == null)) {
+      return;
+    }
+
+    final Rect worldBounds = (image is MPImageInsertConfig)
+        ? image.transformLocalRect(localBounds)
+        : localBounds.shift(Offset(image.xx.value, image.yy.value));
+    final bool isTransformed =
+        (image is MPImageInsertConfig) &&
+        ((image.xScale.value != 1.0) ||
+            (image.yScale.value != 1.0) ||
+            (image.rotationDeg.value != 0.0));
+
+    /// In TH2 coordinates Y increases upwards, so the lower left corner is at
+    /// the minimum Y value, which Flutter calls "top".
+    _selectedImageMPID = imageMPID;
+    _setFilename(image.filename);
+    _xController.text = MPNumericAux.doubleToString(
+      worldBounds.left,
+      mpDefaultDecimalPositions,
+    );
+    _yController.text = MPNumericAux.doubleToString(
+      worldBounds.top,
+      mpDefaultDecimalPositions,
+    );
+    _imageWarningMessage = isTransformed
+        ? appLocalizations.mpSketchTransformedImageWarning
+        : null;
+
+    _updateIsValid();
   }
 
   void _updateIsOkButtonEnabled() {
@@ -204,9 +299,8 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
             RadioGroup<String>(
               groupValue: _selectedChoice,
               onChanged: (String? value) {
-                setState(() {
-                  _selectedChoice = value!;
-                });
+                _selectedChoice = value!;
+                _updateIsValid();
                 if (_selectedChoice == mpNonMultipleChoiceSetID) {
                   _xFieldFocusNode.requestFocus();
                 }
@@ -235,20 +329,59 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
 
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
+              if (_rasterImages.isNotEmpty) ...[
+                DropdownMenu<int>(
+                  key: ValueKey(
+                    "MPSketchOptionWidget|DropdownMenu|$_selectedImageMPID",
+                  ),
+                  width: mpSketchFilenameFieldWidth,
+                  label: Text(appLocalizations.mpSketchLoadedImageLabel),
+                  initialSelection: _selectedImageMPID,
+                  dropdownMenuEntries: _rasterImages
+                      .map(
+                        (MPRuntimeImageInsertConfigMixin image) =>
+                            DropdownMenuEntry<int>(
+                              value: image.mpID,
+                              label: image.filename,
+                            ),
+                      )
+                      .toList(),
+                  onSelected: (int? imageMPID) {
+                    if (imageMPID != null) {
+                      _useLoadedImage(imageMPID);
+                    }
+                  },
+                ),
+                if (_imageWarningMessage != null) ...[
+                  const SizedBox(height: mpButtonSpace),
+                  SizedBox(
+                    width: mpSketchFilenameFieldWidth,
+                    child: Text(
+                      _imageWarningMessage!,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: mpButtonSpace),
+              ],
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
+                  SizedBox(
+                    width: mpSketchFilenameFieldWidth,
                     child: TextField(
-                      controller: TextEditingController(text: _filename),
+                      controller: _filenameController,
                       decoration: InputDecoration(
                         labelText: appLocalizations.mpSketchFilenameLabel,
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (value) {
-                        setState(() {
-                          _filename = value;
-                          _updateIsOkButtonEnabled();
-                        });
+                        _filename = value;
+                        _selectedImageMPID = null;
+                        _imageWarningMessage = null;
+                        _updateIsValid();
                       },
                     ),
                   ),
@@ -260,10 +393,10 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
                       ).then((result) => result?.path);
 
                       if (pickedFile != null) {
-                        setState(() {
-                          _filename = pickedFile;
-                          _updateIsOkButtonEnabled();
-                        });
+                        _setFilename(_filenameForTH2File(pickedFile));
+                        _selectedImageMPID = null;
+                        _imageWarningMessage = null;
+                        _updateIsValid();
                       }
                     },
                     child: Text(appLocalizations.mpSketchChooseFileButtonLabel),

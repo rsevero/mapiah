@@ -1100,6 +1100,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSketchFilenameLabel => 'Filename';
 
   @override
+  String get mpSketchLoadedImageLabel => 'Loaded image';
+
+  @override
+  String get mpSketchTransformedImageWarning =>
+      'This image is scaled or rotated in Mapiah. Therion doesn\'t scale or rotate sketches, so it will use the image at its original size, from its current lower left corner.';
+
+  @override
   String get mpSketchXLabel => 'X';
 
   @override

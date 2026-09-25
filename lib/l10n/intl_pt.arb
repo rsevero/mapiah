@@ -354,6 +354,8 @@
   "mpSketchChooseFileButtonLabel": "Escolher arquivo",
   "mpSketchCoordinateInvalid": "Coordenada inválida",
   "mpSketchFilenameLabel": "Arquivo",
+  "mpSketchLoadedImageLabel": "Imagem carregada",
+  "mpSketchTransformedImageWarning": "Esta imagem está redimensionada ou rotacionada no Mapiah. O Therion não redimensiona nem rotaciona esboços, então usará a imagem no seu tamanho original, a partir do seu canto inferior esquerdo atual.",
   "mpSketchXLabel": "X",
   "mpSketchYLabel": "Y",
   "mpSnapLinePointTargetsLabel": "Ajuste a pontos de linha",
