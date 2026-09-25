@@ -26,9 +26,9 @@ All code (app, scripts, tests) must follow these rules.
 
 10. **Commit signature** — Include `Signed-off-by: Name <email>` (last line) and `Assisted-By: AI_MODEL <email>`.
 
-11. **`git add -A` on commit** — Avoid forgetting files.
+11. **Stage by path on commit** — Run `git status` in the task's worktree and stage the task's files by path, so no file is forgotten and no other agent's work is included. `git add -A` is fine only when `git status` shows nothing but the task's files (see AGENTS.md, Parallel Work).
 
-12. **Don't manually run `build_runner build`** — Watch instance is already running.
+12. **`build_runner`: watch in the main checkout, manual in worktrees** — In the main checkout the watch instance is already running, so don't run `build_runner` there. The watch doesn't see worktrees: after changing MobX-annotated code in one, run `dart run build_runner build --delete-conflicting-outputs` there and commit the regenerated `.g.dart` files (see AGENTS.md, Parallel Work).
 
 13. **Update TODO.md** — Check if any completed items should be marked done.
 

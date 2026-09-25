@@ -20,7 +20,8 @@ flutter test                       # All tests
 flutter test test/t1200_...        # Single test
 flutter build linux                # Build for Linux
 flutter analyze                    # Static analysis
-# Do not run build_runner manually; the watch instance regenerates MobX.
+# Main checkout: do not run build_runner; the watch instance regenerates MobX.
+# In a worktree: dart run build_runner build --delete-conflicting-outputs (see Parallel Work)
 flutter gen-l10n                   # Generate localizations after .arb edits
 ```
 
@@ -28,7 +29,7 @@ flutter gen-l10n                   # Generate localizations after .arb edits
 
 ### State Management: MobX
 
-Controllers in lib/src/controllers/ use @observable/@action. The build_runner watch regenerates `.g.dart` files after modifications; do not run `build_runner` manually.
+Controllers in lib/src/controllers/ use @observable/@action. In the main checkout, the build_runner watch regenerates `.g.dart` files after modifications; do not run `build_runner` there. The watch doesn't see worktrees: see Parallel Work.
 
 ### Key Controllers
 
@@ -106,10 +107,42 @@ MPLocator (global mpLocator) provides:
 
 ### Prompt Abbreviations
 
-* cc: Update CHANGELOG.md + prepare commit. Always asks for confirmation of commit message before actually commiting. Keep the changes on its separate branch.
-* ccm: Like cc but merges the branch after commiting.
+* cc: Update CHANGELOG.md + prepare commit on the task's branch, inside the task's worktree (see Parallel Work). Always asks for confirmation of commit message before actually commiting.
+* ccm: Like cc, then merges the branch into main, removes the worktree and deletes the branch (see Parallel Work, "Finishing").
 * Commit messages should include Assisted_By/Signed-off-by (first Assisted_By: and then finish with Signed-off-by:) when appliable.
 * hpcc: Update help pages (EN/PT) + keyboard shortcuts + cc above
+
+### Parallel Work: Branches and Worktrees
+
+Several agents may work on different issues at the same time. Each one works in its own branch **and** its own worktree, so no agent ever changes another agent's files, index or checked-out branch.
+
+**The main checkout** (`/home/rodrigo/devel/mapiah`) belongs to the user:
+* It always stays on `main`. Never run `git switch`/`git checkout <branch>` there.
+* Never edit, stage, commit, stash, reset or clean files there. Uncommitted changes in it are the user's or another agent's work in progress.
+* The only git command an agent runs there is the final `git merge --ff-only` of "Finishing".
+* Read-only tasks (questions, reviews, analysis) can run from it, without a worktree.
+
+**Starting a task that changes files**, before editing anything:
+1. Pick a branch name: `<type>_<issue>_<slug>` (type: `feat`, `fix`, `docs`, `refactor`, `test`), e.g. `fix_46_xtherion_image_format`. Without an issue: `<type>_<slug>`. Check it doesn't exist yet (`git branch --list <name>`).
+2. Create the worktree from the current `main`: `git worktree add -b <branch> ../mapiah-worktrees/<branch> main`.
+3. Work only inside that worktree: use its absolute path for every file edit and run every command there (`git -C <worktree> …`, or `cd` into it).
+4. Run `flutter pub get` in it once.
+
+**Inside a worktree:**
+* The build_runner watch only covers the main checkout. After changing MobX-annotated code (`@observable`, `@action`, `@computed`, `@readonly`), run `dart run build_runner build --delete-conflicting-outputs` in the worktree, and commit the regenerated `.g.dart` files.
+* `flutter gen-l10n`, `flutter analyze` and `flutter test` run in the worktree, on its code.
+* Touch only your own branch and worktree. Never switch, reset, rebase, delete or force-update another agent's branch, and never remove another worktree. When `git worktree list` or `git branch` shows something you didn't create, leave it alone.
+
+**Committing (cc):**
+* Run `git status` in the worktree first. Stage the task's files by path. `git add -A` is fine only when `git status` shows nothing but the task's files.
+* Ask authorization for staging and committing in the same step, after showing the complete commit message.
+
+**Finishing (ccm)**, after the commit:
+1. Bring the branch up to date: `git -C <worktree> rebase main`. On a conflict in `CHANGELOG.md`, keep both entries. For any other conflict, stop and ask.
+2. Run `flutter analyze` and `flutter test` in the worktree again if the rebase brought in new commits.
+3. Merge: `git -C /home/rodrigo/devel/mapiah merge --ff-only <branch>`. If it fails because `main` moved (another agent merged first), go back to step 1. If it fails because of the user's uncommitted changes in the main checkout, stop and ask. Never use a merge commit, `--force` or `reset` to get past it.
+4. Clean up: `git worktree remove ../mapiah-worktrees/<branch>`, then `git branch -d <branch>`. If either refuses (uncommitted or unmerged work), stop and ask. Never use `--force` or `-D`.
+* Never push unless asked.
 
 ### Canvas Orientation
 
@@ -125,11 +158,11 @@ Full rules in coding-guidelines.md. Critical rules:
 * Update help pages (EN/PT) + keyboard shortcuts (alphabetical order)
 * URLs → MPURLTextWidget
 * Formatting handled automatically on commit: never run "dart format".
-* Lets create a separate branch for each feature/bugfix.
+* Each feature/bugfix gets its own branch and worktree (see Parallel Work).
 
 ### For every prompt:
 
-1. Run 'flutter analyze'
+1. Run 'flutter analyze' (in the task's worktree when there is one)
 2. Summarize diffs
 
 ### Release Targets
@@ -138,7 +171,7 @@ See release-targets.md — Linux (AppImage/Flatpak), macOS, Windows (no web/Flat
 
 When commiting:
 * When presenting a commit message, show the complete message before actually asking for permission so I can see it all.
-* Ask for authorization both for git add -A and git commmit at the same step.
+* Ask for authorization for staging and for the commit at the same step (see Parallel Work, "Committing").
 
 See coding-guidelines.md for detailed coding rules.
 
