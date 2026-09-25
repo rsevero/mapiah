@@ -5,7 +5,9 @@
 **Date:** 2026-09-25
 **Status:** Proposed. Checked against the codebase on 2026-09-25 (`main` at `0e0ca067`). Revised the same day with these decisions:
 
-- text edits become undo steps **line by line, each one closed when the cursor leaves the edited line**, so the same line can give several steps in one session (§4.6);
+- text edits become **canvas** undo steps line by line, each one closed when the cursor leaves the edited line, so the same line can give several steps in one session (§4.6);
+- **inside text mode**, undo and redo work as in the `thconfig`/`.th` editor, through the `TextField`'s own history (§3.5);
+- redo is **`Ctrl+Shift+Z` everywhere**. The canvas no longer uses `Ctrl+Y`, and the text editor accepts both Ctrl and Cmd. This change was made on its own, ahead of this plan (§2.7);
 - text that doesn't parse is **never saved** (§3.6);
 - a selected line point **round-trips** between the two views (§3.2, §3.3);
 - the mode toggle uses **F2** instead of `Ctrl+E` (§3.1).
@@ -28,7 +30,7 @@ The two views are **synchronized at each switch**, not while typing:
 3. **Lossless generation.** The text shown on entering text mode is exactly the output of the save path (`TH2FileWriter` with `includeEmptyLines: true, useOriginalRepresentation: true`). Unchanged lines keep their original formatting.
 4. **Graphical → text selection.** The first selected element or line point in file order decides the scroll position and the cursor line.
 5. **Text → graphical selection.** The element owning the cursor's line is selected, as if clicked in the element tree. A line point opens _Line edit_ mode with that point selected.
-6. **Line-by-line undo.** An undo step is closed each time the cursor leaves a line it changed (§4.6). Each step is one command on the file's undo stack, in the order the edits were made. Editing a line, leaving it and returning to edit it again gives two steps. `Ctrl+Z`/`Ctrl+Y` step through the same units in text mode and on the canvas.
+6. **Line-by-line undo on the canvas.** A canvas undo step is closed each time the cursor leaves a line it changed (§4.6). Each step is one command on the file's undo stack, in the order the edits were made. Editing a line, leaving it and returning to edit it again gives two steps. Inside text mode, `Ctrl+Z`/`Ctrl+Shift+Z` behave as in the `thconfig`/`.th` editor (§3.5).
 7. **Safe apply.** Text that doesn't parse cleanly is never applied and never saved. The tab stays in text mode, and each problem is marked at its line.
 8. **Stable identity.** Unchanged elements keep their MPIDs, so their selection, hidden state and the element tree's collapsed scraps survive a text edit.
 9. **Save, dirty state and projects.** Unsaved text edits count as unsaved changes everywhere: the Save button, the project tree's dirty dot, Save All and the unsaved-changes guard.
@@ -41,7 +43,8 @@ The two views are **synchronized at each switch**, not while typing:
 - **Split view** (canvas and text side by side). The design leaves room for it (§4.1), but it is not built here.
 - **An option-entry box on the canvas** (the literal proposal in #38). Text mode covers the need. A per-element text box can be a later follow-up that reuses this plan's parser and apply path.
 - **Autocompletion or option validation while typing.** Validation is the parser's, at apply time.
-- **Per-keystroke undo.** Keystrokes on one line, before the cursor leaves it, are one undo step, in text mode and on the canvas (§3.5).
+- **Per-keystroke undo on the canvas.** Keystrokes on one line, before the cursor leaves it, are one canvas undo step (§3.5).
+- **A custom undo for the text editor.** TH2 text mode keeps the undo that `thconfig`/`.th` tabs already use (§3.5).
 - **Text editing of files that are not `.th2`.** `thconfig`/`.th` files already have their own text tabs.
 
 ## 2. Grounding: Current State
@@ -51,7 +54,7 @@ The two views are **synchronized at each switch**, not while typing:
 - `THTextEditorWidget` (`lib/src/widgets/th_text_editor_widget.dart`, 928 lines) is a self-built editor with no code-editor dependency. It has a line-number gutter, a `TextField` with a syntax-highlighting overlay, diagnostic line markers, folding, and a find/replace bar.
 - It takes a concrete `THTextEditorController` (`lib/src/controllers/th_text_editor_controller.dart`). It uses only these members: `content`, `setContent`, `isDirty`, `cursorLine`, `setCursorPosition`, `pendingScrollToLine`/`clearPendingScrollToLine`, `pendingSelectionRange`/`clearPendingSelectionRange`, `diagnostics`, `textEditorFocusNode`, `save`, `revert`, and the find members (`findQuery`, `replaceQuery`, `findCaseSensitive`, `findMatches`, `activeMatchIndex`, `isFindBarVisible`, `openFindBar`, `closeFindBar`, `findNext`, `findPrevious`, `replaceActiveMatch`, `replaceAllMatches`, `setFindQuery`, `setReplaceQuery`, `setFindCaseSensitive`).
 - `THTextEditorController` is bound to `THProjectController`. It owns a project epoch/root identity, calls `registerTextContentChange` and a debounced `reparseFile`, and saves through the project. None of that applies to a `.th2` file, whose model is owned by `TH2FileEditController`.
-- The widget listens to its `TextEditingController` (`_onTextEditingChanged`, `:75`) and relies on the `TextField`'s built-in undo history. It sets no `undoController` and doesn't override `UndoTextIntent`/`RedoTextIntent`.
+- The widget listens to its `TextEditingController` (`_onTextEditingChanged`, `:75`) and relies on the `TextField`'s built-in undo history. That history records a step after a 500 ms pause in typing. Programmatic changes (auto-indent, block indent, Replace, Replace All, Revert) go into it too. Its shortcut map binds `Ctrl+Z`/`Cmd+Z` to `UndoTextIntent` and `Ctrl+Shift+Z`/`Cmd+Shift+Z` to `RedoTextIntent`, so both modifier keys work on every platform (§2.7).
 - `diagnostics` is `List<THProjectParseError>`. The widget renders them in `_buildDiagnosticBackground` (`:749-783`) and `THTextEditorDiagnosticMarkerWidget`.
 - `tokenizeTherionText` (`lib/src/auxiliary/th_text_editor_syntax_highlighter.dart`) is a stateless, per-line lexer. Its keyword set is for `thconfig`/`.th` (`survey`, `centreline`, `map`, `scrap`, `layout`, `input`, …). It has no `point`, `line`, `area`, `endline`, `endarea`, `comment`/`endcomment`. Anything from `#` to the end of the line is a comment, so `##XTHERION##` settings would be colored as comments. It keeps no state across lines, so it can't color a multiline `comment … endcomment` block.
 - `buildFoldRegions` (`lib/src/auxiliary/th_text_editor_fold_aux.dart:30-34`) folds `survey`, `centreline`, `map`, `scrap` and `layout`. `line`, `area` and `comment` are not included.
@@ -100,7 +103,8 @@ The two views are **synchronized at each switch**, not while typing:
 
 ### 2.7 Keyboard shortcuts
 
-The edit page uses only `F1` among the function keys (`th2_file_tabs_page.dart:1085`). Function keys have no default meaning in Flutter's text-editing shortcuts on any platform. `F2` is free.
+- The edit page uses only `F1` among the function keys (`th2_file_tabs_page.dart:1085`). Function keys have no default meaning in Flutter's text-editing shortcuts on any platform. `F2` is free.
+- **Redo is `Ctrl+Shift+Z` everywhere.** This was changed on its own, ahead of this plan. The canvas key handler (`mp_th2_file_edit_state_key_down_mixin.dart`) maps `Ctrl/Cmd+Z` to undo and `Ctrl/Cmd+Shift+Z` to redo. `Ctrl+Y` no longer does anything. The text editor maps the same keys for both Ctrl and Cmd. The redo tooltip, the help pages and the shortcut tables say `Ctrl+Shift+Z`. It is covered by `test/t3956_redo_ctrl_shift_z_test.dart`.
 
 ## 3. User-Facing Behavior
 
@@ -144,12 +148,10 @@ If the selection is outside the visible canvas area, the canvas is centered on i
 
 ### 3.5 Undo
 
-An undo step is closed **when the cursor leaves a line it changed**, whether by arrow keys, a click, `Enter`, `Tab` or scrolling and clicking elsewhere. All the typing on that line until then is one step. Coming back to the same line and changing it again starts a new step. An edit that itself spans several lines (a multi-line paste, deleting a selection across lines, a replace) is one step. Leaving text mode, saving and `F2` close the step in progress.
-
-- **In text mode**, `Ctrl+Z`/`Ctrl+Y` move through these steps. If the current line has edits that aren't closed yet, `Ctrl+Z` first closes them as a step and undoes it. The cursor goes to the line the undone or redone step changed. Typing after an undo drops the steps that could have been redone. `Ctrl+Z` does nothing at the start of the session: the edits made before it are undone on the canvas.
-- **On the canvas**, the same steps are commands on the file's undo stack, in the order they were made, so the last text edit is undone first. The step's description names the line, for example "Text edit (line 42)". Older, canvas-made steps below them stay valid, because unchanged elements keep their MPIDs.
-
-The two lists can differ in one way. A step that leaves the text unparseable, such as a new `line` header typed before its `endline`, can't be applied to the model on its own. On the canvas, it is joined with the following steps until the text parses again (§4.6). In text mode, it stays a separate step.
+- **In text mode**, undo and redo work exactly as in the `thconfig`/`.th` editor: `Ctrl+Z` and `Ctrl+Shift+Z` go through the `TextField`'s own history, which groups typing by 500 ms pauses (§2.1). They reach back only to the start of the text session. The edits made before it are undone on the canvas.
+- **On the canvas**, the text session gives undo steps that are closed **when the cursor leaves a line it changed**, whether by arrow keys, a click, `Enter` or `Tab`. All the changes on that line until then are one step. Coming back to the same line and changing it again starts a new step. An edit that itself spans several lines (a multi-line paste, deleting a selection across lines, a replace) is one step. An undo or redo inside text mode is recorded like any other edit: it closes a step right after it runs. Leaving text mode, saving and `F2` close the step in progress.
+- The steps are commands on the file's undo stack, in the order they were made, so the last text edit is undone first. The step's description names the line, for example "Text edit (line 42)". Older, canvas-made steps below them stay valid, because unchanged elements keep their MPIDs.
+- A step that leaves the text unparseable, such as a new `line` header typed before its `endline`, can't be applied to the model on its own. It is joined with the following steps until the text parses again (§4.6).
 
 ### 3.6 Save in text mode
 
@@ -205,15 +207,15 @@ Each closed step's text gets its own detached parse (§4.6). The parse is both t
 
 ### 4.6 Line checkpoints, units and steps
 
-**1. Checkpoints.** `TH2TextEditController` keeps a list of `TH2TextCheckpoint`s (text, cursor line, and the line range changed since the previous checkpoint) and the index of the current one. Checkpoint 0 is `initialContent`. It also keeps the line of the edit in progress, if any.
+**1. Checkpoints.** `TH2TextEditController` keeps a list of `TH2TextCheckpoint`s (text, cursor line, and the line range changed since the previous checkpoint) Checkpoint 0 is `initialContent`. It also keeps the line of the edit in progress, if any.
 
 - A text change sets the line in progress if none is set.
-- A cursor move to a different line, with the text different from the current checkpoint, **records a checkpoint**. Line numbers shift with inserted or deleted lines, so "a different line" is decided on the text after the change: `Enter` at the end of line 5 closes the edit of line 5 when the cursor lands on line 6.
+- A cursor move to a different line, with the text different from the last checkpoint, **records a checkpoint**. Line numbers shift with inserted or deleted lines, so "a different line" is decided on the text after the change: `Enter` at the end of line 5 closes the edit of line 5 when the cursor lands on line 6.
 - An edit that spans lines (multi-line paste, cross-line delete, replace, replace all) records a checkpoint right after it, closing any edit in progress on another line first.
 - Leaving text mode, saving, `F2`, and the find/replace actions record a checkpoint for the edit in progress.
-- A checkpoint equal to the current one is not recorded. Recording after an undo drops the checkpoints after the current index.
+- A checkpoint equal to the last one is not recorded.
 
-The editor's undo uses these checkpoints instead of the `TextField`'s history (§2.1). `THTextEditorWidget` gets an `Actions` override for `UndoTextIntent` and `RedoTextIntent` when the buffer provides checkpoint undo (§4.9). The `thconfig` editor keeps its current behavior.
+Checkpoints are only used for the canvas steps. The editor's own undo stays the `TextField`'s history (§2.1). The widget's undo/redo bindings (§2.7) call the buffer's `onUndoRedoApplied()` after the `TextField` has run the undo or redo. The TH2 buffer then records a checkpoint, as for any edit that spans lines. The `thconfig` buffer ignores the call.
 
 **2. Diff.** `MPLineDiffAux` (new, pure, `lib/src/auxiliary/mp_line_diff_aux.dart`) compares two consecutive checkpoints' texts line by line, using Myers' O(ND) algorithm. No package is needed. It returns the matched (unchanged) line pairs and the hunks between them. Inside a hunk, lines are paired one to one as **modified** lines while both sides have lines left. The remainder are **inserted** or **deleted** lines. Consecutive checkpoints usually differ in one line, so this is fast.
 
@@ -236,7 +238,7 @@ Cached models are dropped when their checkpoint is dropped or the session ends. 
 
 For the pair of checkpoints *k−1 → k*, units are found through the **live** model's line map for deleted and modified lines, and through checkpoint *k*'s detached model for inserted and modified lines. The live model at that point is the result of the previous steps, and its line map comes from the check in item 7. Unchanged lines map old → new through the diff's matched pairs. The elements on them are **not touched**, so they keep their MPIDs.
 
-**5. Steps.** Each pair of consecutive checkpoints is **one step**, containing all the units its diff touches. If checkpoint *k* doesn't parse, it is skipped: the pair *k−1 → k+1* is used instead, and so on until a checkpoint that parses. The last checkpoint is the current text, which must parse, or the apply is rejected (§3.4). Steps whose diffs cancel out (a line changed and then changed back) still apply, as two steps, because that is what the user did. The only exception is a session whose final text equals `initialContent`: nothing is applied (§3.4).
+**5. Steps.** Each pair of consecutive checkpoints is **one step**, containing all the units its diff touches. If checkpoint *k* doesn't parse, it is skipped: the pair *k−1 → k+1* is used instead, and so on until a checkpoint that parses. The last checkpoint is the final text, which must parse, or the apply is rejected (§3.4). Steps whose diffs cancel out (a line changed and then changed back) still apply, as two steps, because that is what the user did. The only exception is a session whose final text equals `initialContent`: nothing is applied (§3.4).
 
 Every step replaces whole units between two valid texts, so the model is structurally valid after each step, in both undo and redo.
 
@@ -274,7 +276,7 @@ It is used only when line steps can't be: for the first apply of a broken file (
 
 ### 4.9 Editor widget reuse
 
-- Extract `THTextEditorBuffer`, an abstract class with the members listed in §2.1, plus `List<THTextEditorDiagnostic> get diagnostics`, `THTextEditorLanguage get language`, and optional checkpoint undo (`bool get providesUndo`, `undo()`, `redo()`, `canUndo`, `canRedo`, `onCursorLineChanged(int line)`). `THTextEditorController` and the new `TH2TextEditController` implement it. `THTextEditorWidget` takes `THTextEditorBuffer`.
+- Extract `THTextEditorBuffer`, an abstract class with the members listed in §2.1, plus `List<THTextEditorDiagnostic> get diagnostics`, `THTextEditorLanguage get language`, and the notifications `onCursorLineChanged(int line)` and `onUndoRedoApplied()` (§4.6). `THTextEditorController` implements them as no-ops. `THTextEditorController` and the new `TH2TextEditController` implement it. `THTextEditorWidget` takes `THTextEditorBuffer`.
 - The find/replace state and logic move from `THTextEditorController` into a `THTextEditorFindMixin` used by both, so they behave the same.
 - `THTextEditorDiagnostic` (line, message, severity) replaces the widget's direct use of `THProjectParseError`. `THTextEditorController` maps its project errors to it. `TH2TextEditController` maps `TH2FileProblem`s (with the localized category from `TH2FileProblemTextAux`) and line-less parser errors.
 - `THTextEditorLanguage { therion, th2 }` chooses the tokenizer and fold keywords. `tokenizeTherionText(text, language:)` keeps its default, so current callers don't change.
@@ -328,13 +330,13 @@ Each phase ends with `flutter analyze` clean and `flutter test` green. New tests
 - `THTextEditorBuffer`, `THTextEditorFindMixin`, `THTextEditorDiagnostic` and `THTextEditorLanguage` (§4.9). Refactor `THTextEditorController` and `THTextEditorWidget` onto them with no behavior change.
 - The TH2 tokenizer and folds (§4.10).
 - `TH2TextEditController` (MobX): `content`, `initialContent`, `isDirty` (`content != initialContent`), cursor, pending scroll/selection, diagnostics, find, the owning `TH2FileEditController`, and the checkpoints with their idle-time parsing and cache (§4.6). `save` and `revert` delegate to the owner (§3.6, discard).
-- Checkpoint undo in `THTextEditorWidget`: the `UndoTextIntent`/`RedoTextIntent` override and the cursor-line notifications (§4.6).
+- The cursor-line and undo/redo notifications in `THTextEditorWidget` (§4.6). The undo/redo bindings stay those added for `Ctrl+Shift+Z` (§2.7).
 - Tests:
   - the existing text editor tests (`t3900`–`t3937`) pass unchanged;
   - `t3972`: TH2 tokens, including `##XTHERION##` lines, multiline comments, options and line-option words;
   - `t3973`: TH2 fold regions.
   - `t3982`: checkpoint recording: typing on one line and moving away records one checkpoint; returning to the line and typing again records another; `Enter`, a multi-line paste and Replace All each close a step; moving without changes records nothing.
-  - `t3983`: text-mode `Ctrl+Z`/`Ctrl+Y` walk the checkpoints, close an edit in progress first, move the cursor to the changed line, and drop the redo tail when typing after an undo. The `thconfig` editor's undo is unchanged.
+  - `t3983`: an undo and a redo in TH2 text mode each record a checkpoint. `Ctrl+Z`/`Ctrl+Shift+Z` in text mode behave as in the `thconfig` editor, and the `thconfig` editor's undo is unchanged.
 
 ### Phase 4: Mode switching, synchronization and saving
 
@@ -371,5 +373,5 @@ Each phase ends with `flutter analyze` clean and `flutter test` green. New tests
 2. **References across steps.** An area's border references point at lines by thID. If the user adds a line and the area referencing it in one text session, undoing only the line's step leaves the area referring to a missing line. Mapiah already opens files in that state, so it is tolerated. The tree and canvas must not fail on it (checked in `t3966`).
 3. **Diff pairing inside a hunk.** Pairing modified lines one to one inside a hunk can pair unrelated lines, for example after a large paste over several lines. The step stays correct, but it may replace more elements than needed. If it becomes a problem, pairing can prefer lines with the same first word (`point` with `point`).
 5. **Parsing cost per checkpoint** (§4.6). Every checkpoint is parsed once, in idle time. For very large files this may be noticeable after each line change. The idle delay and the model cache limit are constants that can be tuned. `t3971` measures both.
-6. **Different step counts in the two views.** A checkpoint that doesn't parse is its own step in text mode but is joined with the next one on the canvas (§3.5). This is the only way the two lists differ.
+6. **Different undo granularity in the two views.** Inside text mode, undo groups typing by 500 ms pauses. On the canvas, a step closes when the cursor leaves an edited line. Both are deliberate: the text editor matches the `thconfig`/`.th` editor, and the canvas follows the line rule.
 4. **Memory of the whole-file step's snapshots** for very large files (§4.7). It is used rarely, and `t3971` covers the size.
