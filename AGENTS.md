@@ -121,8 +121,11 @@ Several agents may work on different issues at the same time. Each one works in 
 * Never edit, stage, commit, stash, reset or clean files there. Uncommitted changes in it are the user's or another agent's work in progress.
 * The only git command an agent runs there is the final `git merge --ff-only` of "Finishing".
 * Read-only tasks (questions, reviews, analysis) can run from it, without a worktree.
+* Exception: when the user explicitly says to work directly in the main checkout (typically for a trivial change while no other agent is working), edit, stage and commit there on `main`, without a branch or worktree. The user decides this, since an agent can't reliably tell whether other agents are working. The permission covers only that task.
 
 **Starting a task that changes files**, before editing anything:
+
+Run `scripts/task_start.sh <branch>` from the main checkout. It does steps 2 and 4 below, after checking the name and that the branch doesn't exist yet. The manual steps are:
 1. Pick a branch name: `<type>_<issue>_<slug>` (type: `feat`, `fix`, `docs`, `refactor`, `test`), e.g. `fix_46_xtherion_image_format`. Without an issue: `<type>_<slug>`. Check it doesn't exist yet (`git branch --list <name>`).
 2. Create the worktree from the current `main`: `git worktree add -b <branch> ../mapiah-worktrees/<branch> main`.
 3. Work only inside that worktree: use its absolute path for every file edit and run every command there (`git -C <worktree> …`, or `cd` into it).
@@ -131,6 +134,7 @@ Several agents may work on different issues at the same time. Each one works in 
 **Inside a worktree:**
 * The build_runner watch only covers the main checkout. After changing MobX-annotated code (`@observable`, `@action`, `@computed`, `@readonly`), run `dart run build_runner build --delete-conflicting-outputs` in the worktree, and commit the regenerated `.g.dart` files.
 * `flutter gen-l10n`, `flutter analyze` and `flutter test` run in the worktree, on its code.
+* The user tries a task's version with `scripts/task_run.sh <branch> [run|test|analyze] [flutter args...]` (no arguments lists the task worktrees). When a task is ready for the user to check, give the exact command.
 * Touch only your own branch and worktree. Never switch, reset, rebase, delete or force-update another agent's branch, and never remove another worktree. When `git worktree list` or `git branch` shows something you didn't create, leave it alone.
 
 **Committing (cc):**
@@ -138,7 +142,12 @@ Several agents may work on different issues at the same time. Each one works in 
 * Ask authorization for staging and committing in the same step, after showing the complete commit message.
 
 **Finishing (ccm)**, after the commit:
-1. Bring the branch up to date: `git -C <worktree> rebase main`. On a conflict in `CHANGELOG.md`, keep both entries. For any other conflict, stop and ask.
+
+Run `scripts/task_finish.sh <branch>`. It does steps 1 to 4 below and stops on any rebase conflict, leaving the rebase in progress: resolve it as in step 1, run `git rebase --continue` in the worktree and run the script again. The manual steps are:
+1. Bring the branch up to date: `git -C <worktree> rebase main`. On a conflict:
+   * `CHANGELOG.md`: keep both entries.
+   * Generated files (`lib/src/generated/i18n/*`, `*.g.dart`): first resolve the conflicts in their sources (`.arb` files: keep both sides' entries; MobX-annotated code), then regenerate with `flutter gen-l10n` or `dart run build_runner build --delete-conflicting-outputs` and stage the regenerated files instead of merging them by hand.
+   * Anything else: stop and ask.
 2. Run `flutter analyze` and `flutter test` in the worktree again if the rebase brought in new commits.
 3. Merge: `git -C /home/rodrigo/devel/mapiah merge --ff-only <branch>`. If it fails because `main` moved (another agent merged first), go back to step 1. If it fails because of the user's uncommitted changes in the main checkout, stop and ask. Never use a merge commit, `--force` or `reset` to get past it.
 4. Clean up: `git worktree remove ../mapiah-worktrees/<branch>`, then `git branch -d <branch>`. If either refuses (uncommitted or unmerged work), stop and ask. Never use `--force` or `-D`.

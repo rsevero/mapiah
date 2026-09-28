@@ -5,6 +5,8 @@
 ## 1.0.2 - not yet released
 * Changes:
   * The scrap _Sketch_ option dialog now lists every sketch at once, each with its own filename, X and Y fields and a _Remove sketch_ button (#44). _Add loaded image_ appends a sketch taken from a raster image already loaded in the file, so adding a second loaded image no longer replaces the first one, and _Add from file…_ appends a sketch from an image file whose lower left corner coordinates you type in. The filename fields are wider, so long filenames are easier to tell apart.
+* Infrastructure maintenance:
+  * Added `scripts/task_start.sh`, `scripts/task_finish.sh` and `scripts/task_run.sh` to start, finish and try out parallel tasks in their own branches and worktrees, and documented in `AGENTS.md` how to resolve rebase conflicts in generated files and when a task may be done directly in the main checkout.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
