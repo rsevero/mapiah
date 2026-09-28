@@ -148,7 +148,7 @@ Run `scripts/task_finish.sh <branch>`. It does steps 1 to 4 below and stops on a
    * `CHANGELOG.md`: keep both entries.
    * Generated files (`lib/src/generated/i18n/*`, `*.g.dart`): first resolve the conflicts in their sources (`.arb` files: keep both sides' entries; MobX-annotated code), then regenerate with `flutter gen-l10n` or `dart run build_runner build --delete-conflicting-outputs` and stage the regenerated files instead of merging them by hand.
    * Anything else: stop and ask.
-2. Run `flutter analyze` and `flutter test` in the worktree again if the rebase brought in new commits.
+2. Run `flutter analyze` and `flutter test` in the worktree again if the rebase brought in new commits, unless the branch's changes are doc-only (see "For every prompt").
 3. Merge: `git -C /home/rodrigo/devel/mapiah merge --ff-only <branch>`. If it fails because `main` moved (another agent merged first), go back to step 1. If it fails because of the user's uncommitted changes in the main checkout, stop and ask. Never use a merge commit, `--force` or `reset` to get past it.
 4. Clean up: `git worktree remove ../mapiah-worktrees/<branch>`, then `git branch -d <branch>`. If either refuses (uncommitted or unmerged work), stop and ask. Never use `--force` or `-D`.
 * Never push unless asked.
@@ -171,8 +171,10 @@ Full rules in coding-guidelines.md. Critical rules:
 
 ### For every prompt:
 
-1. Run 'flutter analyze' (in the task's worktree when there is one)
+1. Run 'flutter analyze' (in the task's worktree when there is one), except for doc-only changes (see below)
 2. Summarize diffs
+
+**Doc-only changes** skip `flutter analyze` and `flutter test`, since neither reads them. A change is doc-only when every changed file is a Markdown file outside `assets/`: `AGENTS.md`, `CHANGELOG.md`, `coding-guidelines.md`, `docs/**`, and so on. The help pages and keyboard shortcut pages in `assets/help/` are not doc-only: the app bundles them and tests check their contents, so changes to them still run both.
 
 ### Release Targets
 

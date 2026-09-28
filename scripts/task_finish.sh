@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Finishes a task after its commit: rebases its branch on main, runs
 # flutter analyze and flutter test again when the rebase brought in new
-# commits, fast-forwards main and removes the worktree and branch.
+# commits (unless the branch's changes are doc-only), fast-forwards main
+# and removes the worktree and branch.
 # See AGENTS.md, "Parallel Work", "Finishing (ccm)".
 #
 # Stops on any rebase conflict, leaving the rebase in progress. Resolve it
@@ -39,6 +40,25 @@ if [[ "${BASE}" != "${MAIN_TIP}" ]]; then
     echo "Rebase stopped on a conflict. Resolve it (see AGENTS.md), run 'git rebase --continue' in ${WORKTREE} and run this script again." >&2
     exit 1
   fi
+fi
+
+# Whether every file the branch changes is a Markdown file outside assets/
+# (see AGENTS.md, "Doc-only changes").
+is_doc_only_branch() {
+  local file
+
+  while IFS= read -r file; do
+    if [[ "${file}" != *.md ]] || [[ "${file}" == assets/* ]]; then
+      return 1
+    fi
+  done < <(git -C "${WORKTREE}" diff --name-only main...HEAD)
+
+  return 0
+}
+
+if [[ -e "${NEEDS_CHECKS}" ]] && is_doc_only_branch; then
+  echo "== Doc-only changes: skipping flutter analyze and flutter test =="
+  rm "${NEEDS_CHECKS}"
 fi
 
 if [[ -e "${NEEDS_CHECKS}" ]]; then
