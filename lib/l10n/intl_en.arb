@@ -4446,7 +4446,7 @@
     "description": "Snack bar message shown when the New project stub button is pressed. Used on: THProjectTreeWidget._buildEmptyState",
     "type": "text"
   },
-  "projectTreeRunTherionButton": "Run Therion (and open project)",
+  "projectTreeRunTherionButton": "Run Therion",
   "@projectTreeRunTherionButton": {
     "description": "Label for the button that picks a project file and runs Therion against it, shown in the empty project tree sidebar. Used on: THProjectTreeWidget._buildEmptyState",
     "type": "text"

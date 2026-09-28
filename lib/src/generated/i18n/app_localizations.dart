@@ -5353,7 +5353,7 @@ abstract class AppLocalizations {
   /// Label for the button that picks a project file and runs Therion against it, shown in the empty project tree sidebar. Used on: THProjectTreeWidget._buildEmptyState
   ///
   /// In en, this message translates to:
-  /// **'Run Therion (and open project)'**
+  /// **'Run Therion'**
   String get projectTreeRunTherionButton;
 
   /// Hint text for the project tree search field. Used on: _THProjectTreeSearchFieldState.build

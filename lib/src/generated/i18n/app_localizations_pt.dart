@@ -2887,8 +2887,7 @@ class AppLocalizationsPt extends AppLocalizations {
       'Novo projeto ainda não está implementado.';
 
   @override
-  String get projectTreeRunTherionButton =>
-      'Executar Therion (e abrir projeto)';
+  String get projectTreeRunTherionButton => 'Executar Therion';
 
   @override
   String get projectTreeSearchHint => 'Pesquisar projeto';

@@ -2861,7 +2861,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'New project isn\'t implemented yet.';
 
   @override
-  String get projectTreeRunTherionButton => 'Run Therion (and open project)';
+  String get projectTreeRunTherionButton => 'Run Therion';
 
   @override
   String get projectTreeSearchHint => 'Search project';
