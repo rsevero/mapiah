@@ -8,6 +8,7 @@
 * Infrastructure maintenance:
   * Added `scripts/task_start.sh`, `scripts/task_finish.sh` and `scripts/task_run.sh` to start, finish and try out parallel tasks in their own branches and worktrees, and documented in `AGENTS.md` how to resolve rebase conflicts in generated files and when a task may be done directly in the main checkout.
   * Validated the scrap dialog removal plan (#32) against the current code: it now covers new, never saved files in the "Open files outside the project" section, hiding several scraps at once, the existing scrap options target, and corrected help page line numbers and test updates. A second check makes every scrap option edit, and the options list refresh after it, target the scrap instead of the canvas selection, reopens the scrap options window when another scrap is chosen instead of closing it, and restores the sidebar selection of files outside the project after a project change.
+  * Simplified the proposed TH2 text editing plan (#38): text typing uses the existing editor undo history, while each successful apply becomes one canvas undo step. The plan now validates the current buffer while idle and no longer requires line-by-line canvas checkpoints or element commands.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
