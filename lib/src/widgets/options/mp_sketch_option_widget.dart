@@ -43,25 +43,53 @@ class MPSketchOptionWidget extends StatefulWidget {
   State<MPSketchOptionWidget> createState() => _MPSketchOptionWidgetState();
 }
 
+typedef _MPSketchValues = ({String filename, String x, String y});
+
+/// One sketch being edited in the dialog, with its own text fields.
+class _MPSketchEntry {
+  final TextEditingController filenameController;
+  final TextEditingController xController;
+  final TextEditingController yController;
+  final FocusNode xFocusNode = FocusNode();
+  String? imageWarningMessage;
+
+  _MPSketchEntry({
+    required String filename,
+    required String x,
+    required String y,
+    this.imageWarningMessage,
+  }) : filenameController = TextEditingController(text: filename),
+       xController = TextEditingController(text: x),
+       yController = TextEditingController(text: y);
+
+  _MPSketchValues get values => (
+    filename: filenameController.text,
+    x: xController.text,
+    y: yController.text,
+  );
+
+  bool get isValid =>
+      filenameController.text.trim().isNotEmpty &&
+      (double.tryParse(xController.text) != null) &&
+      (double.tryParse(yController.text) != null);
+
+  void dispose() {
+    filenameController.dispose();
+    xController.dispose();
+    yController.dispose();
+    xFocusNode.dispose();
+  }
+}
+
 class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
     with MPOptionTypeBeingEditedTrackingMixin<MPSketchOptionWidget> {
-  late String _filename;
-  late final List<({String filename, String x, String y})> _sketches;
-  late final List<({String filename, String x, String y})> _initialSketches;
-  int _selectedSketchIndex = 0;
+  final List<_MPSketchEntry> _sketches = [];
+  late final List<_MPSketchValues> _initialSketches;
   late String _selectedChoice;
-  late final TextEditingController _filenameController;
   late final List<MPRuntimeImageInsertConfigMixin> _rasterImages;
-  int? _selectedImageMPID;
-  String? _imageWarningMessage;
-  late TextEditingController _xController;
-  late TextEditingController _yController;
-  final FocusNode _xFieldFocusNode = FocusNode();
   bool _hasExecutedSingleRunOfPostFrameCallback = false;
   late final String _initialSelectedChoice;
   final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-  String? _xWarningMessage;
-  String? _yWarningMessage;
   bool _isValid = false;
   bool _isOkButtonEnabled = false;
 
@@ -74,37 +102,23 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
         final THSketchCommandOption currentOption =
             widget.optionInfo.option! as THSketchCommandOption;
 
-        _filename = currentOption.filename;
-        _xController = TextEditingController(
-          text: currentOption.point.xAsString(),
-        );
-        _yController = TextEditingController(
-          text: currentOption.point.yAsString(),
-        );
         _selectedChoice = mpNonMultipleChoiceSetID;
-        _sketches = currentOption.sketches
-            .map((THSketchSpec sketch) => (
-                  filename: sketch.filename.content,
-                  x: sketch.point.xAsString(),
-                  y: sketch.point.yAsString(),
-                ))
-            .toList();
+        _sketches.addAll(
+          currentOption.sketches.map(
+            (THSketchSpec sketch) => _MPSketchEntry(
+              filename: sketch.filename.content,
+              x: sketch.point.xAsString(),
+              y: sketch.point.yAsString(),
+            ),
+          ),
+        );
       case MPOptionStateType.setMixed:
       case MPOptionStateType.setUnsupported:
-        _filename = '';
-        _xController = TextEditingController(text: '');
-        _yController = TextEditingController(text: '');
         _selectedChoice = '';
-        _sketches = [];
       case MPOptionStateType.unset:
-        _filename = '';
-        _xController = TextEditingController(text: '');
-        _yController = TextEditingController(text: '');
         _selectedChoice = mpUnsetOptionID;
-        _sketches = [];
     }
 
-    _filenameController = TextEditingController(text: _filename);
     _rasterImages = widget.th2FileEditController.th2File
         .getImages()
         .where(
@@ -114,7 +128,7 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
         .toList();
 
     _initialSelectedChoice = _selectedChoice;
-    _initialSketches = List.of(_sketches);
+    _initialSketches = _currentSketchValues();
 
     _updateIsValid();
 
@@ -128,35 +142,40 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
 
   @override
   void dispose() {
-    _filenameController.dispose();
-    _xController.dispose();
-    _xFieldFocusNode.dispose();
-    _yController.dispose();
+    for (final _MPSketchEntry sketch in _sketches) {
+      sketch.dispose();
+    }
     super.dispose();
   }
 
   void _executeOnceAfterBuild() {
-    if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      _xFieldFocusNode.requestFocus();
+    if ((_selectedChoice == mpNonMultipleChoiceSetID) && _sketches.isNotEmpty) {
+      _sketches.first.xFocusNode.requestFocus();
     }
+  }
+
+  List<_MPSketchValues> _currentSketchValues() {
+    return _sketches.map((_MPSketchEntry sketch) => sketch.values).toList();
   }
 
   void _okButtonPressed() {
     THCommandOption? newOption;
 
     if (_selectedChoice == mpNonMultipleChoiceSetID) {
-      final List<THSketchSpec> sketchSpecs = _sketches
-          .map((({String filename, String x, String y}) sketch) => THSketchSpec(
-                filename: sketch.filename,
-                point: THPositionPart.fromStringList(
-                  list: [sketch.x, sketch.y],
-                ),
-              ))
+      final List<_MPSketchValues> sketches = _currentSketchValues();
+      final List<THSketchSpec> sketchSpecs = sketches
+          .map(
+            (_MPSketchValues sketch) => THSketchSpec(
+              filename: sketch.filename,
+              point: THPositionPart.fromStringList(list: [sketch.x, sketch.y]),
+            ),
+          )
           .toList();
+
       newOption = THSketchCommandOption.fromStringWithParentMPID(
         parentMPID: mpParentMPIDPlaceholder,
         filename: sketchSpecs.first.filename.content,
-        pointList: [_sketches.first.x, _sketches.first.y],
+        pointList: [sketches.first.x, sketches.first.y],
       ).copyWith(sketches: sketchSpecs);
     }
 
@@ -174,79 +193,35 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
   }
 
   void _updateIsValid() {
-    if ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-        _sketches.isNotEmpty) {
-      _sketches[_selectedSketchIndex] = (
-        filename: _filename,
-        x: _xController.text,
-        y: _yController.text,
-      );
-    }
-
-    final double? x = double.tryParse(_xController.text);
-    final double? y = double.tryParse(_yController.text);
-
-    _xWarningMessage = (x == null)
-        ? appLocalizations.mpSketchCoordinateInvalid
-        : null;
-    _yWarningMessage = (y == null)
-        ? appLocalizations.mpSketchCoordinateInvalid
-        : null;
-    _isValid = (_selectedChoice != mpNonMultipleChoiceSetID) ||
+    _isValid =
+        (_selectedChoice != mpNonMultipleChoiceSetID) ||
         (_sketches.isNotEmpty &&
-            _sketches.every((({String filename, String x, String y}) sketch) =>
-                sketch.filename.trim().isNotEmpty &&
-                double.tryParse(sketch.x) != null &&
-                double.tryParse(sketch.y) != null));
+            _sketches.every((_MPSketchEntry sketch) => sketch.isValid));
 
     _updateIsOkButtonEnabled();
   }
 
-  void _setFilename(String filename) {
-    _filename = filename;
-
-    if (_filenameController.text != filename) {
-      _filenameController.text = filename;
-    }
-  }
-
-  /// Shows one sketch's editable metadata.
-  void _selectSketch(int index) {
-    final ({String filename, String x, String y}) sketch = _sketches[index];
-
-    _selectedSketchIndex = index;
-    _setFilename(sketch.filename);
-    _xController.text = sketch.x;
-    _yController.text = sketch.y;
-    _selectedImageMPID = null;
-    _imageWarningMessage = null;
+  /// Appends a new sketch to the list and focuses its X coordinate.
+  void _appendSketch(_MPSketchEntry sketch) {
+    _sketches.add(sketch);
     _updateIsValid();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _sketches.contains(sketch)) {
+        sketch.xFocusNode.requestFocus();
+      }
+    });
   }
 
-  /// Adds a new sketch to the current scrap.
-  void _addSketch() {
-    _sketches.add((filename: '', x: '', y: ''));
-    _selectSketch(_sketches.length - 1);
-    _xFieldFocusNode.requestFocus();
-  }
+  void _removeSketch(_MPSketchEntry sketch) {
+    _sketches.remove(sketch);
+    sketch.dispose();
 
-  /// Removes the selected sketch and shows the next available one.
-  void _removeSketch() {
-    _sketches.removeAt(_selectedSketchIndex);
-
+    /// Removing every sketch is the same as unsetting the option.
     if (_sketches.isEmpty) {
       _selectedChoice = mpUnsetOptionID;
-      _setFilename('');
-      _xController.text = '';
-      _yController.text = '';
-      _updateIsValid();
-    } else {
-      final int nextIndex = _selectedSketchIndex >= _sketches.length
-          ? _sketches.length - 1
-          : _selectedSketchIndex;
-
-      _selectSketch(nextIndex);
     }
+
+    _updateIsValid();
   }
 
   /// Returns [pickedFile] relative to the TH2 file directory, as Therion
@@ -264,9 +239,25 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
     );
   }
 
-  /// Fills filename and lower left corner coordinates from an image already
-  /// loaded in the file.
-  Future<void> _useLoadedImage(int imageMPID) async {
+  /// Adds a sketch from an image file. Its lower left corner coordinates have
+  /// to be typed in, as the file isn't placed on the canvas.
+  Future<void> _addSketchFromFile() async {
+    final String? pickedFile = await FilePicker.pickFile(
+      type: FileType.image,
+    ).then((result) => result?.path);
+
+    if (!mounted || (pickedFile == null)) {
+      return;
+    }
+
+    _appendSketch(
+      _MPSketchEntry(filename: _filenameForTH2File(pickedFile), x: '', y: ''),
+    );
+  }
+
+  /// Adds a sketch whose filename and lower left corner coordinates come from
+  /// an image already loaded in the file.
+  Future<void> _addSketchFromLoadedImage(int imageMPID) async {
     final TH2FileEditController th2FileEditController =
         widget.th2FileEditController;
     final MPRuntimeImageInsertConfigMixin image = _rasterImages.firstWhere(
@@ -297,29 +288,32 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
 
     /// In TH2 coordinates Y increases upwards, so the lower left corner is at
     /// the minimum Y value, which Flutter calls "top".
-    _selectedImageMPID = imageMPID;
-    _setFilename(image.filename);
-    _xController.text = MPNumericAux.doubleToString(
-      worldBounds.left,
-      mpDefaultDecimalPositions,
+    _appendSketch(
+      _MPSketchEntry(
+        filename: image.filename,
+        x: MPNumericAux.doubleToString(
+          worldBounds.left,
+          mpDefaultDecimalPositions,
+        ),
+        y: MPNumericAux.doubleToString(
+          worldBounds.top,
+          mpDefaultDecimalPositions,
+        ),
+        imageWarningMessage: isTransformed
+            ? appLocalizations.mpSketchTransformedImageWarning
+            : null,
+      ),
     );
-    _yController.text = MPNumericAux.doubleToString(
-      worldBounds.top,
-      mpDefaultDecimalPositions,
-    );
-    _imageWarningMessage = isTransformed
-        ? appLocalizations.mpSketchTransformedImageWarning
-        : null;
-
-    _updateIsValid();
   }
 
   void _updateIsOkButtonEnabled() {
     final bool isChanged =
         ((_selectedChoice != _initialSelectedChoice) ||
         ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-            !const ListEquality<({String filename, String x, String y})>()
-                .equals(_sketches, _initialSketches)));
+            !const ListEquality<_MPSketchValues>().equals(
+              _currentSketchValues(),
+              _initialSketches,
+            )));
 
     setState(() {
       _isOkButtonEnabled = _isValid && isChanged;
@@ -327,23 +321,135 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
   }
 
   Widget _buildCoordinateTextField({
+    required Key key,
     required String labelText,
     required TextEditingController controller,
-    required String? errorText,
-    bool autofocus = false,
     FocusNode? focusNode,
   }) {
     return MPTextFieldInputWidget(
+      key: key,
       labelText: labelText,
       controller: controller,
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'^[0-9.\-+]*$')),
       ],
-      autofocus: autofocus,
       focusNode: focusNode,
-      errorText: errorText,
+      errorText: (double.tryParse(controller.text) == null)
+          ? appLocalizations.mpSketchCoordinateInvalid
+          : null,
       onChanged: (value) => _updateIsValid(),
+    );
+  }
+
+  Widget _buildSketchEntry(BuildContext context, int index) {
+    final _MPSketchEntry sketch = _sketches[index];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: mpSketchFilenameFieldWidth,
+              child: TextField(
+                key: ValueKey('MPSketchOptionWidget|Filename|$index'),
+                controller: sketch.filenameController,
+                decoration: InputDecoration(
+                  labelText:
+                      '${index + 1}: '
+                      '${appLocalizations.mpSketchFilenameLabel}',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (value) {
+                  sketch.imageWarningMessage = null;
+                  _updateIsValid();
+                },
+              ),
+            ),
+            const SizedBox(width: mpButtonSpace),
+            ElevatedButton(
+              key: ValueKey('MPSketchOptionWidget|Remove|$index'),
+              onPressed: () => _removeSketch(sketch),
+              child: Text(appLocalizations.mpSketchRemoveButtonLabel),
+            ),
+          ],
+        ),
+        const SizedBox(height: mpButtonSpace),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildCoordinateTextField(
+              key: ValueKey('MPSketchOptionWidget|X|$index'),
+              labelText: appLocalizations.mpSketchXLabel,
+              controller: sketch.xController,
+              focusNode: sketch.xFocusNode,
+            ),
+            const SizedBox(width: mpButtonSpace),
+            _buildCoordinateTextField(
+              key: ValueKey('MPSketchOptionWidget|Y|$index'),
+              labelText: appLocalizations.mpSketchYLabel,
+              controller: sketch.yController,
+            ),
+          ],
+        ),
+        if (sketch.imageWarningMessage != null) ...[
+          const SizedBox(height: mpButtonSpace),
+          SizedBox(
+            width: mpSketchFilenameFieldWidth,
+            child: Text(
+              sketch.imageWarningMessage!,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildAddButtons() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (_rasterImages.isNotEmpty) ...[
+          MenuAnchor(
+            menuChildren: _rasterImages
+                .map(
+                  (MPRuntimeImageInsertConfigMixin image) => MenuItemButton(
+                    onPressed: () => _addSketchFromLoadedImage(image.mpID),
+                    child: Text(image.filename),
+                  ),
+                )
+                .toList(),
+            builder:
+                (
+                  BuildContext context,
+                  MenuController controller,
+                  Widget? child,
+                ) {
+                  return ElevatedButton(
+                    key: const ValueKey('MPSketchOptionWidget|AddLoadedImage'),
+                    onPressed: () => controller.isOpen
+                        ? controller.close()
+                        : controller.open(),
+                    child: Text(
+                      appLocalizations.mpSketchAddLoadedImageButtonLabel,
+                    ),
+                  );
+                },
+          ),
+          const SizedBox(width: mpButtonSpace),
+        ],
+        ElevatedButton(
+          key: const ValueKey('MPSketchOptionWidget|AddFromFile'),
+          onPressed: _addSketchFromFile,
+          child: Text(appLocalizations.mpSketchAddFromFileButtonLabel),
+        ),
+      ],
     );
   }
 
@@ -365,14 +471,7 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
               groupValue: _selectedChoice,
               onChanged: (String? value) {
                 _selectedChoice = value!;
-                if ((_selectedChoice == mpNonMultipleChoiceSetID) &&
-                    _sketches.isEmpty) {
-                  _sketches.add((filename: '', x: '', y: ''));
-                }
                 _updateIsValid();
-                if (_selectedChoice == mpNonMultipleChoiceSetID) {
-                  _xFieldFocusNode.requestFocus();
-                }
               },
               child: Column(
                 children: [
@@ -398,140 +497,11 @@ class _MPSketchOptionWidgetState extends State<MPSketchOptionWidget>
 
             // Additional Inputs for "Set" Option
             if (_selectedChoice == mpNonMultipleChoiceSetID) ...[
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: mpSketchFilenameFieldWidth,
-                    child: DropdownButton<int>(
-                      key: const ValueKey('MPSketchOptionWidget|SketchSelector'),
-                      isExpanded: true,
-                      value: _selectedSketchIndex,
-                      items: [
-                        for (int index = 0; index < _sketches.length; index++)
-                          DropdownMenuItem<int>(
-                            value: index,
-                            child: Text(
-                              '${index + 1}: ${_sketches[index].filename}',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                      ],
-                      onChanged: (int? index) {
-                        if (index != null) {
-                          _selectSketch(index);
-                        }
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: mpButtonSpace),
-                  ElevatedButton(
-                    onPressed: _addSketch,
-                    child: Text(appLocalizations.mpSketchAddButtonLabel),
-                  ),
-                  const SizedBox(width: mpButtonSpace),
-                  ElevatedButton(
-                    onPressed: _removeSketch,
-                    child: Text(appLocalizations.mpSketchRemoveButtonLabel),
-                  ),
-                ],
-              ),
-              const SizedBox(height: mpButtonSpace),
-              if (_rasterImages.isNotEmpty) ...[
-                DropdownMenu<int>(
-                  key: ValueKey(
-                    "MPSketchOptionWidget|DropdownMenu|$_selectedImageMPID",
-                  ),
-                  width: mpSketchFilenameFieldWidth,
-                  label: Text(appLocalizations.mpSketchLoadedImageLabel),
-                  initialSelection: _selectedImageMPID,
-                  dropdownMenuEntries: _rasterImages
-                      .map(
-                        (MPRuntimeImageInsertConfigMixin image) =>
-                            DropdownMenuEntry<int>(
-                              value: image.mpID,
-                              label: image.filename,
-                            ),
-                      )
-                      .toList(),
-                  onSelected: (int? imageMPID) {
-                    if (imageMPID != null) {
-                      _useLoadedImage(imageMPID);
-                    }
-                  },
-                ),
-                if (_imageWarningMessage != null) ...[
-                  const SizedBox(height: mpButtonSpace),
-                  SizedBox(
-                    width: mpSketchFilenameFieldWidth,
-                    child: Text(
-                      _imageWarningMessage!,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
-                  ),
-                ],
-                const SizedBox(height: mpButtonSpace),
+              for (int index = 0; index < _sketches.length; index++) ...[
+                _buildSketchEntry(context, index),
+                const Divider(height: mpButtonSpace * 3),
               ],
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: mpSketchFilenameFieldWidth,
-                    child: TextField(
-                      controller: _filenameController,
-                      decoration: InputDecoration(
-                        labelText: appLocalizations.mpSketchFilenameLabel,
-                        border: OutlineInputBorder(),
-                      ),
-                      onChanged: (value) {
-                        _filename = value;
-                        _selectedImageMPID = null;
-                        _imageWarningMessage = null;
-                        _updateIsValid();
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: mpButtonSpace),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final String? pickedFile = await FilePicker.pickFile(
-                        type: FileType.image,
-                      ).then((result) => result?.path);
-
-                      if (pickedFile != null) {
-                        _setFilename(_filenameForTH2File(pickedFile));
-                        _selectedImageMPID = null;
-                        _imageWarningMessage = null;
-                        _updateIsValid();
-                      }
-                    },
-                    child: Text(appLocalizations.mpSketchChooseFileButtonLabel),
-                  ),
-                ],
-              ),
-              const SizedBox(height: mpButtonSpace),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildCoordinateTextField(
-                    labelText: appLocalizations.mpSketchXLabel,
-                    controller: _xController,
-                    errorText: _xWarningMessage,
-                    autofocus: true,
-                    focusNode: _xFieldFocusNode,
-                  ),
-                  const SizedBox(width: mpButtonSpace),
-                  _buildCoordinateTextField(
-                    labelText: appLocalizations.mpSketchYLabel,
-                    controller: _yController,
-                    errorText: _yWarningMessage,
-                  ),
-                ],
-              ),
+              _buildAddButtons(),
             ],
           ],
         ),

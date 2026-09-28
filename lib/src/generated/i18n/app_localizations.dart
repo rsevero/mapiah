@@ -2099,23 +2099,23 @@ abstract class AppLocalizations {
   /// **'Debug log 1'**
   String get mpSettingsSettingTherionDebugLog1;
 
-  /// Button to add another background sketch to a scrap. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Add sketch'**
-  String get mpSketchAddButtonLabel;
-
-  /// Button to remove the selected background sketch from a scrap. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
+  /// Button to remove a background sketch from a scrap. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
   ///
   /// In en, this message translates to:
   /// **'Remove sketch'**
   String get mpSketchRemoveButtonLabel;
 
-  /// The label for the choose file button. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
+  /// Button that adds a background sketch to a scrap from an image file chosen on disk. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
   ///
   /// In en, this message translates to:
-  /// **'Choose file'**
-  String get mpSketchChooseFileButtonLabel;
+  /// **'Add from file…'**
+  String get mpSketchAddFromFileButtonLabel;
+
+  /// Button that opens a menu to add an image already loaded in the file as a background sketch of a scrap. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Add loaded image'**
+  String get mpSketchAddLoadedImageButtonLabel;
 
   /// The error message for invalid coordinate. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
   ///
@@ -2128,12 +2128,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Filename'**
   String get mpSketchFilenameLabel;
-
-  /// The label for the dropdown that lets the user pick an image already loaded in the file as the scrap sketch. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
-  ///
-  /// In en, this message translates to:
-  /// **'Loaded image'**
-  String get mpSketchLoadedImageLabel;
 
   /// Warning shown when the loaded image picked as a scrap sketch is scaled or rotated. Used on: lib/src/widgets/options/mp_sketch_option_widget.dart
   ///

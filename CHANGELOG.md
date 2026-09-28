@@ -2,6 +2,10 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
+## 1.0.2 - not yet released
+* Changes:
+  * The scrap _Sketch_ option dialog now lists every sketch at once, each with its own filename, X and Y fields and a _Remove sketch_ button (#44). _Add loaded image_ appends a sketch taken from a raster image already loaded in the file, so adding a second loaded image no longer replaces the first one, and _Add from file…_ appends a sketch from an image file whose lower left corner coordinates you type in. The filename fields are wider, so long filenames are easier to tell apart.
+
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
   * Scraps can now have several background sketches (#45). The scrap _Sketch_ dialog can take the filename and position from a raster image already loaded in the file (#44), and several problems in that dialog were fixed.
