@@ -1,9 +1,9 @@
 id: io.github.rsevero.mapiah
 runtime: org.freedesktop.Platform
-runtime-version: '24.08'
+runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
-  - org.freedesktop.Sdk.Extension.llvm19
+  - org.freedesktop.Sdk.Extension.llvm20
   - org.freedesktop.Sdk.Extension.texlive
 command: mapiah
 finish-args:
@@ -80,8 +80,8 @@ modules:
         aarch64:
           env:
             BUNDLE_PATH: build/linux/arm64/release/bundle
-      append-path: /usr/lib/sdk/llvm19/bin:/var/lib/flutter/bin
-      prepend-ld-library-path: /usr/lib/sdk/llvm19/lib
+      append-path: /usr/lib/sdk/llvm20/bin:/var/lib/flutter/bin
+      prepend-ld-library-path: /usr/lib/sdk/llvm20/lib
       env:
         PUB_CACHE: /run/build/mapiah/.pub-cache
     build-commands:
