@@ -9,6 +9,7 @@
 [ ] - Overlay dialogs should be draggable outside the main Mapiah Window.
 [ ] - Create text editor font settings
 [X] - "Add line segments" (/ keyboard shortcut) has no button when editing line segments.
+[ ] - Create "unsaved-changes guard".
 
 ## Version 2.0
 [X] - Open/edit/save thconfig files.
