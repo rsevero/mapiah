@@ -3,7 +3,7 @@
 # TH2 Text Editing Mode with Selection Synchronization: Implementation Plan
 
 **Date:** 2026-09-25
-**Status:** Proposed. Checked against the codebase on 2026-09-25 (`main` at `0e0ca067`). Line references updated at `83953678`, and the writer's again after `bcd28f18` (#46). Undo design revised on 2026-09-28. Saving new and broken files, the broken-file baseline's canvas setup, element back-references, tree edits in text mode, the missing unsaved-changes guard and the controller refresh on undo and redo revised on 2026-10-01, after checking against `9ec53309`. Decisions:
+**Status:** Proposed. Checked against the codebase on 2026-09-25 (`main` at `0e0ca067`). Line references updated at `83953678`, and the writer's again after `bcd28f18` (#46). Undo design revised on 2026-09-28. Saving new and broken files, the broken-file baseline's canvas setup, element back-references, tree edits in text mode, the missing unsaved-changes guard and the controller refresh on undo and redo revised on 2026-10-01, after checking against `9ec53309`. Line endings kept line by line on 2026-10-01. Decisions:
 
 - text mode uses the existing `TextField` undo history; each successful apply becomes **one canvas undo step**, regardless of how many lines changed (§3.5, §4.6);
 - **inside text mode**, undo and redo work as in the `thconfig`/`.th` editor, through the `TextField`'s own history (§3.5);
@@ -12,7 +12,8 @@
 - the first apply of a broken file is a **new baseline that can't be undone**, and the fixed file stays unsaved until saved (§3.7, §4.7);
 - text the parser rewrites or drops is **accepted as the parser reads it**, and each such line gets an information marker before the apply (§4.12);
 - a selected line point **round-trips** between the two views (§3.2, §3.3);
-- the mode toggle uses **F2** instead of `Ctrl+E` (§3.1).
+- the mode toggle uses **F2** instead of `Ctrl+E` (§3.1);
+- every line keeps **its own original line ending** through an apply, including edited lines; only lines the user adds get the file's line ending, so a save changes only the lines the user edited (§4.2).
 - an element-tree edit made while the tab is in text mode **applies the text first**, and is cancelled if the text doesn't parse (§3.8, §4.13).
 
 **Issue:** [#38: Simplify object options entry by allowing user to type without clicking each option](https://github.com/rsevero/mapiah/issues/38)
@@ -212,9 +213,12 @@ A tree edit made with unchanged text skips steps 1 and 2.
 
 - **Valid file:** a new `TH2FileEditController.serializeForTextMode()` returns `TH2FileWriter().serializeWithLineMap(_th2File, includeEmptyLines: true, useOriginalRepresentation: true)`, with the line ending normalized to `\n`. Passing `lineEnding: '\n'` to the writer isn't enough, because the source text of parsed elements keeps its own endings (§2.4). So the method normalizes the writer's output itself, turning every `\r\n` and lone `\r` into `\n`. It shares its writer options with `_encodedFileContents()`, so the two can't drift apart. `TH2TextEditController.initialContent` keeps this text for dirty and no-op checks (§4.6).
 - **Broken file:** the raw bytes from disk (or `_th2File.fileBytes` when it's set), decoded with the parser's encoding detection, which becomes a public static helper.
-- Before any parse of editor text (idle validation or apply in §4.6), the text is converted back to the file's line ending (`TH2File.lineEnding`, §2.5). It is encoded with the encoding its own `encoding` line names, as the parser already does on load. Elements parsed from the text then carry the file's line ending in their source text.
-- An apply replaces the whole model with the one parsed from the text (§4.6), so **every** line, changed or not, then carries the file's line ending. A file with mixed line endings is unified to the ending of its first line on its first apply, and a save writes it that way. Before an apply, nothing changes: the save path keeps each line's original ending, as today. This is accepted: Therion reads any of them, and mixed endings are almost always accidental.
-- A lone `\r` is a line ending in the editor (it becomes `\n` above), but not for the parser (§2.3). So a lone `\r` in a stored line shows as a line break in text mode, and after an apply it is a real line break in the file. This is accepted too: a lone `\r` inside a TH2 line is almost certainly damage.
+- **Original line endings.** Mapiah only changes what the user edited, so files kept under version control show no spurious differences. Text mode keeps that rule for line endings too: an apply must not change the ending of any line the user didn't add.
+  - At the start of each text session, `TH2TextEditController` records `initialLineEndings`, the original ending of every line of the initial text, next to `initialContent`. For a valid file, they come from the writer's output before the `\n` normalization above. For a broken file, they come from the decoded disk text. Lines are split at `\r\n`, `\n` and a lone `\r`, as in the normalization, and a final line with no ending gets `''`. A new session, after a save (§3.6) or a tree edit (§4.13), records them again.
+  - Before any parse of editor text (idle validation, apply or Save, §4.6), the text is **rebuilt line by line** instead of being converted to a single ending. A new pure helper, `TH2TextLineEndingsAux`, records the endings and does the rebuild. It uses `MPLineDiffAux`, which compares the editor text with `initialContent`, both `\n`-normalized. A line that matches an initial line takes that line's original ending. Inside each changed hunk, the removed and inserted lines are paired in order, and each inserted line takes the original ending of its partner, so an **edited line keeps its ending** too. Lines with no partner, the ones the user added, get the file's line ending (`TH2File.lineEnding`, §2.5), as lines created on the canvas do today. A line whose original ending was `''` (the old last line) gets the file's ending when lines now follow it. The last line of the rebuilt text keeps no ending if the editor text has none.
+  - The rebuilt text is encoded with the encoding its own `encoding` line names, as the parser already does on load. The parsed elements then store each line with its original bytes, so the writer reproduces every line the user didn't edit exactly, including mixed endings. A save changes only the lines the user edited or added, and the bytes of edited lines differ only in their content.
+  - A lone `\r` is a line ending in the editor (it becomes `\n` above), but not for the parser (§2.3). The rebuild puts it back, so the parser reads an unedited line holding a lone `\r` exactly as it did on load. Only a line the user edits next to it changes.
+  - Undo and redo keep the bytes too, because the snapshots store each element's `originalLineInTH2File` (§4.7).
 - Every comparison between writer output and editor text is made on `\n`-normalized text. This includes the apply check in §4.6 and the "text unchanged" test in §3.4. A file with mixed line endings therefore doesn't count as changed.
 
 ### 4.3 Writer line map (model MPID → line range)
@@ -391,7 +395,7 @@ Each phase ends with `flutter analyze` clean and `flutter test` green. New tests
 ### Phase 2: Detached parse, diff and one apply command
 
 - `targetController` on `TH2FileParser.parse`, and `createForDetachedParse` (§4.5).
-- `MPLineDiffAux` (§4.6).
+- `MPLineDiffAux` (§4.6), and `TH2TextLineEndingsAux`, which records a text's line endings and rebuilds the original endings of an edited text (§4.2). The rebuilt raw text is what `applyTextContent` below receives.
 - `TH2FileNormalization` records in the three clean-up passes, *N(T)* and the *T* ↔ *N(T)* line mapping (§4.12).
 - `TH2File.withMPID` (§4.5), `TH2File.replaceContentsFrom` and `MPReplaceTH2FileContentsCommand`, with its factory entry and localized description (§4.7).
 - `elementEditController.executeReplaceTH2FileContents` and `syncControllersWithModel({initialSetup})`. `_finalFilePreparations` is moved onto it (§4.7).
@@ -403,16 +407,17 @@ Each phase ends with `flutter analyze` clean and `flutter test` green. New tests
   - `t3966`: editing several lines in one session creates one canvas undo step. Undo restores the exact pre-apply text; redo restores the final normalized text. An older canvas command still undoes and redoes correctly afterwards. Separate successful text sessions create separate steps;
   - `t3985`: the controllers stay in line with the model through apply, undo and redo. Undoing an apply that added a scrap while that scrap is active makes the first scrap active, and `hasMultipleScraps` follows. An element that the undo removes, which was selected, hidden or a selected line point, leaves its MPID in neither the selection, the hidden sets, the `isSelected` flags nor the selectable elements. Redo gives the same controller state as the apply. Snap targets and the station cache reflect the restored model. Used-type counts don't change on undo or redo. A valid load gives the same controller state as before the change;
   - `t3967`: clearly matched unchanged elements keep their MPIDs through apply and redo; ambiguous duplicate lines need not. Added points, lines and scraps have valid parent and child MPIDs, and area border references resolve after apply, undo and redo. After each of them, every element and option of the live file has `identical(th2File, liveFile)`, including the children of scraps, lines and areas, and `replaceContentsFrom` rejects a source whose elements still point at a file;
-  - `t3968`: a session with temporarily invalid text applies once when its final text is valid. A moved `endscrap` also applies once. For a CRLF file, apply, undo and redo preserve `lineEnding` and serialized bytes; `TH2File.copyWith()` preserves CRLF. A file with mixed line endings is unified to its first line's ending by the first apply (§4.2);
+  - `t3968`: a session with temporarily invalid text applies once when its final text is valid. A moved `endscrap` also applies once. For a CRLF file, apply, undo and redo preserve `lineEnding` and serialized bytes; `TH2File.copyWith()` preserves CRLF. In a file with mixed endings (`\r\n`, `\n` and a lone `\r`) whose last line has no ending, the user edits one line, inserts one and deletes one. The saved bytes differ from the original only in those lines: the edited line keeps its ending, the inserted line has the file's ending, and the last line still has no ending. Appending a line after that last line gives it the file's ending (§4.2);
   - `t3969`: text with a problem or error is rejected, and the model and undo stack are unchanged;
   - `t3970`: the live model serializes to the final normalized text. Cover a duplicate line point, a short line, an empty area, a rewritten scrap option, a repaired border reference (`b@1` for a line stored as `b_1`), a deleted `encoding` line, moved settings, a setting typed inside a scrap, and a representable `##MAPIAH##` image. Check normalization markers and cursor mapping. A final text that normalizes to the initial text gives no canvas step;
-  - `t3971`: a large fixture measures idle validation and one apply, including cached and uncached final parses.
+  - `t3971`: a large fixture measures idle validation and one apply, including cached and uncached final parses and the line-ending rebuild;
+  - `t3986`: `TH2TextLineEndingsAux` records `\r\n`, `\n`, lone `\r` and a missing final ending. The rebuild keeps the ending of unchanged lines and of edited lines paired inside a hunk, gives added lines the file's ending, gives the old last line the file's ending when lines are appended after it, and returns the original text unchanged when nothing was edited.
 
 ### Phase 3: Editor generalization and TH2 highlighting
 
 - `THTextEditorBuffer`, `THTextEditorFindMixin`, `THTextEditorDiagnostic` and `THTextEditorLanguage` (§4.9). Refactor `THTextEditorController` and `THTextEditorWidget` onto them with no behavior change.
 - The TH2 tokenizer and folds (§4.10).
-- `TH2TextEditController` (MobX): `content`, `initialContent`, `isDirty` (`content != initialContent`), cursor, pending scroll/selection, diagnostics, find, the owning `TH2FileEditController`, and current-buffer idle validation with its content-keyed cache (§4.6). `save` and `revert` delegate to the owner (§3.6, discard).
+- `TH2TextEditController` (MobX): `content`, `initialContent`, `initialLineEndings` (§4.2), `isDirty` (`content != initialContent`), cursor, pending scroll/selection, diagnostics, find, the owning `TH2FileEditController`, and current-buffer idle validation with its content-keyed cache (§4.6). `save` and `revert` delegate to the owner (§3.6, discard).
 - The `information` diagnostic severity and its marker color, and per-line diagnostic grouping (§4.9, §4.12).
 - Keep the existing `TextField` undo/redo bindings for `Ctrl+Shift+Z` (§2.7); no checkpoint notifications are needed.
 - Tests:
@@ -458,6 +463,6 @@ Each phase ends with `flutter analyze` clean and `flutter test` green. New tests
 
 1. **Coarser canvas undo.** All edits in one text session become one canvas step. Users can still undo typing within text mode using the existing `TextField` history. Separate applies create separate canvas steps.
 2. **Identity matching.** A whole-file apply can keep clearly matched unchanged MPIDs, but identical repeated elements may be ambiguous. Those elements can receive new MPIDs, which may reset their selection or hidden state. `t3967` covers this.
-3. **Idle parsing cost.** Large files may make current-buffer validation noticeable. Debounce it, ignore stale results, and measure cached and uncached apply in `t3971`.
+3. **Idle parsing cost.** Large files may make current-buffer validation noticeable. Each parse also needs a line diff against `initialContent` to rebuild the line endings (§4.2). Debounce it, ignore stale results, and measure cached and uncached apply, diff included, in `t3971`.
 4. **Snapshot size.** Each canvas apply stores two deep file snapshots. `t3971` measures the cost on a large fixture.
 5. **No unsaved-changes guard.** Unsaved text edits are lost without a prompt when the tab is closed, the app quits or the file is reloaded, as canvas edits are today (§2.5). An app-wide guard for tab close, quit, Reload and project switch, covering every file type, is left to a separate issue. It can use this plan's `hasUnsavedChanges`, which already counts text edits and an unsaved broken-file fix (§4.7, §4.8).
