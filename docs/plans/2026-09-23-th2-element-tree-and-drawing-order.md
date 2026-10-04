@@ -472,11 +472,13 @@ Detailed implementation: [Phase 6 plan](2026-09-24-th2-element-tree-and-drawing-
 
 ### Phase 7: Evaluate removing the scrap button and dialog
 
-Phase 4 lets users move scraps, points, lines and areas in the project sidebar. That overlaps with the canvas's "Change active scrap" button, the scrap button in the right-hand action column (`_changeScrapButton` in `th2_file_edit_action_buttons_widget.dart`), and the dialog it opens (`MPWindowType.availableScraps` → `MPAvailableScrapsWidget`). This phase decides **whether** the button and dialog can be removed completely, and **how**. The deliverable is a decision, plus a follow-up implementation plan when the answer is yes. This phase changes no code.
+**Status: Implemented.** The outcome A decision and its [Phase 7 implementation plan](2026-09-24-th2-element-tree-and-drawing-order-phase7-scrap-dialog-removal.md) were carried out in `7605b4ee` (`feat: move scrap management into the TH2 element tree (#32)`). The sidebar now covers scrap management for project and standalone `.th2` tabs; the canvas scrap button and dialog were removed. The evaluation and decision below record how that result was chosen.
 
-**What the dialog does today, and what the tree offers after Phase 4:**
+Before Phase 7, Phase 4 let users move scraps, points, lines and areas in the project sidebar, overlapping with the canvas's "Change active scrap" button (`_changeScrapButton` in `th2_file_edit_action_buttons_widget.dart`) and its dialog (`MPWindowType.availableScraps` → `MPAvailableScrapsWidget`). The evaluation below decided **whether** the button and dialog could be removed completely, and **how**. The evaluation itself changed no code; the linked implementation plan was subsequently completed.
 
-| Dialog feature (`mp_available_scraps_widget.dart`) | Code today | Tree after Phase 4 |
+**What the dialog did before Phase 7, and what the tree offered after Phase 4:**
+
+| Dialog feature (`mp_available_scraps_widget.dart`) | Code before Phase 7 | Tree after Phase 4 |
 |---|---|---|
 | Choose the active scrap (radio) | `setActiveScrap` | Plain click on a scrap row (Phase 4 plan §3.6). **Covered.** |
 | Reorder scraps by drag | `reorderScraps` through `MPReversedListIndexHelper` | Scrap drag, context menu and shortcuts (Phase 4). **Covered**, but the dialog lists scraps in **reverse** file order (the scrap drawn on top first) and the tree lists them in file order. |
@@ -534,6 +536,8 @@ Phase 4 lets users move scraps, points, lines and areas in the project sidebar. 
 Phase 4 is finished and its plan is left as written. Where Phase 7 changes what the Phase 4 plan describes (test numbers, the source of leftover scraps in the canvas selection), Phase 7 plan §9 says so.
 
 ### Phase 8: Type preview icons on element rows, and the Run Therion broken-file warning
+
+Detailed implementation and codebase validation: [Phase 8 plan](2026-10-04-th2-element-tree-and-drawing-order-phase8-type-previews-and-broken-file-warning.md). Where the outline below assumes asynchronous area-pattern loading, the detailed plan follows the current synchronous `MPPatternCache` behavior.
 
 Each point, line and area row in the sidebar tree starts with a small icon that previews how that element's type (and subtype) is drawn on the canvas. It replaces the generic element-kind icon that Phase 3 uses for these rows. Scrap rows keep their Phase 3 icon, and file, status and project rows are unchanged.
 

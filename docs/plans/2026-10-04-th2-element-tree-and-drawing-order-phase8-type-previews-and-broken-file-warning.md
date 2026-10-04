@@ -1,0 +1,74 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Copyright (C) 2023- Mapiah Ltda -->
+# TH2 Element Tree Phase 8: Type Previews and Broken-File Run Warning — Implementation Plan
+
+- **Date:** 2026-10-04
+- **Status:** Proposed; checked against `main` at `dacfd723`.
+- **Parent:** [TH2 Element Tree and Drawing Order](2026-09-23-th2-element-tree-and-drawing-order.md), Phase 8.
+- **Related:** [TH2 Text Editing Mode](2026-09-25-th2-text-editing.md), especially its later broken-file repair flow.
+- **Issue:** [#32](https://github.com/rsevero/mapiah/issues/32).
+
+## 1. Outcome and boundaries
+
+Replace the generic point, line and area images in the `.th2` element tree with small previews of their type and subtype. The previews follow the active visualization method and theme, stay the same at every canvas zoom, and do not depend on the individual element's geometry or options other than subtype. Scrap and non-element rows keep their current icons. Add a warning to the Run Therion dialog listing loaded broken `.th2` files; the warning never prevents the run.
+
+This phase does not create a project-wide TH2 scanner, change Therion diagnostics or make broken files editable. When the [text-editing plan](2026-09-25-th2-text-editing.md) later lets a user repair a broken file in Mapiah, the warning must use the controller's *current* `isBroken` state, so it disappears after a successful repair and can reappear after a reload of broken disk content.
+
+## 2. Verified starting point
+
+- `_TH2ElementRow._buildIcon` in `th2_element_tree_row_widget.dart` selects one of three generic asset paths. The icon is already inside `ExcludeSemantics`, and the row has a separate text semantics label. The row's chevron and icon slots are fixed-width; the replacement must keep the label aligned with scrap rows.
+- `TH2ElementTreeAux` caches flattened rows by `structureRevision`. A type or subtype change must invalidate that cache; a preview widget also needs to see visualization-setting and theme changes. `MPSettingsController.getEnumWithDefault` is not itself observable: `setEnum` increments `getTrigger(MPSettingID.TH2Edit_VisualizationMethod)`.
+- `MPVisualController.getDefaultPointPaint(THPoint)` reads the point's subtype and other options, uses the controller's zoom for stroke width, and modifies a `Paint` while preparing it. Its label fallback can resolve an element's own text. A preview cannot simply pass the real point or mutate the returned shared paints.
+- `getDefaultLinePaintByTypeSubtype`, `getLineDecorator`, `getLineDecoratorColor` and `getDefaultAreaPaint` resolve the active Therion style. The area resolver obtains a pattern tile through `MPPatternCache`; its tile builder is synchronous. Its shader scale currently uses the file controller's canvas scale, so copying the resulting paint alone would leave the preview zoom-dependent.
+- `THLinePainter.paint` mixes path construction, marks, direction ticks, base stroke or fill, dashes and decoration. Its dashed path lengths use `scaleScreenToCanvas`. The reusable path-painting part needs explicit preview scale and decorator inputs, including the sample vertices and segments decorators consume.
+- `MPGeneralController` holds registered `.th2` controllers in `_t2hFileEditControllers`, including loaded controllers without tabs. `MPRunTherionDialogWidget.initState` starts Therion immediately. Its output lives in a fixed-height `AlertDialog`, so the warning must not consume unbounded height.
+
+## 3. Preview data and paint resolution
+
+1. Add a value object for the preview key: element kind, type, normalized subtype, visualization method, theme brightness, device pixel ratio, and any effective symbol-set choice not already fixed by the visualization method. Do not include MPID, controller identity, file path, selection, actual geometry, `-orient`, `-scale`, `-reverse`, `-clip`, `-visibility` or `-id`. Use one representation for missing subtype (`mpNoSubtypeID`).
+2. Resolve each preview through the row's registered, valid file controller, which is available for expanded tab-less files too. For points, make a type/subtype-only paint-resolution path (or a minimal detached proxy) so label-mode types use `mapiahPlaceholder` and cannot render an element's text. Force neutral orientation and the preview radius. Reuse the normal symbol registry and default paints for other point types.
+3. Copy every `Paint` and paint list that preview rendering will adjust: border, fill, primary and secondary strokes, decorator color and highlight borders. `THPointPaint.copyWith` and `THLinePaint.copyWith` copy their containers, but their `Paint` fields are mutable objects. Set preview stroke widths only on copies. Do not mutate the visual controller's cached/default paints or the paint objects used by a canvas already on screen.
+4. Give area-pattern resolution an explicit preview `MPSymbolUnit` or scale parameter so its image shader is based on the fixed icon scale. Continue to use the file visual controller's `MPPatternCache` for the tile image; tile construction is synchronous, so no pending-image fallback or repaint subscription is needed. Retain the canvas method's current scale as its default. Test a patterned area at two canvas zooms.
+
+## 4. Shared path painting and icon layout
+
+1. Extract from `THLinePainter` the path-painting operation after its path and vertices have been assembled. It takes the canvas, path, vertices or sample segments required by the decorator, `THLinePaint`, decorator and decorator color, an explicit `MPSymbolUnit`, explicit line thickness, and explicit dash scale. Pass the decorator's existing flags (`isReversed`, border and arrow choices) explicitly; the icon supplies neutral values and no line-direction ticks. `THLinePainter` calls the helper with its current controller-derived values, preserving canvas output. Keep mark and line-point painting in `THLinePainter`.
+2. Create `TH2ElementTypeIconPainter` and `TH2ElementTypeIconWidget`. Point symbols sit on the preview background without a frame. Line and area previews use the same small outline frame: the line has a fixed cubic S-curve, and the area has a fixed closed oval. Use `colorScheme.outline` for the frame and the canvas background color for the inside. Clip content to the icon box; choose a sample length and symbol unit that leave visible room for long decorators and line caps.
+3. Put icon dimensions, frame thickness, padding, sample geometry, symbol-unit scale, line thickness, point radius and cache limit in `mp_constants.dart`. Keep the icon within `mpProjectTreeRowHeight`. Replace `_TH2ElementRow._buildIcon` only for point, line and area rows; leave the scrap icon and row semantics intact.
+4. Check the concrete decorator contracts before extraction. Some decorators use vertices, segment metadata or an MPID. Feed them a stable synthetic sample rather than a real row element. If a decorator cannot draw from that sample, give it a defined neutral preview fallback and cover that type in a test; do not let an icon throw during tree build.
+
+## 5. Cache and invalidation
+
+- Cache the rendered `ui.Picture` by the value key from §3, with a bounded least-recently-used policy. Dispose a picture when evicting or clearing it. Keep the cache owner at app scope or another scope that survives row recycling but is disposed on app teardown. Cache creation is lazy, for visible rows only.
+- The widget observes `structureRevision` for the file's element type/subtype changes and `getTrigger(MPSettingID.TH2Edit_VisualizationMethod)` for visualization changes. Theme brightness and device pixel ratio come from build context and participate in the key. On a visualization-setting change, clear old entries as well as rebuilding visible rows; a key change alone leaves unused pictures resident.
+- The cache shares pictures only when type, subtype and effective rendering inputs match. If any resolved paint can vary by file settings beyond that key, add that setting to the key or remove the file dependency by using a fixed preview value. Canvas zoom must never enter the key or picture content.
+- Verify the subtype update path actually bumps `structureRevision` for set, unset, undo and redo. If a path does not, fix that invalidation in this phase instead of forcing the entire tree to rebuild.
+
+## 6. Run Therion warning
+
+1. Add a read-only `MPGeneralController` getter returning a sorted snapshot of filenames for registered controllers with `isFileLoaded && isBroken` and no `loadError`. Include controllers opened only by expanding a project-tree file row and standalone loaded controllers. Do not load extra files to populate the list. Controller rename/removal naturally changes a later snapshot.
+2. Snapshot that getter when `MPRunTherionDialogWidget` opens. Show a localized plural-aware warning and the file paths above the output pane. Use a bounded scrollable list or bounded warning region so a large number of paths leaves output and run controls usable. Paths are selectable plain text, not links. The injected-runner test path must use the same widget behavior.
+3. Preserve the current `initState` run start and rerun behavior; no wait, confirmation or cancellation is added. The warning states that Therion *may* fail, since the run itself determines the outcome. A dialog already open keeps its opening snapshot; a newly opened dialog reflects a file fixed by the later text-editing flow.
+
+## 7. Localization, help and release note
+
+- Add the warning's plural-aware EN/PT ARB entries, with an English metadata description naming `MPRunTherionDialogWidget`, then run `flutter gen-l10n`. Type icons add no strings and remain excluded from semantics.
+- In `assets/help/{en,pt}/th2_file_edit_page_help.md`, extend **Drawing order and element tree** to explain that icons preview types and follow the visualization setting; extend **Broken files** to mention the run warning. Update `assets/help/{en,pt}/run_therion_help.md` with the same warning and its loaded-files-only limit. Keep the help true to the currently shipped broken-file workflow; text-mode repair belongs to its later phase.
+- No shortcut changes. Add one CHANGELOG entry under the next release referencing #32.
+
+## 8. Implementation and verification sequence
+
+1. First add focused tests for the preview key, zoom independence, mutable-paint isolation and the broken-controller getter. Confirm `t3952` remains free before naming the icon suite `t3952_th2_element_type_icon_test.dart`; otherwise take the next unused prefix. Extend `t3610_ui_therion_run_dialog_test.dart` for warning display and run continuity.
+2. Refactor the line paint core with explicit scale inputs. Run the existing line and area golden tests (`t3764`–`t3766`) before adding preview rendering. Verify dash, decorator and patterned-fill output remains unchanged on the canvas.
+3. Add icon rendering, cache and row integration. Golden cases in light and dark themes, under placeholder and at least one Therion mode: symbol point, label-mode fallback, continuous line, decorated line, solid area and patterned area. Test type/subtype edits with undo and redo, visualization changes, brightness changes, identical icons for elements with different unrelated options or geometry, one cache entry for the identical type keys, and stable output across zoom levels and tab-less controllers. Check scrap icon, alignment and semantics.
+4. Add the warning getter and dialog UI. Test zero broken files, one tab-less broken file, multiple sorted paths, valid and load-error controllers excluded, long-list layout, and an injected runner starting and finishing with the warning visible. Test a second dialog after a controller changes from broken to valid.
+5. Update EN/PT ARB, generated localizations, both help pages and CHANGELOG. Run focused tests, then `flutter analyze` and `flutter test` in the task worktree. Inspect the diff for unrelated paint, output or tree changes.
+
+## 9. Acceptance criteria and risks
+
+- Every loaded point, line and area tree row shows a readable type preview with a fixed footprint. Type and subtype changes, undo/redo, visualization changes and theme changes refresh it. Zoom, unrelated options, selection and individual geometry do not.
+- Canvas painting and existing golden output are unchanged. Preview rendering does not alter shared paints, leak disposed pictures or grow the cache beyond its limit.
+- Run Therion starts exactly as before. The warning lists only currently loaded broken `.th2` files in deterministic order and does not mistake a load error for a parsed broken file.
+- EN/PT help and localization describe the actual behavior, and the full analysis and test gates pass.
+
+The main implementation risk is that a line decorator expects real segment metadata or uses controller scale internally. Resolve those dependencies explicitly in the shared painter interface and cover representative decorators in goldens. The second risk is shared mutable `Paint`: copy it before any preview adjustment and verify the canvas paints and goldens after preview rendering.
