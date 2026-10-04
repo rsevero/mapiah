@@ -23,14 +23,14 @@ void main() {
 
   final MPLocator mpLocator = MPLocator();
 
-  group('UI: change scrap overlay action buttons', () {
+  group('UI: change image overlay action buttons', () {
     setUp(() {
       mpLocator.appLocalizations = AppLocalizationsEn();
       mpLocator.mpGeneralController.reset();
     });
 
     testWidgets(
-      'hides snap and remove buttons while available scraps widget is open',
+      'hides snap and remove buttons while change image widget is open',
       (WidgetTester tester) async {
         tester.view.physicalSize = const Size(1280, 720);
         tester.view.devicePixelRatio = 1.0;
@@ -56,14 +56,14 @@ void main() {
         expect(find.byTooltip('Snap'), findsOneWidget);
         expect(find.byTooltip('Remove (Del)'), findsOneWidget);
 
-        final Key changeScrapButtonKey = th2Controller
+        final Key changeImageButtonKey = th2Controller
             .overlayWindowController
-            .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeScrapButton]!;
+            .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeImageButton]!;
 
-        final FloatingActionButton changeScrapButton = tester
-            .widget<FloatingActionButton>(find.byKey(changeScrapButtonKey));
+        final FloatingActionButton changeImageButton = tester
+            .widget<FloatingActionButton>(find.byKey(changeImageButtonKey));
 
-        changeScrapButton.onPressed!();
+        changeImageButton.onPressed!();
         await tester.pumpAndSettle();
 
         expect(find.byTooltip('Snap'), findsNothing);

@@ -1405,13 +1405,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get th2FileEditPageAddScrapButton => 'Adicionar croqui (K)';
 
   @override
-  String get th2FileEditPageChangeActiveScrapTitle => 'Alterar croqui ativo';
-
-  @override
-  String get th2FileEditPageChangeActiveScrapTool =>
-      'Alterar croqui ativo (Alt+K)';
-
-  @override
   String get th2FileEditPageChangeImageTitle => 'Alterar imagens';
 
   @override
@@ -3268,6 +3261,34 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get th2ElementTreeDrawingOrderTooltip =>
       'As linhas seguem a ordem do arquivo: a primeira é desenhada primeiro (embaixo) e a última é desenhada por último (em cima).';
+
+  @override
+  String get th2ElementTreeOutsideProjectHeader =>
+      'Arquivos abertos fora do projeto';
+
+  @override
+  String get th2ElementTreeCopy => 'Copiar';
+
+  @override
+  String get th2ElementTreeCut => 'Recortar';
+
+  @override
+  String get th2ElementTreeDuplicate => 'Duplicar';
+
+  @override
+  String get th2ElementTreeDelete => 'Excluir';
+
+  @override
+  String get th2ElementTreeHide => 'Ocultar';
+
+  @override
+  String get th2ElementTreeShow => 'Mostrar';
+
+  @override
+  String get th2ElementTreeScrapOptions => 'Opções…';
+
+  @override
+  String get th2ElementTreeAddScrap => 'Adicionar croqui';
 
   @override
   String get th2ElementTreeBringForward => 'Avançar';

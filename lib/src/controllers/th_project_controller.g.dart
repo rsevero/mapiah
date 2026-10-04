@@ -421,6 +421,18 @@ mixin _$THProjectController on THProjectControllerBase, Store {
   }
 
   @override
+  void clearSelection() {
+    final _$actionInfo = _$THProjectControllerBaseActionController.startAction(
+      name: 'THProjectControllerBase.clearSelection',
+    );
+    try {
+      return super.clearSelection();
+    } finally {
+      _$THProjectControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 rootConfigPath: ${rootConfigPath},

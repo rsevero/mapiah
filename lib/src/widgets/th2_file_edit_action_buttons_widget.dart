@@ -27,7 +27,6 @@ class TH2FileEditActionButtonsWidget extends StatelessWidget {
         final List<Widget> generalActionButtons = [];
 
         generalActionButtons.addAll(_changeImageButton(context));
-        generalActionButtons.addAll(_changeScrapButton(context));
         generalActionButtons.addAll(_editElementButtons(context));
         generalActionButtons.addAll(_addElementButtons(context));
         generalActionButtons.addAll(_zoomButtonWithOptions(context));
@@ -186,35 +185,6 @@ class TH2FileEditActionButtonsWidget extends StatelessWidget {
                     .overlayWindowController
                     .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
                     .changeImageButton]!,
-          );
-        },
-      ),
-    ];
-  }
-
-  List<Widget> _changeScrapButton(BuildContext context) {
-    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
-
-    return <Widget>[
-      const SizedBox(height: mpButtonSpace),
-      Observer(
-        builder: (_) {
-          final bool isPressed = th2FileEditController
-              .overlayWindowController
-              .showChangeScrapOverlayWindow;
-
-          return _imageAssetButton(
-            context: context,
-            isPressed: isPressed,
-            onPressed: () => _toggleOverlayWindow(MPWindowType.availableScraps),
-            tooltip: appLocalizations.th2FileEditPageChangeActiveScrapTool,
-            imageAssetPath: mpScrapButtonImagePath,
-            heroTag: '${heroPrefix}_change_active_scrap_tool',
-            key:
-                th2FileEditController
-                    .overlayWindowController
-                    .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType
-                    .changeScrapButton]!,
           );
         },
       ),

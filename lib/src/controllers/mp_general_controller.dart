@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/src/auxiliary/mp_copy_element_result.dart';
+import 'package:mapiah/src/auxiliary/th_project_tree_visible_row.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -110,13 +111,19 @@ abstract class MPGeneralControllerBase with Store {
 
   TH2FileEditController? prepareTH2FileForTreeEdit(String th2FilePath) {
     final TH2FileEditController? controller =
+        prepareTH2FileForTreeOptions(th2FilePath);
+    controller?.stateController.onButtonPressed(MPButtonType.select);
+    return controller;
+  }
+
+  TH2FileEditController? prepareTH2FileForTreeOptions(String th2FilePath) {
+    final TH2FileEditController? controller =
         getTH2FileEditControllerIfExists(th2FilePath);
     if (controller == null || !controller.isFileLoaded ||
         controller.isBroken || controller.loadError != null) {
       return null;
     }
     addFileTab(th2FilePath);
-    controller.stateController.onButtonPressed(MPButtonType.select);
     return controller;
   }
 
@@ -134,6 +141,7 @@ abstract class MPGeneralControllerBase with Store {
     }
 
     _activeTabIndex = _openFileOrder.indexOf(normalizedFilename);
+    _syncProjectTreeSelectionToActiveTab(normalizedFilename);
 
     /// Give keyboard focus to the newly active tab directly: the
     /// `activeTabIndex` reaction in `TH2FileTabsPage` only fires on a
@@ -164,6 +172,10 @@ abstract class MPGeneralControllerBase with Store {
 
       if (_openFileOrder.isEmpty) {
         _activeTabIndex = 0;
+        if (MPLocator().thProjectController.activeSelectedNodeId ==
+            standaloneTH2FileRowId(normalizedFilename)) {
+          MPLocator().thProjectController.clearSelection();
+        }
       } else {
         if (_activeTabIndex >= _openFileOrder.length) {
           _activeTabIndex = _openFileOrder.length - 1;
@@ -263,6 +275,10 @@ abstract class MPGeneralControllerBase with Store {
         .nodeByCanonicalPath(filename);
 
     if (node == null) {
+      if (isTH2Tab(filename)) {
+        MPLocator().thProjectController.selectNode(
+          standaloneTH2FileRowId(filename));
+      }
       return;
     }
 
@@ -559,6 +575,20 @@ abstract class MPGeneralControllerBase with Store {
   }) {
     final String normalizedOldFilename = _normalizeFilename(oldFilename);
     final String normalizedNewFilename = _normalizeFilename(newFilename);
+    final THProjectController project = MPLocator().thProjectController;
+    final String? oldProjectId =
+        project.nodeByCanonicalPath(normalizedOldFilename)?.id;
+    final String? newProjectId =
+        project.nodeByCanonicalPath(normalizedNewFilename)?.id;
+    final String oldRowId = oldProjectId ??
+        standaloneTH2FileRowId(normalizedOldFilename);
+    final String newRowId = newProjectId ??
+        standaloneTH2FileRowId(normalizedNewFilename);
+    if (_t2hFileEditControllers.containsKey(normalizedOldFilename)) {
+      MPLocator().thProjectTreeUIController.renameFileRows(
+        normalizedOldFilename, normalizedNewFilename,
+        oldProjectId, newProjectId);
+    }
 
     if (_t2hFileEditControllers.containsKey(normalizedOldFilename)) {
       final TH2FileEditController controller = _t2hFileEditControllers.remove(
@@ -580,6 +610,10 @@ abstract class MPGeneralControllerBase with Store {
 
     if (index >= 0) {
       _openFileOrder[index] = normalizedNewFilename;
+      if (project.activeSelectedNodeId == oldRowId ||
+          index == _activeTabIndex) {
+        project.selectNode(newRowId);
+      }
     }
   }
 
@@ -591,6 +625,8 @@ abstract class MPGeneralControllerBase with Store {
         _t2hFileEditControllers.remove(normalizedFilename);
     if (controller != null) {
       controller.dispose();
+      MPLocator().thProjectTreeUIController
+          .removeStandaloneFile(normalizedFilename);
       _bumpTH2ControllersRevision();
     }
 
@@ -606,6 +642,7 @@ abstract class MPGeneralControllerBase with Store {
       final TH2FileEditController? controller =
           _t2hFileEditControllers.remove(path);
       controller?.dispose();
+      MPLocator().thProjectTreeUIController.removeCollapsedScrapsForFile(path);
       disposedAny = true;
     }
     if (disposedAny) {

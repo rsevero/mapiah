@@ -55,6 +55,11 @@ abstract class TH2FileEditOptionEditControllerBase with Store {
 
   @action
   void updateOptionStateMap() {
+    if (_th2FileEditController.overlayWindowController
+        .getIsOverlayWindowShown(MPWindowType.scrapOptions)) {
+      updateElementOptionMapByMPID(_optionsScrapMPID);
+      return;
+    }
     final Iterable<MPSelectedElement> mpSelectedElements =
         _th2FileEditController
             .selectionController
@@ -451,4 +456,4 @@ class MPOptionInfo {
   });
 }
 
-enum MPOptionElementType { lineSegment, pla, scrap }
+enum MPOptionElementType { lineSegment, pla }

@@ -9,6 +9,8 @@ import 'package:mapiah/src/auxiliary/th2_element_tree_aux.dart';
 import 'package:mapiah/src/auxiliary/th_project_tree_flatten_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
+import 'package:mapiah/src/controllers/mp_general_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th_project_tree_ui_controller.dart';
 import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_file_node.dart';
@@ -19,6 +21,7 @@ import 'package:mapiah/src/widgets/th2_element_tree_row_widget.dart';
 import 'package:mapiah/src/widgets/th2_element_tree_drag_controller.dart';
 import 'package:mapiah/src/widgets/th_project_tree_node_widget.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:path/path.dart' as p;
 
 /// The project-tree side column shown next to the tab workspace.
 class THProjectTreeWidget extends StatefulWidget {
@@ -96,7 +99,7 @@ class _THProjectTreeWidgetState extends State<THProjectTreeWidget> {
               hasProject: rootConfigPath.isNotEmpty,
             ),
             const _THProjectTreeSearchField(),
-            if (root == null)
+            if (root == null && visibleRows.isEmpty)
               Expanded(
                 child: _buildEmptyState(context, appLocalizations),
               )
@@ -112,10 +115,13 @@ class _THProjectTreeWidgetState extends State<THProjectTreeWidget> {
                   key: _scrollViewportKey,
                   child: ListView.builder(
                   controller: _scrollController,
-                  itemCount: visibleRows.length,
+                  itemCount: visibleRows.length + (root == null ? 1 : 0),
                   itemBuilder: (BuildContext context, int index) {
+                    if (root == null && index == 0) {
+                      return _buildEmptyState(context, appLocalizations);
+                    }
                     return _buildRow(
-                      visibleRows[index],
+                      visibleRows[index - (root == null ? 1 : 0)],
                       activeSelectedNodeId: activeSelectedNodeId,
                       dirtyFilePaths: dirtyFilePaths,
                     );
@@ -145,6 +151,12 @@ class _THProjectTreeWidgetState extends State<THProjectTreeWidget> {
       ),
       TH2ElementTreeRow _ => TH2ElementTreeRowWidget(row: row, dragController: _dragController),
       TH2FileStatusTreeRow _ => TH2ElementTreeRowWidget(row: row, dragController: _dragController),
+      TH2OutsideProjectHeaderRow _ => Padding(
+        key: const ValueKey('TH2OutsideProjectHeaderRow'),
+        padding: const EdgeInsets.all(8),
+        child: Text(AppLocalizations.of(context)
+            .th2ElementTreeOutsideProjectHeader),
+      ),
     };
   }
 
@@ -156,14 +168,11 @@ class _THProjectTreeWidgetState extends State<THProjectTreeWidget> {
     required bool filterActive,
     required Set<String> pathsNeedingLoad,
   }) {
-    if (root == null) {
-      return const <THProjectTreeVisibleRow>[];
-    }
-
     final THProjectTreeUIController uiController =
         mpLocator.thProjectTreeUIController;
-
-    return flattenVisibleNodes(
+    final MPGeneralController general = mpLocator.mpGeneralController;
+    final List<THProjectTreeVisibleRow> rows = root == null
+        ? <THProjectTreeVisibleRow>[] : flattenVisibleNodes(
       root: root,
       isExpanded: (THProjectNode node) => uiController.isExpanded(node.id),
       matchesFilter: uiController.matchesFilter,
@@ -182,6 +191,42 @@ class _THProjectTreeWidgetState extends State<THProjectTreeWidget> {
             );
           },
     );
+    final List<THProjectTreeVisibleRow> outsideRows =
+        <THProjectTreeVisibleRow>[];
+    for (final String tabKey in general.openFileOrder) {
+      if (!isTH2Tab(tabKey) ||
+          mpLocator.thProjectController.nodeByCanonicalPath(tabKey) != null) {
+        continue;
+      }
+      final TH2FileEditController? controller =
+          general.getTH2FileEditControllerIfExists(tabKey);
+      final String label = p.basenameWithoutExtension(tabKey);
+      final TH2FileNode node = TH2FileNode(
+        id: standaloneTH2FileRowId(tabKey), label: label,
+        sourceFilePath: tabKey, absolutePath: tabKey,
+        relativePathToProjectRoot: tabKey, lineNumber: 0,
+        encoding: controller?.th2File.encoding ?? mpDefaultEncoding,
+      );
+      final TH2ElementRowsResult elements = TH2ElementTreeAux.rowsForFile(
+        th2FilePath: tabKey, controller: controller, fileDepth: 1,
+        filterActive: filterActive,
+        matchesFilterText: uiController.matchesFilterText,
+        isScrapCollapsed: uiController.isTH2ScrapCollapsed,
+      );
+      if (filterActive && !uiController.matchesFilter(node) &&
+          !elements.hasMatch) {
+        continue;
+      }
+      outsideRows.add(THProjectTreeNodeRow(node: node, depth: 1));
+      if (uiController.isExpanded(node.id) || filterActive) {
+        outsideRows.addAll(elements.rows);
+      }
+    }
+    if (outsideRows.isNotEmpty) {
+      rows.add(const TH2OutsideProjectHeaderRow());
+      rows.addAll(outsideRows);
+    }
+    return rows;
   }
 
   /// Requests the loads after the frame, never during the build. Each

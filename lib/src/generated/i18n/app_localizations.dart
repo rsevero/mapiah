@@ -2585,23 +2585,11 @@ abstract class AppLocalizations {
   /// **'Click to add a {type} point'**
   String th2FileEditPageAddPointStatusBarMessage(Object type);
 
-  /// The label for the add scrap button. Used on: _MPAvailableScrapsWidgetState.build, _TH2FileEditPageState._addElementButtons
+  /// The label for the add scrap button. Used on: TH2FileEditActionButtonsWidget._addElementButtons
   ///
   /// In en, this message translates to:
   /// **'Add scrap (K)'**
   String get th2FileEditPageAddScrapButton;
-
-  /// The title for the change active scrap dialog. Used on: _MPAvailableScrapsWidgetState.build
-  ///
-  /// In en, this message translates to:
-  /// **'Change active scrap'**
-  String get th2FileEditPageChangeActiveScrapTitle;
-
-  /// The label for the change active scrap tool button. Used on: _TH2FileEditPageState._changeScrapButton
-  ///
-  /// In en, this message translates to:
-  /// **'Change active scrap (Alt+K)'**
-  String get th2FileEditPageChangeActiveScrapTool;
 
   /// The title for the change image dialog. Used on: _MPAvailableImagesWidgetState.build
   ///
@@ -2633,7 +2621,7 @@ abstract class AppLocalizations {
   /// **'Copy elements (Ctrl+C)'**
   String get th2FileEditPageCopyElements;
 
-  /// The tooltip for the copy scrap button. Used on: _MPAvailableScrapsWidgetState.build
+  /// The tooltip for the copy scrap button. Used on: TH2ElementTreeRowWidget._menuItems
   ///
   /// In en, this message translates to:
   /// **'Copy scrap'**
@@ -2651,7 +2639,7 @@ abstract class AppLocalizations {
   /// **'Cut elements (Ctrl+X)'**
   String get th2FileEditPageCutElements;
 
-  /// The tooltip for the cut scrap button. Used on: _MPAvailableScrapsWidgetState.build
+  /// The tooltip for the cut scrap button. Used on: TH2ElementTreeRowWidget._menuItems
   ///
   /// In en, this message translates to:
   /// **'Cut scrap'**
@@ -2681,7 +2669,7 @@ abstract class AppLocalizations {
   /// **'Duplicate elements (Ctrl+Shift+D)'**
   String get th2FileEditPageDuplicateElements;
 
-  /// The tooltip for the duplicate scrap button. Used on: _MPAvailableScrapsWidgetState.build
+  /// The tooltip for the duplicate scrap button. Used on: TH2ElementTreeRowWidget._menuItems
   ///
   /// In en, this message translates to:
   /// **'Duplicate scrap'**
@@ -2963,7 +2951,7 @@ abstract class AppLocalizations {
   /// **'Remove image'**
   String get th2FileEditPageRemoveImageButton;
 
-  /// The label for the remove scrap button. Used on: _MPAvailableScrapsWidgetState.build
+  /// The label for the remove scrap button. Used on: TH2ElementTreeRowWidget._menuItems
   ///
   /// In en, this message translates to:
   /// **'Remove scrap'**
@@ -3209,19 +3197,19 @@ abstract class AppLocalizations {
   /// **'Show all images (Ctrl+I)'**
   String get th2FileEditPageToggleAllImagesVisibilityShowAllTooltip;
 
-  /// Tooltip for the toggle-all scrap visibility button when all scraps are visible (clicking will hide all except the active one). Used on: _MPAvailableScrapsWidgetState.build
+  /// File-row menu label when all scraps are visible. Used on: THProjectTreeNodeWidget._menuChildren
   ///
   /// In en, this message translates to:
   /// **'Hide all but active'**
   String get th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip;
 
-  /// Tooltip for the toggle-all scrap visibility button when any scrap is hidden (clicking will make all scraps visible). Used on: _MPAvailableScrapsWidgetState.build
+  /// File-row menu label when a scrap is hidden. Used on: THProjectTreeNodeWidget._menuChildren
   ///
   /// In en, this message translates to:
   /// **'Show all scraps'**
   String get th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip;
 
-  /// Tooltip for the visibility checkbox on each scrap row in the change active scrap overlay. Used on: _MPAvailableScrapsWidgetState.build
+  /// Tooltip for the scrap-row eye button. Used on: TH2ElementTreeRowWidget._buildScrapVisibilityButton
   ///
   /// In en, this message translates to:
   /// **'Toggle scrap visibility'**
@@ -5805,6 +5793,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rows are in file order: the top row is drawn first (bottom of the stack) and the last row is drawn last (on top).'**
   String get th2ElementTreeDrawingOrderTooltip;
+
+  /// Used on: THProjectTreeWidget._buildRow
+  ///
+  /// In en, this message translates to:
+  /// **'Open files outside the project'**
+  String get th2ElementTreeOutsideProjectHeader;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get th2ElementTreeCopy;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Cut'**
+  String get th2ElementTreeCut;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get th2ElementTreeDuplicate;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get th2ElementTreeDelete;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Hide'**
+  String get th2ElementTreeHide;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Show'**
+  String get th2ElementTreeShow;
+
+  /// Used on: TH2ElementTreeRowWidget._menuItems
+  ///
+  /// In en, this message translates to:
+  /// **'Options…'**
+  String get th2ElementTreeScrapOptions;
+
+  /// Used on: THProjectTreeNodeWidget._menuChildren
+  ///
+  /// In en, this message translates to:
+  /// **'Add scrap'**
+  String get th2ElementTreeAddScrap;
 
   /// Used on: TH2ElementTreeRowWidget._menuItems
   ///

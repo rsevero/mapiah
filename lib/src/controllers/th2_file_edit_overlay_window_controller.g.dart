@@ -10,15 +10,6 @@ part of 'th2_file_edit_overlay_window_controller.dart';
 
 mixin _$TH2FileEditOverlayWindowController
     on TH2FileEditOverlayWindowControllerBase, Store {
-  Computed<bool>? _$showChangeScrapOverlayWindowComputed;
-
-  @override
-  bool get showChangeScrapOverlayWindow =>
-      (_$showChangeScrapOverlayWindowComputed ??= Computed<bool>(
-        () => super.showChangeScrapOverlayWindow,
-        name:
-            'TH2FileEditOverlayWindowControllerBase.showChangeScrapOverlayWindow',
-      )).value;
   Computed<bool>? _$showChangeImageOverlayWindowComputed;
 
   @override
@@ -197,30 +188,6 @@ mixin _$TH2FileEditOverlayWindowController
       super._secondLevelOptionOpenedOverlayWindow,
       () {
         super._secondLevelOptionOpenedOverlayWindow = value;
-      },
-    );
-  }
-
-  late final _$_isChangeScrapWindowShownAtom = Atom(
-    name: 'TH2FileEditOverlayWindowControllerBase._isChangeScrapWindowShown',
-    context: context,
-  );
-
-  bool get isChangeScrapWindowShown {
-    _$_isChangeScrapWindowShownAtom.reportRead();
-    return super._isChangeScrapWindowShown;
-  }
-
-  @override
-  bool get _isChangeScrapWindowShown => isChangeScrapWindowShown;
-
-  @override
-  set _isChangeScrapWindowShown(bool value) {
-    _$_isChangeScrapWindowShownAtom.reportWrite(
-      value,
-      super._isChangeScrapWindowShown,
-      () {
-        super._isChangeScrapWindowShown = value;
       },
     );
   }
@@ -432,7 +399,6 @@ mixin _$TH2FileEditOverlayWindowController
   @override
   String toString() {
     return '''
-showChangeScrapOverlayWindow: ${showChangeScrapOverlayWindow},
 showChangeImageOverlayWindow: ${showChangeImageOverlayWindow},
 showDefaultOptionsOverlayWindow: ${showDefaultOptionsOverlayWindow}
     ''';

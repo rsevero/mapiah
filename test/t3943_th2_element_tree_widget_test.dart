@@ -534,15 +534,19 @@ void main() {
       final String path = project.pathOf('a.th2');
       final TH2FileNode aNode = th2NodeOf(project, 'a.th2');
 
-      for (final Finder target in <Finder>[
+      await tester.tap(
         find.byKey(ValueKey('THProjectTreeNodeWidget|${aNode.id}')),
+        buttons: kSecondaryButton);
+      await tester.pump();
+      await tester.pump();
+      expect(find.byType(MenuItemButton), findsWidgets);
+
+      await tester.tap(
         find.byKey(ValueKey('THProjectTreeNodeWidget|${aNode.parent!.id}')),
-      ]) {
-        await tester.tap(target, buttons: kSecondaryButton);
-        await tester.pump();
-        await tester.pump();
-        expect(find.byType(MenuItemButton), findsNothing);
-      }
+        buttons: kSecondaryButton);
+      await tester.pump();
+      await tester.pump();
+      expect(find.byType(MenuItemButton), findsNothing);
 
       await tester.tap(elementRow(path, 'p1'), buttons: kSecondaryButton);
       await tester.pump();

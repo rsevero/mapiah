@@ -27,6 +27,28 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
     });
   }
 
+  late final _$expandedStandaloneTH2FileIdsAtom = Atom(
+    name: 'THProjectTreeUIControllerBase.expandedStandaloneTH2FileIds',
+    context: context,
+  );
+
+  @override
+  ObservableSet<String> get expandedStandaloneTH2FileIds {
+    _$expandedStandaloneTH2FileIdsAtom.reportRead();
+    return super.expandedStandaloneTH2FileIds;
+  }
+
+  @override
+  set expandedStandaloneTH2FileIds(ObservableSet<String> value) {
+    _$expandedStandaloneTH2FileIdsAtom.reportWrite(
+      value,
+      super.expandedStandaloneTH2FileIds,
+      () {
+        super.expandedStandaloneTH2FileIds = value;
+      },
+    );
+  }
+
   late final _$collapsedTH2ScrapIdsAtom = Atom(
     name: 'THProjectTreeUIControllerBase.collapsedTH2ScrapIds',
     context: context,
@@ -261,6 +283,48 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
   }
 
   @override
+  void removeStandaloneFile(String tabKey) {
+    final _$actionInfo = _$THProjectTreeUIControllerBaseActionController
+        .startAction(
+          name: 'THProjectTreeUIControllerBase.removeStandaloneFile',
+        );
+    try {
+      return super.removeStandaloneFile(tabKey);
+    } finally {
+      _$THProjectTreeUIControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void removeCollapsedScrapsForFile(String tabKey) {
+    final _$actionInfo = _$THProjectTreeUIControllerBaseActionController
+        .startAction(
+          name: 'THProjectTreeUIControllerBase.removeCollapsedScrapsForFile',
+        );
+    try {
+      return super.removeCollapsedScrapsForFile(tabKey);
+    } finally {
+      _$THProjectTreeUIControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void renameFileRows(
+    String oldKey,
+    String newKey,
+    String? oldProjectId,
+    String? newProjectId,
+  ) {
+    final _$actionInfo = _$THProjectTreeUIControllerBaseActionController
+        .startAction(name: 'THProjectTreeUIControllerBase.renameFileRows');
+    try {
+      return super.renameFileRows(oldKey, newKey, oldProjectId, newProjectId);
+    } finally {
+      _$THProjectTreeUIControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _handleProjectRootChanged(THProjectFileNode? root) {
     final _$actionInfo = _$THProjectTreeUIControllerBaseActionController
         .startAction(
@@ -277,6 +341,7 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
   String toString() {
     return '''
 expandedNodeIds: ${expandedNodeIds},
+expandedStandaloneTH2FileIds: ${expandedStandaloneTH2FileIds},
 collapsedTH2ScrapIds: ${collapsedTH2ScrapIds},
 filterText: ${filterText},
 isSidebarCollapsed: ${isSidebarCollapsed},

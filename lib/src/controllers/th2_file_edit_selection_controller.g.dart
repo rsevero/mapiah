@@ -705,21 +705,6 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
-  void setSelectedScrapByMPID(int scrapID) {
-    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
-        .startAction(
-          name: 'TH2FileEditSelectionControllerBase.setSelectedScrapByMPID',
-        );
-    try {
-      return super.setSelectedScrapByMPID(scrapID);
-    } finally {
-      _$TH2FileEditSelectionControllerBaseActionController.endAction(
-        _$actionInfo,
-      );
-    }
-  }
-
-  @override
   String toString() {
     return '''
 

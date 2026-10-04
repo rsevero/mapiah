@@ -37,9 +37,6 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Selected elements](#selected-elements)
   - [Single-line end/control points](#single-line-endcontrol-points)
 - [Scraps](#scraps)
-  - [Scrap copy](#scrap-copy)
-  - [Scrap cut](#scrap-cut)
-  - [Scrap duplicate](#scrap-duplicate)
   - [Scrap visibility](#scrap-visibility)
   - [Scrap reordering](#scrap-reordering)
 - [Simplify lines](#simplify-lines)
@@ -138,7 +135,6 @@ In case there are available redoes when a new edit operation is performed, the r
 
 ### Bottom right corner
 * ![Images button](assets/help/images/buttonImages.png "Images")  _Images_: opens the images options overlay window. Shows all images inserted in the current file. Each image row has a visibility checkbox, a grid visibility checkbox (XVI images only), a delete button, and a drag handle for reordering. Also presents an "Add Image (I)" button. (Alt+I)
-* ![Scraps button](assets/help/images/buttonScraps.png "Scraps")  _Scraps_: opens a dialog box to change the current scrap, delete an existing scrap and add a new one. The dialog box shows all available scraps and allows to select one of them. The scrap options overlay window is presented when right clicking on the desired scrap. (Alt+C)
 * ![Select element button](assets/help/images/buttonSelectElement.png "Select element")  _Select element_: allows to select elements in the TH2 file. (C)
 * ![Line edit button](assets/help/images/buttonLineEdit.png "Line edit")  _Line edit_: allows to edit individual lines in the TH2 file. (N)
   * Double-clicking a line or one of its visible line segments while using the _Select element_ tool also enters _Line edit_ mode for that line.
@@ -240,9 +236,7 @@ Selected elements can be quickly duplicated in place.
 Right clicking on a selected element presents an overlay window with the options available for the currently selected elements. The element options window can also be opened by using the 'O' keyboard shortcut when there is at least one element selected.
 The options available depend on the type of element selected.
 
-To edit scrap options, right click on:
-* the scrap select button on the right bottom corner in case there is only one scrap in the file, or
-* the scrap name in the scrap select dialog box presented when clicking on the scrap select button in case there are multiple scraps in the file.
+To edit scrap options, right-click its row in the project sidebar and choose **Options…**.
 
 The scrap _Sketch_ option sets the background images Therion draws under the scrap when the layout has `sketches on`. After choosing _Set_, every sketch of the scrap is listed with its filename and lower left corner coordinates, which can be edited directly; use _Remove sketch_ to delete one. _Add loaded image_ adds a sketch from a raster image already loaded in the file, filling in its filename and lower left corner coordinates. _Add from file…_ adds a sketch from an image file on disk; as that image isn't placed on the canvas, type in its lower left corner coordinates. Chosen files are stored relative to the TH2 file. Therion doesn't scale or rotate sketches, so a warning is shown when the loaded image is scaled or rotated in Mapiah.
 
@@ -394,42 +388,17 @@ When one or more end/control points are selected in line edit mode:
 * Hold _Shift_ while dragging to temporarily disable snapping
 
 ## Scraps
-It's only possible to work on one scrap at a time. To change the current scrap, click on the scrap select button ![Scraps button](assets/help/images/buttonScraps.png "Scraps") on the bottom right corner and select the desired scrap from the dialog box presented.
+The project sidebar lists each `.th2` file's scraps in file order: the top row is drawn first. The former scrap dialog listed them in the opposite order. Open a file row with its chevron to see its scraps. Open canvas tabs that are not in the loaded project appear under **Open files outside the project**, even when no project is open.
 
-You can also _Alt+click_ on a non active scrap to make it the current scrap.
-
-Each scrap is listed as a row in the dialog box. The row contains:
-* A radio button to select it as the active scrap
-* A visibility checkbox (when the file has more than one scrap) — see [Scrap visibility](#scrap-visibility)
-* Four icon buttons: _Copy scrap_, _Cut scrap_, _Duplicate scrap_, and _Remove scrap_
-* A drag handle (⣿) to reorder scraps (when the file has more than one scrap) — see [Scrap reordering](#scrap-reordering)
-
-A _toggle all_ button appears above the list (when the file has more than one scrap). Its tooltip and icon reflect what the button will do:
-* _Hide all but active_ (eye-off icon): shown when all scraps are visible; clicking hides all scraps except the active one.
-* _Show all scraps_ (eye icon): shown when any scrap is hidden; clicking makes all scraps visible.
-
-### Scrap copy
-Copies all elements within the scrap to the clipboard without removing the scrap. The clipboard content can then be pasted with _Ctrl+V_ into the same or another open file.
-
-### Scrap cut
-Copies all elements within the scrap to the clipboard and then removes the scrap from the file. The clipboard content can then be pasted with _Ctrl+V_ into the same or another open file. The cut operation can be undone with _Ctrl+Z_, which restores the scrap and all its elements.
-
-### Scrap duplicate
-Duplicates the entire scrap, including all its elements, creating a new scrap in the same file. New unique IDs are generated for all duplicated elements. The duplicate operation can be undone with _Ctrl+Z_.
+Click a scrap row to make it active. You can also _Alt+click_ an inactive scrap on the canvas, or press _Alt+K_ to cycle through scraps. Right-click a scrap row for **Copy**, **Cut**, **Duplicate**, **Delete**, **Hide/Show**, **Options…**, and drawing-order actions. A selected scrap row's menu applies to all selected scraps; use _Ctrl+click_ to select several. Copy places the scraps on the clipboard for _Ctrl+V_; Cut removes them as one undoable action; Duplicate copies them in the file as one undoable action. Delete is also undoable.
 
 ### Scrap visibility
-When the file has more than one scrap, a visibility checkbox appears in every scrap row, including the active one. Checking or unchecking this box toggles whether that scrap is displayed on the canvas.
+Click the eye icon on a scrap row to show or hide it without opening its tab. A hidden scrap's label is dimmed, but its elements stay in the tree. The eye icon is absent when there is only one scrap. The last visible scrap cannot be hidden. Hiding the active scrap activates the nearest visible one.
 
-If only one scrap is currently visible, the active scrap's checkbox is disabled to prevent hiding all scraps. When the active scrap is hidden, Mapiah automatically switches the active scrap to the nearest previously visible one.
-
-If the file has only one scrap, the visibility checkbox is hidden.
+Right-click a file row for **Hide all but active** or **Show all scraps**, and for **Add scrap**. The file visibility action does not open a tab.
 
 ### Scrap reordering
-Click and drag the drag handle (⣿) of any scrap row to change its position in the list. Reordering is undoable with _Ctrl+Z_.
-
-While dragging:
-* The dragged row disappears from the list and a semi-transparent preview of it follows the cursor.
-* A colored bar appears above the row where the dragged scrap will be inserted when released.
+Drag a scrap row, use its drawing-order menu, or use the drawing-order shortcuts to move it in the stack. The changes are undoable with _Ctrl+Z_.
 
 ## Simplify lines
 Bézier curves and straight line segments are simplified differently. To simplify lines, first select them. There can be other types of elements selected (points or areas) while simplifying lines. They will be untouched by the simplification process.

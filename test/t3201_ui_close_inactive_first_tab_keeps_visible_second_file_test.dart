@@ -99,7 +99,8 @@ void main() {
       expect(find.text('scrap-second'), findsOneWidget);
       expect(find.text('scrap-first'), findsNothing);
       expect(find.text(firstTabLabel), findsNothing);
-      expect(find.text(secondTabLabel), findsOneWidget);
+      // The remaining file is shown both as a tab and in the standalone tree.
+      expect(find.text(secondTabLabel), findsNWidgets(2));
     });
   });
 }

@@ -124,6 +124,19 @@ mixin _$TH2FileHideElementController
       );
 
   @override
+  void setScrapsHidden(List<int> scrapMPIDs, bool hidden) {
+    final _$actionInfo = _$TH2FileHideElementControllerBaseActionController
+        .startAction(name: 'TH2FileHideElementControllerBase.setScrapsHidden');
+    try {
+      return super.setScrapsHidden(scrapMPIDs, hidden);
+    } finally {
+      _$TH2FileHideElementControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void toggleAllScrapsVisibility() {
     final _$actionInfo = _$TH2FileHideElementControllerBaseActionController
         .startAction(

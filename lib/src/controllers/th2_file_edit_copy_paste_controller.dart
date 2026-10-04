@@ -318,11 +318,14 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
   }
 
   void duplicateScrap(int scrapMPID) {
+    duplicateScraps(<int>[scrapMPID]);
+  }
+
+  void duplicateScraps(List<int> scrapMPIDs) {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
-    final THScrap scrap = _th2File.scrapByMPID(scrapMPID);
-
-    selectionController.setSelectedElements([scrap]);
+    selectionController.setSelectedElements(
+      scrapMPIDs.map(_th2File.scrapByMPID).toList());
 
     final List<int> pastedMPIDs = duplicateSelectedElements();
 
@@ -338,11 +341,14 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
   }
 
   void copyScrap(int scrapMPID) {
+    copyScraps(<int>[scrapMPID]);
+  }
+
+  void copyScraps(List<int> scrapMPIDs) {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
-    final THScrap scrap = _th2File.scrapByMPID(scrapMPID);
-
-    selectionController.setSelectedElements([scrap]);
+    selectionController.setSelectedElements(
+      scrapMPIDs.map(_th2File.scrapByMPID).toList());
     copySelectedElements();
     selectionController.clearSelectedElements();
     _th2FileEditController.triggerSelectedListChanged();
@@ -351,11 +357,14 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
   }
 
   void cutScrap(int scrapMPID) {
+    cutScraps(<int>[scrapMPID]);
+  }
+
+  void cutScraps(List<int> scrapMPIDs) {
     final TH2FileEditSelectionController selectionController =
         _th2FileEditController.selectionController;
-    final THScrap scrap = _th2File.scrapByMPID(scrapMPID);
-
-    selectionController.setSelectedElements([scrap]);
+    selectionController.setSelectedElements(
+      scrapMPIDs.map(_th2File.scrapByMPID).toList());
     cutSelectedElements();
     selectionController.clearSelectedElements();
     _th2FileEditController.triggerSelectedListChanged();

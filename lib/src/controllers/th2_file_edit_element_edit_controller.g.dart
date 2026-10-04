@@ -562,6 +562,19 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void removeScraps(List<int> scrapMPIDs) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditElementEditControllerBase.removeScraps');
+    try {
+      return super.removeScraps(scrapMPIDs);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void toggleSelectedLinesReverseOption() {
     final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
         .startAction(

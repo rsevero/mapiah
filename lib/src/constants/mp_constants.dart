@@ -834,6 +834,7 @@ const int mpProjectTreeDragHoverExpandDelayMilliseconds = 700;
 const double mpProjectTreeDragAutoScrollEdgeExtent = 24.0;
 const double mpProjectTreeDragAutoScrollVelocityScalar = 20.0;
 const double mpProjectTreeRowHeight = 28.0;
+const int mpTreeCanvasOverlayMaxWaitFrames = 3;
 const double mpProjectTreeIndent = 16.0;
 const double mpProjectTreeStatusDotSize = 8.0;
 

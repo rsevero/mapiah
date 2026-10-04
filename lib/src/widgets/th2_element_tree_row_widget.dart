@@ -19,6 +19,7 @@ import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:mapiah/src/widgets/th_project_tree_row_context_menu_widget.dart';
+import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Detects a second tap on the same TH2 element row, so a single tap acts
@@ -70,6 +71,22 @@ class TH2ElementTreeTapTracker {
 final TH2ElementTreeTapTracker th2ElementTreeTapTracker =
     TH2ElementTreeTapTracker();
 
+/// Runs a tree overlay action when its canvas has been laid out.
+void whenTreeCanvasReady(TH2FileEditController controller,
+    void Function(BuildContext canvasContext) action,
+    {int remainingFrames = mpTreeCanvasOverlayMaxWaitFrames}) {
+  final BuildContext? canvasContext =
+      controller.getTH2FileWidgetGlobalKey().currentContext;
+  if (canvasContext != null) {
+    action(canvasContext);
+  } else if (remainingFrames > 0) {
+    WidgetsBinding.instance.addPostFrameCallback((Duration _) {
+      whenTreeCanvasReady(controller, action,
+          remainingFrames: remainingFrames - 1);
+    });
+  }
+}
+
 /// A project-tree row for a TH2 scrap, point, line or area, or for the
 /// loading, load-error or broken status of a `.th2` file.
 class TH2ElementTreeRowWidget extends StatelessWidget {
@@ -89,6 +106,9 @@ class TH2ElementTreeRowWidget extends StatelessWidget {
       TH2FileStatusTreeRow statusRow => _TH2FileStatusRow(row: statusRow),
       THProjectTreeNodeRow _ => throw ArgumentError(
         'TH2ElementTreeRowWidget does not render project node rows.',
+      ),
+      TH2OutsideProjectHeaderRow _ => throw ArgumentError(
+        'TH2ElementTreeRowWidget does not render section headers.',
       ),
     };
   }
@@ -126,9 +146,12 @@ class _TH2ElementRow extends StatelessWidget {
           _buildExpandControl(colorScheme),
           ExcludeSemantics(child: _buildIcon()),
           const SizedBox(width: 4),
-          Expanded(child: _buildLabel(colorScheme)),
+          Expanded(child: row.isScrap
+              ? Observer(builder: (_) => _buildLabel(colorScheme))
+              : _buildLabel(colorScheme)),
           if (row.isScrap && !row.isExpanded)
             _buildContainsSelectionDot(context),
+          if (row.isScrap) _buildScrapVisibilityButton(context),
           const SizedBox(width: 4),
         ],
       ),
@@ -331,8 +354,14 @@ class _TH2ElementRow extends StatelessWidget {
             ),
         ],
       ),
-      style: row.isScrap && _validControllerFor(row.th2FilePath)?.activeScrapID ==
-          row.elementMPID ? const TextStyle(fontWeight: FontWeight.bold) : null,
+      style: TextStyle(
+        color: row.isScrap &&
+            _validControllerFor(row.th2FilePath)?.hideElementController
+                .isScrapVisible(row.elementMPID) == false
+            ? colorScheme.onSurfaceVariant : null,
+        fontWeight: row.isScrap &&
+            _validControllerFor(row.th2FilePath)?.activeScrapID ==
+                row.elementMPID ? FontWeight.bold : null),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       semanticsLabel: row.label.plainText,
@@ -351,6 +380,32 @@ class _TH2ElementRow extends StatelessWidget {
       triggerMode: TooltipTriggerMode.manual,
       child: label,
     );
+  }
+
+  Widget _buildScrapVisibilityButton(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context);
+    return Observer(builder: (_) {
+      final TH2FileEditController? controller =
+          _validControllerFor(row.th2FilePath);
+      if (controller == null || controller.th2File.scrapMPIDs.length <= 1) {
+        return const SizedBox.shrink();
+      }
+      final bool visible = controller.hideElementController
+          .isScrapVisible(row.elementMPID);
+      final bool canToggle = !visible ||
+          controller.hideElementController.visibleScrapCount > 1;
+      return IconButton(
+        key: ValueKey('TH2ElementTreeVisibility|${row.rowId}'),
+        iconSize: mpSmallIconSize,
+        constraints: const BoxConstraints.tightFor(
+          width: mpProjectTreeRowHeight, height: mpProjectTreeRowHeight),
+        padding: EdgeInsets.zero,
+        tooltip: l10n.th2FileEditPageToggleScrapVisibilityTooltip,
+        icon: Icon(visible ? Icons.visibility : Icons.visibility_off),
+        onPressed: canToggle ? () => controller.hideElementController
+            .toggleScrapVisibility(row.elementMPID) : null,
+      );
+    });
   }
 
   /// The dot a collapsed scrap shows while one of its children is selected.
@@ -547,8 +602,8 @@ class _TH2ElementRow extends StatelessWidget {
   void _onBeforeOpenMenu() {
     final TH2FileEditController? controller = _validControllerFor(row.th2FilePath);
     if (controller == null) return;
-    _leaveCreationMode(controller);
     if (!row.isScrap) {
+      _leaveCreationMode(controller);
       final THElement? element = controller.th2File.tryElementByMPID(
         row.elementMPID);
       if (element == null) return;
@@ -651,7 +706,75 @@ class _TH2ElementRow extends StatelessWidget {
           child: Text(l10n.th2ElementTreeMoveToScrap)));
       }
     }
+    if (row.isScrap) {
+      items.add(const Divider());
+      items.addAll(<Widget>[
+        MenuItemButton(onPressed: () => _executeScrapEdit('copy'),
+          child: Semantics(label: l10n.th2FileEditPageCopyScrapButton,
+            child: Text(l10n.th2ElementTreeCopy))),
+        MenuItemButton(onPressed: () => _executeScrapEdit('cut'),
+          child: Semantics(label: l10n.th2FileEditPageCutScrapButton,
+            child: Text(l10n.th2ElementTreeCut))),
+        MenuItemButton(onPressed: () => _executeScrapEdit('duplicate'),
+          child: Semantics(label: l10n.th2FileEditPageDuplicateScrapButton,
+            child: Text(l10n.th2ElementTreeDuplicate))),
+        MenuItemButton(onPressed: () => _executeScrapEdit('delete'),
+          child: Semantics(label: l10n.th2FileEditPageRemoveScrapButton,
+            child: Text(l10n.th2ElementTreeDelete))),
+        const Divider(),
+      ]);
+      final bool hide = ids.any(controller.hideElementController.isScrapVisible);
+      items.add(MenuItemButton(
+        onPressed: controller.th2File.scrapMPIDs.length > 1
+            ? () => controller.hideElementController.setScrapsHidden(ids, hide)
+            : null,
+        child: Text(hide ? l10n.th2ElementTreeHide : l10n.th2ElementTreeShow)));
+      items.add(MenuItemButton(
+        onPressed: ids.length == 1 ? () => _showScrapOptions(context, ids.single)
+            : null,
+        child: Text(l10n.th2ElementTreeScrapOptions)));
+    }
     return items;
+  }
+
+  void _executeScrapEdit(String action) {
+    final TH2FileEditController? controller = mpLocator.mpGeneralController
+        .prepareTH2FileForTreeEdit(row.th2FilePath);
+    if (controller == null ||
+        controller.th2File.tryElementByMPID(row.elementMPID) == null) {
+      return;
+    }
+    final List<int> ids = _menuSelection(controller);
+    if (ids.isEmpty) {
+      return;
+    }
+    switch (action) {
+      case 'copy': controller.copyPasteController.copyScraps(ids);
+      case 'cut': controller.copyPasteController.cutScraps(ids);
+      case 'duplicate': controller.copyPasteController.duplicateScraps(ids);
+      case 'delete': controller.elementEditController.removeScraps(ids);
+    }
+  }
+
+  void _showScrapOptions(BuildContext rowContext, int scrapMPID) {
+    final TH2FileEditController? controller = mpLocator.mpGeneralController
+        .prepareTH2FileForTreeOptions(row.th2FilePath);
+    if (controller == null) {
+      return;
+    }
+    whenTreeCanvasReady(controller, (BuildContext canvasContext) {
+      final RenderBox canvas = canvasContext.findRenderObject()! as RenderBox;
+      final Rect? rowRect = rowContext.mounted
+          ? MPInteractionAux.getWidgetRectFromContext(
+              widgetContext: rowContext,
+              ancestorGlobalKey: controller.getTH2FileWidgetGlobalKey())
+          : null;
+      final double y = (rowRect?.center.dy ?? canvas.size.height / 2)
+          .clamp(0.0, canvas.size.height).toDouble();
+      controller.overlayWindowController.performShowScrapOptionsOverlayWindow(
+        scrapMPID: scrapMPID, outerAnchorPosition: Offset(0, y),
+        innerAnchorType: MPWidgetPositionType.centerLeft);
+    });
   }
 
   void _selectMovedDrawables(TH2FileEditController controller,

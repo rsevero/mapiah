@@ -34,6 +34,28 @@ class TH2FileEditUserInteractionController = TH2FileEditUserInteractionControlle
     with _$TH2FileEditUserInteractionController;
 
 abstract class TH2FileEditUserInteractionControllerBase with Store {
+  bool get _isLineSegmentOptionTarget =>
+      !_th2FileEditController.overlayWindowController
+          .getIsOverlayWindowShown(MPWindowType.scrapOptions) &&
+      _th2FileEditController.optionEditController.currentOptionElementsType ==
+          MPOptionElementType.lineSegment;
+
+  Iterable<MPSelectedElement> _optionTargetElements() {
+    if (_th2FileEditController.overlayWindowController
+        .getIsOverlayWindowShown(MPWindowType.scrapOptions)) {
+      final int scrapMPID =
+          _th2FileEditController.optionEditController.optionsScrapMPID;
+      return <MPSelectedElement>[
+        MPSelectedScrap(originalScrap: _th2File.scrapByMPID(scrapMPID)),
+      ];
+    }
+    final TH2FileEditSelectionController selection =
+        _th2FileEditController.selectionController;
+    return _isLineSegmentOptionTarget
+        ? selection.selectedEndControlPoints.values
+        : selection.mpSelectedElementsLogical.values;
+  }
+
   @readonly
   TH2File _th2File;
 
@@ -431,14 +453,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   void _prepareSetOption(THCommandOption option) {
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
     final List<THElement> candidateElementsForNewOption = [];
-    final TH2FileEditSelectionController selectionController =
-        _th2FileEditController.selectionController;
-    final bool isLineSegmentOption =
-        _th2FileEditController.optionEditController.currentOptionElementsType ==
-        MPOptionElementType.lineSegment;
-    final Iterable<MPSelectedElement> selectedElements = isLineSegmentOption
-        ? selectionController.selectedEndControlPoints.values
-        : selectionController.mpSelectedElementsLogical.values;
+    final bool isLineSegmentOption = _isLineSegmentOptionTarget;
+    final Iterable<MPSelectedElement> selectedElements = _optionTargetElements();
 
     for (final MPSelectedElement selectedElement in selectedElements) {
       candidateElementsForNewOption.add(selectedElement.originalElementClone);
@@ -723,14 +739,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   void prepareUnsetAttrOption({required String attrName}) {
     final List<THElement> candidateElementsForNewOption = [];
-    final TH2FileEditSelectionController selectionController =
-        _th2FileEditController.selectionController;
-    final bool isLineSegmentOption =
-        _th2FileEditController.optionEditController.currentOptionElementsType ==
-        MPOptionElementType.lineSegment;
-    final Iterable<MPSelectedElement> selectedElements = isLineSegmentOption
-        ? selectionController.selectedEndControlPoints.values
-        : selectionController.mpSelectedElementsLogical.values;
+    final bool isLineSegmentOption = _isLineSegmentOptionTarget;
+    final Iterable<MPSelectedElement> selectedElements = _optionTargetElements();
 
     for (final MPSelectedElement selectedElement in selectedElements) {
       candidateElementsForNewOption.add(selectedElement.originalElementClone);
@@ -769,14 +779,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
 
   void _prepareUnsetOption(THCommandOptionType optionType) {
     final List<THElement> candidateElementsForNewOption = [];
-    final TH2FileEditSelectionController selectionController =
-        _th2FileEditController.selectionController;
-    final bool isLineSegmentOption =
-        _th2FileEditController.optionEditController.currentOptionElementsType ==
-        MPOptionElementType.lineSegment;
-    final Iterable<MPSelectedElement> selectedElements = isLineSegmentOption
-        ? selectionController.selectedEndControlPoints.values
-        : selectionController.mpSelectedElementsLogical.values;
+    final bool isLineSegmentOption = _isLineSegmentOptionTarget;
+    final Iterable<MPSelectedElement> selectedElements = _optionTargetElements();
 
     for (final MPSelectedElement selectedElement in selectedElements) {
       candidateElementsForNewOption.add(selectedElement.originalElementClone);
@@ -861,14 +865,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
     String choice,
   ) {
     final bool isCtrlPressed = MPInteractionAux.isCtrlPressed();
-    final TH2FileEditSelectionController selectionController =
-        _th2FileEditController.selectionController;
-    final bool isLineSegmentOption =
-        _th2FileEditController.optionEditController.currentOptionElementsType ==
-        MPOptionElementType.lineSegment;
-    final Iterable<MPSelectedElement> selectedElements = isLineSegmentOption
-        ? selectionController.selectedEndControlPoints.values
-        : selectionController.mpSelectedElementsLogical.values;
+    final bool isLineSegmentOption = _isLineSegmentOptionTarget;
+    final Iterable<MPSelectedElement> selectedElements = _optionTargetElements();
 
     List<MPCommand> addOptionCommands = [];
 
@@ -969,14 +967,8 @@ abstract class TH2FileEditUserInteractionControllerBase with Store {
   }
 
   void _prepareUnsetMultipleOptionChoice(THCommandOptionType optionType) {
-    final TH2FileEditSelectionController selectionController =
-        _th2FileEditController.selectionController;
-    final bool isLineSegmentOption =
-        _th2FileEditController.optionEditController.currentOptionElementsType ==
-        MPOptionElementType.lineSegment;
-    final Iterable<MPSelectedElement> selectedElements = isLineSegmentOption
-        ? selectionController.selectedEndControlPoints.values
-        : selectionController.mpSelectedElementsLogical.values;
+    final bool isLineSegmentOption = _isLineSegmentOptionTarget;
+    final Iterable<MPSelectedElement> selectedElements = _optionTargetElements();
 
     if (selectedElements.isEmpty) {
       if (_th2FileEditController.optionEditController.isDefaultOptionsMode) {

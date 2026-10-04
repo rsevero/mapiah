@@ -1733,16 +1733,6 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     _th2FileEditController.triggerImagesRedraw();
   }
 
-  @action
-  void setSelectedScrapByMPID(int scrapID) {
-    final THScrap scrap = _th2File.scrapByMPID(scrapID);
-
-    _clearSelectedElementsWithoutResettingRedrawTriggers();
-    _mpSelectedElementsLogical[scrapID] = MPSelectedScrap(originalScrap: scrap);
-    _th2FileEditController.optionEditController.setOptionElementsType(
-      MPOptionElementType.scrap,
-    );
-  }
 }
 
 enum THSelectionType { line, lineSegment, pla }

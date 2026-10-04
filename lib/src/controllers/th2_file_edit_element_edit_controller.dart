@@ -1565,14 +1565,19 @@ abstract class TH2FileEditElementEditControllerBase with Store {
 
   @action
   void removeScrap(int scrapMPID) {
-    final MPRemoveScrapCommand removeScrapCommand =
-        MPCommandFactory.removeScrapFromExisting(
-          existingScrapMPID: scrapMPID,
-          th2File: _th2FileEditController.th2File,
-        );
+    removeScraps(<int>[scrapMPID]);
+  }
 
-    _th2FileEditController.setActiveScrapForScrapRemoval(scrapMPID);
-    _th2FileEditController.execute(removeScrapCommand);
+  @action
+  void removeScraps(List<int> scrapMPIDs) {
+    if (scrapMPIDs.isEmpty) {
+      return;
+    }
+    _th2FileEditController.execute(MPCommandFactory.removeElements(
+      mpIDs: scrapMPIDs,
+      th2File: _th2File,
+      descriptionType: MPCommandDescriptionType.removeScrap,
+    ));
   }
 
   MPCommand? getSmoothLineSegmentsCommand(THLineSegment lineSegment) {

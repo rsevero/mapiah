@@ -2108,17 +2108,7 @@
   },
   "th2FileEditPageAddScrapButton": "Add scrap (K)",
   "@th2FileEditPageAddScrapButton": {
-    "description": "The label for the add scrap button. Used on: _MPAvailableScrapsWidgetState.build, _TH2FileEditPageState._addElementButtons",
-    "type": "text"
-  },
-  "th2FileEditPageChangeActiveScrapTitle": "Change active scrap",
-  "@th2FileEditPageChangeActiveScrapTitle": {
-    "description": "The title for the change active scrap dialog. Used on: _MPAvailableScrapsWidgetState.build",
-    "type": "text"
-  },
-  "th2FileEditPageChangeActiveScrapTool": "Change active scrap (Alt+K)",
-  "@th2FileEditPageChangeActiveScrapTool": {
-    "description": "The label for the change active scrap tool button. Used on: _TH2FileEditPageState._changeScrapButton",
+    "description": "The label for the add scrap button. Used on: TH2FileEditActionButtonsWidget._addElementButtons",
     "type": "text"
   },
   "th2FileEditPageChangeImageTitle": "Change images",
@@ -2148,7 +2138,7 @@
   },
   "th2FileEditPageCopyScrapButton": "Copy scrap",
   "@th2FileEditPageCopyScrapButton": {
-    "description": "The tooltip for the copy scrap button. Used on: _MPAvailableScrapsWidgetState.build",
+    "description": "The tooltip for the copy scrap button. Used on: TH2ElementTreeRowWidget._menuItems",
     "type": "text"
   },
   "th2FileEditPageCreateMapConnectionLines": "Create map connection lines",
@@ -2163,7 +2153,7 @@
   },
   "th2FileEditPageCutScrapButton": "Cut scrap",
   "@th2FileEditPageCutScrapButton": {
-    "description": "The tooltip for the cut scrap button. Used on: _MPAvailableScrapsWidgetState.build",
+    "description": "The tooltip for the cut scrap button. Used on: TH2ElementTreeRowWidget._menuItems",
     "type": "text"
   },
   "th2FileEditPageDeselectAllElements": "Deselect all elements (Ctrl+D)",
@@ -2188,7 +2178,7 @@
   },
   "th2FileEditPageDuplicateScrapButton": "Duplicate scrap",
   "@th2FileEditPageDuplicateScrapButton": {
-    "description": "The tooltip for the duplicate scrap button. Used on: _MPAvailableScrapsWidgetState.build",
+    "description": "The tooltip for the duplicate scrap button. Used on: TH2ElementTreeRowWidget._menuItems",
     "type": "text"
   },
   "th2FileEditPageElementRotateStatusBarMessage": "Element rotate mode",
@@ -2428,7 +2418,7 @@
   },
   "th2FileEditPageRemoveScrapButton": "Remove scrap",
   "@th2FileEditPageRemoveScrapButton": {
-    "description": "The label for the remove scrap button. Used on: _MPAvailableScrapsWidgetState.build",
+    "description": "The label for the remove scrap button. Used on: TH2ElementTreeRowWidget._menuItems",
     "type": "text"
   },
   "th2FileEditPageResetImageButton": "Reset image transform",
@@ -2635,17 +2625,17 @@
   },
   "th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip": "Hide all but active",
   "@th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip": {
-    "description": "Tooltip for the toggle-all scrap visibility button when all scraps are visible (clicking will hide all except the active one). Used on: _MPAvailableScrapsWidgetState.build",
+    "description": "File-row menu label when all scraps are visible. Used on: THProjectTreeNodeWidget._menuChildren",
     "type": "text"
   },
   "th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip": "Show all scraps",
   "@th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip": {
-    "description": "Tooltip for the toggle-all scrap visibility button when any scrap is hidden (clicking will make all scraps visible). Used on: _MPAvailableScrapsWidgetState.build",
+    "description": "File-row menu label when a scrap is hidden. Used on: THProjectTreeNodeWidget._menuChildren",
     "type": "text"
   },
   "th2FileEditPageToggleScrapVisibilityTooltip": "Toggle scrap visibility",
   "@th2FileEditPageToggleScrapVisibilityTooltip": {
-    "description": "Tooltip for the visibility checkbox on each scrap row in the change active scrap overlay. Used on: _MPAvailableScrapsWidgetState.build",
+    "description": "Tooltip for the scrap-row eye button. Used on: TH2ElementTreeRowWidget._buildScrapVisibilityButton",
     "type": "text"
   },
   "th2FileEditPageUndo": "Undo '{undoDescription}' (Ctrl+Z)",
@@ -4905,6 +4895,24 @@
     "description": "Tooltip of the project tree header explaining the drawing order of .th2 element rows. Used on: THProjectTreeWidget._buildHeader",
     "type": "text"
   },
+  "th2ElementTreeOutsideProjectHeader": "Open files outside the project",
+  "@th2ElementTreeOutsideProjectHeader": {"description": "Used on: THProjectTreeWidget._buildRow"},
+  "th2ElementTreeCopy": "Copy",
+  "@th2ElementTreeCopy": {"description": "Used on: TH2ElementTreeRowWidget._menuItems"},
+  "th2ElementTreeCut": "Cut",
+  "@th2ElementTreeCut": {"description": "Used on: TH2ElementTreeRowWidget._menuItems"},
+  "th2ElementTreeDuplicate": "Duplicate",
+  "@th2ElementTreeDuplicate": {"description": "Used on: TH2ElementTreeRowWidget._menuItems"},
+  "th2ElementTreeDelete": "Delete",
+  "@th2ElementTreeDelete": {"description": "Used on: TH2ElementTreeRowWidget._menuItems"},
+  "th2ElementTreeHide": "Hide",
+  "@th2ElementTreeHide": {"description": "Used on: TH2ElementTreeRowWidget._menuItems"},
+  "th2ElementTreeShow": "Show",
+  "@th2ElementTreeShow": {"description": "Used on: TH2ElementTreeRowWidget._menuItems"},
+  "th2ElementTreeScrapOptions": "Options…",
+  "@th2ElementTreeScrapOptions": {"description": "Used on: TH2ElementTreeRowWidget._menuItems"},
+  "th2ElementTreeAddScrap": "Add scrap",
+  "@th2ElementTreeAddScrap": {"description": "Used on: THProjectTreeNodeWidget._menuChildren"},
   "th2ElementTreeBringForward": "Bring forward",
   "@th2ElementTreeBringForward": {"description": "Used on: TH2ElementTreeRowWidget._menuItems"},
   "th2ElementTreeSendBackward": "Send backward",

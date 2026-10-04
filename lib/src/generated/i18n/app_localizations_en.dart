@@ -1391,13 +1391,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get th2FileEditPageAddScrapButton => 'Add scrap (K)';
 
   @override
-  String get th2FileEditPageChangeActiveScrapTitle => 'Change active scrap';
-
-  @override
-  String get th2FileEditPageChangeActiveScrapTool =>
-      'Change active scrap (Alt+K)';
-
-  @override
   String get th2FileEditPageChangeImageTitle => 'Change images';
 
   @override
@@ -3232,6 +3225,34 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get th2ElementTreeDrawingOrderTooltip =>
       'Rows are in file order: the top row is drawn first (bottom of the stack) and the last row is drawn last (on top).';
+
+  @override
+  String get th2ElementTreeOutsideProjectHeader =>
+      'Open files outside the project';
+
+  @override
+  String get th2ElementTreeCopy => 'Copy';
+
+  @override
+  String get th2ElementTreeCut => 'Cut';
+
+  @override
+  String get th2ElementTreeDuplicate => 'Duplicate';
+
+  @override
+  String get th2ElementTreeDelete => 'Delete';
+
+  @override
+  String get th2ElementTreeHide => 'Hide';
+
+  @override
+  String get th2ElementTreeShow => 'Show';
+
+  @override
+  String get th2ElementTreeScrapOptions => 'Options…';
+
+  @override
+  String get th2ElementTreeAddScrap => 'Add scrap';
 
   @override
   String get th2ElementTreeBringForward => 'Bring forward';

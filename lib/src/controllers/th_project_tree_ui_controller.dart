@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
@@ -29,6 +30,9 @@ enum THProjectSidebarMode { tree, projectSearch }
 abstract class THProjectTreeUIControllerBase with Store {
   @observable
   ObservableSet<String> expandedNodeIds = ObservableSet<String>();
+
+  @observable
+  ObservableSet<String> expandedStandaloneTH2FileIds = ObservableSet<String>();
 
   /// Row ids (`th2el:<canonicalPath>:<mpID>`) of the TH2 scrap rows the user
   /// collapsed. Scraps start expanded, so only the exception is stored. Kept
@@ -105,6 +109,12 @@ abstract class THProjectTreeUIControllerBase with Store {
 
   @action
   void toggleExpanded(String nodeId) {
+    if (nodeId.startsWith('standalone:')) {
+      if (!expandedStandaloneTH2FileIds.add(nodeId)) {
+        expandedStandaloneTH2FileIds.remove(nodeId);
+      }
+      return;
+    }
     if (!expandedNodeIds.add(nodeId)) {
       expandedNodeIds.remove(nodeId);
     }
@@ -112,12 +122,20 @@ abstract class THProjectTreeUIControllerBase with Store {
 
   @action
   void expand(String nodeId) {
-    expandedNodeIds.add(nodeId);
+    if (nodeId.startsWith('standalone:')) {
+      expandedStandaloneTH2FileIds.add(nodeId);
+    } else {
+      expandedNodeIds.add(nodeId);
+    }
   }
 
   @action
   void collapse(String nodeId) {
-    expandedNodeIds.remove(nodeId);
+    if (nodeId.startsWith('standalone:')) {
+      expandedStandaloneTH2FileIds.remove(nodeId);
+    } else {
+      expandedNodeIds.remove(nodeId);
+    }
   }
 
   @action
@@ -259,9 +277,47 @@ abstract class THProjectTreeUIControllerBase with Store {
     _scheduleSidebarWidthPersistence();
   }
 
-  bool isExpanded(String nodeId) => expandedNodeIds.contains(nodeId);
+  bool isExpanded(String nodeId) => nodeId.startsWith('standalone:')
+      ? expandedStandaloneTH2FileIds.contains(nodeId)
+      : expandedNodeIds.contains(nodeId);
+
+  @action
+  void removeStandaloneFile(String tabKey) {
+    expandedStandaloneTH2FileIds.remove('standalone:$tabKey');
+    removeCollapsedScrapsForFile(tabKey);
+  }
+
+  @action
+  void removeCollapsedScrapsForFile(String tabKey) {
+    collapsedTH2ScrapIds.removeWhere(
+      (String id) => id.startsWith('th2el:$tabKey:'));
+  }
+
+  @action
+  void renameFileRows(String oldKey, String newKey, String? oldProjectId,
+      String? newProjectId) {
+    final String oldId = oldProjectId ?? 'standalone:$oldKey';
+    final String newId = newProjectId ?? 'standalone:$newKey';
+    if (isExpanded(oldId)) {
+      expand(newId);
+    }
+    if (oldProjectId == null) {
+      collapse(oldId);
+    }
+    final List<String> oldScraps = collapsedTH2ScrapIds
+        .where((String id) => id.startsWith('th2el:$oldKey:')).toList();
+    for (final String id in oldScraps) {
+      collapsedTH2ScrapIds.remove(id);
+      collapsedTH2ScrapIds.add('th2el:$newKey:${id.substring('th2el:$oldKey:'.length)}');
+    }
+  }
 
   bool matchesFilter(THProjectNode node) => matchesFilterText(node.label);
+
+  /// Applies a new project's normal default expansion before row migration.
+  void ensureDefaultExpansionForProject(THProjectFileNode root) {
+    _handleProjectRootChanged(root);
+  }
 
   /// Case-insensitive substring match of the filter against a row's full
   /// label. Project rows and TH2 element rows both use it.
@@ -277,7 +333,11 @@ abstract class THProjectTreeUIControllerBase with Store {
   void _handleProjectRootChanged(THProjectFileNode? root) {
     if (root == null) {
       expandedNodeIds.clear();
-      collapsedTH2ScrapIds.clear();
+      final MPGeneralController general = MPLocator().mpGeneralController;
+      final List<String> openTH2Keys = general.openFileOrder
+          .where(isTH2Tab).toList();
+      collapsedTH2ScrapIds.removeWhere((String id) => !openTH2Keys.any(
+        (String key) => id.startsWith('th2el:$key:')));
 
       return;
     }

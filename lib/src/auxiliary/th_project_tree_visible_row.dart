@@ -14,6 +14,19 @@ sealed class THProjectTreeVisibleRow {
   String get rowId;
 }
 
+/// Heading for canvas tabs without a file node in the loaded project.
+final class TH2OutsideProjectHeaderRow extends THProjectTreeVisibleRow {
+  const TH2OutsideProjectHeaderRow();
+
+  @override
+  int get depth => 0;
+
+  @override
+  String get rowId => 'th2:outside-project';
+}
+
+String standaloneTH2FileRowId(String tabKey) => 'standalone:$tabKey';
+
 /// A row showing a [THProjectNode] of the project parser's tree.
 final class THProjectTreeNodeRow extends THProjectTreeVisibleRow {
   final THProjectNode node;

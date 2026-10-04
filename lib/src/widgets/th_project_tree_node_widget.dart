@@ -22,6 +22,8 @@ import 'package:mapiah/src/mp_file_read_write/th2_file_problem.dart';
 import 'package:mapiah/src/widgets/th_project_tree_node_icon_widget.dart';
 import 'package:mapiah/src/widgets/th_project_tree_row_context_menu_widget.dart';
 import 'package:mapiah/src/widgets/th2_element_tree_drag_controller.dart';
+import 'package:mapiah/src/widgets/th2_element_tree_row_widget.dart';
+import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// One visible project-tree row.
@@ -94,12 +96,8 @@ class THProjectTreeNodeWidget extends StatelessWidget {
     final Widget content = THProjectTreeRowContextMenuWidget(
       key: ValueKey('THProjectTreeRowContextMenu|${node.id}'),
       rowId: node.id,
-      menuChildrenBuilder: () =>
-          THProjectTreeRowContextMenuWidget.reloadMenuChildrenIfBrokenOrFailed(
-            rowId: node.id,
-            th2FilePath: currentNode.absolutePath,
-            appLocalizations: appLocalizations,
-          ),
+      menuChildrenBuilder: () => _menuChildren(
+        currentNode, appLocalizations),
       child: row,
     );
     if (dragController == null) return content;
@@ -109,6 +107,44 @@ class THProjectTreeNodeWidget extends StatelessWidget {
       targetMPID: null, collapsedScrap: false,
       expanded: isExpanded, child: content);
 
+  }
+
+  List<Widget> _menuChildren(TH2FileNode fileNode,
+      AppLocalizations l10n) {
+    final List<Widget> reload = THProjectTreeRowContextMenuWidget
+        .reloadMenuChildrenIfBrokenOrFailed(
+          rowId: node.id, th2FilePath: fileNode.absolutePath,
+          appLocalizations: l10n);
+    if (reload.isNotEmpty) {
+      return reload;
+    }
+    final TH2FileEditController? controller = mpLocator.mpGeneralController
+        .getTH2FileEditControllerIfExists(fileNode.absolutePath);
+    if (controller == null || !controller.isFileLoaded) {
+      return const <Widget>[];
+    }
+    final bool allVisible = controller.hideElementController.allScrapsVisible;
+    return <Widget>[
+      MenuItemButton(
+        onPressed: () {
+          final TH2FileEditController? edit = mpLocator.mpGeneralController
+              .prepareTH2FileForTreeEdit(fileNode.absolutePath);
+          if (edit == null) {
+            return;
+          }
+          whenTreeCanvasReady(edit, (BuildContext _) {
+            edit.stateController.onButtonPressed(MPButtonType.addScrap);
+          });
+        },
+        child: Text(l10n.th2ElementTreeAddScrap)),
+      const Divider(),
+      MenuItemButton(
+        onPressed: controller.th2File.scrapMPIDs.length > 1
+            ? controller.hideElementController.toggleAllScrapsVisibility : null,
+        child: Text(allVisible
+            ? l10n.th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip
+            : l10n.th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip)),
+    ];
   }
 
   /// The broken badge (problem count) or load-error mark of a `.th2` file
@@ -212,6 +248,9 @@ class THProjectTreeNodeWidget extends StatelessWidget {
       return;
     }
 
+    if (node.id.startsWith('standalone:')) {
+      return;
+    }
     uiController.loadTH2FileIfEligible(
       currentNode.absolutePath,
       projectEpoch: mpLocator.thProjectController.projectEpoch,

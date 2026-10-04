@@ -5,6 +5,8 @@ import 'dart:typed_data';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/mp_general_controller.dart';
+import 'package:mapiah/src/controllers/th_project_tree_ui_controller.dart';
 import 'package:mapiah/src/controllers/th_project_controller_operations.dart';
 import 'package:mapiah/src/controllers/th_project_reparse_aux.dart';
 import 'package:mapiah/src/controllers/th_project_reparse_flush_result.dart';
@@ -187,6 +189,7 @@ abstract class THProjectControllerBase with Store {
       }
 
       _applyFreshLoadResult(result);
+      _syncSelectionToActiveTab();
     } catch (error, stackTrace) {
       mpLocator.mpLog.e(
         '[THProjectController] openProject failed for $canonicalRootPath',
@@ -258,6 +261,7 @@ abstract class THProjectControllerBase with Store {
   void closeProject() {
     _beginProjectLifecycleTransition();
     _clearProjectState();
+    _syncSelectionToActiveTab();
   }
 
   /// Reserves exactly one new epoch, disposes the outgoing project's file
@@ -1678,6 +1682,25 @@ abstract class THProjectControllerBase with Store {
     activeSelectedNodeId = nodeId;
   }
 
+  @action
+  void clearSelection() {
+    activeSelectedNodeId = null;
+  }
+
+  void _syncSelectionToActiveTab() {
+    final List<String> tabs = mpLocator.mpGeneralController.openFileOrder;
+    final int index = mpLocator.mpGeneralController.activeTabIndex;
+    if (index < tabs.length) {
+      final String tab = tabs[index];
+      final THProjectFileNode? node = nodeByCanonicalPath(tab);
+      if (node != null) {
+        selectNode(node.id);
+      } else if (isTH2Tab(tab)) {
+        selectNode('standalone:$tab');
+      }
+    }
+  }
+
   THProjectFileNode? nodeByCanonicalPath(String canonicalPath) =>
       _nodesByCanonicalPath[canonicalPath];
 
@@ -1727,6 +1750,28 @@ abstract class THProjectControllerBase with Store {
       nodesByCanonicalPath: _nodesByCanonicalPath,
       nodesById: _nodesById,
     );
+    mpLocator.thProjectTreeUIController
+        .ensureDefaultExpansionForProject(result.rootNode);
+
+    for (final String tab in mpLocator.mpGeneralController.openFileOrder) {
+      if (!isTH2Tab(tab)) {
+        continue;
+      }
+      final THProjectFileNode? node = nodeByCanonicalPath(tab);
+      if (node is! TH2FileNode) {
+        continue;
+      }
+      final String standaloneId = 'standalone:$tab';
+      final THProjectTreeUIController treeUI =
+          mpLocator.thProjectTreeUIController;
+      if (treeUI.isExpanded(standaloneId)) {
+        treeUI.collapse(standaloneId);
+        treeUI.expand(node.id);
+      }
+      if (activeSelectedNodeId == standaloneId) {
+        selectNode(node.id);
+      }
+    }
 
     final List<THProjectParseError> treeErrors = collectTreeErrors(
       result.rootNode,

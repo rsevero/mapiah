@@ -32,13 +32,43 @@ abstract class TH2FileHideElementControllerBase with Store {
 
   @computed
   int get visibleScrapCount {
+    _th2FileEditController.structureRevision;
     return _th2File.scrapMPIDs
         .where((mpID) => !_hiddenScrapMPIDs.contains(mpID))
         .length;
   }
 
   @computed
-  bool get allScrapsVisible => _hiddenScrapMPIDs.isEmpty;
+  bool get allScrapsVisible {
+    _th2FileEditController.structureRevision;
+    return _th2File.scrapMPIDs.every(isScrapVisible);
+  }
+
+  /// Sets the visibility of several scraps while retaining a visible scrap.
+  @action
+  void setScrapsHidden(List<int> scrapMPIDs, bool hidden) {
+    if (scrapMPIDs.isEmpty) {
+      return;
+    }
+    final Set<int> targetIDs = scrapMPIDs.toSet();
+    final int activeID = _th2FileEditController.activeScrapID;
+    final bool wouldHideAll = hidden && _th2File.scrapMPIDs.every(
+      (int id) => targetIDs.contains(id) || _hiddenScrapMPIDs.contains(id));
+    for (final int id in scrapMPIDs) {
+      if (hidden && !(wouldHideAll && id == activeID)) {
+        _hiddenScrapMPIDs.add(id);
+      } else {
+        _hiddenScrapMPIDs.remove(id);
+      }
+    }
+    if (hidden && _hiddenScrapMPIDs.contains(activeID)) {
+      _setActiveScrapForVisibilityHide(activeID);
+    }
+    _th2FileEditController.userInteractionController
+        .markTherionStationPointNameCoordinateCacheDirty();
+    _th2FileEditController.snapController.updateSnapTargets();
+    _th2FileEditController.triggerNonSelectedElementsRedraw();
+  }
 
   /// If all scraps are visible, hides all except the active one.
   /// If any scrap is hidden, makes all scraps visible.

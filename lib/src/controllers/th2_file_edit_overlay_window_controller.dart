@@ -52,12 +52,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   MPWindowType? _secondLevelOptionOpenedOverlayWindow;
 
   @readonly
-  bool _isChangeScrapWindowShown = false;
-
-  @computed
-  bool get showChangeScrapOverlayWindow => _isChangeScrapWindowShown;
-
-  @readonly
   bool _isChangeImageWindowShown = false;
 
   @computed
@@ -73,7 +67,6 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
   bool _isAutoDismissWindowOpen = false;
 
   final autoDismissOverlayWindowTypes = {
-    MPWindowType.availableScraps,
     MPWindowType.changeImage,
     MPWindowType.commandOptions,
     MPWindowType.defaultOptions,
@@ -101,10 +94,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
 
   Set<MPWindowType> _getMutuallyExclusiveOverlayWindowTypes(MPWindowType type) {
     switch (type) {
-      case MPWindowType.availableScraps:
-        return <MPWindowType>{MPWindowType.changeImage};
       case MPWindowType.changeImage:
-        return <MPWindowType>{MPWindowType.availableScraps};
+        return <MPWindowType>{};
       default:
         return <MPWindowType>{};
     }
@@ -287,8 +278,8 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
       _isDefaultOptionsWindowShown = show;
     }
 
-    if (type == MPWindowType.availableScraps) {
-      _isChangeScrapWindowShown = show;
+    if ((type == MPWindowType.scrapOptions) && !show) {
+      _th2FileEditController.optionEditController.setOptionsScrapMPID(-1);
     }
 
     if (type == MPWindowType.changeImage) {
@@ -435,27 +426,22 @@ abstract class TH2FileEditOverlayWindowControllerBase with Store {
     ).insert(_overlayWindows[overlayWindowType]!);
   }
 
-  void perfomToggleScrapOptionsOverlayWindow({
+  void performShowScrapOptionsOverlayWindow({
     required int scrapMPID,
     required Offset outerAnchorPosition,
+    required MPWidgetPositionType innerAnchorType,
   }) {
-    final bool shouldShowScrapOptions =
-        !_isOverlayWindowShown[MPWindowType.scrapOptions]!;
-
-    if (shouldShowScrapOptions) {
-      _th2FileEditController.optionEditController.setOptionsScrapMPID(
-        scrapMPID,
-      );
-      _th2FileEditController.optionEditController.updateElementOptionMapByMPID(
-        scrapMPID,
-      );
+    if (_isOverlayWindowShown[MPWindowType.scrapOptions]!) {
+      setShowOverlayWindow(MPWindowType.scrapOptions, false);
     }
-
+    _th2FileEditController.optionEditController.setOptionsScrapMPID(scrapMPID);
+    _th2FileEditController.optionEditController
+        .updateElementOptionMapByMPID(scrapMPID);
     setShowOverlayWindow(
       MPWindowType.scrapOptions,
-      shouldShowScrapOptions,
+      true,
       outerAnchorPosition: outerAnchorPosition,
-      innerAnchorType: MPWidgetPositionType.centerRight,
+      innerAnchorType: innerAnchorType,
     );
   }
 

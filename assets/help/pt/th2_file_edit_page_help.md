@@ -23,9 +23,6 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Elementos selecionados](#elementos-selecionados)
   - [Pontos finais/controle em edição de linha](#pontos-finaiscontrole-em-edição-de-linha)
 - [Croquis](#croquis)
-  - [Copiar croqui](#copiar-croqui)
-  - [Recortar croqui](#recortar-croqui)
-  - [Duplicar croqui](#duplicar-croqui)
   - [Visibilidade do croqui](#visibilidade-do-croqui)
   - [Reordenação de croquis](#reordenação-de-croquis)
 - [Desenhando linhas](#desenhando-linhas)
@@ -245,42 +242,17 @@ Quando um ou mais pontos finais/controle estão selecionados no modo de edição
 * Mantenha _Shift_ pressionado enquanto arrasta para desativar temporariamente o snap
 
 ## Croquis
-Só é possível trabalhar em um croqui por vez. Para trocar o croqui atual, clique no botão de seleção de croquis ![Botão Croquis](assets/help/images/buttonScraps.png "Scraps") no canto inferior direito e escolha o croqui desejado na caixa de diálogo apresentada.
+A barra lateral do projeto lista os croquis de cada arquivo `.th2` na ordem do arquivo: a primeira linha é desenhada primeiro. A antiga caixa de diálogo mostrava a ordem inversa. Abra a linha do arquivo pela seta para ver seus croquis. Abas de arquivos fora do projeto aparecem em **Arquivos abertos fora do projeto**, mesmo quando nenhum projeto está aberto.
 
-Você também pode _Alt+clicar_ em um croqui inativo para torná-lo o croqui atual.
-
-Cada croqui é listado como uma linha na caixa de diálogo. A linha contém:
-* Um botão de rádio para selecioná-lo como o croqui ativo
-* Uma caixa de seleção de visibilidade (quando o arquivo tem mais de um croqui) — veja [Visibilidade do croqui](#visibilidade-do-croqui)
-* Quatro botões de ícone: _Copiar croqui_, _Recortar croqui_, _Duplicar croqui_ e _Remover croqui_
-* Um identificador de arrasto (⣿) para reordenar os croquis (quando o arquivo tem mais de um croqui) — veja [Reordenação de croquis](#reordenação-de-croquis)
-
-Um botão _alternar todos_ aparece acima da lista (quando o arquivo tem mais de um croqui). Seu tooltip e ícone refletem o que o botão fará:
-* _Ocultar todos exceto o ativo_ (ícone de olho fechado): exibido quando todos os croquis estão visíveis; clicar oculta todos os croquis exceto o ativo.
-* _Mostrar todos os croquis_ (ícone de olho): exibido quando algum croqui está oculto; clicar torna todos os croquis visíveis.
-
-### Copiar croqui
-Copia todos os elementos do croqui para a área de transferência sem remover o croqui. O conteúdo da área de transferência pode então ser colado com _Ctrl+V_ no mesmo arquivo ou em outro arquivo aberto.
-
-### Recortar croqui
-Copia todos os elementos do croqui para a área de transferência e então remove o croqui do arquivo. O conteúdo da área de transferência pode então ser colado com _Ctrl+V_ no mesmo arquivo ou em outro arquivo aberto. A operação de recortar pode ser desfeita com _Ctrl+Z_, que restaura o croqui e todos os seus elementos.
-
-### Duplicar croqui
-Duplica o croqui inteiro, incluindo todos os seus elementos, criando um novo croqui no mesmo arquivo. Novos IDs exclusivos são gerados para todos os elementos duplicados. A operação de duplicação pode ser desfeita com _Ctrl+Z_.
+Clique na linha de um croqui para ativá-lo. Você também pode usar _Alt+clique_ em um croqui inativo no canvas ou pressionar _Alt+K_ para alternar entre croquis. Clique com o botão direito na linha do croqui para **Copiar**, **Recortar**, **Duplicar**, **Excluir**, **Ocultar/Mostrar**, **Opções…** e ações de ordem de desenho. Quando a linha pertence à seleção de croquis, o menu atua em todos os croquis selecionados; use _Ctrl+clique_ para selecionar vários. Copiar coloca os croquis na área de transferência para _Ctrl+V_; Recortar, Duplicar e Excluir são operações que podem ser desfeitas.
 
 ### Visibilidade do croqui
-Quando o arquivo tem mais de um croqui, uma caixa de seleção de visibilidade aparece em todas as linhas de croqui, incluindo a do croqui ativo. Marcar ou desmarcar essa caixa alterna se aquele croqui é exibido no canvas.
+Clique no ícone de olho na linha de um croqui para mostrá-lo ou ocultá-lo sem abrir sua aba. O texto de um croqui oculto fica esmaecido, mas seus elementos continuam na árvore. O ícone não aparece quando há apenas um croqui. O último croqui visível não pode ser ocultado. Ao ocultar o croqui ativo, o mais próximo entre os visíveis passa a ser o ativo.
 
-Se apenas um croqui estiver visível no momento, a caixa de seleção do croqui ativo fica desabilitada para evitar ocultar todos os croquis. Quando o croqui ativo é ocultado, o Mapiah troca automaticamente o croqui ativo pelo mais próximo que estava visível anteriormente.
-
-Se o arquivo tiver apenas um croqui, a caixa de seleção de visibilidade fica oculta.
+Clique com o botão direito na linha de um arquivo para **Ocultar todos exceto o ativo** ou **Mostrar todos os croquis**, e também para **Adicionar croqui**. A ação de visibilidade não abre uma aba.
 
 ### Reordenação de croquis
-Clique e arraste o identificador de arrasto (⣿) de qualquer linha de croqui para alterar sua posição na lista. A reordenação pode ser desfeita com _Ctrl+Z_.
-
-Durante o arrasto:
-* A linha arrastada desaparece da lista e uma prévia semitransparente dela segue o cursor.
-* Uma barra colorida aparece acima da linha onde o croqui arrastado será inserido ao soltar o botão do mouse.
+Arraste a linha de um croqui, use o menu de ordem de desenho ou seus atalhos para movê-lo na pilha. As alterações podem ser desfeitas com _Ctrl+Z_.
 
 ## Desenhando linhas
 Ao desenhar linhas, cada novo segmento é inicialmente criado como um segmento de linha reta. Para convertê-lo em um segmento de curva Bézier, não solte o botão do mouse e arraste. A posição do mouse será tratada como a posição do único ponto de controle de uma curva Bézier quadrática.
@@ -324,7 +296,6 @@ Caso existam operações no stack de refazer e uma nova operação de edição s
 
 ### Canto inferior direito
 * ![Botão imagens](assets/help/images/buttonImages.png “Imagens”)  _Imagens_: abre a janela de imagens (overlay). Mostra todas as imagens inseridas no arquivo atual. Cada linha de imagem possui uma caixa de seleção de visibilidade, uma caixa de seleção de visibilidade da grade (somente imagens XVI), um botão de exclusão e um identificador de arrasto para reordenação. Também apresenta um botão “Add Image (I)”. (Alt+I)
-* ![Botão scraps](assets/help/images/buttonScraps.png "Scraps")  _Scraps_: abre uma caixa de diálogo para mudar o scrap atual, excluir um scrap existente e adicionar um novo. A caixa de diálogo mostra todos os scraps disponíveis e permite selecionar um deles. A janela de opções do scrap (overlay) é apresentada ao clicar com o botão direito no scrap desejado. (Alt+C)
 * ![Botão selecionar elemento](assets/help/images/buttonSelectElement.png "Selecionar elemento")  _Selecionar elemento_: permite selecionar elementos no arquivo TH2. (C)
 * ![Botão editar linha](assets/help/images/buttonLineEdit.png "Editar linha")  _Editar linha_: permite editar linhas individuais no arquivo TH2. (N)
   * Um clique duplo em uma linha ou em um de seus segmentos de linha visíveis, usando a ferramenta _Selecionar elemento_, também entra no modo _Editar linha_ para aquela linha.
@@ -346,9 +317,7 @@ Caso existam operações no stack de refazer e uma nova operação de edição s
 Clicar com o botão direito em um elemento selecionado apresenta uma janela (overlay) com as opções disponíveis para os elementos selecionados. A janela de opções do elemento também pode ser aberta usando o atalho de teclado 'O' quando houver pelo menos um elemento selecionado.
 As opções disponíveis dependem do tipo de elemento selecionado.
 
-Para editar opções do scrap, clique com o botão direito em:
-* o botão de seleção de scrap no canto inferior direito, caso exista apenas um scrap no arquivo, ou
-* o nome do scrap na caixa de diálogo de seleção de scrap apresentada ao clicar no botão de seleção de scrap, caso existam múltiplos scraps no arquivo.
+Para editar as opções de um croqui, clique com o botão direito na sua linha na barra lateral do projeto e escolha **Opções…**.
 
 A opção _Esboço_ do scrap define as imagens de fundo que o Therion desenha sob o scrap quando o layout tem `sketches on`. Após escolher _Definido_, todos os esboços do scrap são listados com seu nome de arquivo e as coordenadas do seu canto inferior esquerdo, que podem ser editados diretamente; use _Remover esboço_ para excluir um deles. _Adicionar imagem carregada_ adiciona um esboço a partir de uma imagem já carregada no arquivo, preenchendo seu nome de arquivo e as coordenadas do seu canto inferior esquerdo. _Adicionar de arquivo…_ adiciona um esboço a partir de um arquivo de imagem no disco; como essa imagem não está posicionada no canvas, digite as coordenadas do seu canto inferior esquerdo. Os arquivos escolhidos são armazenados com caminho relativo ao arquivo TH2. O Therion não redimensiona nem rotaciona esboços, então um aviso é apresentado quando a imagem carregada está redimensionada ou rotacionada no Mapiah.
 
