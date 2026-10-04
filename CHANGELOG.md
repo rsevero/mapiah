@@ -20,6 +20,7 @@
   * Clarified the TH2 text editing plan (#38) so mode switches, tree edits and saves await detached parsing before changing the model or writing. Stale parse results are discarded, and the plan covers cancellation and concurrent actions while validation is pending.
   * Limited the TH2 text editing plan (#38) to LF and CRLF line endings. A lone CR blocks entry to text mode or an apply with a clear message, and the planned preservation tests now cover only supported endings.
   * Validated the TH2 text editing plan (#38) against the current code again. Applying text now always starts from the editor's own text. Text with characters the file's encoding can't hold, such as `ç` in an ASCII file, is refused with a message at its line instead of failing on save. Saving in text mode reports whether the text had problems or the save was cancelled. Leaving text mode for a broken file without changes returns to the broken-file view. Several smaller details were also fixed.
+  * Simplified line endings in the TH2 text editing plan (#38): the text editor keeps each line's real line ending. Edited lines keep theirs, pasted lines keep the ending they were pasted with, and Enter inserts the file's line ending, so saving changes only the lines that were edited, typed or pasted.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
