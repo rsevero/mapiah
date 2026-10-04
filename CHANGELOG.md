@@ -18,6 +18,7 @@
   * Corrected the scrap dialog removal plan (#32): opening scrap options from the tree preserves line-edit mode and selected end control points, and the standalone-file section has an explicit header row type.
   * Validated the scrap dialog removal plan (#32) against the current code. A project reload keeps the sidebar selection, so the plan no longer restores it after a reload, and it now moves standalone rows to their project rows after a project open too. Collapsed scraps of controllers disposed during a project reload are now forgotten. After a hidden scrap is deleted, the file menu no longer offers "Show all scraps" when every remaining scrap is visible.
   * Clarified the TH2 text editing plan (#38) so mode switches, tree edits and saves await detached parsing before changing the model or writing. Stale parse results are discarded, and the plan covers cancellation and concurrent actions while validation is pending.
+  * Limited the TH2 text editing plan (#38) to LF and CRLF line endings. A lone CR blocks entry to text mode or an apply with a clear message, and the planned preservation tests now cover only supported endings.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
