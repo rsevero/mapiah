@@ -155,7 +155,7 @@ Run `scripts/task_finish.sh <branch>`. It does steps 1 to 4 below and stops on a
 
 ### Canvas Orientation
 
-Therion and Flutter Y-axes are opposite. Mapiah uses Therion's convention (Y increases downwards) for intuitive mapping to .th2 files. All canvas transformations account for this.
+Therion and Flutter Y-axes are opposite. Mapiah uses Therion's convention (Y increases upwards) for intuitive mapping to .th2 files: `TH2FileEditController.transformCanvas` ends with `canvas.scale(1, -1)`, so elements are painted on a Y-up canvas. Code that draws upright content on it (point symbols, labels, images) cancels that reflection locally. All canvas transformations account for this.
 
 ### Coding Rules Summary
 
