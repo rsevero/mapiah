@@ -40,6 +40,7 @@
 
   * Clarified the Phase 8 type-preview plan (#32): the picture cache owns and draws pictures without exposing references to mounted painters, so eviction and clearing are safe on later repaints. Defined synthetic SKBB steps, fixed-ladder and slope samples, with focused rendering and cache-lifetime regression tests.
   * Validated the TH2 text editing plan (#38) again. Leaving text mode now ends the text session, so a file no longer stays marked as unsaved on the canvas after its text was applied and saved. Save As starts its new text session after renaming the file, and the plan makes a file's "new, never saved" flag observable, so Save's enabled state follows it.
+  * Validated the TH2 text editing plan (#38) again. Applying the text no longer ends the text session by itself, so the editor always has text to show while a save or a tree edit finishes. A failed save from the app bar, the overflow menu or a keyboard shortcut is now logged instead of being left unhandled.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
