@@ -597,6 +597,13 @@ abstract class MPGeneralControllerBase with Store {
 
       _t2hFileEditControllers[normalizedNewFilename] = controller;
       _bumpTH2ControllersRevision();
+
+      // The dirty-mirroring reaction only fires when `enableSaveButton`
+      // changes, and then uses the current filename, so it would never
+      // remove the old path. Move the mark with the controller.
+      if (project.dirtyFilePaths.remove(normalizedOldFilename)) {
+        project.dirtyFilePaths.add(normalizedNewFilename);
+      }
     }
 
     if (_textEditorControllers.containsKey(normalizedOldFilename)) {

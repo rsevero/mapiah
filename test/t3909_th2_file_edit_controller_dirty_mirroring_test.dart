@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
@@ -81,6 +83,63 @@ void main() {
           mpLocator.thProjectController.dirtyFilePaths,
           isNot(contains(canonicalPath)),
         );
+      },
+    );
+
+    test(
+      'Save As moves the mark to the new path and clears it once saved',
+      () async {
+        final String path = THTestAux.testPath('2025-10-05-001-line.th2');
+        final String canonicalPath = THProjectPathResolver.canonicalize(
+          p.absolute(path),
+        );
+        final Directory tempDirectory = Directory.systemTemp.createTempSync(
+          'mapiah_t3909_',
+        );
+
+        addTearDown(() => tempDirectory.deleteSync(recursive: true));
+
+        final String newPath = p.join(tempDirectory.path, 'saved_as.th2');
+        final String newCanonicalPath = THProjectPathResolver.canonicalize(
+          p.absolute(newPath),
+        );
+        final TH2FileEditController controller = mpLocator
+            .mpGeneralController
+            .getTH2FileEditController(filename: path);
+
+        await controller.load();
+        controller.setActiveScrap(controller.th2File.getScraps().first.mpID);
+
+        final THArea area = controller.areaLineCreationController.getNewArea();
+
+        controller.execute(
+          MPCommandFactory.addAreaFromExisting(
+            existingArea: area,
+            th2File: controller.th2File,
+          ),
+        );
+
+        expect(
+          mpLocator.thProjectController.dirtyFilePaths,
+          contains(canonicalPath),
+        );
+
+        // The same steps saveAsTH2File runs after its file picker.
+        mpLocator.mpGeneralController.renameFileController(
+          oldFilename: path,
+          newFilename: newPath,
+        );
+        controller.th2File.filename = newPath;
+
+        expect(
+          mpLocator.thProjectController.dirtyFilePaths,
+          equals(<String>{newCanonicalPath}),
+        );
+
+        controller.saveTH2File();
+
+        expect(controller.enableSaveButton, isFalse);
+        expect(mpLocator.thProjectController.dirtyFilePaths, isEmpty);
       },
     );
 
