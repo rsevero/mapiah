@@ -39,6 +39,7 @@
   * Validated the TH2 text editing plan (#38) after the Save As unsaved-mark fix. In the plan, Save As now renames the file before marking it saved, so the project tree doesn't show the saved file as unsaved under its new name, and a failed Save As keeps the mark on the original file.
 
   * Clarified the Phase 8 type-preview plan (#32): the picture cache owns and draws pictures without exposing references to mounted painters, so eviction and clearing are safe on later repaints. Defined synthetic SKBB steps, fixed-ladder and slope samples, with focused rendering and cache-lifetime regression tests.
+  * Validated the TH2 text editing plan (#38) again. Leaving text mode now ends the text session, so a file no longer stays marked as unsaved on the canvas after its text was applied and saved. Save As starts its new text session after renaming the file, and the plan makes a file's "new, never saved" flag observable, so Save's enabled state follows it.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
