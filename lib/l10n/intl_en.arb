@@ -164,6 +164,16 @@
     "description": "Message shown when no acceptable therion.log can be appended. Used on: lib/src/widgets/mp_run_therion_dialog_widget.dart",
     "type": "text"
   },
+  "mapiahTherionRunBrokenFilesWarning": "{count, plural, one {This loaded file of the project is broken. Therion may fail:} other {These {count} loaded files of the project are broken. Therion may fail:}}",
+  "@mapiahTherionRunBrokenFilesWarning": {
+    "description": "Warning above the output of the Run Therion dialog, followed by the paths of the loaded broken .th2 files of the project being run. Used on: MPRunTherionDialogWidget",
+    "type": "text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "mapiahTherionRunOutputLabel": "Output:",
   "@mapiahTherionRunOutputLabel": {
     "description": "Label for Therion output area. Used on: _MPRunTherionDialogWidgetState.build",

@@ -27,8 +27,10 @@ abstract class MPLineDecorator {
   /// decoration is stable across repaints; defaults to 0 for decorators
   /// that don't need it. [lineSegments] carries the ordered vertices behind
   /// [path], each with its raw (undefaulted) `l-size`/`orientation` line
-  /// point options — only the SKBB `slope` line decorator (`l_slope_SKBB`)
-  /// reads it; every other decorator ignores it. [showBorder] mirrors
+  /// point options — the SKBB `slope` (`l_slope_SKBB`, `l-size` and
+  /// `orientation`), `steps` (`l_steps_SKBB`, point count and rails) and
+  /// `fixed-ladder` (`l_fixedladder_SKBB`, rail knots) line decorators read
+  /// it; every other decorator ignores it. [showBorder] mirrors
   /// `line slope -border on` (`l_slope_SKBB`'s baseline stroke); every
   /// other decorator ignores it too. [arrowHead] mirrors `line arrow
   /// -head begin/end/both/none` (`l_arrow_SKBB`'s chevron placement);

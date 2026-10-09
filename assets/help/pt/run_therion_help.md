@@ -18,6 +18,14 @@ Opções extras opcionais de linha de comando passadas ao Therion a cada execuç
 * A **página de Configurações** (campo `Therion_RunParameters`).
 * O argumento de linha de comando `--therion_run_parameters` do Mapiah (veja a [ajuda da página principal](mapiah_home_help) para detalhes).
 
+## Aviso de arquivos com problemas
+
+Quando você executa o projeto carregado e alguns de seus arquivos `.th2` que o Mapiah já carregou estão com problemas, um aviso acima da saída lista seus caminhos. O Therion pode falhar por causa deles, mas a execução começa mesmo assim. Os caminhos são texto selecionável, e uma lista longa pode ser rolada.
+
+* Só são listados arquivos do projeto carregado que está sendo executado, e apenas os já carregados, expandindo-os na árvore do projeto ou abrindo-os em uma aba. O Mapiah não lê outros arquivos para procurar problemas.
+* Nenhum aviso aparece quando você executa um arquivo de configuração que não é o projeto carregado, ou logo após escolher um projeto para executar, antes que ele seja carregado.
+* A lista é obtida quando a caixa de diálogo abre. Depois de corrigir e recarregar um arquivo, a execução seguinte não o lista mais.
+
 ## Saída
 
 O texto completo produzido pelo Therion durante a execução. Após o término, o arquivo de log do Therion é anexado, seguido dos horários de início e fim.

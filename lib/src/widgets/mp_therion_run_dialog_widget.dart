@@ -53,6 +53,10 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   bool _hasAppendedPostRunOutput = false;
   bool _isProcessingPostRun = false;
 
+  /// The loaded broken `.th2` files of the project being run, taken when
+  /// the dialog opens. Empty when the run is not the loaded project's.
+  late final List<String> _brokenTH2FilePaths;
+
   @override
   void initState() {
     super.initState();
@@ -64,6 +68,9 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     );
 
     _updateStartTime(DateTime.now());
+    _brokenTH2FilePaths = _isRunTargetingLoadedProject()
+        ? mpLocator.mpGeneralController.loadedBrokenProjectTH2FilePaths()
+        : const <String>[];
 
     final MPTherionRunner? injectedRunner = widget.therionRunner;
 
@@ -541,6 +548,10 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
                           },
                         ),
                         const SizedBox(height: mpTherionRunDialogSpacing),
+                        if (_brokenTH2FilePaths.isNotEmpty) ...<Widget>[
+                          _buildBrokenFilesWarning(appLocalizations, theme),
+                          const SizedBox(height: mpTherionRunDialogSpacing),
+                        ],
                         Text(appLocalizations.mapiahTherionRunOutputLabel),
                         const SizedBox(height: mpSettingsPageFieldSpacing),
                         Expanded(
@@ -735,6 +746,65 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
       targetOffset,
       duration: mpTherionRunScrollAnimationDuration,
       curve: mpTherionRunScrollAnimationCurve,
+    );
+  }
+
+  /// A bounded warning listing [_brokenTH2FilePaths] as selectable plain
+  /// text; the list scrolls when it does not fit.
+  Widget _buildBrokenFilesWarning(
+    AppLocalizations appLocalizations,
+    ThemeData theme,
+  ) {
+    return Container(
+      key: const ValueKey<String>('MPRunTherionDialogBrokenFilesWarning'),
+      width: double.infinity,
+      constraints: const BoxConstraints(
+        maxHeight: mpTherionRunBrokenFilesWarningMaxHeight,
+      ),
+      padding: const EdgeInsets.all(mpSettingsPageFieldSpacing),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: mpTherionRunOutputWarningColor,
+          width: mpTherionRunOutputBorderWidth,
+        ),
+        borderRadius: BorderRadius.circular(mpDefaultButtonRadius),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              const Icon(
+                Icons.warning_amber_outlined,
+                color: mpTherionRunOutputWarningColor,
+              ),
+              const SizedBox(width: mpSettingsPageFieldSpacing),
+              Expanded(
+                child: Text(
+                  appLocalizations.mapiahTherionRunBrokenFilesWarning(
+                    _brokenTH2FilePaths.length,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: mpSettingsPageFieldSpacing),
+          Flexible(
+            child: SingleChildScrollView(
+              child: SelectionArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    for (final String path in _brokenTH2FilePaths)
+                      Text(path, style: theme.textTheme.bodySmall),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

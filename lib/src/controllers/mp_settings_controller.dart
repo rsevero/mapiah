@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'package:flutter/foundation.dart' show listEquals;
+import 'package:flutter/foundation.dart' show listEquals, visibleForTesting;
 import 'package:mapiah/src/auxiliary/mp_therion_runner.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
@@ -20,6 +20,18 @@ class MPSettingsController = MPSettingsControllerBase
 abstract class MPSettingsControllerBase with Store {
   @readonly
   bool _isTherionAvailable = true;
+
+  /// Set by [setTherionAvailableForTesting], so a later availability probe
+  /// does not overwrite the test's value.
+  bool _isTherionAvailabilityOverriddenForTesting = false;
+
+  /// Overrides [isTherionAvailable] for tests, which must not depend on a
+  /// Therion executable being installed.
+  @visibleForTesting
+  void setTherionAvailableForTesting(bool isAvailable) {
+    _isTherionAvailabilityOverriddenForTesting = true;
+    runInAction(() => _isTherionAvailable = isAvailable);
+  }
 
   Locale get locale {
     final String localIDSetting = getStringWithDefault(
@@ -149,8 +161,16 @@ abstract class MPSettingsControllerBase with Store {
     try {
       final bool available = await MPTherionRunner.isTherionAvailable();
 
+      if (_isTherionAvailabilityOverriddenForTesting) {
+        return;
+      }
+
       _isTherionAvailable = available;
     } on Object {
+      if (_isTherionAvailabilityOverriddenForTesting) {
+        return;
+      }
+
       _isTherionAvailable = false;
     }
   }

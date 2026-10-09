@@ -3,7 +3,7 @@
 # TH2 Element Tree Phase 8: Type Previews and Broken-File Run Warning — Implementation Plan
 
 - **Date:** 2026-10-04
-- **Status:** Proposed; validated against `main` at `9252a865`.
+- **Status:** Implemented; validated against `main` at `9252a865`.
 - **Parent:** [TH2 Element Tree and Drawing Order](2026-09-23-th2-element-tree-and-drawing-order.md), Phase 8.
 - **Related:** [TH2 Text Editing Mode](2026-09-25-th2-text-editing.md), especially its later broken-file repair flow.
 - **Issue:** [#32](https://github.com/rsevero/mapiah/issues/32).

@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:mapiah/src/painters/helpers/th2_element_type_preview_cache.dart';
+import 'package:mapiah/src/painters/th2_element_type_icon_painter.dart';
 import 'package:mapiah/src/auxiliary/mp_log.dart';
 import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
@@ -26,6 +28,8 @@ class MPLocator {
   MPSettingsController? _mpSettingsController;
   THProjectTreeUIController? _thProjectTreeUIController;
   THProjectSearchController? _thProjectSearchController;
+  TH2ElementTypePreviewCache<TH2ElementTypePreviewKey>?
+  _th2ElementTypePreviewCache;
 
   MPSettingsController get mpSettingsController =>
       _mpSettingsController ??= MPSettingsController();
@@ -35,6 +39,19 @@ class MPLocator {
 
   THProjectSearchController get thProjectSearchController =>
       _thProjectSearchController ??= THProjectSearchController();
+
+  /// The app-wide cache of element-tree type previews, created when the
+  /// first icon paints.
+  TH2ElementTypePreviewCache<TH2ElementTypePreviewKey>
+  get th2ElementTypePreviewCache => _th2ElementTypePreviewCache ??=
+      TH2ElementTypePreviewCache<TH2ElementTypePreviewKey>();
+
+  /// Disposes the type preview cache, if created. Unmount every type icon
+  /// first; a later [th2ElementTypePreviewCache] read creates a new cache.
+  void disposeTH2ElementTypePreviewCache() {
+    _th2ElementTypePreviewCache?.dispose();
+    _th2ElementTypePreviewCache = null;
+  }
 
   final MPLog mpLog = MPLog.instance;
 

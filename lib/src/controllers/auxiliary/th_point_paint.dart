@@ -65,4 +65,23 @@ class THPointPaint {
       labelPaint: makeLabelPaintNull ? null : (labelPaint ?? this.labelPaint),
     );
   }
+
+  /// A copy that shares no mutable [Paint] or list with this one: [border],
+  /// [fill] and the [highlightBorders] list and entries are new objects, so
+  /// adjusting the copy cannot change shared or on-screen paints.
+  THPointPaint copyWithCopiedPaints() {
+    return THPointPaint(
+      radius: radius,
+      rotation: rotation,
+      type: type,
+      border: (border == null) ? null : Paint.from(border!),
+      fill: (fill == null) ? null : Paint.from(fill!),
+      highlightBorders: <Paint>[
+        for (final Paint highlightBorder in highlightBorders)
+          Paint.from(highlightBorder),
+      ],
+      therionSymbol: therionSymbol,
+      labelPaint: labelPaint,
+    );
+  }
 }

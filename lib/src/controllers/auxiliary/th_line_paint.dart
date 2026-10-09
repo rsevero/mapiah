@@ -49,4 +49,23 @@ class THLinePaint {
       cleanBeforeFill: cleanBeforeFill ?? this.cleanBeforeFill,
     );
   }
+
+  /// A copy that shares no mutable [Paint] or list with this one: every
+  /// paint and the [highlightBorders] list and entries are new objects, so
+  /// adjusting the copy cannot change shared or on-screen paints.
+  THLinePaint copyWithCopiedPaints() {
+    return THLinePaint(
+      primaryPaint: (primaryPaint == null) ? null : Paint.from(primaryPaint!),
+      secondaryPaint: (secondaryPaint == null)
+          ? null
+          : Paint.from(secondaryPaint!),
+      fillPaint: (fillPaint == null) ? null : Paint.from(fillPaint!),
+      highlightBorders: <Paint>[
+        for (final Paint highlightBorder in highlightBorders)
+          Paint.from(highlightBorder),
+      ],
+      type: type,
+      cleanBeforeFill: cleanBeforeFill,
+    );
+  }
 }

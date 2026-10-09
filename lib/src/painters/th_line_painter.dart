@@ -5,17 +5,14 @@ import 'dart:ui';
 import 'package:collection/collection.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/constants/mp_paints.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_line_paint.dart';
 import 'package:mapiah/src/controllers/auxiliary/th_point_paint.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/elements/auxiliary/mp_line_segment_mark_info.dart';
-import 'package:mapiah/src/painters/helpers/mp_dashed_properties.dart';
 import 'package:mapiah/src/painters/helpers/mp_line_decorator.dart';
+import 'package:mapiah/src/painters/helpers/mp_line_path_painter.dart';
 import 'package:mapiah/src/painters/helpers/mp_symbol_unit.dart';
-import 'package:mapiah/src/painters/helpers/mp_thclean.dart';
 import 'package:mapiah/src/painters/th_line_painter_line_segment.dart';
-import 'package:mapiah/src/painters/types/mp_line_paint_type.dart';
 import 'package:mapiah/src/widgets/auxiliary/th_line_painter_line_info.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -39,28 +36,6 @@ class THLinePainter extends CustomPainter {
     required this.th2FileEditController,
   });
 
-  static final Map<MPLinePaintType, List<int>> linePaintTypeToDashLengths =
-      <MPLinePaintType, List<int>>{
-        MPLinePaintType.dot: <int>[2, -6],
-        MPLinePaintType.long2Dots: <int>[18, -6, 2, -6, 2, -6],
-        MPLinePaintType.long3Dots: <int>[18, -6, 2, -6, 2, -6, 2, -6],
-        MPLinePaintType.long: <int>[18, -6],
-        MPLinePaintType.longDot: <int>[18, -6, 2, -6],
-        MPLinePaintType.medium2Dots: <int>[12, -6, 2, -6, 2, -6],
-        MPLinePaintType.medium3Dots: <int>[12, -6, 2, -6, 2, -6, 2, -6],
-        MPLinePaintType.medium: <int>[12, -6],
-        MPLinePaintType.mediumDot: <int>[12, -6, 2, -6],
-        MPLinePaintType.mediumEven: <int>[12, -12],
-        MPLinePaintType.mediumLongMedium: <int>[12, -6, 18, -6, 12, -12],
-        MPLinePaintType.short2Dots: <int>[6, -6, 2, -6, 2, -6],
-        MPLinePaintType.short3Dots: <int>[6, -6, 2, -6, 2, -6, 2, -6],
-        MPLinePaintType.short: <int>[6, -6],
-        MPLinePaintType.shortDot: <int>[6, -6, 2, -6],
-        MPLinePaintType.shortLongShort: <int>[6, -6, 18, -6, 6, -12],
-        MPLinePaintType.shortMediumShort: <int>[6, -6, 12, -6, 6, -12],
-      };
-
-  @override
   @override
   void paint(Canvas canvas, Size size) {
     final Iterable<THLinePainterLineSegment> lineSegments =
@@ -227,53 +202,25 @@ class THLinePainter extends CustomPainter {
       scrapLengthUnitsPerPoint: th2FileEditController.scrapLengthUnitsPerPoint,
       scrapLengthUnitType: th2FileEditController.scrapLengthUnitType,
     );
-    final Path basePath =
-        lineDecorator?.buildBasePath(
-          path: path,
-          vertices: vertices,
-          symbolUnit: symbolUnit,
-        ) ??
-        path;
+    final MPLinePathPainter pathPainter = MPLinePathPainter(
+      path: path,
+      vertices: vertices,
+      lineSegments: lineSegmentsMap.values.toList(),
+      linePaint: linePaint,
+      lineDecorator: lineDecorator,
+      lineDecoratorColor: lineDecoratorColor,
+      symbolUnit: symbolUnit,
+      dashScale: th2FileEditController.scaleScreenToCanvas(
+        1.0 / th2FileEditController.devicePixelRatio,
+      ),
+      isReversed: lineInfo.isReversed,
+      mpID: lineInfo.mpID,
+      showBorder: lineInfo.slopeBorderOn,
+      arrowHead: lineInfo.arrowHead,
+    );
+    final Path basePath = pathPainter.buildBasePath();
 
-    if (lineDecorator == null) {
-      if (linePaint.fillPaint != null) {
-        if (linePaint.cleanBeforeFill) {
-          MPThClean.drawPath(
-            canvas: canvas,
-            path: basePath,
-            backgroundColor: THPaint.thPaintWhiteBackground.color,
-          );
-        }
-
-        canvas.drawPath(basePath, linePaint.fillPaint!);
-      }
-
-      if (linePaint.type == MPLinePaintType.continuous) {
-        if (linePaint.highlightBorders.isNotEmpty) {
-          int highlightBorderCount = linePaint.highlightBorders.length;
-
-          for (final Paint highlightBorder
-              in linePaint.highlightBorders.reversed) {
-            canvas.drawPath(
-              basePath,
-              highlightBorder
-                ..strokeWidth =
-                    highlightBorder.strokeWidth *
-                    ((highlightBorderCount * 2) + 1),
-            );
-
-            highlightBorderCount--;
-          }
-        }
-        if (linePaint.primaryPaint != null) {
-          canvas.drawPath(basePath, linePaint.primaryPaint!);
-        } else if (linePaint.secondaryPaint != null) {
-          canvas.drawPath(basePath, linePaint.secondaryPaint!);
-        }
-      } else {
-        _drawDashedPath(canvas, basePath);
-      }
-    }
+    pathPainter.paintBase(canvas, basePath);
 
     if (lineInfo.addLineDirectionTicks) {
       canvas.drawPath(
@@ -282,17 +229,7 @@ class THLinePainter extends CustomPainter {
       );
     }
 
-    lineDecorator?.decorate(
-      canvas: canvas,
-      path: basePath,
-      color: lineDecoratorColor!,
-      symbolUnit: symbolUnit,
-      isReversed: lineInfo.isReversed,
-      mpID: lineInfo.mpID,
-      lineSegments: lineSegmentsMap.values.toList(),
-      showBorder: lineInfo.slopeBorderOn,
-      arrowHead: lineInfo.arrowHead,
-    );
+    pathPainter.paintDecoration(canvas, basePath);
 
     if (showLinePoints) {
       final double linePointRadius =
@@ -320,79 +257,6 @@ class THLinePainter extends CustomPainter {
           lineSegmentsMap,
           oldDelegate.lineSegmentsMap,
         );
-  }
-
-  /// Dash code inspired by https://stackoverflow.com/a/71099304/11754455
-  void _drawDashedPath(Canvas canvas, Path path) {
-    final List<int> dashLengths = linePaintTypeToDashLengths[linePaint.type]!;
-    final List<double> dashLengthsOnCanvas = [];
-    final double devicePixelRatio = th2FileEditController.devicePixelRatio;
-
-    for (final int length in dashLengths) {
-      dashLengthsOnCanvas.add(
-        th2FileEditController.scaleScreenToCanvas(
-          length.toDouble() / devicePixelRatio,
-        ),
-      );
-    }
-
-    final MPDashedPathProperties dashedPathProperties = MPDashedPathProperties(
-      dashLengths: dashLengthsOnCanvas,
-    );
-    final Path dashedPath = _getDashedPath(path, dashedPathProperties);
-
-    if (linePaint.highlightBorders.isNotEmpty) {
-      int highlightBorderCount = linePaint.highlightBorders.length;
-
-      for (final Paint highlightBorder in linePaint.highlightBorders.reversed) {
-        final double highlightBorderStrokeFactor =
-            ((highlightBorderCount * 2) + 1);
-
-        canvas.drawPath(
-          dashedPath,
-          highlightBorder
-            ..strokeWidth =
-                highlightBorder.strokeWidth * highlightBorderStrokeFactor,
-        );
-
-        highlightBorderCount--;
-      }
-    }
-
-    if (linePaint.secondaryPaint != null) {
-      final MPDashedPathProperties dashedPathProperties =
-          MPDashedPathProperties(
-            dashLengths: dashLengthsOnCanvas,
-            invert: true,
-          );
-      final Path dashedPath = _getDashedPath(path, dashedPathProperties);
-
-      canvas.drawPath(dashedPath, linePaint.secondaryPaint!);
-    }
-
-    if (linePaint.primaryPaint != null) {
-      canvas.drawPath(dashedPath, linePaint.primaryPaint!);
-    }
-  }
-
-  Path _getDashedPath(
-    Path originalPath,
-    MPDashedPathProperties dashedPathProperties,
-  ) {
-    final Iterator<PathMetric> metricsIterator = originalPath
-        .computeMetrics()
-        .iterator;
-
-    while (metricsIterator.moveNext()) {
-      final PathMetric metric = metricsIterator.current;
-
-      dashedPathProperties.extractedPathLength = 0.0;
-      while (dashedPathProperties.extractedPathLength < metric.length) {
-        dashedPathProperties.addNext(metric);
-      }
-    }
-
-    return dashedPathProperties.path;
   }
 
   Offset? _getTangentAtDistance(PathMetric metric, double distance) {

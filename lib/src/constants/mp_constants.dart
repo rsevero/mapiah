@@ -364,6 +364,10 @@ const double mpTherionRunDialogSpacing = 12;
 const double mpTherionRunStatusBoxMinWidth = 120;
 const double mpTherionRunOutputBorderWidth = 1;
 const double mpTherionRunIssuesListHeight = 120;
+
+/// Maximum height of the broken-file warning of the Run Therion dialog;
+/// its path list scrolls beyond it.
+const double mpTherionRunBrokenFilesWarningMaxHeight = 110;
 const Duration mpTherionRunScrollAnimationDuration = Duration(
   milliseconds: 250,
 );
@@ -841,6 +845,48 @@ const double mpProjectTreeStatusDotSize = 8.0;
 /// How many problems the broken badge tooltip of a `.th2` file row lists
 /// before summarizing the rest.
 const int mpTH2ElementTreeBadgeTooltipMaxProblems = 5;
+
+// Element-type previews of TH2 element tree rows. Lengths are logical
+// pixels; preview content is drawn on a Y-up canvas centered on the icon.
+const double mpTH2ElementTypeIconSize = mpSmallIconSize;
+const double mpTH2ElementTypeIconFrameThickness = 1.0;
+const double mpTH2ElementTypeIconFrameCornerRadius = 3.0;
+
+/// Effective Therion symbol unit (`u`) of the previews.
+const double mpTH2ElementTypeIconSymbolUnit = 8.0;
+
+/// Drawing length of one real-world meter in the previews (the SKBB
+/// handrail point's stem height).
+const double mpTH2ElementTypeIconOneMeter = 7.0;
+const double mpTH2ElementTypeIconLineThickness = 1.5;
+const double mpTH2ElementTypeIconPointRadius = 5.0;
+
+/// Canvas length of one dash-pattern length unit in line previews.
+const double mpTH2ElementTypeIconDashScale = 0.4;
+
+/// Half width and half height of the line sample's cubic S-curve.
+const double mpTH2ElementTypeIconLineHalfWidth = 6.5;
+const double mpTH2ElementTypeIconLineHalfHeight = 4.0;
+
+/// Cubic segments the S-curve is split into for decorators that build
+/// rails from segment knots (SKBB `fixed-ladder`).
+const int mpTH2ElementTypeIconLineSubdivisions = 8;
+
+/// Half the gap between the two rails of the SKBB `steps` sample.
+const double mpTH2ElementTypeIconStepsRailHalfGap = 3.5;
+
+/// `l-size` of every point of the line sample (SKBB `slope` ticks).
+const double mpTH2ElementTypeIconSlopeLSize = 3.5;
+
+/// Half width and half height of the area sample's oval.
+const double mpTH2ElementTypeIconAreaHalfWidth = 6.5;
+const double mpTH2ElementTypeIconAreaHalfHeight = 5.0;
+
+/// MPID seeding the decorators' procedural randomness in line previews.
+const int mpTH2ElementTypeIconSyntheticMPID = 1;
+
+/// How many recorded previews the app-wide cache keeps.
+const int mpTH2ElementTypeIconCacheLimit = 256;
 const double mpProjectTreeRailWidth = 32.0;
 const double mpProjectTreeErrorSummaryMaxHeight = 120.0;
 const int mpProjectTreeFilterDebounceMilliseconds = 150;

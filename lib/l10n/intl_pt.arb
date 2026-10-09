@@ -48,6 +48,7 @@
   "mapiahTherionRunElapsedLabel": "Tempo decorrido: {elapsed} s",
   "mapiahTherionRunEndTime": "Fim: {time}",
   "mapiahTherionRunNoTherionOutputFound": "Saída do Therion não encontrada",
+  "mapiahTherionRunBrokenFilesWarning": "{count, plural, one {Este arquivo carregado do projeto está com problemas. O Therion pode falhar:} other {Estes {count} arquivos carregados do projeto estão com problemas. O Therion pode falhar:}}",
   "mapiahTherionRunOutputLabel": "Saída:",
   "mapiahTherionRunParametersLabel": "Parâmetros de execução:",
   "mapiahTherionRunTHConfigFileLabel": "Arquivo THConfig: {fileName}",

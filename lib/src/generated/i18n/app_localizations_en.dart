@@ -116,6 +116,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mapiahTherionRunNoTherionOutputFound => 'No Therion output found';
 
   @override
+  String mapiahTherionRunBrokenFilesWarning(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'These $count loaded files of the project are broken. Therion may fail:',
+      one: 'This loaded file of the project is broken. Therion may fail:',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get mapiahTherionRunOutputLabel => 'Output:';
 
   @override

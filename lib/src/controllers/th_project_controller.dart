@@ -25,6 +25,7 @@ import 'package:mapiah/src/mp_file_read_write/th_directive_rewrite_aux.dart';
 import 'package:mapiah/src/mp_file_read_write/th_file_writer.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:mobx/mobx.dart';
 import 'package:path/path.dart' as p;
 
@@ -50,7 +51,14 @@ abstract class THProjectControllerBase with Store {
   THProjectControllerBase({THProjectControllerOperations? operations})
     : _operations = operations ?? THProjectControllerOperations.defaults();
 
-  final THProjectControllerOperations _operations;
+  THProjectControllerOperations _operations;
+
+  /// Replaces the controller's I/O and parsing operations, so tests can
+  /// drive the real lifecycle of the app-wide controller with fake loads.
+  @visibleForTesting
+  void setOperationsForTesting(THProjectControllerOperations operations) {
+    _operations = operations;
+  }
 
   @observable
   String rootConfigPath = '';
@@ -1703,6 +1711,10 @@ abstract class THProjectControllerBase with Store {
 
   THProjectFileNode? nodeByCanonicalPath(String canonicalPath) =>
       _nodesByCanonicalPath[canonicalPath];
+
+  /// Whether [canonicalPath] is a file of the loaded project.
+  bool isProjectFile(String canonicalPath) =>
+      _nodesByCanonicalPath.containsKey(canonicalPath);
 
   /// Canonical paths of every writable `THConfigFileNode`/`THDataFileNode`
   /// currently in the project tree, deduplicated. This is the authoritative

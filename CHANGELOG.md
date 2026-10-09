@@ -4,6 +4,7 @@
 
 ## 1.0.2 - not yet released
 * New features:
+  * Point, line and area rows of the project tree now show a small preview of their type and subtype instead of generic icons (#32). The previews follow the visualization method and theme and stay the same at every zoom. The Run Therion dialog also warns about the loaded project's broken `.th2` files that are already loaded, without preventing the run. Added `t3952_th2_element_type_icon_test.dart` and `t3957_th_line_painter_golden_test.dart`.
   * Removed the scrap button and dialog (#32). The project sidebar now provides scrap visibility, copy, cut, duplicate, delete and options from scrap rows, plus add scrap and show/hide all from file rows. Open `.th2` tabs outside the project, including unsaved files, appear in their own sidebar section. Added `t3953_th2_element_tree_scrap_actions_test.dart`.
 * Changes:
   * The scrap _Sketch_ option dialog now lists every sketch at once, each with its own filename, X and Y fields and a _Remove sketch_ button (#44). _Add loaded image_ appends a sketch taken from a raster image already loaded in the file, so adding a second loaded image no longer replaces the first one, and _Add from file…_ appends a sketch from an image file whose lower left corner coordinates you type in. The filename fields are wider, so long filenames are easier to tell apart.

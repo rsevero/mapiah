@@ -18,6 +18,7 @@ import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
+import 'package:mapiah/src/widgets/th2_element_type_icon_widget.dart';
 import 'package:mapiah/src/widgets/th_project_tree_row_context_menu_widget.dart';
 import 'package:mapiah/src/widgets/types/mp_widget_position_type.dart';
 import 'package:material_ui/material_ui.dart';
@@ -311,22 +312,28 @@ class _TH2ElementRow extends StatelessWidget {
     );
   }
 
+  /// The scrap icon, or the type preview of a point, line or area row.
   Widget _buildIcon() {
-    final String? imagePath = switch (row.elementType) {
-      THElementType.point => mpAddPointButtonImagePath,
-      THElementType.line => mpAddLineButtonImagePath,
-      THElementType.area => mpAddAreaButtonImagePath,
-      _ => null,
-    };
+    final bool isPreviewed =
+        (row.elementType == THElementType.point) ||
+        (row.elementType == THElementType.line) ||
+        (row.elementType == THElementType.area);
 
-    if (imagePath == null) {
+    if (!isPreviewed) {
       return const Icon(Icons.map_outlined, size: mpSmallIconSize);
     }
 
-    return Image.asset(
-      imagePath,
-      width: mpSmallIconSize,
-      height: mpSmallIconSize,
+    final TH2FileEditController? controller = _validControllerFor(
+      row.th2FilePath,
+    );
+
+    if (controller == null) {
+      return const SizedBox.square(dimension: mpTH2ElementTypeIconSize);
+    }
+
+    return TH2ElementTypeIconWidget(
+      controller: controller,
+      elementMPID: row.elementMPID,
     );
   }
 

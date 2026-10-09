@@ -272,6 +272,12 @@ abstract class AppLocalizations {
   /// **'No Therion output found'**
   String get mapiahTherionRunNoTherionOutputFound;
 
+  /// Warning above the output of the Run Therion dialog, followed by the paths of the loaded broken .th2 files of the project being run. Used on: MPRunTherionDialogWidget
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one {This loaded file of the project is broken. Therion may fail:} other {These {count} loaded files of the project are broken. Therion may fail:}}'**
+  String mapiahTherionRunBrokenFilesWarning(int count);
+
   /// Label for Therion output area. Used on: _MPRunTherionDialogWidgetState.build
   ///
   /// In en, this message translates to:

@@ -19,17 +19,49 @@ class MPSymbolUnit {
   final double scrapLengthUnitsPerPoint;
   final THLengthUnitType scrapLengthUnitType;
 
+  /// Set only by [MPSymbolUnit.preview]: the fixed [canvasValue].
+  final double? _fixedCanvasValue;
+
+  /// Set only by [MPSymbolUnit.preview]: the fixed [oneMeterInLocalUnits].
+  final double? _fixedOneMeterInLocalUnits;
+
   const MPSymbolUnit({
     required this.canvasScale,
     required this.devicePixelRatio,
     required this.scrapLengthUnitsPerPoint,
     required this.scrapLengthUnitType,
-  }) : assert(canvasScale > 0),
+  }) : _fixedCanvasValue = null,
+       _fixedOneMeterInLocalUnits = null,
+       assert(canvasScale > 0),
        assert(devicePixelRatio > 0),
        assert(scrapLengthUnitsPerPoint > 0);
 
+  /// A unit with fixed effective values, independent of the
+  /// `TH2Edit_SymbolUnit` setting, canvas zoom and the active scrap, for
+  /// the element-type previews of the element tree.
+  ///
+  /// Not for label drawing: [canvasScale] and [devicePixelRatio], which
+  /// only `MPLabelPainter` reads, are placeholder values here.
+  const MPSymbolUnit.preview({
+    required double canvasValue,
+    required double oneMeterInLocalUnits,
+  }) : _fixedCanvasValue = canvasValue,
+       _fixedOneMeterInLocalUnits = oneMeterInLocalUnits,
+       canvasScale = 1.0,
+       devicePixelRatio = 1.0,
+       scrapLengthUnitsPerPoint = 1.0,
+       scrapLengthUnitType = THLengthUnitType.meter,
+       assert(canvasValue > 0),
+       assert(oneMeterInLocalUnits > 0);
+
   /// One Therion-compatible symbol unit expressed in canvas coordinates.
   double get canvasValue {
+    final double? fixedCanvasValue = _fixedCanvasValue;
+
+    if (fixedCanvasValue != null) {
+      return fixedCanvasValue;
+    }
+
     final double symbolUnitOnScreen = mpLocator.mpSettingsController
         .getDoubleWithDefault(MPSettingID.TH2Edit_SymbolUnit);
 
@@ -44,6 +76,12 @@ class MPSymbolUnit {
   /// is a fixed physical print size unrelated to a scrap's survey scale, so
   /// this and `u` intentionally live in different scales of "bigness".
   double get oneMeterInLocalUnits {
+    final double? fixedOneMeterInLocalUnits = _fixedOneMeterInLocalUnits;
+
+    if (fixedOneMeterInLocalUnits != null) {
+      return fixedOneMeterInLocalUnits;
+    }
+
     final double oneMeterInScrapUnits = (scrapLengthUnitType ==
             THLengthUnitType.meter)
         ? 1.0

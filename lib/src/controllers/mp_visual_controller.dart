@@ -1285,14 +1285,52 @@ abstract class MPVisualControllerBase with Store {
   }
 
   THLinePaint getDefaultAreaPaint({required THAreaType areaType}) {
-    final THLinePaint areaPaint =
-        areaTypePaints[areaType] ??
+    return _resolveAreaPaint(
+      areaPaint: _baseAreaPaint(areaType),
+      areaType: areaType,
+    );
+  }
+
+  /// The area paint of an element-type preview: a copy of [areaType]'s
+  /// default paint, whose primary stroke is [lineThickness] wide and whose
+  /// pattern, if any, is scaled by [symbolUnit] instead of the canvas zoom.
+  /// Shared and on-screen paints are never changed.
+  THLinePaint getPreviewAreaPaint({
+    required THAreaType areaType,
+    required MPSymbolUnit symbolUnit,
+    required double lineThickness,
+  }) {
+    final THLinePaint basePaint = _baseAreaPaint(
+      areaType,
+    ).copyWithCopiedPaints();
+    final THLinePaint areaPaint = _resolveAreaPaint(
+      areaPaint: basePaint,
+      areaType: areaType,
+      symbolUnit: symbolUnit,
+    );
+
+    areaPaint.primaryPaint?.strokeWidth = lineThickness;
+
+    return areaPaint;
+  }
+
+  /// The shared, unresolved paint of [areaType]. Callers must not mutate it.
+  THLinePaint _baseAreaPaint(THAreaType areaType) {
+    return areaTypePaints[areaType] ??
         THLinePaint(
           primaryPaint: THPaint.thPaint0,
           fillPaint: THPaint.thPaint3001,
           type: MPLinePaintType.medium,
         );
+  }
 
+  /// Applies the active Therion pattern, if any, to [areaPaint]. The
+  /// pattern is scaled by [symbolUnit], or by the canvas's unit when null.
+  THLinePaint _resolveAreaPaint({
+    required THLinePaint areaPaint,
+    required THAreaType areaType,
+    MPSymbolUnit? symbolUnit,
+  }) {
     if (mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
         MPTH2EditVisualizationMethod.mapiahPlaceholder) {
       return areaPaint;
@@ -1311,6 +1349,7 @@ abstract class MPVisualControllerBase with Store {
         set: set,
         areaType: areaType,
         definition: definition,
+        symbolUnit: symbolUnit,
       ),
       cleanBeforeFill: definition.cleanBeforeFill,
     );
@@ -1319,11 +1358,13 @@ abstract class MPVisualControllerBase with Store {
   /// Builds (once, via [patternCache]) and scales the pattern tile fill
   /// for [definition]. The tile is cached per `(set, areaType)` because the
   /// same [THAreaType] can produce a different tile under a different
-  /// Therion symbol set.
+  /// Therion symbol set. The fill is scaled by [symbolUnit], or by the
+  /// canvas's current unit when null.
   Paint _getTherionAreaPatternPaint({
     required MPTherionSymbolSet? set,
     required THAreaType areaType,
     required MPTherionAreaPatternDefinition definition,
+    MPSymbolUnit? symbolUnit,
   }) {
     ui.Image? tile = patternCache.imageFor(set, areaType);
 
@@ -1332,15 +1373,17 @@ abstract class MPVisualControllerBase with Store {
       patternCache.store(set, areaType, tile);
     }
 
-    final MPSymbolUnit symbolUnit = MPSymbolUnit(
-      canvasScale: _th2FileEditController.canvasScale,
-      devicePixelRatio: _th2FileEditController.devicePixelRatio,
-      scrapLengthUnitsPerPoint:
-          _th2FileEditController.scrapLengthUnitsPerPoint,
-      scrapLengthUnitType: _th2FileEditController.scrapLengthUnitType,
-    );
+    final MPSymbolUnit effectiveSymbolUnit =
+        symbolUnit ??
+        MPSymbolUnit(
+          canvasScale: _th2FileEditController.canvasScale,
+          devicePixelRatio: _th2FileEditController.devicePixelRatio,
+          scrapLengthUnitsPerPoint:
+              _th2FileEditController.scrapLengthUnitsPerPoint,
+          scrapLengthUnitType: _th2FileEditController.scrapLengthUnitType,
+        );
     final double scale =
-        symbolUnit.canvasValue / mpTherionAreaPatternTileUnitPixels;
+        effectiveSymbolUnit.canvasValue / mpTherionAreaPatternTileUnitPixels;
 
     return Paint()
       ..shader = ui.ImageShader(
@@ -1396,45 +1439,13 @@ abstract class MPVisualControllerBase with Store {
 
   THPointPaint getDefaultPointPaint(THPoint point) {
     final THPointType pointType = point.pointType;
+    final String pointSubtype =
+        MPCommandOptionAux.getSubtype(point) ?? mpNoSubtypeID;
 
-    THPointPaint pointPaint;
-
-    if (pointTypePaints.containsKey(pointType)) {
-      pointPaint = pointTypePaints[pointType]!;
-    } else {
-      final String pointSubtype = point.hasOption(THCommandOptionType.subtype)
-          ? (point.getOption(THCommandOptionType.subtype)
-                    as THSubtypeCommandOption)
-                .subtype
-          : mpNoSubtypeID;
-
-      switch (pointType) {
-        case THPointType.airDraught:
-          pointPaint =
-              airDraughtSubtypesPaints[pointSubtype] ??
-              airDraughtSubtypesPaints[mpNoSubtypeID]!;
-        case THPointType.station:
-          pointPaint =
-              stationSubtypesPaints[pointSubtype] ??
-              stationSubtypesPaints[mpNoSubtypeID]!;
-        case THPointType.unknown:
-          pointPaint = THPointPaint(
-            type: MPPointShapeType.exclamation,
-            border: THPaint.thPaint0,
-            fill: THPaint.thPaint1000,
-          );
-        case THPointType.waterFlow:
-          pointPaint =
-              waterFlowPointSubtypesPaints[pointSubtype] ??
-              waterFlowPointSubtypesPaints[mpNoSubtypeID]!;
-        default:
-          pointPaint = THPointPaint(
-            type: MPPointShapeType.exclamation,
-            border: THPaint.thPaint0,
-            fill: THPaint.thPaint1000,
-          );
-      }
-    }
+    THPointPaint pointPaint = _basePointPaint(
+      pointType: pointType,
+      pointSubtype: pointSubtype,
+    );
 
     if (pointPaint.border != null) {
       pointPaint = pointPaint.copyWith(
@@ -1449,8 +1460,6 @@ abstract class MPVisualControllerBase with Store {
 
     if (mpLocator.mpSettingsController.tH2EditVisualizationMethod !=
         MPTH2EditVisualizationMethod.mapiahPlaceholder) {
-      final String pointSubtype =
-          MPCommandOptionAux.getSubtype(point) ?? mpNoSubtypeID;
       final MPTherionPointSymbol? therionSymbol = getTherionPointSymbol(
         set: _selectedTherionSymbolSet,
         pointType: pointType,
@@ -1496,6 +1505,75 @@ abstract class MPVisualControllerBase with Store {
     return pointPaint;
   }
 
+  /// The point paint of an element-type preview, from [pointType] and
+  /// [pointSubtype] alone: a copy of the default paint with neutral
+  /// rotation, the given [radius] and a [lineThickness] wide border, plus
+  /// the active Therion symbol, if any. Label-mode types keep their
+  /// placeholder shape and never get a label. Shared and on-screen paints
+  /// are never changed.
+  THPointPaint getPreviewPointPaint({
+    required THPointType pointType,
+    required String pointSubtype,
+    required double radius,
+    required double lineThickness,
+  }) {
+    final THPointPaint basePaint = _basePointPaint(
+      pointType: pointType,
+      pointSubtype: pointSubtype,
+    ).copyWithCopiedPaints();
+
+    basePaint.border?.strokeWidth = lineThickness;
+
+    final MPTherionPointSymbol? therionSymbol =
+        (mpLocator.mpSettingsController.tH2EditVisualizationMethod ==
+            MPTH2EditVisualizationMethod.mapiahPlaceholder)
+        ? null
+        : getTherionPointSymbol(
+            set: _selectedTherionSymbolSet,
+            pointType: pointType,
+            subtype: pointSubtype,
+          );
+
+    return basePaint.copyWith(
+      radius: radius,
+      rotation: 0,
+      therionSymbol: therionSymbol,
+      makeTherionSymbolNull: therionSymbol == null,
+      makeLabelPaintNull: true,
+    );
+  }
+
+  /// The shared, unresolved paint of [pointType] and [pointSubtype].
+  /// Callers must not mutate it.
+  THPointPaint _basePointPaint({
+    required THPointType pointType,
+    required String pointSubtype,
+  }) {
+    final THPointPaint? typePaint = pointTypePaints[pointType];
+
+    if (typePaint != null) {
+      return typePaint;
+    }
+
+    switch (pointType) {
+      case THPointType.airDraught:
+        return airDraughtSubtypesPaints[pointSubtype] ??
+            airDraughtSubtypesPaints[mpNoSubtypeID]!;
+      case THPointType.station:
+        return stationSubtypesPaints[pointSubtype] ??
+            stationSubtypesPaints[mpNoSubtypeID]!;
+      case THPointType.waterFlow:
+        return waterFlowPointSubtypesPaints[pointSubtype] ??
+            waterFlowPointSubtypesPaints[mpNoSubtypeID]!;
+      default:
+        return THPointPaint(
+          type: MPPointShapeType.exclamation,
+          border: THPaint.thPaint0,
+          fill: THPaint.thPaint1000,
+        );
+    }
+  }
+
   THPointPaint getLineSegmentMarkPointPaint() {
     return THPointPaint(
       radius: _th2FileEditController.pointRadiusOnCanvas,
@@ -1522,46 +1600,67 @@ abstract class MPVisualControllerBase with Store {
     required THLineType lineType,
     String? subtype,
   }) {
-    final THLinePaint linePaint;
-
-    if (lineTypePaints.containsKey(lineType)) {
-      linePaint = lineTypePaints[lineType]!;
-    } else {
-      final String lineSubtype = subtype ?? mpNoSubtypeID;
-
-      switch (lineType) {
-        case THLineType.border:
-          linePaint =
-              borderSubtypesPaints[lineSubtype] ??
-              borderSubtypesPaints[mpNoSubtypeID]!;
-        case THLineType.survey:
-          linePaint =
-              surveySubtypesPaints[lineSubtype] ??
-              surveySubtypesPaints[mpNoSubtypeID]!;
-        case THLineType.unknown:
-          linePaint = THLinePaint(
-            primaryPaint: THPaint.thPaint0,
-            type: MPLinePaintType.continuous,
-          );
-        case THLineType.wall:
-          linePaint =
-              wallSubtypesPaints[lineSubtype] ??
-              wallSubtypesPaints[mpNoSubtypeID]!;
-        case THLineType.waterFlow:
-          linePaint =
-              waterFlowLineSubtypesPaints[lineSubtype] ??
-              waterFlowLineSubtypesPaints[mpNoSubtypeID]!;
-        default:
-          throw Exception(
-            'Line type $lineType not found in lineTypePaints map.',
-          );
-      }
-    }
+    final THLinePaint linePaint = _baseLinePaint(
+      lineType: lineType,
+      subtype: subtype,
+    );
 
     return linePaint.copyWith(
       primaryPaint: linePaint.primaryPaint!
         ..strokeWidth = _th2FileEditController.lineThicknessOnCanvas,
     );
+  }
+
+  /// The line paint of an element-type preview: a copy of [lineType] and
+  /// [subtype]'s default paint whose primary stroke is [lineThickness]
+  /// wide. Shared and on-screen paints are never changed.
+  THLinePaint getPreviewLinePaint({
+    required THLineType lineType,
+    String? subtype,
+    required double lineThickness,
+  }) {
+    final THLinePaint linePaint = _baseLinePaint(
+      lineType: lineType,
+      subtype: subtype,
+    ).copyWithCopiedPaints();
+
+    linePaint.primaryPaint?.strokeWidth = lineThickness;
+
+    return linePaint;
+  }
+
+  /// The shared, unresolved paint of [lineType] and [subtype]. Callers must
+  /// not mutate it.
+  THLinePaint _baseLinePaint({required THLineType lineType, String? subtype}) {
+    final THLinePaint? typePaint = lineTypePaints[lineType];
+
+    if (typePaint != null) {
+      return typePaint;
+    }
+
+    final String lineSubtype = subtype ?? mpNoSubtypeID;
+
+    switch (lineType) {
+      case THLineType.border:
+        return borderSubtypesPaints[lineSubtype] ??
+            borderSubtypesPaints[mpNoSubtypeID]!;
+      case THLineType.survey:
+        return surveySubtypesPaints[lineSubtype] ??
+            surveySubtypesPaints[mpNoSubtypeID]!;
+      case THLineType.unknown:
+        return THLinePaint(
+          primaryPaint: THPaint.thPaint0,
+          type: MPLinePaintType.continuous,
+        );
+      case THLineType.wall:
+        return wallSubtypesPaints[lineSubtype] ??
+            wallSubtypesPaints[mpNoSubtypeID]!;
+      case THLineType.waterFlow:
+        return waterFlowLineSubtypesPaints[lineSubtype] ??
+            waterFlowLineSubtypesPaints[mpNoSubtypeID]!;
+      default:
+        throw Exception('Line type $lineType not found in lineTypePaints map.');
+    }
   }
 
   THLinePaint getLineDirectionTickPaint({

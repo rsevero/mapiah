@@ -5,6 +5,13 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:material_ui/material_ui.dart';
 
 class MPPainterAux {
+  /// The interior color of the TH2 canvas for [brightness]: black when
+  /// dark, white otherwise. Element-type previews use it too, so they
+  /// show elements on the same background as the canvas.
+  static Color canvasInteriorColor(Brightness brightness) {
+    return (brightness == Brightness.dark) ? Colors.black : Colors.white;
+  }
+
   static Path buildCompassPath({
     required Offset center,
     required double azimuth,

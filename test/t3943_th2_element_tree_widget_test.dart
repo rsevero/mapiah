@@ -20,6 +20,7 @@ import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_f
 import 'package:mapiah/src/widgets/th2_broken_file_body_widget.dart';
 import 'package:mapiah/src/widgets/th2_element_tree_row_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_widget.dart';
+import 'package:mapiah/src/widgets/th2_element_type_icon_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'th2_element_tree_test_aux.dart';
@@ -1438,18 +1439,28 @@ void main() {
         findsOneWidget,
       );
 
-      for (final (String, String) entry in <(String, String)>[
-        ('p1', mpAddPointButtonImagePath),
-        ('l1', mpAddLineButtonImagePath),
-      ]) {
-        final Image image = tester.widget<Image>(
-          find.descendant(
-            of: elementRow(path, entry.$1),
-            matching: find.byType(Image),
-          ),
+      final double scrapIconWidth = tester
+          .getSize(
+            find.descendant(
+              of: elementRow(path, 's1'),
+              matching: find.byIcon(Icons.map_outlined),
+            ),
+          )
+          .width;
+
+      for (final String thID in <String>['p1', 'l1']) {
+        final Finder preview = find.descendant(
+          of: elementRow(path, thID),
+          matching: find.byType(TH2ElementTypeIconWidget),
         );
 
-        expect((image.image as AssetImage).assetName, entry.$2);
+        expect(preview, findsOneWidget);
+        expect(
+          find.descendant(of: elementRow(path, thID), matching: find.byType(Image)),
+          findsNothing,
+        );
+        // Same slot width as the scrap icon, so labels stay aligned.
+        expect(tester.getSize(preview).width, scrapIconWidth);
       }
     });
 

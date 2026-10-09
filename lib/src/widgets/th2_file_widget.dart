@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'package:flutter/gestures.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/src/auxiliary/mp_painter_aux.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -81,9 +82,9 @@ class TH2FileWidget extends StatelessWidget {
               actuator: th2FileEditController.stateController,
               th2FileEditController: th2FileEditController,
               child: Container(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.black
-                    : Colors.white,
+                color: MPPainterAux.canvasInteriorColor(
+                  Theme.of(context).brightness,
+                ),
                 child: Stack(
                   key: ValueKey("TH2FileWidgetStack|$thFileMPID"),
                   children: [
