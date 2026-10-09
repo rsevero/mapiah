@@ -47,6 +47,7 @@
   * Validated the Phase 8 type-preview plan (#32) once more. The test for running Therion right after picking a project now loads a project with a broken file first and uses the real project loader, so the test fails if the warning could list the outgoing project's files. The plan also states that a line's preview follows only its line-level subtype.
   * Validated the Phase 8 type-preview plan (#32) again. Label, remark and other text-showing points are previewed as their plain point shape with no text. The rope-ladder and via-ferrata lines keep their red preview, since Therion always draws them red. The pick-and-run warning test now makes sure Therion counts as available and that the run dialog really opens, so it cannot pass by showing the "Therion not found" help instead. The parent roadmap now lists where the detailed plan differs from it.
   * Validated the Phase 8 type-preview plan (#32) again. It now notes that opening another project closes the outgoing project's files before the Run Therion dialog appears, and the pick-and-run test checks that this cleanup happened.
+  * Validated the TH2 text editing plan (#38) again, after the element tree's type previews and collapsed scraps. A broken file fixed in text mode but not yet saved now stays in the Run Therion warning, since Therion still reads the broken file from disk.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
