@@ -23,6 +23,7 @@ import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_pt.dart';
 import 'package:path/path.dart' as p;
 
+import 'th2_element_tree_test_aux.dart';
 import 'th_test_aux.dart';
 
 const String _validContents =
@@ -77,7 +78,7 @@ void main() {
     mpLocator.mpGeneralController.reset();
     mpLocator.thProjectTreeUIController.setFilterText('');
     mpLocator.thProjectTreeUIController.expandedNodeIds.clear();
-    mpLocator.thProjectTreeUIController.collapsedTH2ScrapIds.clear();
+    mpLocator.thProjectTreeUIController.expandedTH2ScrapIds.clear();
     tempDir = Directory.systemTemp.createTempSync('mapiah_t3942_');
   });
 
@@ -90,7 +91,13 @@ void main() {
 
   String pathOf(String name) => p.join(tempDir.path, name);
 
-  Future<TH2FileEditController> load(String contents, {String? name}) async {
+  /// Loads [contents] and, unless [expandScraps] is false, expands its
+  /// scraps, which start collapsed.
+  Future<TH2FileEditController> load(
+    String contents, {
+    String? name,
+    bool expandScraps = true,
+  }) async {
     final TH2FileEditController controller = mpLocator.mpGeneralController
         .getTH2FileEditController(
           filename: pathOf(name ?? 'file.th2'),
@@ -98,6 +105,10 @@ void main() {
         );
 
     await controller.load();
+
+    if (expandScraps && controller.isFileLoaded && !controller.isBroken) {
+      expandTH2TreeScraps(controller.th2File.filename);
+    }
 
     return controller;
   }
@@ -158,16 +169,36 @@ void main() {
       );
     });
 
-    test('only scraps are expandable and scraps start expanded', () async {
-      final TH2FileEditController controller = await load(_validContents);
+    test('only scraps are expandable and scraps start collapsed', () async {
+      final TH2FileEditController controller = await load(
+        _validContents,
+        expandScraps: false,
+      );
       final List<TH2ElementTreeRow> rows = rowsFor(
         controller,
       ).rows.cast<TH2ElementTreeRow>();
 
+      expect(
+        rows.map((TH2ElementTreeRow row) => row.elementType).toList(),
+        <THElementType>[THElementType.scrap, THElementType.scrap],
+      );
+
       for (final TH2ElementTreeRow row in rows) {
-        expect(row.isExpandable, row.isScrap);
-        expect(row.isExpanded, row.isScrap);
+        expect(row.isExpandable, isTrue);
+        expect(row.isExpanded, isFalse);
       }
+
+      ui().toggleTH2ScrapCollapsed(rowIdOf(controller, 's1'));
+
+      final List<TH2ElementTreeRow> expandedRows = rowsFor(
+        controller,
+      ).rows.cast<TH2ElementTreeRow>();
+
+      for (final TH2ElementTreeRow row in expandedRows) {
+        expect(row.isExpandable, row.isScrap);
+      }
+      expect(expandedRows.first.isExpanded, isTrue);
+      expect(expandedRows[1].isScrap, isFalse);
     });
 
     test('a collapsed scrap emits no child rows, others keep order', () async {
@@ -380,9 +411,11 @@ void main() {
 
   group('filtering', () {
     test('a matching element shows its scrap, even when collapsed', () async {
-      final TH2FileEditController controller = await load(_validContents);
+      final TH2FileEditController controller = await load(
+        _validContents,
+        expandScraps: false,
+      );
 
-      ui().toggleTH2ScrapCollapsed(rowIdOf(controller, 's1'));
       ui().setFilterText('w12');
 
       final TH2ElementRowsResult result = rowsFor(
@@ -397,7 +430,7 @@ void main() {
         String?
       >['s1', 'w12']);
       expect(rows.first.isExpanded, isTrue);
-      expect(ui().collapsedTH2ScrapIds, <String>{rowIdOf(controller, 's1')});
+      expect(ui().expandedTH2ScrapIds, isEmpty);
     });
 
     test('a scrap matching by its own label hides non-matching children', () async {
@@ -615,7 +648,7 @@ void main() {
       );
 
       expect(expanded, <String>{'root', 'survey', 'th2'});
-      expect(ui().collapsedTH2ScrapIds, <String>{s1});
+      expect(ui().expandedTH2ScrapIds, <String>{rowIdOf(controller, 's2')});
       expect(
         rows.whereType<TH2ElementTreeRow>().map(
           (TH2ElementTreeRow row) => row.label.thID,

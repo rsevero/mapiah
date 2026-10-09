@@ -45,7 +45,7 @@ void main() {
     locator.mpGeneralController.reset();
     locator.thProjectTreeUIController.setFilterText('');
     locator.thProjectTreeUIController.expandedNodeIds.clear();
-    locator.thProjectTreeUIController.collapsedTH2ScrapIds.clear();
+    locator.thProjectTreeUIController.expandedTH2ScrapIds.clear();
     locator.thProjectTreeUIController.setSidebarCollapsed(false);
     locator.mpSettingsController.setBool(
       MPSettingID.Main_TelemetryConsent, false);
@@ -71,6 +71,8 @@ void main() {
       '${th2NodeOf(project, 'a.th2').id}')));
     await tester.pump();
     controller = (await settleTH2Load(tester, project.pathOf('a.th2')))!;
+    expandTH2TreeScraps(project.pathOf('a.th2'));
+    await tester.pump();
     expect(movableOrder(), <String>['p1', 'l1', 'p3']);
     await tester.tap(row('p1'), buttons: kSecondaryButton);
     await tester.pump();

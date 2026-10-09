@@ -43,7 +43,7 @@ void main() {
     locator.mpGeneralController.reset();
     locator.thProjectTreeUIController.setFilterText('');
     locator.thProjectTreeUIController.expandedNodeIds.clear();
-    locator.thProjectTreeUIController.collapsedTH2ScrapIds.clear();
+    locator.thProjectTreeUIController.expandedTH2ScrapIds.clear();
     locator.thProjectTreeUIController.setSidebarCollapsed(false);
     locator.mpSettingsController.setBool(
       MPSettingID.Main_TelemetryConsent, false);
@@ -69,6 +69,8 @@ void main() {
       '${th2NodeOf(project, 'a.th2').id}')));
     await tester.pump();
     controller = (await settleTH2Load(tester, project.pathOf('a.th2')))!;
+    expandTH2TreeScraps(project.pathOf('a.th2'));
+    await tester.pump();
     expect(pointOrder(), <String>['p1', 'p3']);
     final Offset target = tester.getCenter(row('p1')) + const Offset(0, -6);
     await tester.dragFrom(tester.getCenter(row('p3')),
@@ -96,6 +98,8 @@ void main() {
       '${th2NodeOf(project, 'a.th2').id}')));
     await tester.pump();
     controller = (await settleTH2Load(tester, project.pathOf('a.th2')))!;
+    expandTH2TreeScraps(project.pathOf('a.th2'));
+    await tester.pump();
     final int line = controller.th2File.mpIDByTHID('l1')!;
     final int source = controller.th2File.mpIDByTHID('s1')!;
     final int targetScrap = controller.th2File.mpIDByTHID('s2')!;

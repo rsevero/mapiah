@@ -201,7 +201,7 @@ void main() {
     expect(locator.thProjectTreeUIController.isExpanded(standaloneId), isFalse);
   });
 
-  test('Save As migrates standalone expansion and collapsed scrap rows', () {
+  test('Save As migrates standalone expansion and expanded scrap rows', () {
     final String newPath = project.pathOf('renamed.th2');
     final String oldId = standaloneTH2FileRowId(path);
     final String newId = standaloneTH2FileRowId(newPath);
@@ -219,18 +219,18 @@ void main() {
     expect(locator.thProjectTreeUIController.isExpanded(oldId), isFalse);
     expect(locator.thProjectTreeUIController.isExpanded(newId), isTrue);
     expect(locator.thProjectTreeUIController.isTH2ScrapCollapsed(oldScrapId),
-      isFalse);
-    expect(locator.thProjectTreeUIController.isTH2ScrapCollapsed(newScrapId),
       isTrue);
+    expect(locator.thProjectTreeUIController.isTH2ScrapCollapsed(newScrapId),
+      isFalse);
     expect(locator.thProjectController.activeSelectedNodeId, newId);
 
     locator.mpGeneralController.removeFileTab(filename: newPath);
     expect(locator.thProjectTreeUIController.isExpanded(newId), isFalse);
     expect(locator.thProjectTreeUIController.isTH2ScrapCollapsed(newScrapId),
-      isFalse);
+      isTrue);
   });
 
-  test('outside tab keeps expansion, selection and scrap collapse across '
+  test('outside tab keeps expansion, selection and scrap expansion across '
       'project changes', () async {
     final TH2TreeTestProject otherProject = TH2TreeTestProject.create();
     addTearDown(otherProject.delete);
@@ -246,18 +246,18 @@ void main() {
     expect(locator.thProjectController.activeSelectedNodeId, standaloneId);
     expect(locator.thProjectTreeUIController.isExpanded(standaloneId), isTrue);
     expect(locator.thProjectTreeUIController.isTH2ScrapCollapsed(scrapRowId),
-        isTrue);
+        isFalse);
 
     await locator.thProjectController.reloadProject();
     expect(locator.thProjectController.activeSelectedNodeId, standaloneId);
     expect(locator.thProjectTreeUIController.isExpanded(standaloneId), isTrue);
     expect(locator.thProjectTreeUIController.isTH2ScrapCollapsed(scrapRowId),
-        isTrue);
+        isFalse);
 
     locator.thProjectController.closeProject();
     expect(locator.thProjectController.activeSelectedNodeId, standaloneId);
     expect(locator.thProjectTreeUIController.isExpanded(standaloneId), isTrue);
     expect(locator.thProjectTreeUIController.isTH2ScrapCollapsed(scrapRowId),
-        isTrue);
+        isFalse);
   });
 }

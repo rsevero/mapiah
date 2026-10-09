@@ -671,7 +671,7 @@ abstract class MPGeneralControllerBase with Store {
       final TH2FileEditController? controller =
           _t2hFileEditControllers.remove(path);
       controller?.dispose();
-      MPLocator().thProjectTreeUIController.removeCollapsedScrapsForFile(path);
+      MPLocator().thProjectTreeUIController.removeExpandedScrapsForFile(path);
       disposedAny = true;
     }
     if (disposedAny) {

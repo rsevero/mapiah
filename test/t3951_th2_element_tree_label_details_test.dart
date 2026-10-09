@@ -72,7 +72,7 @@ void main() {
     mpLocator.mpGeneralController.reset();
     mpLocator.thProjectTreeUIController.setFilterText('');
     mpLocator.thProjectTreeUIController.expandedNodeIds.clear();
-    mpLocator.thProjectTreeUIController.collapsedTH2ScrapIds.clear();
+    mpLocator.thProjectTreeUIController.expandedTH2ScrapIds.clear();
   }
 
   setUp(() async {
@@ -117,7 +117,7 @@ void main() {
         fileDepth: 1,
         filterActive: filterActive,
         matchesFilterText: ui().matchesFilterText,
-        isScrapCollapsed: ui().isTH2ScrapCollapsed,
+        isScrapCollapsed: (String scrapRowId) => false,
       ).rows.cast<TH2ElementTreeRow>();
     }
 
@@ -447,6 +447,8 @@ void main() {
       );
       await tester.pump();
       controller = (await settleTH2Load(tester, project.pathOf('a.th2')))!;
+    expandTH2TreeScraps(project.pathOf('a.th2'));
+    await tester.pump();
       await tester.pump();
     }
 

@@ -49,26 +49,22 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
     );
   }
 
-  late final _$collapsedTH2ScrapIdsAtom = Atom(
-    name: 'THProjectTreeUIControllerBase.collapsedTH2ScrapIds',
+  late final _$expandedTH2ScrapIdsAtom = Atom(
+    name: 'THProjectTreeUIControllerBase.expandedTH2ScrapIds',
     context: context,
   );
 
   @override
-  ObservableSet<String> get collapsedTH2ScrapIds {
-    _$collapsedTH2ScrapIdsAtom.reportRead();
-    return super.collapsedTH2ScrapIds;
+  ObservableSet<String> get expandedTH2ScrapIds {
+    _$expandedTH2ScrapIdsAtom.reportRead();
+    return super.expandedTH2ScrapIds;
   }
 
   @override
-  set collapsedTH2ScrapIds(ObservableSet<String> value) {
-    _$collapsedTH2ScrapIdsAtom.reportWrite(
-      value,
-      super.collapsedTH2ScrapIds,
-      () {
-        super.collapsedTH2ScrapIds = value;
-      },
-    );
+  set expandedTH2ScrapIds(ObservableSet<String> value) {
+    _$expandedTH2ScrapIdsAtom.reportWrite(value, super.expandedTH2ScrapIds, () {
+      super.expandedTH2ScrapIds = value;
+    });
   }
 
   late final _$filterTextAtom = Atom(
@@ -296,13 +292,13 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
   }
 
   @override
-  void removeCollapsedScrapsForFile(String tabKey) {
+  void removeExpandedScrapsForFile(String tabKey) {
     final _$actionInfo = _$THProjectTreeUIControllerBaseActionController
         .startAction(
-          name: 'THProjectTreeUIControllerBase.removeCollapsedScrapsForFile',
+          name: 'THProjectTreeUIControllerBase.removeExpandedScrapsForFile',
         );
     try {
-      return super.removeCollapsedScrapsForFile(tabKey);
+      return super.removeExpandedScrapsForFile(tabKey);
     } finally {
       _$THProjectTreeUIControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -342,7 +338,7 @@ mixin _$THProjectTreeUIController on THProjectTreeUIControllerBase, Store {
     return '''
 expandedNodeIds: ${expandedNodeIds},
 expandedStandaloneTH2FileIds: ${expandedStandaloneTH2FileIds},
-collapsedTH2ScrapIds: ${collapsedTH2ScrapIds},
+expandedTH2ScrapIds: ${expandedTH2ScrapIds},
 filterText: ${filterText},
 isSidebarCollapsed: ${isSidebarCollapsed},
 sidebarMode: ${sidebarMode},

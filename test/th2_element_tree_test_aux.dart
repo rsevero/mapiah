@@ -4,8 +4,10 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/th_project_tree_visible_row.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
 import 'package:mapiah/src/elements/th_project/th_project_file_node.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -164,4 +166,19 @@ Future<void> openTH2TreeProject(
     () => mpLocator.thProjectController.openProject(project.configPath),
   );
   await tester.pump();
+}
+
+/// Expands every scrap row of the loaded `.th2` file at [path], which start
+/// collapsed, so its point, line and area rows are visible.
+void expandTH2TreeScraps(String path) {
+  final TH2FileEditController controller = mpLocator.mpGeneralController
+      .getTH2FileEditControllerIfExists(path)!;
+
+  for (final int mpID in controller.th2File.childrenMPIDs) {
+    if (controller.th2File.elementByMPID(mpID) is THScrap) {
+      mpLocator.thProjectTreeUIController.expandedTH2ScrapIds.add(
+        th2ElementTreeRowId(th2FilePath: path, elementMPID: mpID),
+      );
+    }
+  }
 }

@@ -35,10 +35,11 @@ abstract class THProjectTreeUIControllerBase with Store {
   ObservableSet<String> expandedStandaloneTH2FileIds = ObservableSet<String>();
 
   /// Row ids (`th2el:<canonicalPath>:<mpID>`) of the TH2 scrap rows the user
-  /// collapsed. Scraps start expanded, so only the exception is stored. Kept
+  /// expanded. Scraps start collapsed, so expanding a file shows only its
+  /// scraps, and only the exception is stored. Kept
   /// apart from [expandedNodeIds] so default expansion never sees TH2 ids.
   @observable
-  ObservableSet<String> collapsedTH2ScrapIds = ObservableSet<String>();
+  ObservableSet<String> expandedTH2ScrapIds = ObservableSet<String>();
 
   @observable
   String filterText = '';
@@ -140,13 +141,13 @@ abstract class THProjectTreeUIControllerBase with Store {
 
   @action
   void toggleTH2ScrapCollapsed(String scrapRowId) {
-    if (!collapsedTH2ScrapIds.add(scrapRowId)) {
-      collapsedTH2ScrapIds.remove(scrapRowId);
+    if (!expandedTH2ScrapIds.add(scrapRowId)) {
+      expandedTH2ScrapIds.remove(scrapRowId);
     }
   }
 
   bool isTH2ScrapCollapsed(String scrapRowId) =>
-      collapsedTH2ScrapIds.contains(scrapRowId);
+      !expandedTH2ScrapIds.contains(scrapRowId);
 
   /// Whether the project TH2 file at [canonicalPath] has its row expanded.
   /// `false` with no project or for a file outside it.
@@ -284,12 +285,12 @@ abstract class THProjectTreeUIControllerBase with Store {
   @action
   void removeStandaloneFile(String tabKey) {
     expandedStandaloneTH2FileIds.remove('standalone:$tabKey');
-    removeCollapsedScrapsForFile(tabKey);
+    removeExpandedScrapsForFile(tabKey);
   }
 
   @action
-  void removeCollapsedScrapsForFile(String tabKey) {
-    collapsedTH2ScrapIds.removeWhere(
+  void removeExpandedScrapsForFile(String tabKey) {
+    expandedTH2ScrapIds.removeWhere(
       (String id) => id.startsWith('th2el:$tabKey:'));
   }
 
@@ -304,11 +305,11 @@ abstract class THProjectTreeUIControllerBase with Store {
     if (oldProjectId == null) {
       collapse(oldId);
     }
-    final List<String> oldScraps = collapsedTH2ScrapIds
+    final List<String> oldScraps = expandedTH2ScrapIds
         .where((String id) => id.startsWith('th2el:$oldKey:')).toList();
     for (final String id in oldScraps) {
-      collapsedTH2ScrapIds.remove(id);
-      collapsedTH2ScrapIds.add('th2el:$newKey:${id.substring('th2el:$oldKey:'.length)}');
+      expandedTH2ScrapIds.remove(id);
+      expandedTH2ScrapIds.add('th2el:$newKey:${id.substring('th2el:$oldKey:'.length)}');
     }
   }
 
@@ -336,7 +337,7 @@ abstract class THProjectTreeUIControllerBase with Store {
       final MPGeneralController general = MPLocator().mpGeneralController;
       final List<String> openTH2Keys = general.openFileOrder
           .where(isTH2Tab).toList();
-      collapsedTH2ScrapIds.removeWhere((String id) => !openTH2Keys.any(
+      expandedTH2ScrapIds.removeWhere((String id) => !openTH2Keys.any(
         (String key) => id.startsWith('th2el:$key:')));
 
       return;

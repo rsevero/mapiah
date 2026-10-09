@@ -101,6 +101,8 @@ void main() {
     await tester.tap(chevronOf(th2NodeOf(project, 'a.th2')));
     await tester.pump();
     await settleTH2Load(tester, project.pathOf('a.th2'));
+    expandTH2TreeScraps(project.pathOf('a.th2'));
+    await tester.pump();
 
     return project;
   }
@@ -113,7 +115,7 @@ void main() {
     mpLocator.mpGeneralController.reset();
     ui().setFilterText('');
     ui().expandedNodeIds.clear();
-    ui().collapsedTH2ScrapIds.clear();
+    ui().expandedTH2ScrapIds.clear();
     ui().setSidebarCollapsed(false);
     ui().showTree();
     th2ElementTreeTapTracker.reset();
@@ -185,7 +187,10 @@ void main() {
       expect(mpLocator.thProjectController.activeSelectedNodeId, isNull);
       expect(statusRow(path, TH2FileStatusTreeRowKind.loading), findsNothing);
       expect(elementRow(path, 's1'), findsOneWidget);
-      expect(elementRow(path, 'l1'), findsOneWidget);
+      expect(elementRow(path, 's2'), findsOneWidget);
+      expect(elementRow(path, 'p1'), findsNothing);
+      expect(elementRow(path, 'l1'), findsNothing);
+      expect(elementRow(path, 'p2'), findsNothing);
       expect(
         find.byKey(
           ValueKey('THProjectTreeNodeBrokenBadge|${th2NodeOf(project, 'a.th2').id}'),
@@ -1113,6 +1118,7 @@ void main() {
       await tester.runAsync(
         () => mpLocator.mpGeneralController.reloadTH2File(path),
       );
+      expandTH2TreeScraps(path);
       await tester.pump();
 
       final TH2FileEditController reloaded = controllerOf(path)!;
@@ -1317,7 +1323,7 @@ void main() {
       );
     });
 
-    testWidgets('collapsed scraps survive undo, reset on Reload and close', (
+    testWidgets('scrap expansion survives undo, resets on Reload and close', (
       WidgetTester tester,
     ) async {
       final TH2TreeTestProject project = await openAndExpandA(tester);
@@ -1333,6 +1339,7 @@ void main() {
       controller.redo();
       await tester.pump();
 
+      expect(elementRow(path, 'p1'), findsOneWidget);
       expect(elementRow(path, 'p2'), findsNothing);
 
       await tester.runAsync(
@@ -1340,12 +1347,13 @@ void main() {
       );
       await tester.pump();
 
-      expect(elementRow(path, 'p2'), findsOneWidget);
+      expect(elementRow(path, 's1'), findsOneWidget);
+      expect(elementRow(path, 'p1'), findsNothing);
 
       mpLocator.thProjectController.closeProject();
       await tester.pump();
 
-      expect(ui().collapsedTH2ScrapIds, isEmpty);
+      expect(ui().expandedTH2ScrapIds, isEmpty);
     });
   });
 
