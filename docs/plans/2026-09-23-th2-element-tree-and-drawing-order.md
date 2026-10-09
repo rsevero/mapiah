@@ -537,7 +537,7 @@ Phase 4 is finished and its plan is left as written. Where Phase 7 changes what 
 
 ### Phase 8: Type preview icons on element rows, and the Run Therion broken-file warning
 
-Detailed implementation and codebase validation: [Phase 8 plan](2026-10-04-th2-element-tree-and-drawing-order-phase8-type-previews-and-broken-file-warning.md). Where the outline below assumes asynchronous area-pattern loading, the detailed plan follows the current synchronous `MPPatternCache` behavior.
+Detailed implementation and codebase validation: [Phase 8 plan](2026-10-04-th2-element-tree-and-drawing-order-phase8-type-previews-and-broken-file-warning.md). Where the outline below differs from the detailed plan, the detailed plan wins: area patterns follow the current synchronous `MPPatternCache` behavior instead of asynchronous loading; the shared path-painting helper takes no line-thickness input, since stroke widths arrive already set on the paint; previews use a fixed preview symbol unit and one-meter length, so neither the symbol-size setting nor the active scrap affects them; the icon is exactly `mpSmallIconSize` wide; label-mode points show their placeholder point with no text; the cache is cleared on visualization-method changes; and the Run Therion warning lists only loaded broken `.th2` files of the loaded project being run, says Therion *may* fail, and is absent for other configs and right after picking a project to run.
 
 Each point, line and area row in the sidebar tree starts with a small icon that previews how that element's type (and subtype) is drawn on the canvas. It replaces the generic element-kind icon that Phase 3 uses for these rows. Scrap rows keep their Phase 3 icon, and file, status and project rows are unchanged.
 
