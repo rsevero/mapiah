@@ -49,6 +49,7 @@
   * Validated the Phase 8 type-preview plan (#32) again. It now notes that opening another project closes the outgoing project's files before the Run Therion dialog appears, and the pick-and-run test checks that this cleanup happened.
   * Validated the TH2 text editing plan (#38) again, after the element tree's type previews and collapsed scraps. A broken file fixed in text mode but not yet saved now stays in the Run Therion warning, since Therion still reads the broken file from disk.
   * Resolved validation gaps in the TH2 text editing plan (#38): the editor becomes temporarily read-only after tree-edit validation succeeds, Enter is handled separately from paste so line endings are preserved, and diff work and memory have enforced limits with conservative identity and cursor fallbacks. Added regression test requirements for each case.
+  * Removed the line diff and its limits from the TH2 text editing plan (#38). Unchanged elements are now recognized by their content, so large files and large edits keep the selection and hidden elements, and a scrap or line whose options were edited in text keeps its identity. Normalization notes and the cursor position follow each element directly, and tree clicks follow the user's edits with a line tracker. Shift+Enter now inserts the file's line ending too.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
