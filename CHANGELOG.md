@@ -55,6 +55,8 @@
   * Corrected the TH2 text editing plan (#38): normalization now records area border references removed with short lines, model refresh invalidates the selected-line segment cache, and undo/redo tests distinguish restored model-derived state from the existing selection behavior. Added corresponding regression test requirements.
   * Validated the TH2 text editing plan (#38) again. The status bar now shows the right scrap name after a text apply, undo or redo, including after renaming the active scrap in text. Applying text can no longer wait for itself while saving or running a tree edit. Pressing Enter at the end of a line no longer counts as editing that line, so tree clicks still land on it. Text applies keep the undo history's memory use to two copies of the file.
 
+  * Corrected the TH2 text editing plan (#38): Discard waits for pending operations before ending the text session, moved containers retain their identifiable children, and closing markers, blank lines and comments alone cannot establish replacement containers' identity. Added regression requirements for these cases.
+
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
   * Scraps can now have several background sketches (#45). The scrap _Sketch_ dialog can take the filename and position from a raster image already loaded in the file (#44), and several problems in that dialog were fixed.
