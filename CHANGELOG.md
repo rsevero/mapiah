@@ -57,6 +57,7 @@
 
   * Corrected the TH2 text editing plan (#38): Discard waits for pending operations before ending the text session, moved containers retain their identifiable children, and closing markers, blank lines and comments alone cannot establish replacement containers' identity. Added regression requirements for these cases.
   * Validated the TH2 text editing plan (#38) again. A tab's Properties button is disabled in text mode, since changing the file's encoding there would drop text edits not yet applied. The encoding can be changed on the text's `encoding` line instead.
+  * Updated the TH2 text editing plan (#38) so the active scrap can no longer be hidden from the element tree. Its eye button is disabled, and the scrap menu's Hide leaves it visible, so hiding a scrap in text mode no longer changes the canvas selection. A hidden scrap that becomes active can still be shown.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
