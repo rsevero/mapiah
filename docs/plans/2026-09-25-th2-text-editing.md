@@ -21,7 +21,7 @@
 - text that makes the parser throw, such as a duplicate scrap ID, is **rejected with a diagnostic**, like any other text that doesn't parse. Copied IDs are pasted as they are, so a duplicate from a paste is handled like a typed one (§3.4, §4.5, §3.8);
 - entering text mode **waits for pending image insertion**, including its bounds load and command execution, before generating the text (§3.1, §4.13);
 - **the active scrap is always visible and can't be hidden**, in either mode. Activating a hidden scrap shows it, and the active scrap's tree eye button is disabled (§3.9, §4.14);
-- **all phases are implemented on one feature branch**, merged into `main` only once Phase 6 at least is done, so `main` never carries a partial text mode or the writer's new Save layout without its documentation (§5).
+- **all text editing work goes on one feature branch, `feat_38_th2_text_editing`**: every phase, and every later validation or change of this plan and of the per-phase plans. It is merged into `main` only once Phase 6 at least is done, so `main` never carries a partial text mode or the writer's new Save layout without its documentation (§5).
 
 **Issue:** [#38: Simplify object options entry by allowing user to type without clicking each option](https://github.com/rsevero/mapiah/issues/38)
 
@@ -543,7 +543,9 @@ This policy covers failures while regenerating the text editor after an accepted
 
 Each phase ends with `flutter analyze` clean and `flutter test` green. New tests start at `t3960`.
 
-**Branch and merge.** All phases are implemented on **one feature branch**, `feat_38_th2_text_editing`, in its own worktree (AGENTS.md, _Parallel Work_), not on `main` and not on one branch per phase that is merged on its own. Each phase is one or more commits on that branch. The branch is merged into `main` only after **Phase 6 at least** is implemented, so `main` never ships a partial text mode, and never ships the writer's new Save layout (§4.16, from Phase 1) without the help and CHANGELOG that describe it (Phase 6). Phase 7 may land on the branch before the merge, or later on its own branch. Until the merge, rebase the branch on `main` whenever `main` moves in files it touches, and run `flutter analyze` and `flutter test` after each rebase. Plan documents, like this one and the per-phase plans, are doc-only and can still reach `main` on their own `docs_…` branches.
+**Branch and merge.** All phases are implemented on **one feature branch**, `feat_38_th2_text_editing`, in its own worktree (AGENTS.md, _Parallel Work_), not on `main` and not on one branch per phase that is merged on its own. Each phase is one or more commits on that branch. The branch is merged into `main` only after **Phase 6 at least** is implemented, so `main` never ships a partial text mode, and never ships the writer's new Save layout (§4.16, from Phase 1) without the help and CHANGELOG that describe it (Phase 6). Phase 7 may land on the branch before the merge, or later on its own branch. Until the merge, rebase the branch on `main` whenever `main` moves in files it touches, and run `flutter analyze` and `flutter test` after each rebase.
+
+**Plans and validations go on the same branch.** The branch is created with `scripts/task_start.sh feat_38_th2_text_editing` right after the commit that introduced this rule reaches `main`; that commit is the last text editing change to reach `main` on its own. From then on, every validation of this plan or of a per-phase plan, every plan correction, every new per-phase plan and every implementation commit is made in that branch's worktree, never on a `docs_…` branch or on `main`. The plans on `main` therefore stay at that commit until the merge. Phase 7, if it lands after the merge, gets its own branch.
 
 ### Phase 1: Line maps and locator (no UI)
 

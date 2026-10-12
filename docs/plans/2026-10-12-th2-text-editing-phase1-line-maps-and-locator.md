@@ -19,7 +19,7 @@ Build the pure, UI-free layer that every later phase uses to relate TH2 text lin
 
 Nothing here is visible in the UI, except one intended change to what ordinary Save writes: the settings-section policy of parent §4.16 and the line boundary after an unterminated chunk. Both go through the shared writer, so they apply to canvas Save and Save As on the feature branch as soon as this phase is committed there.
 
-**Branch.** This phase is implemented on the feature branch `feat_38_th2_text_editing`, in its worktree, like every phase of the parent plan (parent §5, _Branch and merge_). It is not merged into `main` on its own: the branch is merged only after Phase 6 at least is implemented. Start the branch with `scripts/task_start.sh feat_38_th2_text_editing` when this phase begins; later phases continue in the same worktree.
+**Branch.** This phase is implemented on the feature branch `feat_38_th2_text_editing`, in its worktree, like every phase of the parent plan (parent §5, _Branch and merge_). It is not merged into `main` on its own: the branch is merged only after Phase 6 at least is implemented. The branch is created with `scripts/task_start.sh feat_38_th2_text_editing` as soon as the commit naming it as the only text editing branch reaches `main`, before any further validation of this plan. Every later validation or correction of this plan, and its implementation, is committed there; later phases continue in the same worktree.
 
 ## 2. Current codebase constraints
 
