@@ -3,7 +3,7 @@
 # TH2 Text Editing — Phase 1: Line Maps, Settings Section and Locator
 
 **Date:** 2026-10-12
-**Status:** Proposed. Checked against `main` at `dcdaae85`. Validated against `1672f98b` on 2026-10-12 by running probes on the current parser and writer: round-trip stability is required only with `useOriginalRepresentation: true`, the locator handles lines owned by the file, `t3963` uses rows that a parse can produce, and the test writer options are stated. The ISO-8859 Save bug found then was fixed on `main` in `eef79409`, so no fixture is excluded from the reparse checks any more.
+**Status:** Proposed. Checked against `main` at `dcdaae85`. Validated against `1672f98b` on 2026-10-12 by running probes on the current parser and writer: round-trip stability is required only with `useOriginalRepresentation: true`, the locator handles lines owned by the file, `t3963` uses rows that a parse can produce, and the test writer options are stated. The ISO-8859 Save bug found then was fixed on `main` in `eef79409`, so no fixture is excluded from the reparse checks any more. Validated again against `15297a07` on 2026-10-12: line references updated after `eef79409`, and the planner's end-of-file case corrected. The algorithm keeps a setting appended to a file with no drawing element at the end, where the earlier table and §8.3 claimed it moved above a trailing comment; the user chose to keep the algorithm (§4.3, §8.2, §8.3).
 **Parent plan:** [TH2 Text Editing Mode with Selection Synchronization](2026-09-25-th2-text-editing.md) (§4.3, §4.4, §4.16 and §5 Phase 1)
 **Issue:** [#38: Simplify object options entry by allowing user to type without clicking each option](https://github.com/rsevero/mapiah/issues/38)
 
@@ -19,35 +19,35 @@ Build the pure, UI-free layer that every later phase uses to relate TH2 text lin
 
 Nothing here is visible in the UI, except one intended change to what ordinary Save writes: the settings-section policy of parent §4.16 and the line boundary after an unterminated chunk. Both go through the shared writer, so they apply to canvas Save and Save As on the feature branch as soon as this phase is committed there.
 
-**Branch.** This phase is implemented on the feature branch `feat_38_th2_text_editing`, in its worktree, like every phase of the parent plan (parent §5, _Branch and merge_). It is not merged into `main` on its own: the branch is merged only after Phase 6 at least is implemented. The branch is created with `scripts/task_start.sh feat_38_th2_text_editing` as soon as the commit naming it as the only text editing branch reaches `main`, before any further validation of this plan. Every later validation or correction of this plan, and its implementation, is committed there; later phases continue in the same worktree.
+**Branch.** This phase is implemented on the feature branch `feat_38_th2_text_editing`, in its worktree, like every phase of the parent plan (parent §5, _Branch and merge_). It is not merged into `main` on its own: the branch is merged only after Phase 6 at least is implemented. The branch and its worktree exist since `c2c466d6`. Every validation or correction of this plan, and its implementation, is committed there; later phases continue in the same worktree.
 
 ## 2. Current codebase constraints
 
-Verified at `dcdaae85`. Line numbers are those of that commit.
+Verified at `dcdaae85`; line numbers updated at `15297a07`, after `eef79409` moved encoding and decoding into `MPEncodingAux`.
 
-### 2.1 Writer (`lib/src/mp_file_read_write/th2_file_writer.dart`, 609 lines)
+### 2.1 Writer (`lib/src/mp_file_read_write/th2_file_writer.dart`, 589 lines)
 
-- `serialize` (`:35-62`) resets its state, writes a synthesized `encoding` line when `th2File.elementByMPID(th2File.childrenMPIDs.first) is! THEncoding` (`:51`), followed by `_trySerializeXTherionConfig()`, then `_childrenAsString(th2File)`. `childrenMPIDs.first` throws `StateError` on a file with no children.
-- Settings emission is global: the encoding case of `serializeElement` (`:259-263`) calls `_trySerializeXTherionConfig()` (`:64-85`), which writes every setting right after the encoding line when **all** settings are new; otherwise the first setting reached in `serializeElement` (`:295-298`) calls `_serializeAllXTherionConfigs()` (`:87-111`), which writes every setting there, and `_xTherionConfigWritten` makes the others write nothing. `_configBlockElements()` (`:113-117`) lists the file-level settings in children order.
-- Leaves (text producers): `_elementOriginalLineRepresentation` (`:322-324`), `_prepareLine` (`:467-540`, including wrapped long lines and the same-line comment), both branches of `_serializeEmptyLine` (`:143-149`), the generated branches of `_serializeMultiLineCommmentContent` (`:151-160`), `_serializeXTherionConfig` (`:181-192`), `_serializeXTherionImageInsertConfig` (`:194-217`) and `_serializeMapiahImageInsertConfig` (`:219-241`), the synthesized `encoding` line (`:52`), and in `_linePointOptionsAsString` (`:546-573`) both the stored option line (`_commandOptionOriginalLineRepresentation`, `:542-544`) and the generated one (`:562-564`).
-- Composers: `_prepareLineWithOriginalRepresentation` (`:123-134`), `serializeElement` (`:243-320`), `_childrenAsString` (`:429-439`), the per-type serializers, `_trySerializeXTherionConfig` and `_serializeAllXTherionConfigs`.
-- An XTherion-representable `MPImageInsertConfig` is written through a temporary `THXTherionImageInsertConfig` built by `fromMapiahImageInsertConfig` (`:226-231`), which reuses the model element's MPID.
-- `toBytes` (`:575-608`) calls `serialize` and encodes. The only `lib` caller is `TH2FileEditController._encodedFileContents()` (`th2_file_edit_controller.dart:1648-1657`), used by `_actualSave` (`:1786`), so Save and Save As share it. No test calls `serializeElement` directly.
+- `serialize` (`:34-61`) resets its state, writes a synthesized `encoding` line when `th2File.elementByMPID(th2File.childrenMPIDs.first) is! THEncoding` (`:50`), followed by `_trySerializeXTherionConfig()`, then `_childrenAsString(th2File)`. `childrenMPIDs.first` throws `StateError` on a file with no children.
+- Settings emission is global: the encoding case of `serializeElement` (`:258-262`) calls `_trySerializeXTherionConfig()` (`:63-84`), which writes every setting right after the encoding line when **all** settings are new; otherwise the first setting reached in `serializeElement` (`:294-297`) calls `_serializeAllXTherionConfigs()` (`:86-110`), which writes every setting there, and `_xTherionConfigWritten` makes the others write nothing. `_configBlockElements()` (`:112-116`) lists the file-level settings in children order.
+- Leaves (text producers): `_elementOriginalLineRepresentation` (`:321-323`), `_prepareLine` (`:466-539`, including wrapped long lines and the same-line comment), both branches of `_serializeEmptyLine` (`:142-148`), the generated branches of `_serializeMultiLineCommmentContent` (`:150-159`), `_serializeXTherionConfig` (`:180-191`), `_serializeXTherionImageInsertConfig` (`:193-216`) and `_serializeMapiahImageInsertConfig` (`:218-240`), the synthesized `encoding` line (`:51`), and in `_linePointOptionsAsString` (`:545-572`) both the stored option line (`_commandOptionOriginalLineRepresentation`, `:541-543`) and the generated one (`:561-563`).
+- Composers: `_prepareLineWithOriginalRepresentation` (`:122-133`), `serializeElement` (`:242-319`), `_childrenAsString` (`:428-438`), the per-type serializers, `_trySerializeXTherionConfig` and `_serializeAllXTherionConfigs`.
+- An XTherion-representable `MPImageInsertConfig` is written through a temporary `THXTherionImageInsertConfig` built by `fromMapiahImageInsertConfig` (`:225-230`), which reuses the model element's MPID and has no stored text, so it always writes the generated XTherion line.
+- `toBytes` (`:574-588`) calls `serialize` and encodes the result with `MPEncodingAux.encode`. The only `lib` caller is `TH2FileEditController._encodedFileContents()` (`th2_file_edit_controller.dart:1648-1657`), used by `_actualSave` (`:1786`), so Save and Save As share it. No test calls `serializeElement` directly.
 
-### 2.2 Parser (`lib/src/mp_file_read_write/th2_file_parser.dart`, 3506 lines)
+### 2.2 Parser (`lib/src/mp_file_read_write/th2_file_parser.dart`, 3483 lines)
 
-- 21 `_th2FileElementEditController.executeAddElement(...)` calls, in `_injectEmptyLine` (`:465`), `_injectMultiLineCommentContent` (`:478`), `_injectEndMultiLineComment` (`:490`), `_injectStartMultiLineComment` (`:506`), `_injectEncoding` (`:528`), `_injectXTherionSetting` (`:567`), `_injectMapiahSetting` (`:633`), `_injectXTherionImageInsertConfig` (`:850`), `_injectPoint` (`:884`), `_injectBezierCurveLineSegment` (`:955`), `_injectAreaBorderTHID` (`:1006`), `_injectStraightLineSegment` (`:1037`), `_injectScrap` (`:1076`), `_injectEndScrap` (`:1098`), `_injectArea` (`:1173`), `_injectLine` (`:1224`), `_injectEndArea` (`:1265`), `_injectEndLine` (`:1294`), `_injectComment` (`:1342` full-line comment, `:1360` unrecognized) and `_injectUnknown` (`:2887`).
-- `_injectContents` (`:154-185`) sets `_currentLineNumber` (1-based) before each `MPParseableLine`. `_scanStructureProblems` (`:2711-2730`) also sets it, but runs before injection and adds no element.
-- Line-point option lines (`_injectLineCommandLikeOption`, `:1128-1155`) and area option lines (`_injectAreaCommandLikeOption`, `:1109-1120`) add options, not elements. A same-line comment is stored on the current element.
-- `_splitContents` (`:3325-3440`) joins multi-line values into one parseable line numbered by its first line, and splits only at `\n` and `\r\n` (`_findLineBreak`, `:3073-3089`).
-- Clean-up after injection (`:3049-3051`): `_cleanOriginalLinesInFile` substitutes elements under the same MPID; `_linesCleanUp` (`:3127-3205`) removes duplicate line points, short lines and their area border references; `_areasCleanUp` (`:3276-3323`) rewrites or removes border references and removes empty areas. `TH2File.removeElement` removes descendants too.
-- `parse` returns `(TH2File, bool, List<String>)` (`:2992-3071`) and has no line-map output.
+- 21 `_th2FileElementEditController.executeAddElement(...)` calls, in `_injectEmptyLine` (`:464`), `_injectMultiLineCommentContent` (`:477`), `_injectEndMultiLineComment` (`:489`), `_injectStartMultiLineComment` (`:505`), `_injectEncoding` (`:527`), `_injectXTherionSetting` (`:566`), `_injectMapiahSetting` (`:632`), `_injectXTherionImageInsertConfig` (`:849`), `_injectPoint` (`:883`), `_injectBezierCurveLineSegment` (`:954`), `_injectAreaBorderTHID` (`:1005`), `_injectStraightLineSegment` (`:1036`), `_injectScrap` (`:1075`), `_injectEndScrap` (`:1097`), `_injectArea` (`:1172`), `_injectLine` (`:1223`), `_injectEndArea` (`:1264`), `_injectEndLine` (`:1293`), `_injectComment` (`:1341` full-line comment, `:1359` unrecognized) and `_injectUnknown` (`:2886`).
+- `_injectContents` (`:153-185`) sets `_currentLineNumber` (1-based) before each `MPParseableLine`. Two other places set it and add no element: `_scanStructureProblems` (`:2710-2794`), which runs before injection, and `_reportUnresolvedBorder` (`:3193`), which `_areasCleanUp` calls after injection to report a border reference's source line. Neither affects `elementStartLines`, which only `_addElement` writes.
+- Line-point option lines (`_injectLineCommandLikeOption`, `:1127-1154`) and area option lines (`_injectAreaCommandLikeOption`, `:1108-1119`) add options, not elements. A same-line comment is stored on the current element.
+- `_splitContents` (`:3302-3417`) joins multi-line values into one parseable line numbered by its first line, and splits only at `\n` and `\r\n` (`_findLineBreak`, `:3050-3066`).
+- Clean-up after injection (`:3026-3028`): `_cleanOriginalLinesInFile` substitutes elements under the same MPID; `_linesCleanUp` (`:3104-3182`) removes duplicate line points, short lines and their area border references; `_areasCleanUp` (`:3253-3300`) rewrites or removes border references and removes empty areas. `TH2File.removeElement` removes descendants too.
+- `parse` returns `(TH2File, bool, List<String>)` (`:2969-3048`) and has no line-map output.
 
 ### 2.3 Tests and fixtures
 
 - `test/auxiliary/` holds 397 `.th2` fixtures. 15 contain settings, all of them in a contiguous leading block, so **no fixture's plain round-trip output changes** under the new settings policy. No fixture contains a lone `\r`. `2025-06-20-point_date_quoted_value.th2` uses CRLF. At least ten fixtures end without a final line ending (for example `2025-10-05-001-line.th2`).
 - Tests that add images and compare written output: `t1450` (`2025-10-06-004-only_encoding.th2`, encoding line terminated), `t2450`, `t2451`, `t2452`, plus `t0800`. They place new images right after leading settings, where old and new policy agree; `t2452` and `t0800` must still be run and checked.
-- The highest existing test number is `t3957`. Parent plan numbering starts this phase at `t3960`; `t3989` is the settings-section test.
+- The highest existing test number is `t3958`. Parent plan numbering starts this phase at `t3960`; `t3989` is the settings-section test.
 - `parse(filename, fileBytes: …)` accepts in-memory bytes, so most new tests build their input inline instead of adding fixtures.
 - **Round-trip stability today** (checked at `1672f98b`, writing with `includeEmptyLines: true`, reparsing `toBytes` output): 333 fixtures parse cleanly. With `useOriginalRepresentation: true`, parse → write → parse → write is stable for all of them. With `false`, five are not stable, because of generated-output bugs that already exist: `2025-12-05-001-line_with_repeated_points.th2`, `th_file_parser-00151-point_with_dist_option_with_unit.th2`, `th_file_parser-00154-point_with_invalid_type_for_dist_option_failure.th2`, `th_file_parser-02281-point_with_explored_option_with_unit.th2` and `th_file_parser-02284-point_with_invalid_type_for_explored_option_failure.th2` (the last four don't reparse cleanly).
 - **ISO-8859 Save (fixed).** At `1672f98b`, `th_file_parser-00014-iso8859-2_encoding.th2` and `th_file_parser-00015-iso8859-15_encoding.th2` were written as UTF-8 and couldn't be read back. `eef79409` fixed it on `main` (`MPEncodingAux`, `t3958`), so both fixtures round-trip like the others.
@@ -101,15 +101,17 @@ Algorithm (parent §4.16), with `isSetting` meaning `TH2FileWriter.configBlockEl
 
 1. `start` = 1 if the first child is an `encoding`, else 0.
 2. `runEnd`: advance from `start` while the child is a setting, a comment, an empty line or a multiline comment (`THMultiLineComment`, whose content and `endcomment` are its children). Stop at the first other element or at the end of the children.
-3. `sectionEnd`: from `runEnd`, step back over trailing comments and multiline comments. **The section never ends in a comment**, also when the run reaches the end of the file with no other element after it (decision, see §8.3).
-4. `insertAt`: from `sectionEnd`, step back over trailing empty lines. When the section is empty, `insertAt == start`.
+3. `sectionEnd`: from `runEnd`, step back, not below `start`, over trailing comments and multiline comments. **The section never ends in a comment.**
+4. `insertAt`: from `sectionEnd`, step back, not below `start`, over trailing empty lines. When the section is empty, `insertAt == start`.
 5. `later` = the settings at index ≥ `sectionEnd`, in children order.
 6. Order: `children[0..insertAt) + later + children[insertAt..)` with `later` removed from the tail.
 7. `relocatedSettingMPIDs = later`.
 
 Every loop is bounded by the children count. Nested containers are never inspected: settings-looking lines inside scraps are comments (parent §2.3), and settings-looking text in a multiline comment is content.
 
-Expected orders (all from parent §4.16, plus the two cases the parent left implicit):
+The planner sees element types only, so it can't tell a new setting from a stored one. When the run reaches the end of the file, a setting appended there (a new image in a file with no scrap) is part of the run and keeps its place, after any comments and empty lines before it (§8.3).
+
+Expected orders (from parent §4.16, plus the cases the parent left implicit):
 
 | Children | Output |
 |---|---|
@@ -120,7 +122,8 @@ Expected orders (all from parent §4.16, plus the two cases the parent left impl
 | `enc, C, scrap, I` | `enc, I, C, scrap` |
 | `enc, S1, scrap, C, S2` | `enc, S1, S2, scrap, C` |
 | `enc, S1, S2, E, C, E, scrap, I` | `enc, S1, S2, E, C, I, E, scrap` (today: `I` after `S2`; changes, see §8.2) |
-| `enc, S1, C` + `I` (no drawing element) | `enc, S1, I, C` |
+| `enc, S1, C, I` (no drawing element) | unchanged (today: `I` after `S1`; changes, see §8.2) |
+| `enc, S1, E, I` (no drawing element) | unchanged (today: `I` after `S1`; changes, see §8.2) |
 
 ### 4.4 Writer refactor and `_emit`
 
@@ -300,8 +303,8 @@ Area option lines and a `subtype` option line are not covered: a clean parse can
 ## 8. Risks and notes
 
 1. **Hidden leaf.** A text-producing path missed by `_emit` breaks the length assertion. `t3960` runs the assertion over every fixture and the command-built model, with both `useOriginalRepresentation` values, so it can't go unnoticed.
-2. **Save output changes.** Intended (parent §4.16): new settings now go before the section's trailing empty lines, which can be after a section comment (the `S1, S2, E, C, E, scrap` row, as in `2025-11-28-002-line_throws_at_show_options.th2`); settings after a drawing element move up; comments and empty lines between settings are kept instead of compacted; an unterminated chunk followed by more output gets one ending instead of being concatenated. Every changed expectation is updated explicitly, never regenerated in bulk.
-3. **Section ending at EOF.** The parent defines trimming trailing comments "right before" the first other element. This plan also trims them when no other element follows (`enc, S1, C` + `I` → `enc, S1, I, C`), consistent with "the section can't end in a comment". Revisit only if the user prefers the other reading.
+2. **Save output changes.** Intended (parent §4.16): new settings now go before the section's trailing empty lines, which can be after a section comment (the `S1, S2, E, C, E, scrap` row, as in `2025-11-28-002-line_throws_at_show_options.th2`); in a file with no drawing element they stay at the end, after the section's comments and empty lines (§8.3); settings after a drawing element move up; comments and empty lines between settings are kept instead of compacted; an unterminated chunk followed by more output gets one ending instead of being concatenated. That includes a stored last line ending in a lone `\r` (ordinary mode only; ledger mode refuses it): the added `\n` makes it `\r\n`, which the parser reads as one line break, where today the two commands would be read as one line. Every changed expectation is updated explicitly, never regenerated in bulk.
+3. **Section ending at EOF.** When no other element follows the run, trimming its trailing comments can't move anything: every setting in the run stays in the section. A new image appended to a file with no scrap therefore stays last, after the comments and empty lines before it (`enc, S1, C, I` and `enc, S1, E, I` are unchanged; today's writer puts `I` right after `S1`). Decided by the user on 2026-10-12, over moving trailing settings at EOF (which would also move stored settings in settings-only files) and over telling new settings from stored ones (which would make the planner depend on stored text). The result is stable: a reload gives the same children order.
 4. **Line-point option order.** `_linePointOptionsAsString` writes options in `optionsMap` key order, not source order. If a file's unterminated last line is an option line that is not written last, the boundary rule now inserts an ending where the old writer concatenated two lines. Better than today; covered implicitly by the fixture invariants.
 5. **Shared start lines.** No current injector adds two elements at one line, but the derivation handles it (first one owns the line), so Phase 2 can rely on the map without assumptions.
 6. **Change to the parent plan.** `TH2TextLineEndingsAux` moves from Phase 2 to Phase 1. The parent plan's Phase 1, Phase 2 and `t3986` bullets already say so.

@@ -77,6 +77,7 @@
   * Validated the TH2 text editing Phase 1 plan (#38) against the current parser and writer. Round-trip stability is checked only for writes that keep the original text, two ISO-8859 fixtures are set aside for a Save bug that already exists, lines written for the file itself select nothing on the canvas, and the text-to-canvas cases no longer include lines a valid file can't contain.
   * From now on, all TH2 text editing work (#38), including validations and corrections of its plans, goes on the `feat_38_th2_text_editing` branch, which is merged into `main` only after at least Phase 6 is done.
   * The TH2 text editing plans (#38) no longer set aside the two ISO-8859 fixtures, since saving ISO-8859 files is now fixed.
+  * Validated the TH2 text editing Phase 1 plan (#38) again. In a file with no scrap, a newly added image is now planned to stay at the end of the file, after the comments and empty lines that follow the settings, instead of moving above them. The plan's code references were also updated to the current writer and parser.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
