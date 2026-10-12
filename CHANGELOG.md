@@ -56,6 +56,7 @@
   * Validated the TH2 text editing plan (#38) again. The status bar now shows the right scrap name after a text apply, undo or redo, including after renaming the active scrap in text. Applying text can no longer wait for itself while saving or running a tree edit. Pressing Enter at the end of a line no longer counts as editing that line, so tree clicks still land on it. Text applies keep the undo history's memory use to two copies of the file.
 
   * Corrected the TH2 text editing plan (#38): Discard waits for pending operations before ending the text session, moved containers retain their identifiable children, and closing markers, blank lines and comments alone cannot establish replacement containers' identity. Added regression requirements for these cases.
+  * Validated the TH2 text editing plan (#38) again. A tab's Properties button is disabled in text mode, since changing the file's encoding there would drop text edits not yet applied. The encoding can be changed on the text's `encoding` line instead.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
