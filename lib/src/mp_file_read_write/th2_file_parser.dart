@@ -2,10 +2,10 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:convert';
 import 'dart:io';
-import 'package:charset/charset.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_element_edit_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_encoding_aux.dart';
 import 'package:mapiah/src/auxiliary/th_id_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
@@ -80,7 +80,6 @@ class TH2FileParser {
     r'^\s*encoding\s+([a-zA-Z0-9-]+)',
     caseSensitive: false,
   );
-  final RegExp _isoRegex = RegExp(r'^iso([^_-].*)', caseSensitive: false);
   final RegExp singleDateTimeRegex = RegExp(
     r'^(\d{4})(?:\.(\d{1,2})(?:\.(\d{1,2})(?:@(\d{1,2})(?::(\d{1,2})(?::(\d{1,2})(?:\.(\d{1,2}))?)?)?)?)?)?$',
   );
@@ -2893,32 +2892,10 @@ class TH2FileParser {
 
   @useResult
   String _decodeFile(Uint8List fileContentRaw, String encoding) {
-    String fileContentDecoded = '';
-
-    switch (encoding) {
-      case 'UTF-8':
-        fileContentDecoded = utf8.decode(fileContentRaw);
-      case 'ASCII':
-        fileContentDecoded = ascii.decode(fileContentRaw);
-      case 'ISO8859-1':
-        fileContentDecoded = latin1.decode(fileContentRaw);
-      default:
-        // Therion ISO charset names don´t have a hyphen after ISO but
-        // charset.dart expects one.
-        final RegExpMatch? isoResult = _isoRegex.firstMatch(encoding);
-
-        if (isoResult != null) {
-          encoding = 'ISO-${isoResult[1]}';
-        }
-
-        final Encoding? encoder = Charset.getByName(encoding);
-
-        if (encoder == null) {
-          fileContentDecoded = utf8.decode(fileContentRaw);
-        } else {
-          fileContentDecoded = encoder.decode(fileContentRaw);
-        }
-    }
+    String fileContentDecoded = MPEncodingAux.decode(
+      fileContentRaw,
+      encoding,
+    );
 
     /// NUL characters have no legitimate use in a .th2 file and have been
     /// observed embedded in files written by other tools (e.g. from a

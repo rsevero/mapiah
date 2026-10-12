@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'dart:convert';
 import 'dart:typed_data';
-import 'package:charset/charset.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
+import 'package:mapiah/src/auxiliary/mp_encoding_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
@@ -579,31 +578,12 @@ class TH2FileWriter {
   }) {
     _th2File = th2File;
 
-    String encoding = th2File.encoding;
-    Uint8List fileContentEncoded = Uint8List(0);
     final String fileContent = serialize(
       th2File,
       includeEmptyLines: includeEmptyLines,
       useOriginalRepresentation: useOriginalRepresentation,
     );
 
-    switch (encoding) {
-      case 'UTF-8':
-        fileContentEncoded = utf8.encode(fileContent);
-      case 'ASCII':
-        fileContentEncoded = ascii.encode(fileContent);
-      case 'ISO8859-1':
-        fileContentEncoded = latin1.encode(fileContent);
-      default:
-        final Encoding? encoder = Charset.getByName(encoding);
-
-        if (encoder == null) {
-          fileContentEncoded = utf8.encode(fileContent);
-        } else {
-          fileContentEncoded = Uint8List.fromList(encoder.encode(fileContent));
-        }
-    }
-
-    return fileContentEncoded;
+    return MPEncodingAux.encode(fileContent, th2File.encoding);
   }
 }

@@ -11,6 +11,7 @@
   * The scrap _Sketch_ option dialog now lists every sketch at once, each with its own filename, X and Y fields and a _Remove sketch_ button (#44). _Add loaded image_ appends a sketch taken from a raster image already loaded in the file, so adding a second loaded image no longer replaces the first one, and _Add from file…_ appends a sketch from an image file whose lower left corner coordinates you type in. The filename fields are wider, so long filenames are easier to tell apart.
 * Fixes:
   * After _Save As_ on a `.th2` file with unsaved changes, the project tree no longer keeps showing the file's old name as unsaved.
+  * Saving a `.th2`, `.th` or `thconfig` file whose encoding is ISO-8859 other than ISO-8859-1 (for example `encoding ISO8859-2`) now writes it in that encoding. Before, accented characters were written as UTF-8, so the file no longer matched its own encoding line; a `.th2` file saved this way could no longer be opened.
 * Infrastructure maintenance:
   * Added `scripts/task_start.sh`, `scripts/task_finish.sh` and `scripts/task_run.sh` to start, finish and try out parallel tasks in their own branches and worktrees, and documented in `AGENTS.md` how to resolve rebase conflicts in generated files and when a task may be done directly in the main checkout.
   * Doc-only changes (Markdown files outside `assets/`) no longer run `flutter analyze` and `flutter test`, as documented in `AGENTS.md`; `scripts/task_finish.sh` skips them for such branches.

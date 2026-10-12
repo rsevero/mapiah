@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
-import 'dart:convert';
 import 'dart:typed_data';
-import 'package:charset/charset.dart';
+import 'package:mapiah/src/auxiliary/mp_encoding_aux.dart';
 import 'package:mapiah/src/elements/th_config/th_config_comment.dart';
 import 'package:mapiah/src/elements/th_config/th_config_element.dart';
 import 'package:mapiah/src/elements/th_config/th_config_export.dart';
@@ -57,25 +56,7 @@ class THConfigFileWriter {
       forceReformat: forceReformat,
     );
 
-    final String encodingName = configFile.encoding.toUpperCase();
-
-    switch (encodingName) {
-      case 'UTF-8':
-        return Uint8List.fromList(utf8.encode(text));
-      case 'ASCII':
-        return Uint8List.fromList(ascii.encode(text));
-      case 'ISO8859-1':
-      case 'ISO-8859-1':
-        return Uint8List.fromList(latin1.encode(text));
-      default:
-        final Encoding? encoder = Charset.getByName(configFile.encoding);
-
-        if (encoder == null) {
-          return Uint8List.fromList(utf8.encode(text));
-        } else {
-          return Uint8List.fromList(encoder.encode(text));
-        }
-    }
+    return MPEncodingAux.encode(text, configFile.encoding);
   }
 
   String _serializeElement(THConfigElement element, String lineEnding) {

@@ -2,7 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:convert';
 import 'dart:io';
-import 'package:charset/charset.dart';
+import 'package:mapiah/src/auxiliary/mp_encoding_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/th_config/th_config_file.dart';
 import 'package:mapiah/src/elements/th_config/th_config_input.dart';
@@ -179,11 +179,6 @@ class THProjectParser {
 
   final RegExp _parseErrorLineRegex = RegExp(
     r'line\s+(\d+)',
-    caseSensitive: false,
-  );
-
-  final RegExp _isoEncodingRegex = RegExp(
-    r'^iso([^_-].*)$',
     caseSensitive: false,
   );
 
@@ -908,30 +903,7 @@ class THProjectParser {
   }
 
   String _decodeBytes(List<int> bytes, String encoding) {
-    final String normalizedEncoding = encoding.toUpperCase();
-
-    switch (normalizedEncoding) {
-      case 'UTF-8':
-        return utf8.decode(bytes);
-      case 'ASCII':
-        return ascii.decode(bytes);
-      case 'ISO-8859-1':
-      case 'ISO8859-1':
-        return latin1.decode(bytes);
-      default:
-        final RegExpMatch? isoMatch = _isoEncodingRegex.firstMatch(
-          normalizedEncoding,
-        );
-        final String charsetName = isoMatch == null
-            ? normalizedEncoding
-            : 'ISO-${isoMatch.group(1)}';
-
-        final Encoding? encoder = Charset.getByName(charsetName);
-
-        return encoder == null
-            ? utf8.decode(bytes)
-            : encoder.decode(bytes);
-    }
+    return MPEncodingAux.decode(bytes, encoding);
   }
 
   void _attachParseErrors(
