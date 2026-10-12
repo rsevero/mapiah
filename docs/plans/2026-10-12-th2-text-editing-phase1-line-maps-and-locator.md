@@ -3,7 +3,7 @@
 # TH2 Text Editing — Phase 1: Line Maps, Settings Section and Locator
 
 **Date:** 2026-10-12
-**Status:** Proposed. Checked against `main` at `dcdaae85`.
+**Status:** Proposed. Checked against `main` at `dcdaae85`. Validated against `1672f98b` on 2026-10-12 by running probes on the current parser and writer: round-trip stability is required only with `useOriginalRepresentation: true`, two ISO-8859 fixtures are excluded for a Save bug that already exists, the locator handles lines owned by the file, `t3963` uses rows that a parse can produce, and the test writer options are stated.
 **Parent plan:** [TH2 Text Editing Mode with Selection Synchronization](2026-09-25-th2-text-editing.md) (§4.3, §4.4, §4.16 and §5 Phase 1)
 **Issue:** [#38: Simplify object options entry by allowing user to type without clicking each option](https://github.com/rsevero/mapiah/issues/38)
 
@@ -49,6 +49,9 @@ Verified at `dcdaae85`. Line numbers are those of that commit.
 - Tests that add images and compare written output: `t1450` (`2025-10-06-004-only_encoding.th2`, encoding line terminated), `t2450`, `t2451`, `t2452`, plus `t0800`. They place new images right after leading settings, where old and new policy agree; `t2452` and `t0800` must still be run and checked.
 - The highest existing test number is `t3957`. Parent plan numbering starts this phase at `t3960`; `t3989` is the settings-section test.
 - `parse(filename, fileBytes: …)` accepts in-memory bytes, so most new tests build their input inline instead of adding fixtures.
+- **Round-trip stability today** (checked at `1672f98b`, writing with `includeEmptyLines: true`, reparsing `toBytes` output): 333 fixtures parse cleanly. With `useOriginalRepresentation: true`, parse → write → parse → write is stable for all of them except the two below. With `false`, five more are not stable, because of generated-output bugs that already exist: `2025-12-05-001-line_with_repeated_points.th2`, `th_file_parser-00151-point_with_dist_option_with_unit.th2`, `th_file_parser-00154-point_with_invalid_type_for_dist_option_failure.th2`, `th_file_parser-02281-point_with_explored_option_with_unit.th2` and `th_file_parser-02284-point_with_invalid_type_for_explored_option_failure.th2` (the last four don't reparse cleanly).
+- **ISO-8859 Save bug (already exists, out of scope).** `th_file_parser-00014-iso8859-2_encoding.th2` and `th_file_parser-00015-iso8859-15_encoding.th2` parse cleanly, but the bytes `toBytes` writes for them differ from the source and can't be read back: the reparse fails with `FormatException: Not defined in this code page` and gives a model with no children. It is left for later, on its own; this phase only excludes the two fixtures from the reparse checks.
+- **Lines that a clean parse can't produce.** Area option lines (`place bottom`, `clip off` inside an area body) are read as invalid border references, a parse problem, and the writer never emits an area option on its own line. A line option such as `subtype` on its own line, before or after a line point, is moved into the line header (`line wall:clay`) and the line's stored text is cleared. So a writer map has no area option line and no `subtype` option line; real line-point options (`smooth`, `orientation`, `l-size`, …) stay on their own lines, owned by their segment.
 
 ## 3. Scope and non-goals
 
@@ -66,7 +69,8 @@ Verified at `dcdaae85`. Line numbers are those of that commit.
 
 ### Out of scope (later phases)
 
-- Detached parse, `contents`/`targetController` on `parse`, `lineNumberInProgress`, `TH2FileNormalization` records and markers, identity matching, apply command (Phase 2). Phase 1's removed lines record the **removed MPID**; Phase 2 links them to normalization records.
+- Detached parse, `contents`/`targetController` on `parse`, `lineNumberInProgress`, `TH2FileNormalization` records and markers, identity matching, apply command (Phase 2). Phase 1's removed lines record the **removed MPID** of the line's derived owner, which may be a child of the element the clean-up removed: the point and `endline` lines of a removed short line record those children's MPIDs, not the line's. Phase 2 links them to normalization records, so when it records a removal it also collects the removed element's descendant MPIDs, while they are still in the file.
+- The ISO-8859 Save bug (§2.3) and the generated-output instabilities (§2.3).
 - `serializeForTextMode()`, `applyTextLocation`, any controller, widget, localization or help change (Phases 3–6). The exception added here is caught and localized in Phase 4.
 
 ## 4. Design
@@ -110,7 +114,7 @@ Expected orders (all from parent §4.16, plus the two cases the parent left impl
 | Children | Output |
 |---|---|
 | `enc, S1, C, E, S2, S3, scrap` | unchanged |
-| `enc, S1, C, E, scrap, I` | `enc, S1, C, I, E, scrap` |
+| `enc, S1, C, E, scrap, I` | `enc, S1, C, I, E, scrap` (today: `I` after `S1`; changes, see §8.2) |
 | `enc, E, scrapA, E, scrapB, I` | `enc, I, E, scrapA, E, scrapB` |
 | `enc, S1, E, C, scrap, I` | `enc, S1, I, E, C, scrap` |
 | `enc, C, scrap, I` | `enc, I, C, scrap` |
@@ -149,9 +153,9 @@ No `_emit` in `_prepareLineWithOriginalRepresentation` or any other composer: it
 
 1. Compute the plan (§4.3).
 2. If `synthesizeEncoding`, emit the `encoding` line for the file.
-3. `serializeElement` each child in `orderedChildMPIDs`.
+3. `_serializeElement` each child in `orderedChildMPIDs`.
 
-`serializeElement`'s encoding case no longer calls `_trySerializeXTherionConfig`; its three setting cases call `_serializeXTherionConfig`, `_serializeXTherionImageInsertConfig` and `_serializeMapiahImageInsertConfig` individually. Remove `_trySerializeXTherionConfig`, `_serializeAllXTherionConfigs`, `_configBlockElements`, `_isConfigBlockElement` and `_xTherionConfigWritten`. Keep the public `configBlockElementTypes`, which the planner uses. Nested containers keep `_childrenAsString`.
+`serializeElement` becomes private (`_serializeElement`): it now depends on `_emit` state that only `_serializeFile` resets, and nothing outside the writer calls it. Its encoding case no longer calls `_trySerializeXTherionConfig`; its three setting cases call `_serializeXTherionConfig`, `_serializeXTherionImageInsertConfig` and `_serializeMapiahImageInsertConfig` individually. Remove `_trySerializeXTherionConfig`, `_serializeAllXTherionConfigs`, `_configBlockElements`, `_isConfigBlockElement` and `_xTherionConfigWritten`. Keep the public `configBlockElementTypes`, which the planner uses. Nested containers keep `_childrenAsString`.
 
 **`(String, TH2TextLineMap) serializeWithLineMap(TH2File th2File, {bool includeEmptyLines = false, bool useOriginalRepresentation = false, String? lineEnding})`** sets `_recordLedger = true`, runs `_serializeFile()`, and resets `_recordLedger` in a `finally`. Then:
 
@@ -210,9 +214,10 @@ Load behavior does not change: nothing reads the map during a load.
 Steps (parent §4.4):
 
 1. `owner = lineMap.ownerOfLine(line)`. If `null` (past the last line, a trailing empty editor line, or a removed line) → `FileLevel`.
-2. If the owner is a `THLineSegment` → `SelectLinePoint` with its parent line and that line's scrap. Option lines are already owned by their segment.
-3. Otherwise walk up from the owner (bounded by `mpMaxParseNestingDepth`) to the first `THPoint`, `THLine`, `THArea` or `THScrap`, or the file:
-   - point, line or area → `SelectElement` with its scrap. `endline`, a border reference, an area option line and `endarea` arrive here through their parent.
+2. If `owner == th2File.mpID` (the synthesized `encoding` line, and any separator attributed to it) → `FileLevel`. This is checked before any `elementByMPID` call, since the file's MPID names no element.
+3. If the owner is a `THLineSegment` → `SelectLinePoint` with its parent line and that line's scrap. Option lines are already owned by their segment.
+4. Otherwise walk up from the owner (bounded by `mpMaxParseNestingDepth`) to the first `THPoint`, `THLine`, `THArea` or `THScrap`, or the file:
+   - point, line or area → `SelectElement` with its scrap. `endline`, a border reference and `endarea` arrive here through their parent. An area option line would too, but a clean parse can't produce one today (§2.3).
    - scrap → `ActivateScrap`. This covers `scrap`, `endscrap`, and comments, empty lines and multiline comments inside a scrap.
    - file → `FileLevel`.
 
@@ -234,7 +239,9 @@ Each step ends with `flutter analyze` clean in the worktree and the touched test
 
 ## 6. Tests
 
-All new tests parse inline text through `parse(filename, fileBytes: …)` after `mpLocator.mpGeneralController.reset()`, as `t0100` and `t1450` do, unless they name a fixture.
+All new tests parse inline text through `parse(filename, fileBytes: …)` after `mpLocator.mpGeneralController.reset()`, as `t0100` and `t1450` do, unless they name a fixture. Unless a test says otherwise, they write with Save's options, `includeEmptyLines: true` and `useOriginalRepresentation: true` (`_encodedFileContents`). A reparse of written text parses its `toBytes` output, as a reload after Save does.
+
+**Round-trip exception set.** One shared, commented constant lists the fixtures that are excluded from every reparse check (stability and *N* reparse): the two ISO-8859 fixtures of §2.3, whose Save output can't be read back. It is removed when that bug is fixed. A test asserts that each listed fixture still exists, so a renamed fixture can't silently drop out of the set.
 
 ### `t3960_th2_writer_line_ledger_test.dart`
 
@@ -243,7 +250,7 @@ All new tests parse inline text through `parse(filename, fileBytes: …)` after 
   - ledger spans are contiguous and cover the text exactly, including a final unterminated line;
   - every nonempty line has exactly one owner, every owner is the file or one of its elements;
   - `serializeWithLineMap` text equals `serialize` text byte for byte, and `toBytes` equals the encoded `serialize` text;
-  - parse → write → parse → write is stable (same text the second time).
+  - with `useOriginalRepresentation: true` only, and outside the round-trip exception set: parse → write → parse → write is stable (same text the second time). It isn't required with `false`: five fixtures aren't stable there because of generated-output bugs that already exist (§2.3), and the other invariants already cover the generated branches.
 
   Unchanged output against the old writer is checked once during implementation, not by a permanent test: before step 3 (§5), a throwaway script in the scratchpad writes every clean fixture with the `main` writer, both option values, and step 7 compares the new output byte for byte. No fixture is expected to differ (§2.3). The existing output tests (`t0100`, `t0800`, `t1450`, …) keep pinning the old output permanently.
 - A command-built model with no stored text: new settings, no `encoding` line, a line long enough to wrap, line-point options with no stored text, a representable `##MAPIAH##` image next to a rotated or scaled one. Same invariants. Wrapped parts and the representable image's XTherion line are owned by their element.
@@ -270,21 +277,26 @@ Writer maps of handcrafted text: own lines and ranges for points, lines, line se
 
 ### `t3962_th2_parser_line_map_test.dart`
 
-- For every clean fixture (same filter as `t3960`): parse it, write *N*, parse *N* and build its parser map, then write that model with `serializeWithLineMap`. Text equals *N*, and both maps give the same owner for every line. Both use that model's MPIDs, so they compare directly. A disagreement is a bug to fix in this phase; if it comes from parser behavior out of scope, list the fixture in an explicit, commented exception set (expected to be empty).
+- For every clean fixture (same filter as `t3960`, minus the round-trip exception set): parse it, write *N* with Save's options, parse *N* and build its parser map, then write that model with `serializeWithLineMap`. Text equals *N*, and both maps give the same owner for every line. Both use that model's MPIDs, so they compare directly. A disagreement is a bug to fix in this phase; if it comes from parser behavior out of scope, list the fixture in a second explicit, commented exception set, specific to map agreement (expected to be empty).
 - Option lines, multi-line values (all three kinds) and a final unterminated line are owned as in `t3961`.
-- Removed lines: a text with a duplicate line point, a short line (with its segments) that borders an area with another border, and an empty area. Each removed element's lines are in `removedLines` with the removed MPID, not owned by the element before them; the surviving area still owns its remaining border line.
+- Removed lines: a text with a duplicate line point, a short line (with its segments) that borders an area with another border, and an empty area. Each removed element's lines are in `removedLines` with the MPID of their derived owner (for the short line's point and `endline` lines, those children's MPIDs, §3), not owned by the element before them; the surviving area still owns its remaining border line.
+- Raw-text ownership of a line option moved to the header: in `line wall` / `1 1` / `subtype clay` / `2 2` / `endline`, the parser map gives the `subtype clay` line to the `1 1` segment, and `line wall` / `subtype clay` / `1 1` / … gives it to the line. The writer map of the same model has no such line (§2.3).
 - `elementStartLines` has one entry per `_addElement` call; a load's resulting model is unchanged (compare `toMap()` with and without reading the map).
 
 ### `t3963_th2_text_element_locator_test.dart`
 
-Every row of parent §3.3, on the writer map of one parsed text: a `point` line and its wrapped continuation; a `line` header and `endline`; a line point and each of its option lines (`smooth`, `subtype`); an `area` header, an area option, a border reference and `endarea`; `scrap`, `endscrap`, an empty line, a comment and a multiline comment inside a scrap; `encoding`, a setting, a file-level comment and empty line; a line past the end and the empty editor line after a trailing ending. Each gives the listed `TH2TextLocation` with the right MPIDs.
+Every row of parent §3.3 that a clean parse can produce, on the writer map of one parsed text: a `point` line and its wrapped continuation; a `line` header and `endline`; a line point and each of its option lines (`smooth`, `orientation`, on a `slope` line); an `area` header, a border reference and `endarea`; `scrap`, `endscrap`, an empty line, a comment and a multiline comment inside a scrap; `encoding`, a setting, a file-level comment and empty line; a line past the end and the empty editor line after a trailing ending. Each gives the listed `TH2TextLocation` with the right MPIDs.
+
+Plus, on a command-built model with no `encoding` element: the synthesized `encoding` line, owned by the file, gives `FileLevel` without an `elementByMPID` call on the file's MPID.
+
+Area option lines and a `subtype` option line are not covered: a clean parse can't produce them (§2.3, §8.9).
 
 ## 7. Acceptance criteria
 
 - `flutter analyze` clean; `flutter test` green.
 - Every clean fixture writes the same bytes as before; ledger and ordinary output agree byte for byte everywhere.
 - Changed Save output is limited to §8.2's documented cases, each with an explicit expected output.
-- Parser and writer maps agree on every clean round-tripped fixture.
+- Parser and writer maps agree on every clean round-tripped fixture outside the exception sets (§6).
 - No UI, localization or controller behavior changes.
 
 ## 8. Risks and notes
@@ -297,3 +309,4 @@ Every row of parent §3.3, on the writer map of one parsed text: a `point` line 
 6. **Change to the parent plan.** `TH2TextLineEndingsAux` moves from Phase 2 to Phase 1. The parent plan's Phase 1, Phase 2 and `t3986` bullets already say so.
 7. **Assertions vs throws.** The MPID, length and single-owner checks are `assert`s (debug and tests). The lone-`\r` refusal is a `throw`, because Phase 4 uses it in release.
 8. **CHANGELOG.** This phase changes what Save writes, so its commit on the feature branch adds an entry, referencing #38: Save keeps comments and empty lines between settings, moves settings found later in the file up into the settings section, and ends an unterminated last line when new content is written after it. It reaches `main` only with the branch merge, after Phase 6, whose CHANGELOG work completes the same entry with text mode.
+9. **Rows a parse can't produce.** Parent §3.3 used to list an area option line and `subtype` as a line-point option line; it now lists only lines a clean parse can produce. Neither occurs in the text that text mode shows (§2.3), so the locator handles both through their parent only in principle, and `t3963` doesn't test them. If the grammar later accepts area option lines, or keeps a line option on its own line, add the rows to parent §3.3 and `t3963` then.
