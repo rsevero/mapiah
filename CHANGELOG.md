@@ -78,6 +78,7 @@
   * From now on, all TH2 text editing work (#38), including validations and corrections of its plans, goes on the `feat_38_th2_text_editing` branch, which is merged into `main` only after at least Phase 6 is done.
   * The TH2 text editing plans (#38) no longer set aside the two ISO-8859 fixtures, since saving ISO-8859 files is now fixed.
   * Validated the TH2 text editing Phase 1 plan (#38) again. In a file with no scrap, a newly added image is now planned to stay at the end of the file, after the comments and empty lines that follow the settings, instead of moving above them. The plan's code references were also updated to the current writer and parser.
+  * Validated the TH2 text editing Phase 1 plan (#38) a third time. A line's `subtype` written on its own line after the line's second point stays on that line, so clicking it in text mode selects that line point, and the plan's tests now cover it. The plan also corrects a fixture count and says how one of its tests adds content after a file's last line.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
