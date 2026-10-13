@@ -10,6 +10,7 @@
 [ ] - Create text editor font settings
 [X] - "Add line segments" (/ keyboard shortcut) has no button when editing line segments.
 [ ] - Create "unsaved-changes guard".
+[ ] - Create a "create THIDs for all elements" command.
 
 ## Version 2.0
 [X] - Open/edit/save thconfig files.
