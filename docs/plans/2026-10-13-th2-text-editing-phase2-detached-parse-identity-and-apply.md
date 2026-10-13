@@ -3,7 +3,7 @@
 # TH2 Text Editing — Phase 2: Detached Parse, Identity Matching and One Apply Command
 
 **Date:** 2026-10-13
-**Status:** Proposed. Checked against `feat_38_th2_text_editing` at `b74e1d29` (Phase 1 implemented, rebased on `main` up to `8e3e07c0`). Validated on 2026-10-13 against `8c3e2571`: the remapper rewrites the file's top-level children, parser errors become diagnostics once, byte-based encoding detection no longer throws on a non-ASCII byte, the text never sets the file's line ending, the refresh clears stale selection geometry and invalid selected line points, and test hooks and guards were made reachable. Validated again on 2026-10-13 against `81866327`: `replaceContentsFrom` invalidates the file's drawable-children cache, the replacement keeps unchanged images' runtime caches and view state and marks the XVI station cache, the validator's serialization and analysis run inside its `try`, and `t3964` resets the MPID counters before comparing parses. Validated again on 2026-10-13 against `4ca0fe15`: the replacement keeps each XVI image's load-failure flag, `t3964` seeds the text parse with the bytes parse's line ending and MPID, and `createFromNewTH2File` is named as a caller of the refresh.
+**Status:** Proposed. Checked against `feat_38_th2_text_editing` at `b74e1d29` (Phase 1 implemented, rebased on `main` up to `8e3e07c0`). Validated on 2026-10-13 against `8c3e2571`: the remapper rewrites the file's top-level children, parser errors become diagnostics once, byte-based encoding detection no longer throws on a non-ASCII byte, the text never sets the file's line ending, the refresh clears stale selection geometry and invalid selected line points, and test hooks and guards were made reachable. Validated again on 2026-10-13 against `81866327`: `replaceContentsFrom` invalidates the file's drawable-children cache, the replacement keeps unchanged images' runtime caches and view state and marks the XVI station cache, the validator's serialization and analysis run inside its `try`, and `t3964` resets the MPID counters before comparing parses. Validated again on 2026-10-13 against `4ca0fe15`: the replacement keeps each XVI image's load-failure flag, `t3964` seeds the text parse with the bytes parse's line ending and MPID, and `createFromNewTH2File` is named as a caller of the refresh. Validated again on 2026-10-13 against `70a86f1a`: test steps follow the code they need, the validator's test hooks are static and named, and a load computes snap targets once.
 **Parent plan:** [TH2 Text Editing Mode with Selection Synchronization](2026-09-25-th2-text-editing.md) (§4.2, §4.5, §4.6, §4.7, §4.12, §4.14 and §5 Phase 2)
 **Previous phase:** [Phase 1: Line Maps, Settings Section and Locator](2026-10-12-th2-text-editing-phase1-line-maps-and-locator.md)
 **Issue:** [#38: Simplify object options entry by allowing user to type without clicking each option](https://github.com/rsevero/mapiah/issues/38)
@@ -70,7 +70,7 @@ Verified at `b74e1d29`.
 
 ### 2.7 Phase 1 pieces used here
 
-`TH2TextLineEndingsAux` (`loneCarriageReturnOffset`, `lineStartOffsets`, `lineIndexAtOffset`), `TH2TextLineMap` (`ownerOfLine`, `ownLinesOf`, `firstOwnLineOf`, `rangeOf`, `removedLines`, `relocations`, `addedEndings`, `fromParserStartLines`), `TH2FileWriter.serializeWithLineMap`, `TH2TextElementLocator`, and the parser's `lineStarts`/`elementStartLines`/`parsedLineCount`. A line map holds owners, not text: whoever compares line text keeps the text next to its map.
+`TH2TextLineEndingsAux` (`loneCarriageReturnOffset`, `lineStartOffsets`, `lineIndexAtOffset`), `TH2TextLineMap` (`ownerOfLine`, `ownLinesOf`, `ownerMPIDs`, `firstOwnLineOf`, `rangeOf`, `removedLines`, `relocations`, `addedEndings`, `fromParserStartLines`), `TH2FileWriter.serializeWithLineMap`, `TH2TextElementLocator`, and the parser's `lineStarts`/`elementStartLines`/`parsedLineCount`. A line map holds owners, not text: whoever compares line text keeps the text next to its map.
 
 ## 3. Scope and non-goals
 
@@ -79,7 +79,7 @@ Verified at `b74e1d29`.
 - `TH2FileParser.parse` gains `contents` and `targetController`; the static encoding detection helpers; `lineNumberInProgress`; `TH2FileNormalization` records.
 - `TH2File.withMPID`, `lineEnding` in `toMap`/`fromMap`/`forCWJM`/`copyWith`, and `replaceContentsFrom`.
 - `TH2FileEditControllerBase.createForDetachedParse` and the `_initializeReactions` assertion.
-- `TH2TextValidator`, `TH2TextValidationResult`, `TH2TextValidationCache`, `TH2TextDiagnostic`.
+- `TH2TextValidator`, `TH2TextValidationResult`, `TH2TextValidationCache`, `TH2TextDiagnostic`, and the static test hooks of §4.4.
 - `TH2TextNormalizationAnalyzer` (markers) and `TH2TextCursorMapper` (raw → normalized lines).
 - `TH2TextIdentityMatcher` and `TH2TextMPIDRemapper`.
 - `TH2TextLineTracker` (pure; parent §4.14). Feeding it from the buffer is Phase 3.
@@ -161,6 +161,8 @@ A flagged MPID can be removed later (a line whose header was rewritten and is th
 5. **Valid.** `(normalizedText, writerMap) = TH2FileWriter().serializeWithLineMap(detached, includeEmptyLines: true, useOriginalRepresentation: true)`; `parserMap = TH2TextLineMap.fromParserStartLines(lineStarts: parser.lineStarts, lineCount: parser.parsedLineCount, th2File: detached)`; then the analyzer (§4.5) gives the information diagnostics and the cursor mapper.
 
 The validator is the **single entry point** of the detached parse: idle validation (Phase 3) and `applyTextContent` both go through it, so neither can see an exception.
+
+**Test hooks** (static, `@visibleForTesting`, reset by the tests in `tearDown`): `TH2FileParser.beforeCleanUpForTesting` (`void Function()?`, called by `parse` just before `_cleanOriginalLinesInFile`), `TH2TextValidator.afterParseForTesting` (`void Function()?`, called at the start of step 5) and `TH2TextValidator.onScratchControllerCreatedForTesting` (`void Function(TH2FileEditController)?`, called right after `createForDetachedParse`). They are static because the validator creates its own parser and scratch controller, which a test can't reach otherwise.
 
 **`TH2TextDiagnostic`** (new, same file): `int? line` (0-based, `null` for line-less), `TH2TextDiagnosticSeverity severity` (`error`, `information`), `TH2TextDiagnosticKind kind` (`unsupportedLineEnding`, `unencodableCharacter`, `unreadableText`, `parseProblem`, and the marker kinds of §4.5), `String? detail`, `TH2FileProblem? problem`, `int? destinationLine` (moves). It holds no localized text.
 
@@ -270,8 +272,8 @@ It does not end or replace the session (parent §4.6); its callers do, in Phase 
 
 1. **Selection.** Drop MPIDs no longer in the file from `_mpSelectedElementsLogical`, `_selectedEndControlPoints`, `selectedScrapMPIDs` (`pruneSelectedScraps`) and `_isSelected`, through a new `TH2FileEditSelectionController.pruneToModel()`. It also drops a `_selectedEndControlPoints` entry whose segment is no longer a child of the single selected line (pass 2 of §4.6 can match a segment that moved to another line), or whose control-point type the live segment no longer has (a `controlPoint1`/`controlPoint2` on a segment that is now straight): `updateSelectedLineSegment` keeps a control-point type as it is. Then `updateAllSelectedElementsClones()`; `updateSelectedLineSegment(segment)` for each retained selected line point, with the live segment; `resetSelectedLineLineSegmentsMPIDs()`; `clearSelectedElementsBoundingBoxAndSelectionHandleCenters()`, since an apply keeps the selection while its geometry may change (undo and redo also clear it, through `_undoRedoDone`). A retained MPID doesn't mean unchanged geometry or children.
 2. **Hidden.** A new `TH2FileHideElementController.pruneToModel()` drops removed MPIDs from `_hiddenElementMPIDs` and `_hiddenScrapMPIDs`.
-3. **Active scrap.** Keep `_activeScrapID` when it names a scrap, else the first scrap, else `0`. When nonzero, `hideElementController.ensureScrapVisible(_activeScrapID)`: a new `@action` that removes the scrap from `_hiddenScrapMPIDs` and, when it was hidden, marks the station cache, updates snap targets and redraws the non-selected elements, without calling `setActiveScrap` and without touching the selection. Then `selectionController.resetSelectableElements()`, `updateSelectableEndAndControlPoints()`, `updateHasMultipleScraps()` and `_updateCurrentScrapName()`, every time.
-4. **Snap targets.** With `initialSetup` and at least one scrap, the load defaults (`setSnapTargets(point, linePoint, [shot])`). Then `snapController.updateSnapTargets()` in every case.
+3. **Active scrap.** Keep `_activeScrapID` when it names a scrap, else the first scrap, else `0`. When nonzero, `hideElementController.ensureScrapVisible(_activeScrapID)`: a new `@action` that removes the scrap from `_hiddenScrapMPIDs` and, when it was hidden, marks the station cache and redraws the non-selected elements, and leaves snap targets to its caller (the refresh's step 4; Phase 4's `setActiveScrap` already updates them), without calling `setActiveScrap` and without touching the selection. Then `selectionController.resetSelectableElements()`, `updateSelectableEndAndControlPoints()`, `updateHasMultipleScraps()` and `_updateCurrentScrapName()`, every time.
+4. **Snap targets.** With `initialSetup` and at least one scrap, the load defaults (`setSnapTargets(point, linePoint, [shot])`, which also runs `updateSnapTargets()`); otherwise `snapController.updateSnapTargets()`. A load computes them once, as today.
 5. **Station caches.** Without `initialSetup`, `userInteractionController.markTherionStationPointNameCoordinateCacheDirty()` and `markXVIStationPointNameCoordinateCacheDirty()` (images may have been added, removed or replaced).
 6. **Used types.** Only with `initialSetup`, `elementEditController.initializeUsedTypes()`.
 7. `updateEnableSelectButton()`, `triggerAllElementsRedraw()`, `bumpStructureRevision()`.
@@ -294,12 +296,12 @@ Each step ends with `flutter analyze` clean in the worktree and the touched test
 
 1. **`TH2File`** (§4.7), `TH2File.withMPID` (§4.3). `t3967`'s `replaceContentsFrom` cases, and every `test/t1*` test still green (they snapshot with `fromMap`).
 2. **Parser**: static encoding helpers, `contents`, `targetController`, `lineNumberInProgress`, NUL helper (§4.1). `t3964`.
-3. **Normalization records** (§4.2), **`createForDetachedParse`** (§4.3), **validator and cache** (§4.4). `t3969`, `t3964`.
-4. **Analyzer and cursor mapper** (§4.5). `t3970`.
-5. **Matcher and remapper** (§4.6). `t3965`.
+3. **Normalization records** (§4.2), **`createForDetachedParse`** (§4.3), **validator and cache** (§4.4). `t3969`'s validator cases, `t3964`.
+4. **Analyzer and cursor mapper** (§4.5). `t3970`'s marker and cursor-mapping cases.
+5. **Matcher and remapper** (§4.6). `t3965`'s matcher cases.
 6. **Line tracker** (§4.12). `t3986`.
-7. **Command, description, `executeReplaceTH2FileContents`, `syncControllersWithModel`, `ensureScrapVisible`, `pruneToModel`s** (§4.8, §4.11), and `_finalFilePreparations` on the refresh. `flutter gen-l10n`, `build_runner`. Run the full suite here: the load path changed.
-8. **`serializeForTextMode`, `TH2TextApplySession`, `TH2TextApplyResult`, `applyTextContent`** (§4.9, §4.10). `t3966`, `t3967`, `t3968`, `t3971`, `t3985`.
+7. Before changing `_finalFilePreparations`, record the load-state snapshot that `t3985` compares against (§6). **Command, description, `executeReplaceTH2FileContents`, `syncControllersWithModel`, `ensureScrapVisible`, `pruneToModel`s** (§4.8, §4.11), and `_finalFilePreparations` on the refresh. `flutter gen-l10n`, `build_runner`. Run the full suite here: the load path changed.
+8. **`serializeForTextMode`, `TH2TextApplySession`, `TH2TextApplyResult`, `applyTextContent`** (§4.9, §4.10). `t3965`, `t3966`, `t3967`, `t3968`, `t3969`, `t3970`, `t3971`, `t3985`: the remaining cases.
 9. Full `flutter analyze` and `flutter test`; update the parent plan's Phase 2 entry and the sections named in §3, _Changes to the parent plan_. A CHANGELOG entry for the load fix of §4.1 only: nothing else is user-visible.
 
 ## 6. Tests
@@ -309,7 +311,7 @@ New tests parse inline text after `mpLocator.mpGeneralController.reset()`, as Ph
 ### `t3964_th2_detached_parse_test.dart`
 
 - A detached validation registers no controller in `MPGeneralController` (`th2ControllersRevision` unchanged, and `getTH2FileEditControllerIfExists(filename)` still `null` for a filename that has no controller yet), replaces none, and leaves `THProjectController.dirtyFilePaths` and the live controller's `th2File` unchanged. `structureRevision` of the live controller doesn't change.
-- The scratch controller is disposed after a valid parse, a rejected one and one that throws (a hook or `isDisposed` on a controller exposed through a `@visibleForTesting` callback).
+- The scratch controller is disposed after a valid parse, a rejected one and one that throws (through `onScratchControllerCreatedForTesting` and `isDisposed`).
 - `initializeReactionsForTesting()` on a detached controller trips its assertion.
 - `detectEncodingFromBytes` and `detectEncodingFromText` agree on `encoding` for every fixture in `test/auxiliary/*.th2` (bytes, and text decoded with the detected encoding), including CRLF, no line ending in the window, leading blank lines and no `encoding` line, and on `lineEnding` for every fixture whose window is ASCII (§4.1). Parsing a fixture's decoded text with `contents`, into `createForDetachedParse(filename:, th2FileMPID:, lineEnding:)` seeded with the bytes parse's file MPID and `lineEnding`, gives a `toMap()` equal to parsing its bytes, plus equal `encoding`, `lineStarts` and `parsedLineCount`, for every clean fixture. The seed is needed because `contents` never sets `lineEnding` (§4.1) and `toMap()` now holds it. Each of the two parses starts with `mpLocator.mpGeneralController.reset()`, since MPIDs come from its global counters and would otherwise differ.
 - Text with NUL characters parses as its bytes do.
@@ -363,10 +365,10 @@ As the parent's `t3965`, on the matcher directly and through `applyTextContent`:
 
 - Text with a parse problem or error is rejected: diagnostics on the right lines, each error shown once (no line-less copy of a parser error string), the model and undo stack unchanged.
 - `ç` in an `ASCII` file and a character outside `ISO8859-2` in an `ISO8859-2` file: an `unencodableCharacter` error on that line naming the encoding; also when the text has a parse problem elsewhere (both shown).
-- A lone `\r`, mid-line and at the end: one `unsupportedLineEnding` error on its line, and no parse (no scratch controller created).
+- A lone `\r`, mid-line and at the end: one `unsupportedLineEnding` error on its line, and no parse (`onScratchControllerCreatedForTesting` never fires).
 - A second scrap with an existing ID, typed or pasted: `unreadableText` on that scrap's line, with the ID in its detail; `applyTextContent` returns `rejected`; the scratch controller is disposed; the cache holds the rejection, and a second validation of the same text doesn't parse again.
-- A throw from a clean-up pass, forced through a `@visibleForTesting` hook on the parser: a line-less `unreadableText`.
-- A throw after the parse (step 5 of §4.4), forced through a `@visibleForTesting` hook on the validator: a line-less `unreadableText`, `validate` doesn't throw, and the scratch controller is disposed.
+- A throw from a clean-up pass, forced through `TH2FileParser.beforeCleanUpForTesting`: a line-less `unreadableText`.
+- A throw after the parse (step 5 of §4.4), forced through `TH2TextValidator.afterParseForTesting`: a line-less `unreadableText`, `validate` doesn't throw, and the scratch controller is disposed.
 - Loading a file with duplicate scrap IDs still sets `loadError` (`t3944`).
 - Save returning `textHasProblems` and Save As opening no picker are Phase 4's (`t3980`, `t3987`).
 
