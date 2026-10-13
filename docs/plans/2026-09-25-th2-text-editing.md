@@ -189,7 +189,7 @@ Together with §3.2, this makes a selected line point **round-trip**. Going to t
 
 If the selection is outside the visible canvas area, the canvas is centered on it at the current zoom (§4.9). Nothing is zoomed.
 
-The table lists only lines a clean parse can produce. Area option lines (`place bottom`, `clip off` inside an area body) and full-line comments inside an area body are read as invalid border references today, a parse problem, and a line option on its own line (`close`, `id`, …, and `subtype` before the line's second point) is moved into the line header when written, so neither appears in text mode's text. A `subtype` line after the line's second point is a line-point option line and stays (the line-point row).
+The table lists only lines that written text contains. Full-line comments inside an area body are read as invalid border references, a parse problem. An area option line (`place bottom`, `clip off` inside an area body) is moved into the area header when written (`0b57cbb1`), and a line option on its own line (`close`, `id`, …, and `subtype` before the line's second point) into the line header, so neither appears in text mode's text. A `subtype` line after the line's second point is a line-point option line and stays (the line-point row).
 
 ### 3.4 Text → graphical (apply)
 
