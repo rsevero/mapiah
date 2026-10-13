@@ -292,6 +292,9 @@ void main() {
       '"blaus"': 'blaus',
       '""': '',
       '"""Obs"" hein?"': '""Obs"" hein?',
+      // As in Therion, an unclosed quoted string runs to the end of the line.
+      '"""Obs"" hein?': '""Obs"" hein?',
+      '"blaus': 'blaus',
     };
 
     for (var success in successes.keys) {
@@ -302,7 +305,7 @@ void main() {
       });
     }
 
-    const failures = ['"""Obs"" hein?', 'blaus"', '"blaus'];
+    const failures = ['blaus"'];
 
     for (var failure in failures) {
       test(failure, () {
@@ -330,7 +333,7 @@ void main() {
       });
     }
 
-    const failures = ['"""Obs"" hein?', 'blaus"', '"blaus'];
+    const failures = ['blaus"'];
 
     for (var failure in failures) {
       test(failure, () {

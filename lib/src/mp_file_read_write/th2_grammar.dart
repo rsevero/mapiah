@@ -62,17 +62,26 @@ class TH2Grammar extends GrammarDefinition {
   ///
   /// No convertion of two double quotes in one being done, i.e., the user will
   /// see each double quote (") being represented by a pair of double quotes ("").
+  ///
+  /// As in Therion, a quoted string left open runs to the end of the line.
   Parser quotedString() =>
       (char(mpDoubleQuote) &
               (char(mpDoubleQuote).skip(before: char(mpDoubleQuote)) |
                       noneOf(mpDoubleQuote))
                   .star()
                   .flatten() &
-              char(mpDoubleQuote))
+              (char(mpDoubleQuote) | endOfInput()))
           .pick(1);
 
   /// Unquoted string
-  Parser unquotedString() => noneOf('$mpWhitespaceChars$mpDoubleQuote').plus();
+  ///
+  /// As in Therion, only a double quote at the start of a word opens a quoted
+  /// string; one inside a word is part of it.
+  Parser unquotedString() =>
+      (noneOf('$mpWhitespaceChars$mpDoubleQuote') &
+              noneOf(mpWhitespaceChars).star())
+          .flatten()
+          .map((String value) => value.split(''));
 
   /// Alphanumeric chars
   Parser alphanumericChars() => pattern('A-Za-z0-9').plus();
@@ -87,10 +96,17 @@ class TH2Grammar extends GrammarDefinition {
       unquotedString().flatten().trim();
 
   /// Bracket string
+  ///
+  /// As in Therion, a bracket string left open runs to the end of the line,
+  /// and brackets nest.
   Parser bracketStringTemplate(Parser content) =>
-      (char('[') & content & char(']')).pick(1);
+      (char('[') & content & (char(']') | endOfInput())).pick(1);
   Parser bracketStringGeneral() =>
-      bracketStringTemplate(noneOf('[]').star().flatten());
+      bracketStringTemplate(ref0(bracketContent).flatten());
+  Parser bracketContent() =>
+      (noneOf('[]') |
+              (char('[') & ref0(bracketContent) & (char(']') | endOfInput())))
+          .star();
 
   /// Number
   Parser number() =>

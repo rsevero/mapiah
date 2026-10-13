@@ -2515,7 +2515,6 @@ endscrap
     final parser = TH2FileParser();
 
     const failures = [
-      'th_file_parser-03171-line_with_invalid_text_option-failure.th2',
       'th_file_parser-03172-line_with_invalid_text_option-failure.th2',
       // 'th_file_parser-03174-line_with_text_option_invalid_line_type-failure.th2',
     ];

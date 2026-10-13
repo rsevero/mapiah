@@ -45,8 +45,6 @@ class TH2FileParser {
   final List<MPParseableLine> _splittedContents = [];
   String _currentOriginalLine = '';
   String _currentParseableLine = '';
-  String _continuationDelimiter = '';
-  bool _slashJoinLine = false;
   late Result<dynamic> _parsedContents;
   late List<dynamic>? _commentContentToParse;
   late THIsParentMixin _currentParent;
@@ -3331,173 +3329,57 @@ class TH2FileParser {
     }
   }
 
+  /// Splits [contents] into logical lines as Therion's `thinput::read_line`
+  /// does: a physical line whose last non-whitespace character is a backslash
+  /// continues on the next physical line. The backslash and the trailing
+  /// whitespace are dropped and the next line is appended with no separator.
+  /// Nothing else continues a line: comments, double quotes and square
+  /// brackets are handled by the grammar inside one logical line.
   void _splitContents(String contents) {
     _splittedContents.clear();
-    _continuationDelimiter = '';
 
     int offset = 0;
     int lineNumber = 1;
 
     while (offset < contents.length) {
-      var (lineBreakIndex, lineBreakLength) = _findLineBreak(contents, offset);
+      String toParse = '';
+      String original = '';
 
-      if (lineBreakIndex == -1) {
-        final String tail = contents.substring(offset);
-
-        _splittedContents.add(
-          MPParseableLine(
-            toParse: tail,
-            originalContent: tail,
-            lineNumber: lineNumber,
-          ),
+      while (offset < contents.length) {
+        final (int lineBreakIndex, int lineBreakLength) = _findLineBreak(
+          contents,
+          offset,
         );
+        final int lineEnd = (lineBreakIndex == -1)
+            ? contents.length
+            : lineBreakIndex;
+        final int nextOffset = (lineBreakIndex == -1)
+            ? contents.length
+            : lineBreakIndex + lineBreakLength;
+        final String physicalLine = contents.substring(offset, lineEnd).trimRight();
+
+        original += contents.substring(offset, nextOffset);
+        offset = nextOffset;
+
+        if (physicalLine.endsWith('\\')) {
+          toParse += physicalLine.substring(0, physicalLine.length - 1);
+
+          continue;
+        }
+
+        toParse += physicalLine;
 
         break;
       }
 
-      String currentLine = contents.substring(offset, lineBreakIndex);
-      String newContentOriginal = contents.substring(
-        offset,
-        lineBreakIndex + lineBreakLength,
-      );
-
-      updateContinuationDelimiter(currentLine);
-
-      if (_slashJoinLine) {
-        currentLine = currentLine.substring(0, currentLine.length - 1);
-      }
-
-      /// If the line is ending with an open double qoute (") or square bracket
-      /// (]) the line break should be kept as part of the delimited content.
-      /// Otherwise, the line break shouldn't be included in the content to
-      /// parse.
-      String newContentToParse = (_continuationDelimiter == '"')
-          ? newContentOriginal
-          : currentLine;
-
-      offset = lineBreakIndex + lineBreakLength;
-      if (currentLine.isEmpty) {
-        _splittedContents.add(
-          MPParseableLine(
-            toParse: newContentToParse,
-            originalContent: newContentOriginal,
-            lineNumber: lineNumber,
-          ),
-        );
-        _slashJoinLine = false;
-        lineNumber += '\n'.allMatches(newContentOriginal).length;
-
-        continue;
-      }
-
-      /// Joining lines that didn´t end, i.e., that have an open double quote or
-      /// square bracket or that ends with a backslash.
-      while ((_continuationDelimiter.isNotEmpty || _slashJoinLine) &&
-          (offset < contents.length)) {
-        (lineBreakIndex, lineBreakLength) = _findLineBreak(contents, offset);
-
-        if (lineBreakIndex == -1) {
-          final String tail = contents.substring(offset);
-
-          newContentOriginal += tail;
-          newContentToParse += tail;
-          offset = contents.length;
-
-          break;
-        }
-
-        currentLine = contents.substring(offset, lineBreakIndex);
-
-        String currentContentOriginal = contents.substring(
-          offset,
-          lineBreakIndex + lineBreakLength,
-        );
-
-        newContentOriginal += currentContentOriginal;
-        offset = lineBreakIndex + lineBreakLength;
-        if (currentLine.isEmpty) {
-          if (_slashJoinLine) {
-            _slashJoinLine = false;
-
-            break;
-          } else {
-            continue;
-          }
-        }
-
-        updateContinuationDelimiter(currentLine);
-
-        if (_slashJoinLine) {
-          currentLine = currentLine.substring(0, currentLine.length - 1);
-        }
-
-        newContentToParse += (_continuationDelimiter == '"')
-            ? currentContentOriginal
-            : currentLine;
-      }
-
       _splittedContents.add(
         MPParseableLine(
-          toParse: newContentToParse,
-          originalContent: newContentOriginal,
+          toParse: toParse,
+          originalContent: original,
           lineNumber: lineNumber,
         ),
       );
-      lineNumber += '\n'.allMatches(newContentOriginal).length;
-      _slashJoinLine = false;
-    }
-  }
-
-  /// Returns the reason why the line continues:
-  /// * " for double quotes;
-  /// * ] for square brackets;
-  /// * \ for backslash.
-  ///
-  /// Returns an empty string if the line does not continue.
-  void updateContinuationDelimiter(String text) {
-    _slashJoinLine = false;
-    for (int i = 0; i < text.length; i++) {
-      final String currentChar = text[i];
-
-      if (_continuationDelimiter.isEmpty) {
-        if (currentChar == '"') {
-          _continuationDelimiter = '"';
-        } else if (currentChar == '[') {
-          _continuationDelimiter = ']';
-        } else if (currentChar == '\\') {
-          _slashJoinLine = (i == text.trimRight().length - 1);
-
-          if (_slashJoinLine) {
-            break;
-          }
-        }
-      } else {
-        if (_continuationDelimiter == '"') {
-          if (currentChar == '"') {
-            if ((i + 1 < text.length) && (text[i + 1] == '"')) {
-              i++;
-            } else {
-              _continuationDelimiter = '';
-            }
-          }
-        } else if (_continuationDelimiter == ']') {
-          if (currentChar == ']') {
-            _continuationDelimiter = '';
-          } else if (currentChar == '\\') {
-            _slashJoinLine = (i == text.trimRight().length - 1);
-
-            if (_slashJoinLine) {
-              break;
-            }
-          }
-        }
-      }
-    }
-
-    if ((_continuationDelimiter == ']') && !_slashJoinLine) {
-      throw THCustomException(
-        "Multiline square bracket delimited content not closed on line '$text' at TH2FileParser._splitContents().",
-      );
+      lineNumber += '\n'.allMatches(original).length;
     }
   }
 }

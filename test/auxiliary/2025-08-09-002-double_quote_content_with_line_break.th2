@@ -1,5 +1,0 @@
-encoding  utf-8
-scrap test
-point 1.2 3.4 label -text "First line
-   Second line"
-endscrap

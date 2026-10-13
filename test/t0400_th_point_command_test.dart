@@ -44,35 +44,6 @@ endscrap
 ''',
       },
       {
-        'file': '2025-08-09-002-double_quote_content_with_line_break.th2',
-        'length': 4,
-        'encoding': 'UTF-8',
-        'asFile': r'''encoding UTF-8
-scrap test
-  point 1.2 3.4 label -text "First line
-   Second line"
-endscrap
-''',
-        'quoted_content': r'''First line
-   Second line''',
-      },
-      {
-        'file':
-            '2025-08-09-003-double_quote_content_with_multiple_line_breaks.th2',
-        'length': 4,
-        'encoding': 'UTF-8',
-        'asFile': r'''encoding UTF-8
-scrap test
-  point 1.2 3.4 label -text "First line
-  Second line
-Third line"
-endscrap
-''',
-        'quoted_content': r'''First line
-  Second line
-Third line''',
-      },
-      {
         'file': '2025-08-10-001-double_quote_inside_double_quotes.th2',
         'length': 4,
         'encoding': 'UTF-8',
@@ -157,30 +128,6 @@ scrap test -projection plan
   point \
     1.2 3.4 \
     u:testwrap
-endscrap
-''',
-      },
-      {
-        'file': '2025-08-09-002-double_quote_content_with_line_break.th2',
-        'length': 4,
-        'encoding': 'UTF-8',
-        'asFile': r'''encoding  utf-8
-scrap test
-point 1.2 3.4 label -text "First line
-   Second line"
-endscrap
-''',
-      },
-      {
-        'file':
-            '2025-08-09-003-double_quote_content_with_multiple_line_breaks.th2',
-        'length': 4,
-        'encoding': 'UTF-8',
-        'asFile': r'''encoding  utf-8
-scrap test
-point 1.2 3.4 label -text "First line
-  Second line
-Third line"
 endscrap
 ''',
       },
@@ -1193,7 +1140,6 @@ endscrap
     final parser = TH2FileParser();
 
     const failures = [
-      'th_file_parser-02291-point_with_faulty_title_option_failure.th2',
       'th_file_parser-02292-point_with_faulty_title_option_failure.th2',
       // 'th_file_parser-02295-point_with_faulty_title_option_failure.th2',
     ];
