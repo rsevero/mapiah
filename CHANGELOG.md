@@ -88,6 +88,7 @@
   * Validated the TH2 text editing Phase 1 plan (#38) an eighth time. When an area that has an area option on its own line is removed because it has no border, that option line is now explicitly treated as part of the removed area, and the plan's tests cover it.
 
   * Added a detailed Phase 3 plan for TH2 text editing (#38): shared editor contracts, TH2 highlighting and folding, text-session validation, line endings, diagnostic grouping and native undo routing. The plan specifies implementation steps and regression tests, and leaves production mode switching, saving and canvas history traversal for Phase 4.
+  * Corrected the TH2 text editing Phase 3 plan (#38): backslash continuations preserve normal token classification outside values, bracketed-value continuation distinguishes parser requirements from tolerant highlighting, the shared buffer exposes cached tokens, and standard Flutter undo/redo intents use the same guarded routing as the TH2 shortcuts. Expanded the planned highlighting and undo tests.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
