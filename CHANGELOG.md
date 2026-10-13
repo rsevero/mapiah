@@ -83,6 +83,7 @@
   * Validated the TH2 text editing Phase 1 plan (#38) a fifth time, after the fix for loading a blank line before a line option. A line point option written after an empty line or a multiline comment in the line also belongs to its line point, and a line's `subtype` written on its own line before the second point belongs to the line. The plan's parser code references were updated.
   * Validated the TH2 text editing Phase 1 plan (#38) a sixth time, after the fix that discards blank lines before a `.th2` file's first command. The plan now relies on the `encoding` line always being the file's first element, gives the discarded lines no owner, and corrects which element owns a blank line inside a line. The plan's code references were updated.
   * Validated the TH2 text editing Phase 1 plan (#38) a seventh time, after the fix that keeps area option lines on Save. An area option written on its own line inside an area belongs to that area, and its tests now check this on the file's text as typed. The plan's parser code references were updated.
+  * Validated the TH2 text editing Phase 1 plan (#38) an eighth time. When an area that has an area option on its own line is removed because it has no border, that option line is now explicitly treated as part of the removed area, and the plan's tests cover it.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
