@@ -9,7 +9,6 @@ import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
-import 'package:mapiah/src/mp_file_read_write/th_file_aux.dart';
 
 class TH2FileWriter {
   static const List<THElementType> configBlockElementTypes = <THElementType>[
@@ -476,33 +475,8 @@ class TH2FileWriter {
       int maxLength = mpMaxFileLineLength - _prefix.length;
 
       while ((line.isNotEmpty) && (line.length > maxLength)) {
-        int breakPos = line.lastIndexOf(' ', maxLength) + 1;
-        String part = line.substring(0, breakPos);
-
-        // Dealing with parts that consumed no actual content, i.e., are only
-        // spaces. this probably means that there is a token (keyword, etc)
-        // longer than maxLength.
-        //
-        // In this situation, we put a complete token in the line, no matter how
-        // big it is.
-        if (part.trim() == '') {
-          breakPos = line.indexOf(' ', breakPos);
-          part = line.substring(0, breakPos);
-        }
-
-        // Dealing with parts that broke a quoted string.
-        int quoteCount = TH2FileAux.countCharOccurrences(part, mpDoubleQuote);
-        if (quoteCount.isOdd) {
-          breakPos = line.lastIndexOf(mpDoubleQuote, breakPos);
-          part = line.substring(0, breakPos);
-
-          // Dealing with parts that consumed no actual content take 2: quoted
-          // strings.
-          if (part.trim() == '') {
-            breakPos = line.indexOf(mpDoubleQuote, breakPos);
-            part = line.substring(0, breakPos);
-          }
-        }
+        final int breakPos = _lineBreakPosition(line, maxLength);
+        final String part = line.substring(0, breakPos);
 
         line = line.substring(breakPos);
         splitLine += _prefix;
@@ -537,6 +511,44 @@ class TH2FileWriter {
     newLine = _decodeDoubleQuotes(newLine);
 
     return newLine;
+  }
+
+  /// Where to break [line], which is longer than [maxLength]: right after the
+  /// last space outside quoted strings that fits in [maxLength] and leaves
+  /// some content before it. When there is none, a token or quoted string
+  /// longer than [maxLength] is kept whole, breaking after the first such
+  /// space past it, or at the end of [line] when there is no such space.
+  /// Always greater than zero, so every break consumes content.
+  int _lineBreakPosition(String line, int maxLength) {
+    final int lineLength = line.length;
+    bool isInsideQuotes = false;
+    bool hasContent = false;
+    int lastBreakPos = 0;
+
+    for (int index = 0; index < lineLength; index++) {
+      final String char = line[index];
+
+      if (char == mpDoubleQuote) {
+        isInsideQuotes = !isInsideQuotes;
+      }
+
+      if ((char != ' ') || isInsideQuotes) {
+        hasContent = true;
+        continue;
+      }
+
+      if (!hasContent) {
+        continue;
+      }
+
+      if (index > maxLength) {
+        return (lastBreakPos > 0) ? lastBreakPos : index + 1;
+      }
+
+      lastBreakPos = index + 1;
+    }
+
+    return (lastBreakPos > 0) ? lastBreakPos : lineLength;
   }
 
   String _commandOptionOriginalLineRepresentation(THCommandOption option) {
