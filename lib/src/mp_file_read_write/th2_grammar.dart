@@ -889,11 +889,12 @@ class TH2Grammar extends GrammarDefinition {
           .skip(before: char('-'))
           .star();
   Parser areaCommandLikeOptions() =>
-      (clipCommandLikeOption() |
-              contextCommandLikeOption() |
-              idCommandLikeOption() |
-              placeCommandLikeOption() |
-              visibilityCommandLikeOption())
+      ((clipCommandLikeOption() |
+                  contextCommandLikeOption() |
+                  idCommandLikeOption() |
+                  placeCommandLikeOption() |
+                  visibilityCommandLikeOption())
+              .trim())
           .map(
             (value) => [
               'areaCommandLikeOption',

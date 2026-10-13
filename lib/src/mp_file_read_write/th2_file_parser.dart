@@ -1119,7 +1119,15 @@ class TH2FileParser {
       assert(element[1][0] is List);
     }
 
+    /// An empty line in the area body replaces _currentElement, so the area
+    /// being parsed is set again here: area options and the same line comment
+    /// belong to it.
+    _currentElement = _currentParent as THElement;
     _optionFromElement(element[1], _areaRegularOptions);
+
+    /// The original representation of the "area" line can't be used as it must
+    /// now include this area option.
+    _addToMPIDsToCleanOriginalLine(_currentParentMPID);
   }
 
   /// All line options (the ones that should be on the "line" line in the .th2
