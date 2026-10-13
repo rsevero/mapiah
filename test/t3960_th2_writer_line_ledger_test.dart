@@ -144,7 +144,7 @@ void main() {
 ##MAPIAH## image_insert_v1 {format=raster;filename=images%2Fplain.png;xx=10;yy=20;xScale=1;yScale=1;rotationCenterDx=0;rotationCenterDy=0;rotationDeg=0;pivotSet=false}
 ##MAPIAH## image_insert_v1 {format=raster;filename=images%2Frotated.png;xx=10;yy=20;xScale=1;yScale=2;rotationCenterDx=3;rotationCenterDy=4;rotationDeg=5}
 scrap s1
-  point 1 1 station -name A1 -align top -scale large -visibility on -clip off -place top -context point station -id station_with_a_long_identifier
+  point 1 1 label -text "a label text long enough to make the writer wrap the point line in two or more parts"
   line wall
     1 1
       smooth off
