@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:collection';
+
+import 'package:flutter/foundation.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -31,6 +34,14 @@ abstract class MPUndoRedoControllerBase with Store {
   bool get hasUndo => _undos.isNotEmpty;
   bool get hasRedo => _redos.isNotEmpty;
   int get undoCount => _undos.length;
+
+  @visibleForTesting
+  List<MPUndoRedoCommand> get undosForTesting =>
+      UnmodifiableListView<MPUndoRedoCommand>(_undos);
+
+  @visibleForTesting
+  List<MPUndoRedoCommand> get redosForTesting =>
+      UnmodifiableListView<MPUndoRedoCommand>(_redos);
 
   void add(MPCommand command) {
     final MPUndoRedoCommand undo = command.getUndoRedoCommand(

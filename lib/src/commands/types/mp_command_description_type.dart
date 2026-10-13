@@ -61,6 +61,7 @@ enum MPCommandDescriptionType {
   reorderImages,
   reorderScraps,
   replaceLineSegments,
+  replaceTH2FileContents,
   setFileEncoding,
   setOptionToElement,
   setOptionToElements,

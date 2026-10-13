@@ -908,6 +908,12 @@ abstract class AppLocalizations {
   /// **'Reorder scraps'**
   String get mpCommandDescriptionReorderScraps;
 
+  /// Undo/redo description for applying a TH2 file text edit. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
+  ///
+  /// In en, this message translates to:
+  /// **'Text edit'**
+  String get mpCommandDescriptionReplaceTH2FileContents;
+
   /// Undo/redo description for changing the file encoding. Used on: MPTextToUser._initializeCommandDescriptionTypeAsString
   ///
   /// In en, this message translates to:

@@ -408,6 +408,19 @@ mixin _$TH2FileEditSelectionController
   }
 
   @override
+  void pruneToModel() {
+    final _$actionInfo = _$TH2FileEditSelectionControllerBaseActionController
+        .startAction(name: 'TH2FileEditSelectionControllerBase.pruneToModel');
+    try {
+      return super.pruneToModel();
+    } finally {
+      _$TH2FileEditSelectionControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   bool addSelectedElement(
     THElement element, {
     bool setState = false,

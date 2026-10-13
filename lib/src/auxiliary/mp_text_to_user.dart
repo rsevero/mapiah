@@ -451,6 +451,9 @@ class MPTextToUser {
         localizations.mpCommandDescriptionReorderImages;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.reorderScraps] =
         localizations.mpCommandDescriptionReorderScraps;
+    _commandDescriptionTypeAsString[MPCommandDescriptionType
+            .replaceTH2FileContents] =
+        localizations.mpCommandDescriptionReplaceTH2FileContents;
     _commandDescriptionTypeAsString[MPCommandDescriptionType.setFileEncoding] =
         localizations.mpCommandDescriptionSetFileEncoding;
     _commandDescriptionTypeAsString[MPCommandDescriptionType

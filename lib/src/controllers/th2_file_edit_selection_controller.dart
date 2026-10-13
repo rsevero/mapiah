@@ -323,6 +323,74 @@ abstract class TH2FileEditSelectionControllerBase with Store {
     }
   }
 
+  /// Drops MPIDs no longer in the file from the selection, the selected
+  /// scraps and [isSelected]. Also drops a selected end or control point
+  /// whose segment is no longer a child of the single selected line, or whose
+  /// control point type the live segment no longer has.
+  @action
+  void pruneToModel() {
+    _mpSelectedElementsLogical.removeWhere(
+      (int mpID, MPSelectedElement _) => !_th2File.hasElementByMPID(mpID),
+    );
+    pruneSelectedScraps();
+    _isSelected.removeWhere((int mpID) => !_th2File.hasElementByMPID(mpID));
+
+    final THLine? selectedLine = isSingleLineSelected()
+        ? _th2File.lineByMPID(_mpSelectedElementsLogical.keys.first)
+        : null;
+
+    _selectedEndControlPoints = <int, MPSelectedEndControlPoint>{
+      for (final MapEntry<int, MPSelectedEndControlPoint> entry
+          in _selectedEndControlPoints.entries)
+        if (_isSelectedEndControlPointInModel(
+          entry.key,
+          entry.value.type,
+          selectedLine,
+        ))
+          entry.key: entry.value,
+    };
+  }
+
+  bool _isSelectedEndControlPointInModel(
+    int lineSegmentMPID,
+    MPEndControlPointType type,
+    THLine? selectedLine,
+  ) {
+    if ((selectedLine == null) ||
+        !selectedLine.childrenMPIDs.contains(lineSegmentMPID)) {
+      return false;
+    }
+
+    final THElement lineSegment = _th2File.elementByMPID(lineSegmentMPID);
+
+    if (lineSegment is! THLineSegment) {
+      return false;
+    }
+
+    switch (type) {
+      case MPEndControlPointType.controlPoint1:
+      case MPEndControlPointType.controlPoint2:
+        return lineSegment is THBezierCurveLineSegment;
+      case MPEndControlPointType.endPointBezierCurve:
+      case MPEndControlPointType.endPointStraight:
+        return true;
+    }
+  }
+
+  /// Rebuilds every selected element's clone and every retained selected end
+  /// or control point from the live model, and drops the cached selection
+  /// geometry: a retained MPID doesn't mean unchanged geometry or children.
+  void refreshSelectionFromModel() {
+    updateAllSelectedElementsClones();
+
+    for (final int lineSegmentMPID in _selectedEndControlPoints.keys.toList()) {
+      updateSelectedLineSegment(_th2File.lineSegmentByMPID(lineSegmentMPID));
+    }
+
+    resetSelectedLineLineSegmentsMPIDs();
+    clearSelectedElementsBoundingBoxAndSelectionHandleCenters();
+  }
+
   void updateAllSelectedElementsClones() {
     for (final MPSelectedElement selectedElement
         in _mpSelectedElementsLogical.values) {

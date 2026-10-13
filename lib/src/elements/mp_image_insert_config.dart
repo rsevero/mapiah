@@ -884,6 +884,14 @@ class MPXVIImageInsertConfig extends MPImageInsertConfig
   bool get isGridVisible => _isGridVisible;
 
   @override
+  bool get loadFailureDialogShown => _loadFailuredialogShown;
+
+  @override
+  set loadFailureDialogShown(bool loadFailureDialogShown) {
+    _loadFailuredialogShown = loadFailureDialogShown;
+  }
+
+  @override
   set isGridVisible(bool isGridVisible) {
     if (_isGridVisible == isGridVisible) {
       return;

@@ -458,6 +458,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpCommandDescriptionReorderScraps => 'Reorder scraps';
 
   @override
+  String get mpCommandDescriptionReplaceTH2FileContents => 'Text edit';
+
+  @override
   String get mpCommandDescriptionSetFileEncoding => 'Set file encoding';
 
   @override

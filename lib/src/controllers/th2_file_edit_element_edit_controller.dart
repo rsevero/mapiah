@@ -616,6 +616,53 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     addLineSegmentToIncludeInSelectedEndPoints(newLineSegment);
   }
 
+  /// Replaces the whole contents of the file with [snapshot], a
+  /// `TH2File.toMap()` map, and brings the sub-controllers in line with it.
+  ///
+  /// Every element object is replaced. Images whose MPID names a live image
+  /// with the same filename keep their runtime caches (decoded images, parsed
+  /// XVI files), their view-only visibility and grid visibility, and their XVI
+  /// load failure flag, so an unreadable XVI file still shows its dialog once
+  /// per load.
+  @action
+  void executeReplaceTH2FileContents(Map<String, dynamic> snapshot) {
+    final TH2File source = TH2File.fromMap(snapshot);
+
+    for (final MPRuntimeImageInsertConfigMixin sourceImage
+        in source.getImages()) {
+      final THElement? liveElement = _th2File.tryElementByMPID(
+        sourceImage.mpID,
+      );
+
+      if ((liveElement is! MPRuntimeImageInsertConfigMixin) ||
+          (liveElement.filename != sourceImage.filename)) {
+        continue;
+      }
+
+      final MPRuntimeImageInsertConfigMixin liveImage = liveElement;
+
+      liveImage.copyRuntimeImageCacheTo(
+        targetImage: sourceImage,
+        th2FileEditController: _th2FileEditController,
+      );
+      sourceImage.isVisible = liveImage.isVisible;
+
+      final MPRuntimeXVIImageInsertConfigMixin? liveXVIImage =
+          liveImage.asXVIImage;
+      final MPRuntimeXVIImageInsertConfigMixin? sourceXVIImage =
+          sourceImage.asXVIImage;
+
+      if ((liveXVIImage != null) && (sourceXVIImage != null)) {
+        sourceXVIImage.isGridVisible = liveXVIImage.isGridVisible;
+        sourceXVIImage.loadFailureDialogShown =
+            liveXVIImage.loadFailureDialogShown;
+      }
+    }
+
+    _th2File.replaceContentsFrom(source);
+    _th2FileEditController.syncControllersWithModel(initialSetup: false);
+  }
+
   @action
   void executeAddElement({
     required THElement newElement,

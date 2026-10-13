@@ -44,6 +44,30 @@ abstract class TH2FileHideElementControllerBase with Store {
     return _th2File.scrapMPIDs.every(isScrapVisible);
   }
 
+  /// Drops MPIDs no longer in the file from the hidden sets.
+  @action
+  void pruneToModel() {
+    _hiddenScrapMPIDs.removeWhere(
+      (int mpID) => _th2File.tryElementByMPID(mpID) is! THScrap,
+    );
+    _hiddenElementMPIDs.removeWhere(
+      (int mpID) => !_th2File.hasElementByMPID(mpID),
+    );
+  }
+
+  /// Shows [scrapMPID] when it is hidden, without touching the active scrap
+  /// or the selection. Snap targets are left to the caller.
+  @action
+  void ensureScrapVisible(int scrapMPID) {
+    if (!_hiddenScrapMPIDs.remove(scrapMPID)) {
+      return;
+    }
+
+    _th2FileEditController.userInteractionController
+        .markTherionStationPointNameCoordinateCacheDirty();
+    _th2FileEditController.triggerNonSelectedElementsRedraw();
+  }
+
   /// Sets the visibility of several scraps while retaining a visible scrap.
   @action
   void setScrapsHidden(List<int> scrapMPIDs, bool hidden) {

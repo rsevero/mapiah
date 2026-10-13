@@ -68,6 +68,7 @@ class TH2File
   TH2File.forCWJM({
     required this.filename,
     required this.encoding,
+    required this.lineEnding,
     required int mpID,
     required LinkedHashMap<int, THElement> elementByMPID,
     required List<int> childrenMPIDs,
@@ -80,6 +81,10 @@ class TH2File
   TH2File() {
     _mpID = mpLocator.mpGeneralController.nextMPIDForTH2Files();
   }
+
+  /// An empty file with the given MPID, for a detached parse that must share
+  /// the MPID of the file it describes.
+  TH2File.withMPID(int mpID) : _mpID = mpID;
 
   void _initializeSupportMaps() {
     final Iterable<THElement> elements = _elementByMPID.values;
@@ -97,6 +102,7 @@ class TH2File
     return {
       'filename': filename,
       'encoding': encoding,
+      'lineEnding': lineEnding,
       'mpID': _mpID,
       'childrenMPIDs': childrenMPIDs.toList(),
       'elementByMPID': _elementByMPID.map(
@@ -109,6 +115,7 @@ class TH2File
     return TH2File.forCWJM(
       filename: map['filename'],
       encoding: map['encoding'],
+      lineEnding: map['lineEnding'],
       mpID: map['mpID'],
       elementByMPID: LinkedHashMap<int, THElement>.from(
         map['elementByMPID'].map(
@@ -128,6 +135,7 @@ class TH2File
     bool makeFilenameNull = false,
     String? encoding,
     bool makeEncodingNull = false,
+    String? lineEnding,
     int? mpID,
     LinkedHashMap<int, THElement>? elementByMPID,
     List<int>? childrenMPIDs,
@@ -148,6 +156,7 @@ class TH2File
     return TH2File.forCWJM(
       filename: makeFilenameNull ? '' : (filename ?? this.filename),
       encoding: makeEncodingNull ? '' : (encoding ?? this.encoding),
+      lineEnding: lineEnding ?? this.lineEnding,
       mpID: mpID ?? _mpID,
       elementByMPID: effectiveElements,
       childrenMPIDs: childrenMPIDs ?? this.childrenMPIDs.toList(),
@@ -786,6 +795,80 @@ class TH2File
     filename = '';
     encoding = mpDefaultEncoding;
     clearBoundingBox();
+  }
+
+  /// Replaces every element of this file with the elements of [source], a
+  /// fresh file whose elements belong to no file yet. Keeps [filename],
+  /// [fileBytes], [mpID], [isNewFile] and [lineEnding]: the line ending is
+  /// set at load and never changed by a content replacement.
+  void replaceContentsFrom(TH2File source) {
+    assert(
+      _allElementsAndOptionsPointAt(source, null),
+      'TH2File.replaceContentsFrom: a source element or option already '
+      'belongs to a file.',
+    );
+    assert(
+      source.lineEnding == lineEnding,
+      'TH2File.replaceContentsFrom: the source has a different line ending.',
+    );
+
+    _elementByMPID.clear();
+    childrenMPIDs.clear();
+    _mpIDByTHID.clear();
+    _thIDByMPID.clear();
+    _areasMPIDs.clear();
+    _linesMPIDs.clear();
+    _pointsMPIDs.clear();
+    _scrapMPIDs = null;
+    _imageMPIDs = null;
+    _xtherionSettingMPIDs = null;
+    _areaMPIDByLineMPID = null;
+    _areaMPIDByLineTHID = null;
+    invalidateDrawableChildrenCache();
+
+    encoding = source.encoding;
+
+    _elementByMPID.addAll(source._elementByMPID);
+    childrenMPIDs.addAll(source.childrenMPIDs);
+
+    for (final THElement element in _elementByMPID.values) {
+      element.setTH2File(this);
+      _updateSupportMaps(element);
+    }
+
+    clearBoundingBox();
+
+    assert(
+      _allElementsAndOptionsPointAt(this, this),
+      'TH2File.replaceContentsFrom: an element or option does not point at '
+      'the file.',
+    );
+  }
+
+  /// Whether every element and option of [file] has [th2File] as its file,
+  /// by identity.
+  static bool _allElementsAndOptionsPointAt(TH2File file, TH2File? th2File) {
+    for (final THElement element in file._elementByMPID.values) {
+      if (!identical(element.th2File, th2File)) {
+        return false;
+      }
+
+      if (element is THHasOptionsMixin) {
+        for (final THCommandOption option in element.optionsMap.values) {
+          if (!identical(option.th2File, th2File)) {
+            return false;
+          }
+        }
+
+        for (final THCommandOption option in element.attrOptionsMap.values) {
+          if (!identical(option.th2File, th2File)) {
+            return false;
+          }
+        }
+      }
+    }
+
+    return true;
   }
 
   bool isSameClass(Object object) {

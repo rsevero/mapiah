@@ -239,6 +239,22 @@ mixin _$TH2FileEditElementEditController
   }
 
   @override
+  void executeReplaceTH2FileContents(Map<String, dynamic> snapshot) {
+    final _$actionInfo = _$TH2FileEditElementEditControllerBaseActionController
+        .startAction(
+          name:
+              'TH2FileEditElementEditControllerBase.executeReplaceTH2FileContents',
+        );
+    try {
+      return super.executeReplaceTH2FileContents(snapshot);
+    } finally {
+      _$TH2FileEditElementEditControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void executeAddElement({
     required THElement newElement,
     THIsParentMixin? parent,

@@ -8,6 +8,10 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
+import 'package:mapiah/src/auxiliary/th2_text_apply_session.dart';
+import 'package:mapiah/src/auxiliary/th2_text_identity_matcher.dart';
+import 'package:mapiah/src/auxiliary/th2_text_line_map.dart';
+import 'package:mapiah/src/auxiliary/th2_text_validator.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_default_options_controller.dart';
@@ -59,6 +63,9 @@ class TH2FileEditController = TH2FileEditControllerBase
 
 abstract class TH2FileEditControllerBase with Store {
   bool _disposed = false;
+
+  /// Whether this controller was created by [createForDetachedParse].
+  bool _isDetachedParse = false;
 
   /// Whether [dispose] already ran for this controller.
   bool get isDisposed => _disposed;
@@ -658,8 +665,34 @@ abstract class TH2FileEditControllerBase with Store {
         TH2FileEditController._create();
 
     th2FileEditController._basicInitialization(th2File);
+
+    /// Its model refresh bumps the structure revision once.
     th2FileEditController._finalFilePreparations(th2File);
-    th2FileEditController.bumpStructureRevision();
+
+    return th2FileEditController;
+  }
+
+  /// Creates an unregistered controller for a detached parse of the text of
+  /// the file [filename], whose `TH2File` has [th2FileMPID] and
+  /// [lineEnding].
+  ///
+  /// It is never registered, never gets a tab, and never runs
+  /// [_finalFilePreparations] or [_initializeReactions]: it shares the real
+  /// file's filename, so the dirty-mirroring reaction would add or remove the
+  /// real file's path in `THProjectController.dirtyFilePaths`.
+  static TH2FileEditController createForDetachedParse({
+    required String filename,
+    required int th2FileMPID,
+    required String lineEnding,
+  }) {
+    final TH2FileEditController th2FileEditController =
+        TH2FileEditController._create();
+    final TH2File th2File = TH2File.withMPID(th2FileMPID)
+      ..filename = filename
+      ..lineEnding = lineEnding;
+
+    th2FileEditController._basicInitialization(th2File);
+    th2FileEditController._isDetachedParse = true;
 
     return th2FileEditController;
   }
@@ -825,45 +858,84 @@ abstract class TH2FileEditControllerBase with Store {
   }
 
   void _finalFilePreparations(TH2File parsedFile) {
-    if (!_isBroken && _th2File.scrapMPIDs.isNotEmpty) {
-      _activeScrapID = _th2File.scrapMPIDs.first;
-      updateHasMultipleScraps();
+    _initializeReactions();
 
-      // Initialize snap targets only after activeScrapID is set
+    if (!_isBroken) {
+      syncControllersWithModel(initialSetup: true);
+    }
+
+    setFilename(_th2File.filename);
+    _isLoading = false;
+  }
+
+  /// Brings the sub-controllers in line with the whole model: the only place
+  /// that does so, after a load ([initialSetup]) and after every file
+  /// contents replacement (apply, undo and redo of a text edit).
+  @action
+  void syncControllersWithModel({required bool initialSetup}) {
+    /// 1. Selection.
+    selectionController.pruneToModel();
+    selectionController.refreshSelectionFromModel();
+
+    /// 2. Hidden.
+    hideElementController.pruneToModel();
+
+    /// 3. Active scrap.
+    if (_th2File.tryElementByMPID(_activeScrapID) is! THScrap) {
+      final List<int> scrapMPIDs = _th2File.scrapMPIDs;
+
+      _activeScrapID = scrapMPIDs.isEmpty ? 0 : scrapMPIDs.first;
+    }
+
+    if (_activeScrapID != 0) {
+      hideElementController.ensureScrapVisible(_activeScrapID);
+    }
+
+    selectionController.resetSelectableElements();
+    selectionController.updateSelectableEndAndControlPoints();
+    updateHasMultipleScraps();
+    _updateCurrentScrapName();
+
+    /// 4. Snap targets. A load computes them once.
+    if (initialSetup && _th2File.scrapMPIDs.isNotEmpty) {
       snapController.setSnapTargets(
         pointTarget: MPSnapPointTarget.point,
         linePointTarget: MPSnapLinePointTarget.linePoint,
         xviTargets: [MPSnapXVIFileTarget.shot],
       );
+    } else {
+      snapController.updateSnapTargets();
     }
 
-    _initializeReactions();
-
-    if (_isBroken) {
-      setFilename(_th2File.filename);
-      _isLoading = false;
-      return;
+    /// 5. Station caches: images may have been added, removed or replaced.
+    if (!initialSetup) {
+      userInteractionController
+        ..markTherionStationPointNameCoordinateCacheDirty()
+        ..markXVIStationPointNameCoordinateCacheDirty();
     }
 
-    selectionController.clearIsSelected();
+    /// 6. Used types.
+    if (initialSetup) {
+      elementEditController.initializeUsedTypes();
+    }
 
-    parsedFile.elements.forEach((key, value) {
-      if (value is THPoint || value is THLine) {
-        selectionController.setIsSelected(key, false);
-      }
-    });
-
-    selectionController.resetSelectableElements();
+    /// 7.
     updateEnableSelectButton();
+    triggerAllElementsRedraw();
+    bumpStructureRevision();
+  }
 
-    elementEditController.initializeUsedTypes();
-
-    setFilename(_th2File.filename);
-
-    _isLoading = false;
+  @visibleForTesting
+  void initializeReactionsForTesting() {
+    _initializeReactions();
   }
 
   void _initializeReactions() {
+    assert(
+      !_isDetachedParse,
+      'A detached parse controller must never install reactions.',
+    );
+
     _disposers.add(
       autorun((_) {
         final double snapOnCanvasDistance =
@@ -1645,15 +1717,148 @@ abstract class TH2FileEditControllerBase with Store {
     }
   }
 
+  /// The writer options of Save, shared by text mode so its text is the
+  /// saved text.
+  static const bool _savedIncludeEmptyLines = true;
+  static const bool _savedUseOriginalRepresentation = true;
+
   Uint8List _encodedFileContents() {
     final TH2FileWriter th2FileWriter = TH2FileWriter();
     final Uint8List fileBytes = th2FileWriter.toBytes(
       _th2File,
-      includeEmptyLines: true,
-      useOriginalRepresentation: true,
+      includeEmptyLines: _savedIncludeEmptyLines,
+      useOriginalRepresentation: _savedUseOriginalRepresentation,
     );
 
     return fileBytes;
+  }
+
+  /// The live model's text, as Save writes it, and its writer map.
+  ///
+  /// Throws [TH2UnsupportedLineEndingException] when the text would contain a
+  /// lone `\r`.
+  (String, TH2TextLineMap) serializeForTextMode() {
+    return TH2FileWriter().serializeWithLineMap(
+      _th2File,
+      includeEmptyLines: _savedIncludeEmptyLines,
+      useOriginalRepresentation: _savedUseOriginalRepresentation,
+    );
+  }
+
+  /// Applies the text buffer [content] of [session] to the model as one
+  /// canvas undo step.
+  ///
+  /// Validation is the only asynchronous part: when the session ends, is
+  /// replaced or the controller is disposed meanwhile, nothing changes and
+  /// the result is [TH2TextApplyCancelled]; when the buffer changed
+  /// meanwhile, the current buffer is validated instead. From the final
+  /// check on everything is synchronous. With [lockBufferOnAccept], the
+  /// session's buffer lock is taken for an applied or unchanged result,
+  /// before any model change. The session is never ended or replaced here.
+  Future<TH2TextApplyResult> applyTextContent(
+    String content, {
+    required TH2TextApplySession session,
+    bool lockBufferOnAccept = false,
+  }) async {
+    assert(!_isBroken, 'applyTextContent on a broken file.');
+    if (_isBroken) {
+      return const TH2TextApplyRejected(<TH2TextDiagnostic>[
+        TH2TextDiagnostic.error(
+          line: null,
+          kind: TH2TextDiagnosticKind.unreadableText,
+        ),
+      ]);
+    }
+
+    final int revision = session.sessionRevision;
+    late TH2TextValidationResult result;
+
+    while (true) {
+      /// Unchanged text.
+      if (content == session.initialContent) {
+        if (lockBufferOnAccept) {
+          session.lockBuffer();
+        }
+
+        return TH2TextApplyUnchanged(
+          session.initialLineMap,
+          session.cursorLine,
+        );
+      }
+
+      result = await session.validationCache.validate(
+        content,
+        filename: _th2File.filename,
+        th2FileMPID: _th2File.mpID,
+        lineEnding: _th2File.lineEnding,
+      );
+
+      /// Staleness.
+      if (_disposed ||
+          !session.isOpen ||
+          (session.sessionRevision != revision)) {
+        return const TH2TextApplyCancelled();
+      }
+
+      if (session.content == content) {
+        break;
+      }
+
+      content = session.content;
+    }
+
+    if (!result.isValid) {
+      return TH2TextApplyRejected(result.diagnostics);
+    }
+
+    /// From here on everything is synchronous.
+    if (lockBufferOnAccept) {
+      session.lockBuffer();
+    }
+
+    final int cursorLine = result.cursorMapper.mapRawLine(session.cursorLine);
+
+    /// The text normalizes back to the live text: the line numbers carry
+    /// over.
+    if (result.normalizedText == session.initialContent) {
+      return TH2TextApplyUnchanged(session.initialLineMap, cursorLine);
+    }
+
+    final Map<String, dynamic> before = _th2File.toMap();
+
+    /// The matcher reads the live side from the session, which is only right
+    /// while the session describes the live model.
+    assert(serializeForTextMode().$1 == session.initialContent);
+
+    final Map<int, int> matching = TH2TextIdentityMatcher.match(
+      live: (_th2File, session.initialContent, session.initialLineMap),
+      detached: (result.detachedFile, result.normalizedText, result.writerMap),
+    );
+    final Map<String, dynamic> after = TH2TextMPIDRemapper.remap(
+      result.detachedFile.toMap(),
+      matching,
+    );
+
+    assert(
+      TH2FileWriter().serialize(
+            TH2File.fromMap(after),
+            includeEmptyLines: _savedIncludeEmptyLines,
+            useOriginalRepresentation: _savedUseOriginalRepresentation,
+          ) ==
+          result.normalizedText,
+      'The remapped snapshot does not write the normalized text.',
+    );
+
+    execute(MPReplaceTH2FileContentsCommand(before: before, after: after));
+
+    final (String liveText, TH2TextLineMap liveMap) = serializeForTextMode();
+
+    assert(
+      liveText == result.normalizedText,
+      'The applied model does not write the normalized text.',
+    );
+
+    return TH2TextApplyApplied(liveMap, cursorLine);
   }
 
   void saveTH2File() {
