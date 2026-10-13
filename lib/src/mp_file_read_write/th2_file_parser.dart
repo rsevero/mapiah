@@ -1134,6 +1134,10 @@ class TH2FileParser {
       assert(element[1][0] is List);
     }
 
+    /// An empty line or a multiline comment in the line body replaces
+    /// _currentElement, so the line being parsed is set again here: line
+    /// options belong to it and line point options to _lastLineSegment.
+    _currentElement = _currentParent as THElement;
     _optionFromElement(element[1], _lineSegmentRegularOptions);
 
     /// Same line comments should be inserted in the line segment to which this
