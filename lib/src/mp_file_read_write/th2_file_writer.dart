@@ -47,7 +47,8 @@ class TH2FileWriter {
     String asString = '';
 
     _prefix = '';
-    if (th2File.elementByMPID(th2File.childrenMPIDs.first) is! THEncoding) {
+    if (th2File.childrenMPIDs.isEmpty ||
+        (th2File.elementByMPID(th2File.childrenMPIDs.first) is! THEncoding)) {
       final String newLine = 'encoding ${th2File.encoding}$_lineEnding';
 
       asString += newLine;

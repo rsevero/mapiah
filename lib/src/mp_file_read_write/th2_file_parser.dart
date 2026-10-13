@@ -159,7 +159,11 @@ class TH2FileParser {
       _currentParseableLine = currentMPParseableLine.toParse;
 
       if (_currentParseableLine.trim().isEmpty) {
-        _injectEmptyLine();
+        /// Blank lines before the file's first command are discarded, so the
+        /// encoding line, when there is one, is always the file's first child.
+        if (_parsedTH2File.childrenMPIDs.isNotEmpty) {
+          _injectEmptyLine();
+        }
         continue;
       }
       if (_runTraceParser) {
@@ -2918,9 +2922,17 @@ class TH2FileParser {
     int byte;
     String priorChar = '';
     int charsRead = 0;
+    int i = 0;
+
+    /// Blank lines before the encoding line are skipped, as the parser
+    /// discards them, and don't count toward the encoding line's length.
+    while ((i < fileContentRaw.length) &&
+        _isLeadingBlankByte(fileContentRaw[i])) {
+      i++;
+    }
 
     for (
-      int i = 0;
+      ;
       ((i < fileContentRaw.length) && (charsRead < mpthMaxEncodingLength));
       i++
     ) {
@@ -2948,6 +2960,14 @@ class TH2FileParser {
     // mpLocator.mpLog.finer("Encoding object: '$encoding");
 
     return (encoding == null) ? mpDefaultEncoding : encoding[1]!.toUpperCase();
+  }
+
+  @useResult
+  bool _isLeadingBlankByte(int byte) {
+    return (byte == mpSpaceByte) ||
+        (byte == mpTabByte) ||
+        (byte == mpCarriageReturnByte) ||
+        (byte == mpLineFeedByte);
   }
 
   @useResult

@@ -93,6 +93,10 @@ const String mpDecimalSeparator = '.';
 const String mpUnixLineBreak = '\n';
 const String mpWindowsLineBreak = '\r\n';
 const String mpCarriageReturn = '\r';
+const int mpSpaceByte = 0x20;
+const int mpTabByte = 0x09;
+const int mpLineFeedByte = 0x0A;
+const int mpCarriageReturnByte = 0x0D;
 const String mpDoubleQuote = '"';
 const String mpDoubleQuotePair = r'""';
 
