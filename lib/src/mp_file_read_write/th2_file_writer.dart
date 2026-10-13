@@ -3,12 +3,29 @@
 import 'dart:typed_data';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_encoding_aux.dart';
+import 'package:mapiah/src/auxiliary/th2_text_line_endings_aux.dart';
+import 'package:mapiah/src/auxiliary/th2_text_line_map.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
+import 'package:mapiah/src/exceptions/th2_unsupported_line_ending_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_output_planner.dart';
+
+/// The part of the writer output that one leaf appended, and its owner.
+class TH2LedgerSpan {
+  final int mpID;
+  final int start;
+  final int length;
+
+  const TH2LedgerSpan({
+    required this.mpID,
+    required this.start,
+    required this.length,
+  });
+}
 
 class TH2FileWriter {
   static const List<THElementType> configBlockElementTypes = <THElementType>[
@@ -26,9 +43,20 @@ class TH2FileWriter {
   late bool _useOriginalRepresentation;
   String _lineEnding = MPDirectoryAux.getDefaultLineEnding();
   bool _insideMultiLineComment = false;
-  bool _xTherionConfigWritten = false;
+
+  /// Output state of the current serialization, reset by [_serializeFile].
+  bool _recordLedger = false;
+  final List<TH2LedgerSpan> _ledger = <TH2LedgerSpan>[];
+  int _outputLength = 0;
+  int? _lastChunkOwnerMPID;
+  bool _lastChunkTerminated = true;
+
+  /// Owner MPID and output offset of each line ending added after an
+  /// unterminated chunk.
+  final List<(int, int)> _addedEndings = <(int, int)>[];
 
   late TH2File _th2File;
+  late TH2FileOutputPlan _outputPlan;
 
   String serialize(
     TH2File th2File, {
@@ -36,87 +64,217 @@ class TH2FileWriter {
     bool useOriginalRepresentation = false,
     String? lineEnding,
   }) {
+    return _serializeFile(
+      th2File,
+      includeEmptyLines: includeEmptyLines,
+      useOriginalRepresentation: useOriginalRepresentation,
+      lineEnding: lineEnding,
+    );
+  }
+
+  /// Serializes [th2File] as [serialize] does and maps each line of the
+  /// result to the element that wrote it.
+  ///
+  /// Throws [TH2UnsupportedLineEndingException] when the text would contain a
+  /// lone `\r`, which is not a line ending in a line map.
+  (String, TH2TextLineMap) serializeWithLineMap(
+    TH2File th2File, {
+    bool includeEmptyLines = false,
+    bool useOriginalRepresentation = false,
+    String? lineEnding,
+  }) {
+    final String text;
+
+    _recordLedger = true;
+    try {
+      text = _serializeFile(
+        th2File,
+        includeEmptyLines: includeEmptyLines,
+        useOriginalRepresentation: useOriginalRepresentation,
+        lineEnding: lineEnding,
+      );
+    } finally {
+      _recordLedger = false;
+    }
+
+    assert(_isLedgerContiguous(text.length));
+
+    final List<int> lineStarts = TH2TextLineEndingsAux.lineStartOffsets(text);
+    final List<int?> ownerByLine = List<int?>.filled(lineStarts.length, null);
+
+    for (final TH2LedgerSpan span in _ledger) {
+      if (span.length == 0) {
+        continue;
+      }
+
+      final int firstLine = TH2TextLineEndingsAux.lineIndexAtOffset(
+        lineStarts,
+        span.start,
+      );
+      final int lastLine = TH2TextLineEndingsAux.lineIndexAtOffset(
+        lineStarts,
+        span.start + span.length - 1,
+      );
+
+      for (int line = firstLine; line <= lastLine; line++) {
+        assert(
+          (ownerByLine[line] == null) || (ownerByLine[line] == span.mpID),
+          "Line '$line' written by MPIDs '${ownerByLine[line]}' and '${span.mpID}'.",
+        );
+        ownerByLine[line] = span.mpID;
+      }
+    }
+
+    final List<TH2TextRelocation> relocations = <TH2TextRelocation>[];
+
+    for (final int mpID in _outputPlan.relocatedSettingMPIDs) {
+      final int destinationLine = ownerByLine.indexOf(mpID);
+
+      if (destinationLine >= 0) {
+        relocations.add(
+          TH2TextRelocation(mpID: mpID, destinationLine: destinationLine),
+        );
+      }
+    }
+
+    final List<TH2TextAddedEnding> addedEndings = _addedEndings
+        .map(
+          ((int, int) addedEnding) => TH2TextAddedEnding(
+            ownerMPID: addedEnding.$1,
+            line: TH2TextLineEndingsAux.lineIndexAtOffset(
+              lineStarts,
+              addedEnding.$2,
+            ),
+          ),
+        )
+        .toList();
+
+    final TH2TextLineMap lineMap = TH2TextLineMap.fromWriterLedger(
+      ownerByLine: ownerByLine,
+      th2File: th2File,
+      relocations: relocations,
+      addedEndings: addedEndings,
+    );
+
+    return (text, lineMap);
+  }
+
+  bool _isLedgerContiguous(int textLength) {
+    int expectedStart = 0;
+
+    for (final TH2LedgerSpan span in _ledger) {
+      if (span.start != expectedStart) {
+        return false;
+      }
+      expectedStart += span.length;
+    }
+
+    return expectedStart == textLength;
+  }
+
+  String _serializeFile(
+    TH2File th2File, {
+    required bool includeEmptyLines,
+    required bool useOriginalRepresentation,
+    required String? lineEnding,
+  }) {
     _th2File = th2File;
     _includeEmptyLines = includeEmptyLines;
     _useOriginalRepresentation = useOriginalRepresentation;
     _lineEnding = lineEnding ?? _th2File.lineEnding;
     _insideMultiLineComment = false;
-    _xTherionConfigWritten = false;
+    _prefix = '';
+    _ledger.clear();
+    _outputLength = 0;
+    _lastChunkOwnerMPID = null;
+    _lastChunkTerminated = true;
+    _addedEndings.clear();
+
+    if (_recordLedger) {
+      assert(
+        (_lineEnding == mpUnixLineBreak) ||
+            (_lineEnding == mpWindowsLineBreak),
+      );
+    }
+
+    _outputPlan = TH2FileOutputPlanner.plan(
+      th2File.childrenMPIDs
+          .map(
+            (int childMPID) =>
+                (childMPID, th2File.elementByMPID(childMPID).elementType),
+          )
+          .toList(),
+    );
 
     String asString = '';
 
-    _prefix = '';
-    if (th2File.childrenMPIDs.isEmpty ||
-        (th2File.elementByMPID(th2File.childrenMPIDs.first) is! THEncoding)) {
-      final String newLine = 'encoding ${th2File.encoding}$_lineEnding';
-
-      asString += newLine;
-
-      asString += _trySerializeXTherionConfig();
+    if (_outputPlan.synthesizeEncoding) {
+      asString += _emit(
+        th2File.mpID,
+        'encoding ${th2File.encoding}$_lineEnding',
+      );
     }
 
-    asString += _childrenAsString(th2File);
+    for (final int childMPID in _outputPlan.orderedChildMPIDs) {
+      asString += _serializeElement(th2File.elementByMPID(childMPID));
+    }
 
     return asString;
   }
 
-  String _trySerializeXTherionConfig() {
-    if (_xTherionConfigWritten) {
+  /// Appends [chunk], written by the element [mpID], to the output.
+  ///
+  /// Only leaves (the methods that produce text) call it: a leaf's result is
+  /// appended to the output exactly once, in the order the leaf was called,
+  /// and never discarded or reordered. Composers only concatenate.
+  ///
+  /// When the previous chunk didn't end with a line ending, the selected one
+  /// is added before [chunk], owned by the previous chunk's element.
+  String _emit(int mpID, String chunk) {
+    if (chunk.isEmpty) {
       return '';
     }
 
-    final Iterable<THElement> configBlockElements = _configBlockElements();
+    final String separator = _lastChunkTerminated ? '' : _lineEnding;
 
-    bool onlyNewConfigBlockElements = true;
+    if (_recordLedger) {
+      assert(
+        (mpID == _th2File.mpID) || _th2File.hasElementByMPID(mpID),
+        "MPID '$mpID' names no element of the file.",
+      );
 
-    for (final THElement element in configBlockElements) {
-      if (element.originalLineInTH2File.isNotEmpty) {
-        onlyNewConfigBlockElements = false;
-        break;
-      }
-    }
+      final int? loneCarriageReturnOffset =
+          TH2TextLineEndingsAux.loneCarriageReturnOffset(chunk);
 
-    if (!onlyNewConfigBlockElements) {
-      return '';
-    }
-
-    return _serializeAllXTherionConfigs();
-  }
-
-  String _serializeAllXTherionConfigs() {
-    if (_xTherionConfigWritten) {
-      return '';
-    }
-
-    String asString = '';
-
-    for (final THElement thElement in _configBlockElements()) {
-      if (thElement is THXTherionConfig) {
-        asString += _serializeXTherionConfig(thElement);
-      } else if (thElement is THXTherionImageInsertConfig) {
-        asString += _serializeXTherionImageInsertConfig(thElement);
-      } else if (thElement is MPImageInsertConfig) {
-        asString += _serializeMapiahImageInsertConfig(thElement);
-      } else {
-        throw THCustomException(
-          "At TH2FileWriter._serializeAllXTherionConfigs: thElement with MPID '${thElement.mpID}' is not part of the top-level config block.",
+      if (loneCarriageReturnOffset != null) {
+        throw TH2UnsupportedLineEndingException(
+          offset: _outputLength + separator.length + loneCarriageReturnOffset,
+          mpID: mpID,
         );
       }
     }
 
-    _xTherionConfigWritten = true;
+    if (separator.isNotEmpty) {
+      final int separatorOwnerMPID = _lastChunkOwnerMPID!;
 
-    return asString;
+      _addedEndings.add((separatorOwnerMPID, _outputLength));
+      _recordSpan(separatorOwnerMPID, separator.length);
+    }
+
+    _recordSpan(mpID, chunk.length);
+    _lastChunkOwnerMPID = mpID;
+    _lastChunkTerminated = chunk.endsWith(mpUnixLineBreak);
+
+    return '$separator$chunk';
   }
 
-  Iterable<THElement> _configBlockElements() {
-    return _th2File.childrenMPIDs
-        .map((int childMPID) => _th2File.elementByMPID(childMPID))
-        .where(_isConfigBlockElement);
-  }
-
-  bool _isConfigBlockElement(THElement element) {
-    return configBlockElementTypes.contains(element.elementType);
+  void _recordSpan(int mpID, int length) {
+    if (_recordLedger) {
+      _ledger.add(
+        TH2LedgerSpan(mpID: mpID, start: _outputLength, length: length),
+      );
+    }
+    _outputLength += length;
   }
 
   String _prepareLineWithOriginalRepresentation(
@@ -141,9 +299,12 @@ class TH2FileWriter {
 
   String _serializeEmptyLine(THElement thElement) {
     return (_includeEmptyLines || _insideMultiLineComment)
-        ? (_useOriginalRepresentation
-              ? thElement.originalLineInTH2File
-              : _lineEnding)
+        ? _emit(
+            thElement.mpID,
+            _useOriginalRepresentation
+                ? thElement.originalLineInTH2File
+                : _lineEnding,
+          )
         : '';
   }
 
@@ -151,8 +312,10 @@ class TH2FileWriter {
     String asString = _elementOriginalLineRepresentation(thElement);
 
     if (asString.isEmpty) {
-      asString =
-          "${(thElement as THMultilineCommentContent).content}$_lineEnding";
+      asString = _emit(
+        thElement.mpID,
+        "${(thElement as THMultilineCommentContent).content}$_lineEnding",
+      );
     }
 
     return asString;
@@ -183,8 +346,10 @@ class TH2FileWriter {
     if (asString.isEmpty) {
       final THXTherionConfig xTC = thElement as THXTherionConfig;
 
-      asString =
-          "$mpXTherionConfigID ${xTC.name.trim()} ${xTC.value.trim()}$_lineEnding";
+      asString = _emit(
+        thElement.mpID,
+        "$mpXTherionConfigID ${xTC.name.trim()} ${xTC.value.trim()}$_lineEnding",
+      );
     }
 
     return asString;
@@ -208,8 +373,10 @@ class TH2FileWriter {
           ? yy.trim()
           : "{${yy.trim()}}";
 
-      asString =
-          """$mpXTherionConfigID $mpXTherionImageInsertConfigID {${xx.trim()}} $serializedYY "${xTIIC.filename.trim()}" ${xTIIC.iidx} {${imgx.trim()}}$_lineEnding""";
+      asString = _emit(
+        thElement.mpID,
+        """$mpXTherionConfigID $mpXTherionImageInsertConfigID {${xx.trim()}} $serializedYY "${xTIIC.filename.trim()}" ${xTIIC.iidx} {${imgx.trim()}}$_lineEnding""",
+      );
     }
 
     return asString;
@@ -233,13 +400,16 @@ class TH2FileWriter {
     String asString = _elementOriginalLineRepresentation(thElement);
 
     if (asString.isEmpty) {
-      asString = "${imageInsertConfig.toMetadataLine()}$_lineEnding";
+      asString = _emit(
+        thElement.mpID,
+        "${imageInsertConfig.toMetadataLine()}$_lineEnding",
+      );
     }
 
     return asString;
   }
 
-  String serializeElement(THElement thElement) {
+  String _serializeElement(THElement thElement) {
     final THElementType type = thElement.elementType;
 
     String asString = '';
@@ -259,7 +429,6 @@ class TH2FileWriter {
         final String newLine = 'encoding ${(thElement as THEncoding).encoding}';
 
         asString += _prepareLineWithOriginalRepresentation(newLine, thElement);
-        asString += _trySerializeXTherionConfig();
       case THElementType.endarea:
         _reducePrefix();
         asString += _prepareLineWithOriginalRepresentation(
@@ -292,9 +461,11 @@ class TH2FileWriter {
       case THElementType.straightLineSegment:
         asString += _serializeLineSegment(thElement);
       case THElementType.mapiahImageInsertConfig:
+        asString += _serializeMapiahImageInsertConfig(thElement);
       case THElementType.xTherionConfig:
+        asString += _serializeXTherionConfig(thElement);
       case THElementType.xTherionImageInsertConfig:
-        asString += _serializeAllXTherionConfigs();
+        asString += _serializeXTherionImageInsertConfig(thElement);
       case THElementType.multilineComment:
         asString += _prepareLineWithOriginalRepresentation(
           'comment',
@@ -319,7 +490,9 @@ class TH2FileWriter {
   }
 
   String _elementOriginalLineRepresentation(THElement element) {
-    return _useOriginalRepresentation ? element.originalLineInTH2File : '';
+    return _useOriginalRepresentation
+        ? _emit(element.mpID, element.originalLineInTH2File)
+        : '';
   }
 
   String _serializeArea(THElement thElement) {
@@ -431,7 +604,7 @@ class TH2FileWriter {
     for (final int childMPID in thParent.childrenMPIDs) {
       final THElement child = _th2File.elementByMPID(childMPID);
 
-      asString += serializeElement(child);
+      asString += _serializeElement(child);
     }
 
     return asString;
@@ -510,7 +683,7 @@ class TH2FileWriter {
     newLine += _lineEnding;
     newLine = _decodeDoubleQuotes(newLine);
 
-    return newLine;
+    return _emit(thElement.mpID, newLine);
   }
 
   /// Where to break [line], which is longer than [maxLength]: right after the
@@ -573,9 +746,12 @@ class TH2FileWriter {
       if (newLine.isEmpty) {
         newLine = "${option.typeToFile()} ";
         newLine += option.specToFile().trim();
-        asString += "$_prefix${newLine.trim()}$_lineEnding";
+        asString += _emit(
+          lineSegment.mpID,
+          "$_prefix${newLine.trim()}$_lineEnding",
+        );
       } else {
-        asString += newLine;
+        asString += _emit(lineSegment.mpID, newLine);
       }
     }
 

@@ -549,7 +549,7 @@ Each phase ends with `flutter analyze` clean and `flutter test` green. New tests
 
 ### Phase 1: Line maps and locator (no UI)
 
-Detailed plan: [Phase 1: Line Maps, Settings Section and Locator](2026-10-12-th2-text-editing-phase1-line-maps-and-locator.md).
+Detailed plan: [Phase 1: Line Maps, Settings Section and Locator](2026-10-12-th2-text-editing-phase1-line-maps-and-locator.md). **Implemented** on the feature branch on 2026-10-13.
 
 - `TH2TextLineEndingsAux` (§4.2), moved here from Phase 2 because the writer's ledger scan and the parser's line map split lines the same way, and the typed unsupported-line-ending exception that the ledger throws for a lone `\r` (§4.2, §4.3).
 - `TH2TextLineMap`, the writer's `_emit` ledger and `serializeWithLineMap`, and the writer's handling of an empty file (§4.3). Add the shared settings-section output planner and explicit `TH2TextRelocation` provenance, refactoring eager/global settings emission (§4.16).
