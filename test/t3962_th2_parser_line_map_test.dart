@@ -92,7 +92,7 @@ void main() {
     const String text = '''encoding UTF-8
 scrap s1 -scale [ 0 0 \\
 	96 0 0 0 200 0 in ]
-  point 2 2 label -text "First line
+  point 2 2 label -text "First line \\
 Second line"
   point 3 3 u:test -attr foo "the foo value" \\
       -attr bar "the bar value"

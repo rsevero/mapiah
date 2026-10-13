@@ -89,6 +89,7 @@
 
   * Added a detailed Phase 3 plan for TH2 text editing (#38): shared editor contracts, TH2 highlighting and folding, text-session validation, line endings, diagnostic grouping and native undo routing. The plan specifies implementation steps and regression tests, and leaves production mode switching, saving and canvas history traversal for Phase 4.
   * Corrected the TH2 text editing Phase 3 plan (#38): backslash continuations preserve normal token classification outside values, bracketed-value continuation distinguishes parser requirements from tolerant highlighting, the shared buffer exposes cached tokens, and standard Flutter undo/redo intents use the same guarded routing as the TH2 shortcuts. Expanded the planned highlighting and undo tests.
+  * Validated the TH2 text editing Phase 3 plan (#38) again. Its TH2 highlighting now follows the parser's Therion line splitting; Enter is disabled, not just non-consuming, while an IME composes; the main text field keeps its scroll offset when a new baseline rebuilds it; the TH2 shortcuts are an explicit new inner layer; and TH2 Revert follows `isDirty` and the read-only lock. The Phase 1 line-map tests `t3961` and `t3962` now continue their quoted value with `\`, since a quoted value no longer spans lines without it.
 
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:

@@ -29,7 +29,7 @@ endcomment
 scrap s1 -scale [ 0 0 \\
 	96 0 0 0 200 0 in ]
   point 1 1 station -name A1
-  point 2 2 label -text "First line
+  point 2 2 label -text "First line \\
 Second line"
   point 3 3 u:test -attr foo "the foo value" \\
       -attr bar "the bar value"
@@ -109,7 +109,7 @@ endscrap
       scrapMPID,
       scrapChildren[0],
 
-      /// A quoted value over two lines.
+      /// A quoted value continued with `\`.
       scrapChildren[1],
       scrapChildren[1],
 
