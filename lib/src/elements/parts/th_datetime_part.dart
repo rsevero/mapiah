@@ -68,6 +68,7 @@ class THDatetimePart extends THPart {
     bool tempIsRange = false;
     if (date == '-') {
       isEmpty = true;
+      isRange = false;
       _datetime = '-';
       return;
     } else {
