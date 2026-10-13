@@ -1727,6 +1727,19 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void syncControllersWithModel({required bool initialSetup}) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.syncControllersWithModel',
+        );
+    try {
+      return super.syncControllersWithModel(initialSetup: initialSetup);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setShowImages(bool shouldShow) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase.setShowImages');

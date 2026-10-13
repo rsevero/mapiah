@@ -87,6 +87,12 @@ mixin MPRuntimeXVIImageInsertConfigMixin on MPRuntimeImageInsertConfigMixin {
   bool get isGridVisible;
 
   set isGridVisible(bool isGridVisible);
+
+  /// Whether the XVI load failure dialog was already shown for this image,
+  /// so an unreadable XVI file shows it once per load.
+  bool get loadFailureDialogShown;
+
+  set loadFailureDialogShown(bool loadFailureDialogShown);
 }
 
 mixin MPRuntimeRasterImageInsertConfigMixin on MPRuntimeImageInsertConfigMixin {

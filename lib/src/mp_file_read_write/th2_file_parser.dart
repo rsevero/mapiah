@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:collection';
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:mapiah/main.dart';
@@ -24,6 +23,7 @@ import 'package:mapiah/src/exceptions/th_create_object_from_empty_list_exception
 import 'package:mapiah/src/exceptions/th_create_object_from_null_value_exception.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_grammar.dart';
+import 'package:mapiah/src/mp_file_read_write/th2_file_normalization.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_problem.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_parser_line_start.dart';
 import 'package:meta/meta.dart';
@@ -83,10 +83,19 @@ class TH2FileParser {
 
   int _parsedLineCount = 0;
 
+  int? _lineNumberInProgress;
+
+  /// What the clean-up passes changed or removed, for the text mode markers.
+  final List<TH2FileNormalization> normalizations = <TH2FileNormalization>[];
+
+  /// Called by [parse] just before the clean-up passes.
+  @visibleForTesting
+  static void Function()? beforeCleanUpForTesting;
+
   final Set<int> _mpIDsToCleanOriginalLine = {};
 
   final RegExp _doubleQuoteRegex = RegExp(mpDoubleQuotePair);
-  final RegExp _encodingRegex = RegExp(
+  static final RegExp _encodingRegex = RegExp(
     r'^\s*encoding\s+([a-zA-Z0-9-]+)',
     caseSensitive: false,
   );
@@ -144,6 +153,55 @@ class TH2FileParser {
   /// The number of lines of the decoded text, or 0 when it couldn't be read.
   int get parsedLineCount => _parsedLineCount;
 
+  /// The 1-based line being injected, or `null` outside injection. A throw
+  /// during injection leaves the line being read; a throw in a clean-up pass
+  /// leaves `null`.
+  int? get lineNumberInProgress => _lineNumberInProgress;
+
+  void _addNormalization({
+    required TH2FileNormalizationKind kind,
+    required int mpID,
+    Set<int> removedMPIDs = const <int>{},
+  }) {
+    normalizations.add(
+      TH2FileNormalization(
+        kind: kind,
+        line: elementStartLines[mpID] ?? 0,
+        mpID: mpID,
+        removedMPIDs: removedMPIDs,
+      ),
+    );
+  }
+
+  /// [element] and all its descendants, for a removal record taken before
+  /// the removal.
+  Set<int> _mpIDsWithDescendants(THElement element) {
+    final Set<int> mpIDs = <int>{element.mpID};
+
+    if (element is THIsParentMixin) {
+      for (final int childMPID in (element as THIsParentMixin).childrenMPIDs) {
+        if (_parsedTH2File.hasElementByMPID(childMPID)) {
+          mpIDs.addAll(
+            _mpIDsWithDescendants(_parsedTH2File.elementByMPID(childMPID)),
+          );
+        }
+      }
+    }
+
+    return mpIDs;
+  }
+
+  void _addRemovalNormalization(
+    TH2FileNormalizationKind kind,
+    THElement element,
+  ) {
+    _addNormalization(
+      kind: kind,
+      mpID: element.mpID,
+      removedMPIDs: _mpIDsWithDescendants(element),
+    );
+  }
+
   void _recordLineStart(int mpID) {
     lineStarts.add(TH2ParserLineStart(line: _currentLineNumber, mpID: mpID));
   }
@@ -186,6 +244,7 @@ class TH2FileParser {
 
     for (MPParseableLine currentMPParseableLine in _splittedContents) {
       _currentLineNumber = currentMPParseableLine.lineNumber;
+      _lineNumberInProgress = _currentLineNumber;
       _currentOriginalLine = currentMPParseableLine.originalContent;
       _currentParseableLine = currentMPParseableLine.toParse;
 
@@ -217,6 +276,8 @@ class TH2FileParser {
 
       _dispatchCurrentLine();
     }
+
+    _lineNumberInProgress = null;
   }
 
   /// Parses the current line in the current context and injects it, applying
@@ -2941,103 +3002,162 @@ class TH2FileParser {
 
   @useResult
   String _decodeFile(Uint8List fileContentRaw, String encoding) {
-    String fileContentDecoded = MPEncodingAux.decode(
+    final String fileContentDecoded = MPEncodingAux.decode(
       fileContentRaw,
       encoding,
     );
 
-    /// NUL characters have no legitimate use in a .th2 file and have been
-    /// observed embedded in files written by other tools (e.g. from a
-    /// mis-decoded UTF-16 source), where every real character ends up
-    /// preceded by a stray NUL byte. They break editing of the resulting
-    /// string values in the UI, so discard them here rather than carrying
-    /// them all the way into the parsed model.
-    fileContentDecoded = fileContentDecoded.replaceAll('\u0000', '');
-
-    return fileContentDecoded;
+    return _stripNul(fileContentDecoded);
   }
 
+  /// Strips NUL characters. They have no legitimate use in a .th2 file and
+  /// have been observed embedded in files written by other tools (e.g. from
+  /// a mis-decoded UTF-16 source), where every real character ends up
+  /// preceded by a stray NUL byte. They break editing of the resulting string
+  /// values in the UI, so they are discarded here rather than carried all the
+  /// way into the parsed model.
   @useResult
-  String _encodingNameFromFile(Uint8List fileContentRaw) {
-    String line = '';
-    int byte;
+  static String _stripNul(String contents) {
+    return contents.replaceAll('\u0000', '');
+  }
+
+  /// The encoding named by the file's `encoding` line, or [mpDefaultEncoding]
+  /// when there is none, and the line ending that ended the window read, when
+  /// it was one (`null` when reading stopped at `#`, at
+  /// [mpthMaxEncodingLength] bytes or at the end).
+  ///
+  /// Blank bytes before the encoding line are skipped, as the parser discards
+  /// them, and don't count toward the encoding line's length. A byte ≥ 0x80
+  /// is an ordinary character that is never a delimiter.
+  @useResult
+  static ({String encoding, String? lineEnding}) detectEncodingFromBytes(
+    Uint8List bytes,
+  ) {
+    final StringBuffer line = StringBuffer();
     String priorChar = '';
+    String? lineEnding;
     int charsRead = 0;
     int i = 0;
 
-    /// Blank lines before the encoding line are skipped, as the parser
-    /// discards them, and don't count toward the encoding line's length.
-    while ((i < fileContentRaw.length) &&
-        _isLeadingBlankByte(fileContentRaw[i])) {
+    while ((i < bytes.length) && _isLeadingBlankByte(bytes[i])) {
       i++;
     }
 
-    for (
-      ;
-      ((i < fileContentRaw.length) && (charsRead < mpthMaxEncodingLength));
-      i++
-    ) {
-      byte = fileContentRaw[i];
-
-      if (byte == -1) {
-        break;
-      }
-
+    for (; (i < bytes.length) && (charsRead < mpthMaxEncodingLength); i++) {
       charsRead++;
 
-      final String char = utf8.decode([byte]);
+      final String char = String.fromCharCode(bytes[i]);
+      final (bool isDelimiter, String? delimiterLineEnding) =
+          _encodingDelimiter(priorChar, char);
 
-      if (_isEncodingDelimiter(priorChar, char)) {
+      if (isDelimiter) {
+        lineEnding = delimiterLineEnding;
         break;
       }
 
-      line += char;
+      line.write(char);
       priorChar = char;
     }
-    // mpLocator.mpLog.finer("Line read: '$line'");
 
+    return (encoding: _encodingFromLine(line.toString()), lineEnding: lineEnding);
+  }
+
+  /// [detectEncodingFromBytes] on characters: the window is counted in
+  /// characters instead of bytes.
+  @useResult
+  static ({String encoding, String? lineEnding}) detectEncodingFromText(
+    String text,
+  ) {
+    final StringBuffer line = StringBuffer();
+    String priorChar = '';
+    String? lineEnding;
+    int charsRead = 0;
+    int i = 0;
+
+    while ((i < text.length) && _isLeadingBlankByte(text.codeUnitAt(i))) {
+      i++;
+    }
+
+    for (; (i < text.length) && (charsRead < mpthMaxEncodingLength); i++) {
+      charsRead++;
+
+      final String char = text[i];
+      final (bool isDelimiter, String? delimiterLineEnding) =
+          _encodingDelimiter(priorChar, char);
+
+      if (isDelimiter) {
+        lineEnding = delimiterLineEnding;
+        break;
+      }
+
+      line.write(char);
+      priorChar = char;
+    }
+
+    return (encoding: _encodingFromLine(line.toString()), lineEnding: lineEnding);
+  }
+
+  @useResult
+  static String _encodingFromLine(String line) {
     final RegExpMatch? encoding = _encodingRegex.firstMatch(line);
-
-    // mpLocator.mpLog.finer("Encoding object: '$encoding");
 
     return (encoding == null) ? mpDefaultEncoding : encoding[1]!.toUpperCase();
   }
 
   @useResult
-  bool _isLeadingBlankByte(int byte) {
+  static bool _isLeadingBlankByte(int byte) {
     return (byte == mpSpaceByte) ||
         (byte == mpTabByte) ||
         (byte == mpCarriageReturnByte) ||
         (byte == mpLineFeedByte);
   }
 
+  /// Whether [char] ends the encoding window and, when it ends it with a
+  /// line break, that line break.
   @useResult
-  bool _isEncodingDelimiter(String priorChar, String char) {
+  static (bool, String?) _encodingDelimiter(String priorChar, String char) {
     if (char == mpCommentChar) {
-      return true;
+      return (true, null);
     }
 
     if ((priorChar + char) == mpWindowsLineBreak) {
-      _parsedTH2File.lineEnding = mpWindowsLineBreak;
-      return true;
+      return (true, mpWindowsLineBreak);
     }
 
     if (char == mpUnixLineBreak) {
-      _parsedTH2File.lineEnding = mpUnixLineBreak;
-      return true;
+      return (true, mpUnixLineBreak);
     }
 
-    return false;
+    return (false, null);
   }
 
   @useResult
+  ///
+  /// With [contents], parses that text instead of reading and decoding bytes
+  /// ([fileBytes] must then be `null`): the encoding comes from the text's
+  /// `encoding` line, and the file's line ending is left as it is.
+  ///
+  /// With [targetController], parses into that controller instead of getting
+  /// one from [MPGeneralController]; [forceNewController] is then ignored.
   Future<(TH2File, bool, List<String>)> parse(
     String filename, {
     Uint8List? fileBytes,
+    String? contents,
+    TH2FileEditController? targetController,
     Parser? alternateStartParser,
     bool trace = false,
     bool forceNewController = true,
   }) async {
+    assert(
+      (contents == null) || (fileBytes == null),
+      'TH2FileParser.parse: give either fileBytes or contents, not both.',
+    );
+    assert(
+      (targetController == null) || forceNewController,
+      'TH2FileParser.parse: forceNewController is ignored with a '
+      'targetController.',
+    );
+
     if (alternateStartParser == null) {
       _newRootParser(_th2FileFirstLineParser);
       _resetParsersLineage();
@@ -3048,8 +3168,9 @@ class TH2FileParser {
     }
     _runTraceParser = trace;
 
-    _th2FileEditController = mpLocator.mpGeneralController
-        .getTH2FileEditController(
+    _th2FileEditController =
+        targetController ??
+        mpLocator.mpGeneralController.getTH2FileEditController(
           filename: filename,
           forceNewController: forceNewController,
         );
@@ -3063,25 +3184,39 @@ class TH2FileParser {
     _borderSourceLines.clear();
     lineStarts.clear();
     elementStartLines.clear();
+    normalizations.clear();
     _parsedLineCount = 0;
+    _lineNumberInProgress = null;
 
     try {
-      if (fileBytes == null) {
-        final File file = File(filename);
+      if (contents != null) {
+        _parsedTH2File.encoding = detectEncodingFromText(contents).encoding;
+        contents = _stripNul(contents);
+      } else {
+        if (fileBytes == null) {
+          final File file = File(filename);
 
-        assert(
-          await file.exists(),
-          'The file to parse does not exist: $filename',
-        );
+          assert(
+            await file.exists(),
+            'The file to parse does not exist: $filename',
+          );
 
-        fileBytes = await file.readAsBytes();
+          fileBytes = await file.readAsBytes();
+        }
+
+        final ({String encoding, String? lineEnding}) detected =
+            detectEncodingFromBytes(fileBytes);
+
+        _parsedTH2File.encoding = detected.encoding;
+        if (detected.lineEnding != null) {
+          _parsedTH2File.lineEnding = detected.lineEnding!;
+        }
+
+        contents = _decodeFile(fileBytes, _parsedTH2File.encoding);
+
+        fileBytes = null;
       }
 
-      _parsedTH2File.encoding = _encodingNameFromFile(fileBytes);
-
-      String contents = _decodeFile(fileBytes, _parsedTH2File.encoding);
-
-      fileBytes = null;
       _parsedLineCount = TH2TextLineEndingsAux.lineStartOffsets(
         contents,
       ).length;
@@ -3094,6 +3229,7 @@ class TH2FileParser {
 
     _scanStructureProblems();
     _injectContents();
+    beforeCleanUpForTesting?.call();
     _cleanOriginalLinesInFile();
     _linesCleanUp(_parsedTH2File);
     _areasCleanUp(_parsedTH2File);
@@ -3138,11 +3274,19 @@ class TH2FileParser {
 
   void _cleanOriginalLinesInFile() {
     for (final int mpID in _mpIDsToCleanOriginalLine) {
+      if (!_parsedTH2File.hasElementByMPID(mpID)) {
+        continue;
+      }
+
       final THElement element = _parsedTH2File.elementByMPID(mpID);
       final THElement elementWithoutOriginalLine = element.copyWith(
         originalLineInTH2File: '',
       );
       _parsedTH2File.substituteElement(elementWithoutOriginalLine);
+      _addNormalization(
+        kind: TH2FileNormalizationKind.rewrittenLine,
+        mpID: mpID,
+      );
     }
     _mpIDsToCleanOriginalLine.clear();
   }
@@ -3212,9 +3356,17 @@ class TH2FileParser {
                           lineSegment.controlPoint2.coordinates)))) {
             if (lineSegment.optionsMap.isEmpty &&
                 lineSegment.attrOptionsMap.isEmpty) {
+              _addRemovalNormalization(
+                TH2FileNormalizationKind.removedDuplicateLinePoint,
+                lineSegment,
+              );
               _parsedTH2File.removeElement(lineSegment);
             } else if (previousLineSegment.optionsMap.isEmpty &&
                 previousLineSegment.attrOptionsMap.isEmpty) {
+              _addRemovalNormalization(
+                TH2FileNormalizationKind.removedDuplicateLinePoint,
+                previousLineSegment,
+              );
               _parsedTH2File.removeElement(previousLineSegment);
               previousLineSegment = lineSegment;
             }
@@ -3241,9 +3393,17 @@ class TH2FileParser {
               );
             }
 
+            _addRemovalNormalization(
+              TH2FileNormalizationKind.removedBorderOfShortLine,
+              areaBorder,
+            );
             _parsedTH2File.removeElement(areaBorder);
           }
 
+          _addRemovalNormalization(
+            TH2FileNormalizationKind.removedShortLine,
+            child,
+          );
           _parsedTH2File.removeElement(child);
         }
       } else if (child is THScrap) {
@@ -3313,6 +3473,10 @@ class TH2FileParser {
       _parsedTH2File.substituteElement(
         border.copyWith(thID: repairedReference, originalLineInTH2File: ''),
       );
+      _addNormalization(
+        kind: TH2FileNormalizationKind.rewrittenLine,
+        mpID: border.mpID,
+      );
     }
   }
 
@@ -3362,6 +3526,10 @@ class TH2FileParser {
         child.clearAreaXLineInfo();
 
         if (child.getAreaBorderTHIDMPIDs(_parsedTH2File).isEmpty) {
+          _addRemovalNormalization(
+            TH2FileNormalizationKind.removedEmptyArea,
+            child,
+          );
           _parsedTH2File.removeElement(child);
         }
       } else if (child is THScrap) {

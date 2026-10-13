@@ -124,6 +124,34 @@ mixin _$TH2FileHideElementController
       );
 
   @override
+  void pruneToModel() {
+    final _$actionInfo = _$TH2FileHideElementControllerBaseActionController
+        .startAction(name: 'TH2FileHideElementControllerBase.pruneToModel');
+    try {
+      return super.pruneToModel();
+    } finally {
+      _$TH2FileHideElementControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
+  void ensureScrapVisible(int scrapMPID) {
+    final _$actionInfo = _$TH2FileHideElementControllerBaseActionController
+        .startAction(
+          name: 'TH2FileHideElementControllerBase.ensureScrapVisible',
+        );
+    try {
+      return super.ensureScrapVisible(scrapMPID);
+    } finally {
+      _$TH2FileHideElementControllerBaseActionController.endAction(
+        _$actionInfo,
+      );
+    }
+  }
+
+  @override
   void setScrapsHidden(List<int> scrapMPIDs, bool hidden) {
     final _$actionInfo = _$TH2FileHideElementControllerBaseActionController
         .startAction(name: 'TH2FileHideElementControllerBase.setScrapsHidden');
