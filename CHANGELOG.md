@@ -87,6 +87,8 @@
   * Validated the TH2 text editing Phase 1 plan (#38) a seventh time, after the fix that keeps area option lines on Save. An area option written on its own line inside an area belongs to that area, and its tests now check this on the file's text as typed. The plan's parser code references were updated.
   * Validated the TH2 text editing Phase 1 plan (#38) an eighth time. When an area that has an area option on its own line is removed because it has no border, that option line is now explicitly treated as part of the removed area, and the plan's tests cover it.
 
+  * Added a detailed Phase 3 plan for TH2 text editing (#38): shared editor contracts, TH2 highlighting and folding, text-session validation, line endings, diagnostic grouping and native undo routing. The plan specifies implementation steps and regression tests, and leaves production mode switching, saving and canvas history traversal for Phase 4.
+
 ## 1.0.1 - 2026-09-25 - The [Frankfurt Connection Delay](https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double) release
 * Highlights:
   * Scraps can now have several background sketches (#45). The scrap _Sketch_ dialog can take the filename and position from a raster image already loaded in the file (#44), and several problems in that dialog were fixed.
