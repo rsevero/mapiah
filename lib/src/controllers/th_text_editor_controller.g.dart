@@ -9,13 +9,21 @@ part of 'th_text_editor_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$THTextEditorController on THTextEditorControllerBase, Store {
-  Computed<List<THProjectParseError>>? _$diagnosticsComputed;
+  Computed<List<THTextEditorDiagnostic>>? _$diagnosticsComputed;
 
   @override
-  List<THProjectParseError> get diagnostics =>
-      (_$diagnosticsComputed ??= Computed<List<THProjectParseError>>(
+  List<THTextEditorDiagnostic> get diagnostics =>
+      (_$diagnosticsComputed ??= Computed<List<THTextEditorDiagnostic>>(
         () => super.diagnostics,
         name: 'THTextEditorControllerBase.diagnostics',
+      )).value;
+  Computed<List<THTextEditorToken>>? _$tokensComputed;
+
+  @override
+  List<THTextEditorToken> get tokens =>
+      (_$tokensComputed ??= Computed<List<THTextEditorToken>>(
+        () => super.tokens,
+        name: 'THTextEditorControllerBase.tokens',
       )).value;
   Computed<List<THTextEditorFoldRegion>>? _$foldRegionsComputed;
 
@@ -24,14 +32,6 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
       (_$foldRegionsComputed ??= Computed<List<THTextEditorFoldRegion>>(
         () => super.foldRegions,
         name: 'THTextEditorControllerBase.foldRegions',
-      )).value;
-  Computed<List<TextRange>>? _$findMatchesComputed;
-
-  @override
-  List<TextRange> get findMatches =>
-      (_$findMatchesComputed ??= Computed<List<TextRange>>(
-        () => super.findMatches,
-        name: 'THTextEditorControllerBase.findMatches',
       )).value;
 
   late final _$canonicalPathAtom = Atom(
@@ -160,96 +160,6 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
     });
   }
 
-  late final _$findQueryAtom = Atom(
-    name: 'THTextEditorControllerBase.findQuery',
-    context: context,
-  );
-
-  @override
-  String get findQuery {
-    _$findQueryAtom.reportRead();
-    return super.findQuery;
-  }
-
-  @override
-  set findQuery(String value) {
-    _$findQueryAtom.reportWrite(value, super.findQuery, () {
-      super.findQuery = value;
-    });
-  }
-
-  late final _$replaceQueryAtom = Atom(
-    name: 'THTextEditorControllerBase.replaceQuery',
-    context: context,
-  );
-
-  @override
-  String get replaceQuery {
-    _$replaceQueryAtom.reportRead();
-    return super.replaceQuery;
-  }
-
-  @override
-  set replaceQuery(String value) {
-    _$replaceQueryAtom.reportWrite(value, super.replaceQuery, () {
-      super.replaceQuery = value;
-    });
-  }
-
-  late final _$findCaseSensitiveAtom = Atom(
-    name: 'THTextEditorControllerBase.findCaseSensitive',
-    context: context,
-  );
-
-  @override
-  bool get findCaseSensitive {
-    _$findCaseSensitiveAtom.reportRead();
-    return super.findCaseSensitive;
-  }
-
-  @override
-  set findCaseSensitive(bool value) {
-    _$findCaseSensitiveAtom.reportWrite(value, super.findCaseSensitive, () {
-      super.findCaseSensitive = value;
-    });
-  }
-
-  late final _$isFindBarVisibleAtom = Atom(
-    name: 'THTextEditorControllerBase.isFindBarVisible',
-    context: context,
-  );
-
-  @override
-  bool get isFindBarVisible {
-    _$isFindBarVisibleAtom.reportRead();
-    return super.isFindBarVisible;
-  }
-
-  @override
-  set isFindBarVisible(bool value) {
-    _$isFindBarVisibleAtom.reportWrite(value, super.isFindBarVisible, () {
-      super.isFindBarVisible = value;
-    });
-  }
-
-  late final _$activeMatchIndexAtom = Atom(
-    name: 'THTextEditorControllerBase.activeMatchIndex',
-    context: context,
-  );
-
-  @override
-  int? get activeMatchIndex {
-    _$activeMatchIndexAtom.reportRead();
-    return super.activeMatchIndex;
-  }
-
-  @override
-  set activeMatchIndex(int? value) {
-    _$activeMatchIndexAtom.reportWrite(value, super.activeMatchIndex, () {
-      super.activeMatchIndex = value;
-    });
-  }
-
   late final _$pendingScrollToLineAtom = Atom(
     name: 'THTextEditorControllerBase.pendingScrollToLine',
     context: context,
@@ -286,6 +196,28 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
       super.pendingSelectionRange,
       () {
         super.pendingSelectionRange = value;
+      },
+    );
+  }
+
+  late final _$pendingSelectionRequestsFocusAtom = Atom(
+    name: 'THTextEditorControllerBase.pendingSelectionRequestsFocus',
+    context: context,
+  );
+
+  @override
+  bool get pendingSelectionRequestsFocus {
+    _$pendingSelectionRequestsFocusAtom.reportRead();
+    return super.pendingSelectionRequestsFocus;
+  }
+
+  @override
+  set pendingSelectionRequestsFocus(bool value) {
+    _$pendingSelectionRequestsFocusAtom.reportWrite(
+      value,
+      super.pendingSelectionRequestsFocus,
+      () {
+        super.pendingSelectionRequestsFocus = value;
       },
     );
   }
@@ -406,11 +338,11 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
   );
 
   @override
-  void revealRange(TextRange range) {
+  void revealRange(TextRange range, {bool requestFocus = true}) {
     final _$actionInfo = _$THTextEditorControllerBaseActionController
         .startAction(name: 'THTextEditorControllerBase.revealRange');
     try {
-      return super.revealRange(range);
+      return super.revealRange(range, requestFocus: requestFocus);
     } finally {
       _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -430,11 +362,11 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
   }
 
   @override
-  void setContent(String newContent) {
+  bool setContent(String newContent, {int? cursorOffset}) {
     final _$actionInfo = _$THTextEditorControllerBaseActionController
         .startAction(name: 'THTextEditorControllerBase.setContent');
     try {
-      return super.setContent(newContent);
+      return super.setContent(newContent, cursorOffset: cursorOffset);
     } finally {
       _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -487,105 +419,6 @@ mixin _$THTextEditorController on THTextEditorControllerBase, Store {
   }
 
   @override
-  void openFindBar() {
-    final _$actionInfo = _$THTextEditorControllerBaseActionController
-        .startAction(name: 'THTextEditorControllerBase.openFindBar');
-    try {
-      return super.openFindBar();
-    } finally {
-      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void closeFindBar() {
-    final _$actionInfo = _$THTextEditorControllerBaseActionController
-        .startAction(name: 'THTextEditorControllerBase.closeFindBar');
-    try {
-      return super.closeFindBar();
-    } finally {
-      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setFindQuery(String query) {
-    final _$actionInfo = _$THTextEditorControllerBaseActionController
-        .startAction(name: 'THTextEditorControllerBase.setFindQuery');
-    try {
-      return super.setFindQuery(query);
-    } finally {
-      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setReplaceQuery(String query) {
-    final _$actionInfo = _$THTextEditorControllerBaseActionController
-        .startAction(name: 'THTextEditorControllerBase.setReplaceQuery');
-    try {
-      return super.setReplaceQuery(query);
-    } finally {
-      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setFindCaseSensitive(bool value) {
-    final _$actionInfo = _$THTextEditorControllerBaseActionController
-        .startAction(name: 'THTextEditorControllerBase.setFindCaseSensitive');
-    try {
-      return super.setFindCaseSensitive(value);
-    } finally {
-      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void findNext() {
-    final _$actionInfo = _$THTextEditorControllerBaseActionController
-        .startAction(name: 'THTextEditorControllerBase.findNext');
-    try {
-      return super.findNext();
-    } finally {
-      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void findPrevious() {
-    final _$actionInfo = _$THTextEditorControllerBaseActionController
-        .startAction(name: 'THTextEditorControllerBase.findPrevious');
-    try {
-      return super.findPrevious();
-    } finally {
-      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void replaceActiveMatch() {
-    final _$actionInfo = _$THTextEditorControllerBaseActionController
-        .startAction(name: 'THTextEditorControllerBase.replaceActiveMatch');
-    try {
-      return super.replaceActiveMatch();
-    } finally {
-      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void replaceAllMatches() {
-    final _$actionInfo = _$THTextEditorControllerBaseActionController
-        .startAction(name: 'THTextEditorControllerBase.replaceAllMatches');
-    try {
-      return super.replaceAllMatches();
-    } finally {
-      _$THTextEditorControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 canonicalPath: ${canonicalPath},
@@ -595,19 +428,15 @@ isLoading: ${isLoading},
 cursorLine: ${cursorLine},
 cursorColumn: ${cursorColumn},
 collapsedFoldStarts: ${collapsedFoldStarts},
-findQuery: ${findQuery},
-replaceQuery: ${replaceQuery},
-findCaseSensitive: ${findCaseSensitive},
-isFindBarVisible: ${isFindBarVisible},
-activeMatchIndex: ${activeMatchIndex},
 pendingScrollToLine: ${pendingScrollToLine},
 pendingSelectionRange: ${pendingSelectionRange},
+pendingSelectionRequestsFocus: ${pendingSelectionRequestsFocus},
 loadState: ${loadState},
 observedRevision: ${observedRevision},
 lastOperationRejectedByProjectChange: ${lastOperationRejectedByProjectChange},
 diagnostics: ${diagnostics},
-foldRegions: ${foldRegions},
-findMatches: ${findMatches}
+tokens: ${tokens},
+foldRegions: ${foldRegions}
     ''';
   }
 }

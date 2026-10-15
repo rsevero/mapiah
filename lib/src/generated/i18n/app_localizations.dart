@@ -6015,6 +6015,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unrecognized or invalid TH2 content'**
   String get th2FileProblemParseError;
+
+  /// Tooltip of the Revert button of a TH2 text editor. Used on: TH2TextEditController.revertTooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Discard text changes'**
+  String get th2TextEditorDiscardTooltip;
+
+  /// TH2 text diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported line ending: a carriage return without a line feed'**
+  String get th2TextDiagnosticUnsupportedLineEnding;
+
+  /// TH2 text diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'Character not representable in the {encoding} encoding'**
+  String th2TextDiagnosticUnencodableCharacter(String encoding);
+
+  /// TH2 text diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'The text could not be read'**
+  String get th2TextDiagnosticUnreadableText;
+
+  /// TH2 text diagnostic shown when validation fails unexpectedly. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'The text could not be checked'**
+  String get th2TextDiagnosticValidationFailed;
+
+  /// TH2 text information diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'This duplicate line point will be removed'**
+  String get th2TextDiagnosticRemovedDuplicateLinePoint;
+
+  /// TH2 text information diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'This line has fewer than two points and will be removed'**
+  String get th2TextDiagnosticRemovedShortLine;
+
+  /// TH2 text information diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'This area border refers to a removed line and will be removed'**
+  String get th2TextDiagnosticRemovedBorderOfShortLine;
+
+  /// TH2 text information diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'This area has no border and will be removed'**
+  String get th2TextDiagnosticRemovedEmptyArea;
+
+  /// TH2 text information diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'This line will be rewritten'**
+  String get th2TextDiagnosticRewrittenLine;
+
+  /// TH2 text information diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'This text will be written differently'**
+  String get th2TextDiagnosticGenericRewrite;
+
+  /// TH2 text information diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'This setting will be moved to line {line}'**
+  String th2TextDiagnosticMovedSetting(int line);
+
+  /// TH2 text information diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'Text will be added near this line:\n{text}'**
+  String th2TextDiagnosticAddedLine(String text);
+
+  /// TH2 text information diagnostic. Used on: TH2TextEditController diagnostics
+  ///
+  /// In en, this message translates to:
+  /// **'A line break will be added at the end of this line'**
+  String get th2TextDiagnosticAddedEnding;
 }
 
 class _AppLocalizationsDelegate

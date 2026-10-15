@@ -1,51 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:flutter/painting.dart';
+import 'package:mapiah/src/auxiliary/th2_text_editor_lexer.dart';
+import 'package:mapiah/src/auxiliary/th_text_editor_lexical_types.dart';
 
-/// Lexical token kinds recognized by [tokenizeTherionText].
-///
-/// This classification is deliberately shallow: it only needs to color the
-/// text editor. The real `thconfig`/`.th` grammar remains authoritative for
-/// parse errors and project-tree updates.
-enum THTextEditorTokenType {
-  keyword,
-  directive,
-  option,
-  comment,
-  string,
-  number,
-  stationReference,
-  punctuation,
-  plain,
-}
-
-/// One classified span of [THTextEditorTokenType.plain]-or-otherwise text
-/// within a single line, as `[start, end)` character offsets into that line.
-class THTextEditorToken {
-  final int start;
-
-  final int end;
-
-  final THTextEditorTokenType type;
-
-  const THTextEditorToken({
-    required this.start,
-    required this.end,
-    required this.type,
-  });
-
-  @override
-  bool operator ==(Object other) =>
-      other is THTextEditorToken &&
-      other.start == start &&
-      other.end == end &&
-      other.type == type;
-
-  @override
-  int get hashCode => Object.hash(start, end, type);
-
-  @override
-  String toString() => 'THTextEditorToken($start, $end, $type)';
-}
+export 'package:mapiah/src/auxiliary/th_text_editor_lexical_types.dart';
 
 const Set<String> _thTextEditorKeywords = <String>{
   'survey',
@@ -91,13 +50,24 @@ const Set<String> _thTextEditorPunctuation = <String>{
   ':',
 };
 
-/// Tokenizes [text] line by line for syntax highlighting.
+/// Tokenizes [text] for syntax highlighting. Token offsets are absolute
+/// offsets in [text].
 ///
-/// Recognizes, in order of specificity: `#` comments, quoted strings,
-/// numbers, `station@cave.passage`-style station references, known
-/// block/end keywords, `-option` tokens, single-character punctuation, and
-/// otherwise plain text. Whitespace is skipped rather than tokenized.
-List<THTextEditorToken> tokenizeTherionText(String text) {
+/// For [THTextEditorLanguage.therion], tokenizes line by line, recognizing,
+/// in order of specificity: `#` comments, quoted strings, numbers,
+/// `station@cave.passage`-style station references, known block/end
+/// keywords, `-option` tokens, single-character punctuation, and otherwise
+/// plain text. Whitespace is skipped rather than tokenized.
+///
+/// For [THTextEditorLanguage.th2], see [scanTH2EditorText].
+List<THTextEditorToken> tokenizeTherionText(
+  String text, {
+  THTextEditorLanguage language = THTextEditorLanguage.therion,
+}) {
+  if (language == THTextEditorLanguage.th2) {
+    return scanTH2EditorText(text).tokens;
+  }
+
   final List<THTextEditorToken> tokens = <THTextEditorToken>[];
   final List<String> lines = text.split('\n');
   int lineStartOffset = 0;
@@ -266,4 +236,81 @@ int _findStringEnd(String line, int start, String quote) {
   }
 
   return index < line.length ? index + 1 : line.length;
+}
+
+/// Builds the syntax overlay's spans of [content] in one merged pass over
+/// [tokens] and [findMatches], both sorted and non-overlapping. Each span has
+/// its token's color, or none outside tokens, and the find-match background
+/// where a match covers it; the active match gets [activeFindMatchColor].
+List<InlineSpan> buildTHTextEditorOverlaySpans({
+  required String content,
+  required List<THTextEditorToken> tokens,
+  required Map<THTextEditorTokenType, Color> tokenColors,
+  required List<TextRange> findMatches,
+  required int? activeMatchIndex,
+  required Color findMatchColor,
+  required Color activeFindMatchColor,
+}) {
+  final List<InlineSpan> spans = <InlineSpan>[];
+  final int contentLength = content.length;
+  final int tokenCount = tokens.length;
+  final int matchCount = findMatches.length;
+  int tokenIndex = 0;
+  int matchIndex = 0;
+  int position = 0;
+
+  while (position < contentLength) {
+    while ((tokenIndex < tokenCount) && (tokens[tokenIndex].end <= position)) {
+      tokenIndex++;
+    }
+    while ((matchIndex < matchCount) &&
+        (findMatches[matchIndex].end <= position)) {
+      matchIndex++;
+    }
+
+    int next = contentLength;
+    Color? foregroundColor;
+    Color? backgroundColor;
+
+    if (tokenIndex < tokenCount) {
+      final THTextEditorToken token = tokens[tokenIndex];
+
+      if (token.start <= position) {
+        foregroundColor = tokenColors[token.type];
+        next = (token.end < next) ? token.end : next;
+      } else {
+        next = (token.start < next) ? token.start : next;
+      }
+    }
+
+    if (matchIndex < matchCount) {
+      final TextRange match = findMatches[matchIndex];
+
+      if (match.start <= position) {
+        backgroundColor = (matchIndex == activeMatchIndex)
+            ? activeFindMatchColor
+            : findMatchColor;
+        next = (match.end < next) ? match.end : next;
+      } else {
+        next = (match.start < next) ? match.start : next;
+      }
+    }
+
+    if (next > contentLength) {
+      next = contentLength;
+    }
+
+    spans.add(
+      TextSpan(
+        text: content.substring(position, next),
+        style: TextStyle(
+          color: foregroundColor,
+          backgroundColor: backgroundColor,
+        ),
+      ),
+    );
+    position = next;
+  }
+
+  return spans;
 }
