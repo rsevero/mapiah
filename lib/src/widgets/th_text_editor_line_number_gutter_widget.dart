@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:mapiah/src/auxiliary/th_text_editor_diagnostic.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/elements/th_project/th_project_parse_error.dart';
+import 'package:mapiah/src/widgets/th_text_editor_diagnostic_marker_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Line-number gutter for [THTextEditorWidget], synchronized with the
@@ -9,15 +10,20 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// One number per logical line, right-aligned and padded to the width of
 /// the longest visible line number. The current line is highlighted, and
-/// lines with diagnostics get an error dot.
+/// lines with diagnostics get a dot in their most severe diagnostic's
+/// color.
 class THTextEditorLineNumberGutterWidget extends StatelessWidget {
   final int lineCount;
 
   final int currentLine;
 
-  final Set<int> diagnosticLines;
+  /// Line → its most severe diagnostic severity.
+  final Map<int, THTextEditorDiagnosticSeverity> diagnosticLines;
 
   final ScrollController scrollController;
+
+  /// The height of one editor row.
+  final double lineHeight;
 
   const THTextEditorLineNumberGutterWidget({
     super.key,
@@ -25,6 +31,7 @@ class THTextEditorLineNumberGutterWidget extends StatelessWidget {
     required this.currentLine,
     required this.diagnosticLines,
     required this.scrollController,
+    this.lineHeight = mpTextEditorFontSize * mpTextEditorLineHeight,
   });
 
   @override
@@ -41,10 +48,11 @@ class THTextEditorLineNumberGutterWidget extends StatelessWidget {
         controller: scrollController,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: lineCount,
-        itemExtent: mpTextEditorFontSize * mpTextEditorLineHeight,
+        itemExtent: lineHeight,
         itemBuilder: (BuildContext context, int index) {
           final bool isCurrentLine = index == currentLine;
-          final bool hasDiagnostic = diagnosticLines.contains(index);
+          final THTextEditorDiagnosticSeverity? diagnosticSeverity =
+              diagnosticLines[index];
 
           return Padding(
             padding: const EdgeInsets.symmetric(
@@ -52,13 +60,16 @@ class THTextEditorLineNumberGutterWidget extends StatelessWidget {
             ),
             child: Row(
               children: <Widget>[
-                if (hasDiagnostic)
+                if (diagnosticSeverity != null)
                   Container(
                     width: mpTextEditorDiagnosticMarkerSize,
                     height: mpTextEditorDiagnosticMarkerSize,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: colorScheme.error,
+                      color: thTextEditorDiagnosticColor(
+                        diagnosticSeverity,
+                        colorScheme,
+                      ),
                     ),
                   )
                 else
@@ -88,11 +99,28 @@ class THTextEditorLineNumberGutterWidget extends StatelessWidget {
   }
 }
 
-/// Convenience for building the diagnostic-line set consumed by
-/// [THTextEditorLineNumberGutterWidget.diagnosticLines] from raw parse
-/// errors, mapping the 1-based [THProjectParseError.lineNumber] to a
-/// 0-based editor line.
-Set<int> thTextEditorDiagnosticLines(List<THProjectParseError> diagnostics) =>
-    diagnostics
-        .map((THProjectParseError error) => error.lineNumber - 1)
-        .toSet();
+/// Convenience for building the map consumed by
+/// [THTextEditorLineNumberGutterWidget.diagnosticLines]: each diagnostic line
+/// with its most severe severity. Line-less diagnostics are left out.
+Map<int, THTextEditorDiagnosticSeverity> thTextEditorDiagnosticLines(
+  List<THTextEditorDiagnostic> diagnostics,
+) {
+  final Map<int, THTextEditorDiagnosticSeverity> lines =
+      <int, THTextEditorDiagnosticSeverity>{};
+
+  for (final THTextEditorDiagnostic diagnostic in diagnostics) {
+    final int? line = diagnostic.line;
+
+    if (line == null) {
+      continue;
+    }
+
+    final THTextEditorDiagnosticSeverity? current = lines[line];
+
+    if ((current == null) || (diagnostic.severity.index < current.index)) {
+      lines[line] = diagnostic.severity;
+    }
+  }
+
+  return lines;
+}

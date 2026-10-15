@@ -3369,4 +3369,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2FileProblemParseError => 'Unrecognized or invalid TH2 content';
+
+  @override
+  String get th2TextEditorDiscardTooltip => 'Discard text changes';
+
+  @override
+  String get th2TextDiagnosticUnsupportedLineEnding =>
+      'Unsupported line ending: a carriage return without a line feed';
+
+  @override
+  String th2TextDiagnosticUnencodableCharacter(String encoding) {
+    return 'Character not representable in the $encoding encoding';
+  }
+
+  @override
+  String get th2TextDiagnosticUnreadableText => 'The text could not be read';
+
+  @override
+  String get th2TextDiagnosticValidationFailed =>
+      'The text could not be checked';
+
+  @override
+  String get th2TextDiagnosticRemovedDuplicateLinePoint =>
+      'This duplicate line point will be removed';
+
+  @override
+  String get th2TextDiagnosticRemovedShortLine =>
+      'This line has fewer than two points and will be removed';
+
+  @override
+  String get th2TextDiagnosticRemovedBorderOfShortLine =>
+      'This area border refers to a removed line and will be removed';
+
+  @override
+  String get th2TextDiagnosticRemovedEmptyArea =>
+      'This area has no border and will be removed';
+
+  @override
+  String get th2TextDiagnosticRewrittenLine => 'This line will be rewritten';
+
+  @override
+  String get th2TextDiagnosticGenericRewrite =>
+      'This text will be written differently';
+
+  @override
+  String th2TextDiagnosticMovedSetting(int line) {
+    return 'This setting will be moved to line $line';
+  }
+
+  @override
+  String th2TextDiagnosticAddedLine(String text) {
+    return 'Text will be added near this line:\n$text';
+  }
+
+  @override
+  String get th2TextDiagnosticAddedEnding =>
+      'A line break will be added at the end of this line';
 }

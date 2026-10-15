@@ -3407,4 +3407,60 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get th2FileProblemParseError =>
       'Conteúdo TH2 não reconhecido ou inválido';
+
+  @override
+  String get th2TextEditorDiscardTooltip => 'Descartar alterações do texto';
+
+  @override
+  String get th2TextDiagnosticUnsupportedLineEnding =>
+      'Fim de linha não suportado: retorno de carro sem avanço de linha';
+
+  @override
+  String th2TextDiagnosticUnencodableCharacter(String encoding) {
+    return 'Caractere não representável na codificação $encoding';
+  }
+
+  @override
+  String get th2TextDiagnosticUnreadableText => 'Não foi possível ler o texto';
+
+  @override
+  String get th2TextDiagnosticValidationFailed =>
+      'Não foi possível verificar o texto';
+
+  @override
+  String get th2TextDiagnosticRemovedDuplicateLinePoint =>
+      'Este ponto de linha duplicado será removido';
+
+  @override
+  String get th2TextDiagnosticRemovedShortLine =>
+      'Esta linha tem menos de dois pontos e será removida';
+
+  @override
+  String get th2TextDiagnosticRemovedBorderOfShortLine =>
+      'Esta borda de área se refere a uma linha removida e será removida';
+
+  @override
+  String get th2TextDiagnosticRemovedEmptyArea =>
+      'Esta área não tem borda e será removida';
+
+  @override
+  String get th2TextDiagnosticRewrittenLine => 'Esta linha será reescrita';
+
+  @override
+  String get th2TextDiagnosticGenericRewrite =>
+      'Este texto será escrito de outra forma';
+
+  @override
+  String th2TextDiagnosticMovedSetting(int line) {
+    return 'Esta configuração será movida para a linha $line';
+  }
+
+  @override
+  String th2TextDiagnosticAddedLine(String text) {
+    return 'Texto será adicionado perto desta linha:\n$text';
+  }
+
+  @override
+  String get th2TextDiagnosticAddedEnding =>
+      'Uma quebra de linha será adicionada ao final desta linha';
 }

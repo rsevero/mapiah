@@ -97,6 +97,10 @@ const int mpSpaceByte = 0x20;
 const int mpTabByte = 0x09;
 const int mpLineFeedByte = 0x0A;
 const int mpCarriageReturnByte = 0x0D;
+const int mpCommentCharCode = 0x23;
+const int mpDoubleQuoteCharCode = 0x22;
+const int mpOpenBracketCharCode = 0x5B;
+const int mpCloseBracketCharCode = 0x5D;
 const String mpDoubleQuote = '"';
 const String mpDoubleQuotePair = r'""';
 
@@ -912,3 +916,6 @@ const double mpTextEditorLineNumberGutterMinWidth = 32.0;
 const double mpTextEditorLineNumberGutterPadding = 8.0;
 const double mpTextEditorDiagnosticMarkerSize = 8.0;
 const double mpTextEditorFoldToggleSize = 14.0;
+
+/// The idle delay before a TH2 text buffer is validated after a change.
+const int mpTH2TextValidationIdleMilliseconds = 500;

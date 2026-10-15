@@ -152,7 +152,7 @@ abstract class MPGeneralControllerBase with Store {
       _t2hFileEditControllers[normalizedFilename]?.th2FileFocusNode
           .requestFocus();
     } else {
-      _textEditorControllers[normalizedFilename]?.textEditorFocusNode
+      _textEditorControllers[normalizedFilename]?.textFieldFocusNode
           .requestFocus();
     }
   }
@@ -257,7 +257,7 @@ abstract class MPGeneralControllerBase with Store {
         _t2hFileEditControllers[incomingFilename]?.th2FileFocusNode
             .requestFocus();
       } else {
-        _textEditorControllers[incomingFilename]?.textEditorFocusNode
+        _textEditorControllers[incomingFilename]?.textFieldFocusNode
             .requestFocus();
       }
 

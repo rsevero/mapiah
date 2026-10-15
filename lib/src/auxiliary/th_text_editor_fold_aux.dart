@@ -1,30 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'package:mapiah/src/auxiliary/th2_text_editor_lexer.dart';
+import 'package:mapiah/src/auxiliary/th_text_editor_lexical_types.dart';
 
-/// One foldable, balanced `block ... endblock` region, as zero-based,
-/// inclusive line numbers.
-class THTextEditorFoldRegion {
-  final int startLine;
-
-  final int endLine;
-
-  const THTextEditorFoldRegion({
-    required this.startLine,
-    required this.endLine,
-  });
-
-  @override
-  bool operator ==(Object other) =>
-      other is THTextEditorFoldRegion &&
-      other.startLine == startLine &&
-      other.endLine == endLine;
-
-  @override
-  int get hashCode => Object.hash(startLine, endLine);
-
-  @override
-  String toString() => 'THTextEditorFoldRegion($startLine, $endLine)';
-}
+export 'package:mapiah/src/auxiliary/th_text_editor_lexical_types.dart';
 
 const Set<String> _thTextEditorFoldableBlocks = <String>{
   'survey',
@@ -43,7 +22,18 @@ final RegExp _thTextEditorFoldLineWordRegExp = RegExp(r'^\s*([A-Za-z]+)\b');
 /// Blocks may nest (e.g. `survey` containing `centreline`). An opening
 /// keyword with no matching `end...` before end of input produces no fold
 /// region for that block.
-List<THTextEditorFoldRegion> buildFoldRegions(String content) {
+///
+/// For [THTextEditorLanguage.th2], the regions are balanced `scrap`, `line`,
+/// `area` and `comment` blocks of logical lines, as [scanTH2EditorText]
+/// computes them.
+List<THTextEditorFoldRegion> buildFoldRegions(
+  String content, {
+  THTextEditorLanguage language = THTextEditorLanguage.therion,
+}) {
+  if (language == THTextEditorLanguage.th2) {
+    return scanTH2EditorText(content).foldRegions;
+  }
+
   final List<String> lines = content.split('\n');
   final List<MapEntry<String, int>> openStack = <MapEntry<String, int>>[];
   final List<THTextEditorFoldRegion> regions = <THTextEditorFoldRegion>[];
@@ -95,4 +85,19 @@ List<THTextEditorFoldRegion> buildFoldRegions(String content) {
   );
 
   return regions;
+}
+
+const Set<String> _th2TextEditorBlockOpeners = <String>{
+  'scrap',
+  'line',
+  'area',
+  'comment',
+};
+
+/// The first words of a line after which Enter indents one more level.
+Set<String> thTextEditorBlockOpeners(THTextEditorLanguage language) {
+  return switch (language) {
+    THTextEditorLanguage.therion => _thTextEditorFoldableBlocks,
+    THTextEditorLanguage.th2 => _th2TextEditorBlockOpeners,
+  };
 }

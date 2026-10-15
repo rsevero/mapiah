@@ -1,26 +1,26 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/th_text_editor_diagnostic.dart';
+import 'package:mapiah/src/auxiliary/th_text_editor_fold_aux.dart';
 import 'package:mapiah/src/auxiliary/th_text_editor_syntax_highlighter.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
-import 'package:mapiah/src/controllers/th_text_editor_controller.dart';
-import 'package:mapiah/src/elements/th_project/th_project_parse_error.dart';
+import 'package:mapiah/src/controllers/th_text_editor_buffer.dart';
+import 'package:mapiah/src/controllers/th_text_editor_find_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/th_text_editor_diagnostic_marker_widget.dart';
 import 'package:mapiah/src/widgets/th_text_editor_line_number_gutter_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
-const Set<String> _thTextEditorBlockOpeners = <String>{
-  'survey',
-  'centreline',
-  'map',
-  'scrap',
-  'layout',
-};
-
 final RegExp _thTextEditorLeadingWhitespaceRegExp = RegExp(r'^[ \t]*');
 final RegExp _thTextEditorFirstWordRegExp = RegExp(r'^([a-z]+)');
+final RegExp _thTextEditorFirstWhitespaceDelimitedWordRegExp = RegExp(
+  r'^([^ \t]+)',
+);
 
 const Map<THTextEditorTokenType, Color> _thTextEditorTokenColors =
     <THTextEditorTokenType, Color>{
@@ -32,22 +32,46 @@ const Map<THTextEditorTokenType, Color> _thTextEditorTokenColors =
       THTextEditorTokenType.number: Color(0xFF9D4B00),
       THTextEditorTokenType.stationReference: Color(0xFF006D9D),
       THTextEditorTokenType.punctuation: Color(0xFF444444),
+      THTextEditorTokenType.setting: Color(0xFF8A6D00),
       THTextEditorTokenType.plain: Color(0xFF000000),
     };
+
+const TextStyle _thTextEditorTextStyle = TextStyle(
+  fontFamily: 'monospace',
+  fontSize: mpTextEditorFontSize,
+  height: mpTextEditorLineHeight,
+);
+
+/// Forces every row of the main field and of the syntax overlay to one
+/// height, which the gutter, the markers and navigation measure.
+const StrutStyle _thTextEditorStrutStyle = StrutStyle(
+  fontFamily: 'monospace',
+  fontSize: mpTextEditorFontSize,
+  height: mpTextEditorLineHeight,
+  forceStrutHeight: true,
+);
 
 const Color _thTextEditorFindMatchColor = Color(0x554DB6AC);
 const Color _thTextEditorActiveFindMatchColor = Color(0x99FFB300);
 
-/// Editor surface for one `thconfig`/`.th` file: a line-number gutter, an
-/// editable text area with a lexical syntax-highlighting overlay, and
-/// diagnostic markers for [THProjectParseError]s attached to the file.
+/// Editor surface for one text buffer: a line-number gutter, an editable
+/// text area with a lexical syntax-highlighting overlay, and diagnostic
+/// markers.
 ///
 /// Reads and writes go through [controller]; this widget owns only local
-/// text-field wiring (scroll sync, cursor tracking, keyboard shortcuts).
+/// text-field wiring (scroll sync, cursor tracking, keyboard shortcuts and
+/// the main field's native undo history).
 class THTextEditorWidget extends StatefulWidget {
-  final THTextEditorController controller;
+  final THTextEditorBuffer controller;
 
-  const THTextEditorWidget({super.key, required this.controller});
+  /// Shown at the start of the toolbar, before its ordinary actions.
+  final List<Widget> leadingToolbarActions;
+
+  const THTextEditorWidget({
+    super.key,
+    required this.controller,
+    this.leadingToolbarActions = const <Widget>[],
+  });
 
   @override
   State<THTextEditorWidget> createState() => _THTextEditorWidgetState();
@@ -57,34 +81,61 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
   late final TextEditingController _textEditingController;
   late final ScrollController _textScrollController;
   late final ScrollController _gutterScrollController;
+  late final ScrollController _overlayScrollController;
   late final TextEditingController _findEditingController;
   late final TextEditingController _replaceEditingController;
   late final FocusNode _findFieldFocusNode;
+  late UndoHistoryController _undoHistoryController;
   bool _isSyncingFromController = false;
   bool _isSyncingFindFromController = false;
   bool _isSyncingReplaceFromController = false;
   bool _isReplaceRowExpanded = false;
   int? _lastAppliedActiveMatchIndex;
+  late int _lastBaselineRevision;
+
+  /// The last value the buffer accepted or that was synced from it.
+  late TextEditingValue _lastAcceptedValue;
+
+  /// The text scaler of the main field, which the overlay shares.
+  TextScaler _textScaler = TextScaler.noScaling;
+
+  /// The measured height of one row of the main field.
+  double _lineHeight = mpTextEditorFontSize * mpTextEditorLineHeight;
+
+  TextScaler? _measuredTextScaler;
+
+  THTextEditorBuffer get _buffer => widget.controller;
+
+  THTextEditorFindController get _find => widget.controller.find;
+
+  bool get _isTH2 => _buffer.language == THTextEditorLanguage.th2;
 
   @override
   void initState() {
     super.initState();
-    _textEditingController = TextEditingController(
-      text: widget.controller.content,
-    );
+    _textEditingController = TextEditingController(text: _buffer.content);
+    _lastAcceptedValue = _textEditingController.value;
     _textEditingController.addListener(_onTextEditingChanged);
-    _textScrollController = ScrollController();
+    _textScrollController = ScrollController(
+      initialScrollOffset: _buffer.lastScrollOffset,
+    );
     _textScrollController.addListener(_onTextScrolled);
     _gutterScrollController = ScrollController();
-    _findEditingController = TextEditingController(
-      text: widget.controller.findQuery,
-    );
+    _overlayScrollController = ScrollController();
+    _findEditingController = TextEditingController(text: _find.findQuery);
     _findEditingController.addListener(_onFindEditingChanged);
     _replaceEditingController = TextEditingController(
-      text: widget.controller.replaceQuery,
+      text: _find.replaceQuery,
     );
     _replaceEditingController.addListener(_onReplaceEditingChanged);
     _findFieldFocusNode = FocusNode();
+    _undoHistoryController = UndoHistoryController();
+    _lastBaselineRevision = _buffer.baselineRevision;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _syncScrollFollowers();
+      }
+    });
   }
 
   @override
@@ -94,11 +145,13 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     _textScrollController.removeListener(_onTextScrolled);
     _textScrollController.dispose();
     _gutterScrollController.dispose();
+    _overlayScrollController.dispose();
     _findEditingController.removeListener(_onFindEditingChanged);
     _findEditingController.dispose();
     _replaceEditingController.removeListener(_onReplaceEditingChanged);
     _replaceEditingController.dispose();
     _findFieldFocusNode.dispose();
+    _undoHistoryController.dispose();
     super.dispose();
   }
 
@@ -107,7 +160,7 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
       return;
     }
 
-    widget.controller.setFindQuery(_findEditingController.text);
+    _find.setFindQuery(_findEditingController.text);
   }
 
   void _onReplaceEditingChanged() {
@@ -115,7 +168,14 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
       return;
     }
 
-    widget.controller.setReplaceQuery(_replaceEditingController.text);
+    _find.setReplaceQuery(_replaceEditingController.text);
+  }
+
+  /// Puts [value] into the field without reporting it as an edit.
+  void _setFieldValueSilently(TextEditingValue value) {
+    _isSyncingFromController = true;
+    _textEditingController.value = value;
+    _isSyncingFromController = false;
   }
 
   void _onTextEditingChanged() {
@@ -124,9 +184,13 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     }
 
     TextEditingValue value = _textEditingController.value;
-    final String previousText = widget.controller.content;
+    final String previousText = _buffer.content;
 
-    if (value.selection.isCollapsed &&
+    /// Project editors infer Enter from a single inserted LF. TH2 editors
+    /// handle Enter with an action instead, so a pasted LF keeps its own
+    /// ending and gets no indentation.
+    if (!_isTH2 &&
+        value.selection.isCollapsed &&
         value.text.length == previousText.length + 1 &&
         value.selection.baseOffset > 0 &&
         value.text[value.selection.baseOffset - 1] == '\n') {
@@ -148,15 +212,28 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
             offset: insertOffset + autoIndent.length,
           ),
         );
-        _isSyncingFromController = true;
-        _textEditingController.value = value;
-        _isSyncingFromController = false;
+        _setFieldValueSilently(value);
       }
     }
 
-    if (value.text != widget.controller.content) {
-      widget.controller.setContent(value.text);
+    if (value.text != _buffer.content) {
+      final bool isAccepted = _buffer.setContent(
+        value.text,
+        cursorOffset: value.selection.isValid
+            ? value.selection.extentOffset
+            : null,
+      );
+
+      /// The field already holds the refused value: put the last accepted
+      /// one back, so the field and the buffer stay equal.
+      if (!isAccepted) {
+        _setFieldValueSilently(_lastAcceptedValue);
+
+        return;
+      }
     }
+
+    _lastAcceptedValue = value;
 
     if (value.selection.isValid) {
       final _LineColumn position = _lineColumnAt(
@@ -164,13 +241,12 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
         value.selection.baseOffset,
       );
 
-      widget.controller.setCursorPosition(
-        line: position.line,
-        column: position.column,
-      );
+      _buffer.setCursorPosition(line: position.line, column: position.column);
     }
   }
 
+  /// The indentation for a new line inserted at [newlineOffset] - 1, from
+  /// the text before it on its line.
   String? _computeAutoIndent(String text, int newlineOffset) {
     final int newlineIndex = newlineOffset - 1;
     final int previousLineStart =
@@ -180,23 +256,109 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
       return null;
     }
 
-    final String previousLine = text.substring(
-      previousLineStart,
-      newlineIndex,
-    );
+    return _indentAfter(text.substring(previousLineStart, newlineIndex));
+  }
+
+  /// The indentation of a line following [previousLine]: its own, one level
+  /// more after a block opener.
+  String? _indentAfter(String previousLine) {
     String indent =
         _thTextEditorLeadingWhitespaceRegExp.firstMatch(previousLine)?.group(0) ??
         '';
-    final RegExpMatch? wordMatch = _thTextEditorFirstWordRegExp.firstMatch(
-      previousLine.trim().toLowerCase(),
-    );
+    final RegExpMatch? wordMatch =
+        (_isTH2
+                ? _thTextEditorFirstWhitespaceDelimitedWordRegExp
+                : _thTextEditorFirstWordRegExp)
+            .firstMatch(previousLine.trim().toLowerCase());
 
     if (wordMatch != null &&
-        _thTextEditorBlockOpeners.contains(wordMatch.group(1))) {
-      indent += '  ';
+        thTextEditorBlockOpeners(_buffer.language).contains(wordMatch.group(1))) {
+      indent += mpIndentation;
     }
 
     return indent.isEmpty ? null : indent;
+  }
+
+  bool _isComposing() {
+    final TextRange composing = _textEditingController.value.composing;
+
+    return composing.isValid && !composing.isCollapsed;
+  }
+
+  /// TH2 Enter: replaces the selection with the file's line ending and the
+  /// auto-indent, in one value update.
+  void _handleEnter() {
+    if (_buffer.isReadOnly) {
+      return;
+    }
+
+    final TextEditingValue value = _textEditingController.value;
+    final TextSelection selection = value.selection;
+
+    if (!selection.isValid) {
+      return;
+    }
+
+    final String text = value.text;
+    final int start = _outsideLineEnding(text, selection.start);
+    final int end = _outsideLineEnding(text, selection.end);
+    final int lineStart = text.lastIndexOf('\n', start - 1) + 1;
+    String precedingText = text.substring(lineStart, start);
+
+    if (precedingText.endsWith(mpCarriageReturn)) {
+      precedingText = precedingText.substring(0, precedingText.length - 1);
+    }
+
+    final String insertion = _buffer.lineEnding + (_indentAfter(precedingText) ?? '');
+
+    _textEditingController.value = TextEditingValue(
+      text: text.replaceRange(start, end, insertion),
+      selection: TextSelection.collapsed(offset: start + insertion.length),
+    );
+  }
+
+  /// [offset], moved before the CR when it is between a CR and its LF.
+  static int _outsideLineEnding(String text, int offset) {
+    if ((offset > 0) &&
+        (offset < text.length) &&
+        (text.codeUnitAt(offset - 1) == mpCarriageReturnByte) &&
+        (text.codeUnitAt(offset) == mpLineFeedByte)) {
+      return offset - 1;
+    }
+
+    return offset;
+  }
+
+  /// TH2 undo/redo: text history after the first text edit, canvas history
+  /// before it. Always consumes the key.
+  void _handleHistory({required bool redo}) {
+    if (_buffer.isReadOnly) {
+      return;
+    }
+
+    if (_buffer.hasTextEdits) {
+      if (redo) {
+        _undoHistoryController.redo();
+      } else {
+        _undoHistoryController.undo();
+      }
+
+      return;
+    }
+
+    unawaited(_requestCanvasHistory(redo: redo));
+  }
+
+  Future<void> _requestCanvasHistory({required bool redo}) async {
+    try {
+      await _buffer.requestCanvasHistory(redo: redo);
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        '[THTextEditorWidget] canvas history request failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 
   KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
@@ -211,8 +373,8 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     }
 
     if (event.logicalKey == LogicalKeyboardKey.escape &&
-        widget.controller.isFindBarVisible) {
-      widget.controller.closeFindBar();
+        _find.isFindBarVisible) {
+      _find.closeFindBar();
 
       return KeyEventResult.handled;
     }
@@ -221,13 +383,17 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
   }
 
   void _handleOpenFindBar() {
-    widget.controller.openFindBar();
+    _find.openFindBar();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _findFieldFocusNode.requestFocus();
     });
   }
 
   void _handleTabKey({required bool outdent}) {
+    if (_buffer.isReadOnly) {
+      return;
+    }
+
     final TextEditingValue value = _textEditingController.value;
     final String text = value.text;
     final TextSelection selection = value.selection;
@@ -300,25 +466,80 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
   }
 
   void _onTextScrolled() {
-    if (_gutterScrollController.hasClients) {
-      _gutterScrollController.jumpTo(
-        _textScrollController.offset.clamp(
-          _gutterScrollController.position.minScrollExtent,
-          _gutterScrollController.position.maxScrollExtent,
-        ),
-      );
+    if (_textScrollController.positions.length != 1) {
+      return;
+    }
+
+    _buffer.lastScrollOffset = _textScrollController.offset;
+    _syncScrollFollowers();
+  }
+
+  /// Moves the gutter, the syntax overlay and the diagnostic markers to the
+  /// main field's scroll offset.
+  void _syncScrollFollowers() {
+    if (_textScrollController.positions.length != 1) {
+      return;
+    }
+
+    final double offset = _textScrollController.offset;
+
+    for (final ScrollController follower in <ScrollController>[
+      _gutterScrollController,
+      _overlayScrollController,
+    ]) {
+      if (follower.hasClients) {
+        follower.jumpTo(
+          offset.clamp(
+            follower.position.minScrollExtent,
+            follower.position.maxScrollExtent,
+          ),
+        );
+      }
     }
   }
 
   Future<void> _handleSaveIntent() async {
-    await widget.controller.save();
+    try {
+      await _buffer.save();
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        '[THTextEditorWidget] save failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  Future<void> _handleRevert() async {
+    try {
+      await _buffer.revert();
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        '[THTextEditorWidget] revert failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  void _jumpToLine(int line) {
+    if (!_textScrollController.hasClients) {
+      return;
+    }
+
+    _textScrollController.jumpTo(
+      (line * _lineHeight).clamp(
+        _textScrollController.position.minScrollExtent,
+        _textScrollController.position.maxScrollExtent,
+      ),
+    );
   }
 
   /// Moves the text field's selection to the start of [lineNumber] (0-based)
   /// and scrolls it into view, mirroring [_applyActiveMatch]'s line-height
   /// math.
   void _applyPendingScrollToLine(int lineNumber) {
-    final String content = widget.controller.content;
+    final String content = _buffer.content;
     final List<String> lines = content.split('\n');
 
     if (lineNumber < 0 || lineNumber >= lines.length) {
@@ -332,24 +553,14 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     }
 
     _textEditingController.selection = TextSelection.collapsed(offset: offset);
-
-    final double lineHeight = mpTextEditorFontSize * mpTextEditorLineHeight;
-
-    if (_textScrollController.hasClients) {
-      _textScrollController.jumpTo(
-        (lineNumber * lineHeight).clamp(
-          _textScrollController.position.minScrollExtent,
-          _textScrollController.position.maxScrollExtent,
-        ),
-      );
-    }
+    _jumpToLine(lineNumber);
   }
 
-  /// Applies a pending exact selection from multi-file search navigation:
-  /// clamps the range, selects it, scrolls it into view, and requests editor
-  /// focus. Mirrors [_applyActiveMatch]'s line-height math.
-  void _applyPendingSelectionRange(TextRange range) {
-    final String content = widget.controller.content;
+  /// Applies a pending exact selection: clamps the range, selects it,
+  /// scrolls it into view, and requests typing focus when the buffer asks
+  /// for it. Mirrors [_applyActiveMatch]'s line-height math.
+  void _applyPendingSelectionRange(TextRange range, {required bool focus}) {
+    final String content = _buffer.content;
     final int start = range.start.clamp(0, content.length);
     final int end = range.end.clamp(start, content.length);
 
@@ -357,20 +568,11 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
       baseOffset: start,
       extentOffset: end,
     );
+    _jumpToLine(_lineColumnAt(content, start).line);
 
-    final _LineColumn position = _lineColumnAt(content, start);
-    final double lineHeight = mpTextEditorFontSize * mpTextEditorLineHeight;
-
-    if (_textScrollController.hasClients) {
-      _textScrollController.jumpTo(
-        (position.line * lineHeight).clamp(
-          _textScrollController.position.minScrollExtent,
-          _textScrollController.position.maxScrollExtent,
-        ),
-      );
+    if (focus) {
+      _buffer.textFieldFocusNode.requestFocus();
     }
-
-    widget.controller.textEditorFocusNode.requestFocus();
   }
 
   /// Moves the text field's selection to [activeMatchIndex]'s range in
@@ -385,103 +587,263 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     }
 
     final TextRange match = matches[activeMatchIndex];
-    final String content = widget.controller.content;
 
     _textEditingController.selection = TextSelection(
       baseOffset: match.start,
       extentOffset: match.end,
     );
+    _jumpToLine(_lineColumnAt(_buffer.content, match.start).line);
+  }
 
-    final _LineColumn position = _lineColumnAt(content, match.start);
-    final double lineHeight = mpTextEditorFontSize * mpTextEditorLineHeight;
+  /// Applies pending navigation. Exact selection takes precedence over
+  /// line-only navigation; it has already positioned the viewport, so a
+  /// coincident line-only request is discarded. With [mayFocus] false, the
+  /// selection never requests focus. Returns whether anything was applied.
+  bool _applyPendingNavigation({bool mayFocus = true}) {
+    final TextRange? pendingSelectionRange = _buffer.pendingSelectionRange;
+    final int? pendingScrollToLine = _buffer.pendingScrollToLine;
 
-    if (_textScrollController.hasClients) {
-      _textScrollController.jumpTo(
-        (position.line * lineHeight).clamp(
-          _textScrollController.position.minScrollExtent,
-          _textScrollController.position.maxScrollExtent,
-        ),
+    if (pendingSelectionRange != null) {
+      _applyPendingSelectionRange(
+        pendingSelectionRange,
+        focus: mayFocus && _buffer.pendingSelectionRequestsFocus,
       );
+
+      return true;
+    } else if (pendingScrollToLine != null) {
+      _applyPendingScrollToLine(pendingScrollToLine);
+
+      return true;
     }
+
+    return false;
+  }
+
+  void _clearPendingNavigation({required bool hadSelection}) {
+    if (hadSelection) {
+      _buffer.clearPendingSelectionRange();
+    }
+    _buffer.clearPendingScrollToLine();
+  }
+
+  /// Handles a new baseline: the main field remounts with a fresh native
+  /// history in this build, so nothing touches its scroll controller until
+  /// the post-frame callback, when only the new field is attached.
+  void _onBaselineChanged() {
+    final double recordedOffset =
+        (_textScrollController.positions.length == 1)
+        ? _textScrollController.offset
+        : _buffer.lastScrollOffset;
+    final bool hadFocus = _buffer.textFieldFocusNode.hasFocus;
+    final UndoHistoryController previousUndoHistoryController =
+        _undoHistoryController;
+
+    _undoHistoryController = UndoHistoryController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      previousUndoHistoryController.dispose();
+
+      if (!mounted) {
+        return;
+      }
+
+      final bool hasPendingSelection = _buffer.pendingSelectionRange != null;
+      final bool shouldFocus = hasPendingSelection
+          ? _buffer.pendingSelectionRequestsFocus
+          : hadFocus;
+      final bool isNavigationApplied = _applyPendingNavigation(
+        mayFocus: false,
+      );
+
+      if (isNavigationApplied) {
+        _clearPendingNavigation(hadSelection: hasPendingSelection);
+      } else if (_textScrollController.hasClients) {
+        _textScrollController.jumpTo(
+          recordedOffset.clamp(
+            _textScrollController.position.minScrollExtent,
+            _textScrollController.position.maxScrollExtent,
+          ),
+        );
+      }
+
+      _syncScrollFollowers();
+
+      if (shouldFocus) {
+        _refocusRemountedField();
+      }
+    });
+  }
+
+  /// The outgoing field's focus node detach unfocuses it, but that change
+  /// is applied in a microtask: a focus request made now would coalesce with
+  /// it, the new field would see no focus change and would never open its
+  /// text input connection. So the focus is requested after the unfocus is
+  /// applied.
+  void _refocusRemountedField() {
+    final FocusNode focusNode = _buffer.textFieldFocusNode;
+
+    focusNode.unfocus();
+    scheduleMicrotask(() {
+      if (mounted) {
+        focusNode.requestFocus();
+      }
+    });
+  }
+
+  /// Measures one row of the main field with [textScaler], once per scaler.
+  void _updateLineHeight(TextScaler textScaler) {
+    if (textScaler == _measuredTextScaler) {
+      return;
+    }
+
+    final TextPainter painter = TextPainter(
+      text: const TextSpan(text: ' ', style: _thTextEditorTextStyle),
+      strutStyle: _thTextEditorStrutStyle,
+      textDirection: TextDirection.ltr,
+      textScaler: textScaler,
+    )..layout();
+
+    _lineHeight = painter.preferredLineHeight;
+    _textScaler = textScaler;
+    _measuredTextScaler = textScaler;
+    painter.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
 
+    _updateLineHeight(MediaQuery.textScalerOf(context));
+
     return Observer(
       builder: (_) {
-        if (_textEditingController.text != widget.controller.content) {
-          _isSyncingFromController = true;
+        final String content = _buffer.content;
+        final int baselineRevision = _buffer.baselineRevision;
+        final bool isBaselineChanged = baselineRevision != _lastBaselineRevision;
+
+        if (isBaselineChanged) {
+          _lastBaselineRevision = baselineRevision;
+          _onBaselineChanged();
+        }
+
+        if (_textEditingController.text != content) {
           final TextSelection previousSelection =
               _textEditingController.selection;
 
-          _textEditingController.text = widget.controller.content;
-          _textEditingController.selection = previousSelection.end <=
-                  widget.controller.content.length
-              ? previousSelection
-              : TextSelection.collapsed(
-                  offset: widget.controller.content.length,
-                );
-          _isSyncingFromController = false;
+          _setFieldValueSilently(
+            TextEditingValue(
+              text: content,
+              selection: previousSelection.end <= content.length
+                  ? previousSelection
+                  : TextSelection.collapsed(offset: content.length),
+            ),
+          );
+          _lastAcceptedValue = _textEditingController.value;
         }
 
-        if (_findEditingController.text != widget.controller.findQuery) {
+        if (_findEditingController.text != _find.findQuery) {
           _isSyncingFindFromController = true;
-          _findEditingController.text = widget.controller.findQuery;
+          _findEditingController.text = _find.findQuery;
           _findEditingController.selection = TextSelection.collapsed(
             offset: _findEditingController.text.length,
           );
           _isSyncingFindFromController = false;
         }
 
-        if (_replaceEditingController.text != widget.controller.replaceQuery) {
+        if (_replaceEditingController.text != _find.replaceQuery) {
           _isSyncingReplaceFromController = true;
-          _replaceEditingController.text = widget.controller.replaceQuery;
+          _replaceEditingController.text = _find.replaceQuery;
           _replaceEditingController.selection = TextSelection.collapsed(
             offset: _replaceEditingController.text.length,
           );
           _isSyncingReplaceFromController = false;
         }
 
-        final List<THTextEditorToken> tokens = tokenizeTherionText(
-          widget.controller.content,
-        );
-        final List<THProjectParseError> diagnostics =
-            widget.controller.diagnostics;
-        final int lineCount =
-            '\n'.allMatches(widget.controller.content).length + 1;
-        final List<TextRange> findMatches = widget.controller.isFindBarVisible
-            ? widget.controller.findMatches
+        final List<THTextEditorToken> tokens = _buffer.tokens;
+        final List<THTextEditorDiagnostic> diagnostics = _buffer.diagnostics;
+        final List<THTextEditorDiagnostic> linelessDiagnostics =
+            thTextEditorLinelessDiagnostics(diagnostics);
+        final int lineCount = '\n'.allMatches(content).length + 1;
+        final bool isFindBarVisible = _find.isFindBarVisible;
+        final List<TextRange> findMatches = isFindBarVisible
+            ? _find.findMatches
             : const <TextRange>[];
+        final int? activeMatchIndex = _find.activeMatchIndex;
+        final bool isReadOnly = _buffer.isReadOnly;
 
-        if (widget.controller.isFindBarVisible &&
-            widget.controller.activeMatchIndex != _lastAppliedActiveMatchIndex) {
-          _lastAppliedActiveMatchIndex = widget.controller.activeMatchIndex;
-          _applyActiveMatch(findMatches, widget.controller.activeMatchIndex);
+        /// The main field remounts in this build: pending navigation and
+        /// active-match scrolling wait for the post-frame callback.
+        if (!isBaselineChanged) {
+          if (isFindBarVisible &&
+              activeMatchIndex != _lastAppliedActiveMatchIndex) {
+            _lastAppliedActiveMatchIndex = activeMatchIndex;
+            _applyActiveMatch(findMatches, activeMatchIndex);
+          }
+
+          final bool hasPendingSelection = _buffer.pendingSelectionRange != null;
+
+          if (_applyPendingNavigation()) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _clearPendingNavigation(hadSelection: hasPendingSelection);
+            });
+          }
         }
 
-        final TextRange? pendingSelectionRange =
-            widget.controller.pendingSelectionRange;
-        final int? pendingScrollToLine = widget.controller.pendingScrollToLine;
+        Widget mainEditor = Focus(
+          focusNode: _buffer.textEditorFocusNode,
+          onKeyEvent: _handleKeyEvent,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              THTextEditorLineNumberGutterWidget(
+                lineCount: lineCount,
+                currentLine: _buffer.cursorLine,
+                diagnosticLines: thTextEditorDiagnosticLines(diagnostics),
+                scrollController: _gutterScrollController,
+                lineHeight: _lineHeight,
+              ),
+              Expanded(
+                child: Stack(
+                  children: <Widget>[
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: SingleChildScrollView(
+                          key: const ValueKey(
+                            'THTextEditorWidget|SyntaxOverlay',
+                          ),
+                          controller: _overlayScrollController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: Stack(
+                            children: <Widget>[
+                              ..._buildDiagnosticMarkers(diagnostics),
+                              _buildSyntaxOverlay(
+                                content,
+                                tokens,
+                                findMatches,
+                                activeMatchIndex,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    KeyedSubtree(
+                      key: ValueKey<int>(baselineRevision),
+                      child: _buildMainTextField(
+                        context,
+                        appLocalizations,
+                        isReadOnly,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
 
-        // Exact-range selection (multi-file search navigation) takes
-        // precedence over line-only navigation and clears only its own
-        // request.
-        if (pendingSelectionRange != null) {
-          _applyPendingSelectionRange(pendingSelectionRange);
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.controller.clearPendingSelectionRange();
-            // Exact selection has already positioned the viewport, so discard
-            // any coincident line-only request instead of letting it clobber
-            // the selection on the next build.
-            widget.controller.clearPendingScrollToLine();
-          });
-        } else if (pendingScrollToLine != null) {
-          _applyPendingScrollToLine(pendingScrollToLine);
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            widget.controller.clearPendingScrollToLine();
-          });
+        if (_isTH2) {
+          mainEditor = _wrapWithTH2Shortcuts(mainEditor);
         }
 
         return Shortcuts(
@@ -536,67 +898,18 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 _buildToolbar(context, appLocalizations),
-                if (widget.controller.isFindBarVisible)
-                  _buildFindBar(context, appLocalizations, findMatches),
-                Expanded(
-                  child: Focus(
-                    focusNode: widget.controller.textEditorFocusNode,
-                    onKeyEvent: _handleKeyEvent,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        THTextEditorLineNumberGutterWidget(
-                          lineCount: lineCount,
-                          currentLine: widget.controller.cursorLine,
-                          diagnosticLines: thTextEditorDiagnosticLines(
-                            diagnostics,
-                          ),
-                          scrollController: _gutterScrollController,
-                        ),
-                        Expanded(
-                          child: Stack(
-                            children: <Widget>[
-                              _buildDiagnosticBackground(diagnostics),
-                              IgnorePointer(
-                                child: SingleChildScrollView(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  child: _buildSyntaxOverlay(
-                                    tokens,
-                                    findMatches,
-                                    widget.controller.activeMatchIndex,
-                                  ),
-                                ),
-                              ),
-                              TextField(
-                                key: const ValueKey(
-                                  'THTextEditorWidget|TextField',
-                                ),
-                                controller: _textEditingController,
-                                scrollController: _textScrollController,
-                                maxLines: null,
-                                expands: true,
-                                textAlignVertical: TextAlignVertical.top,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: appLocalizations.textEditorEmptyHint,
-                                ),
-                                style: TextStyle(
-                                  fontFamily: 'monospace',
-                                  fontSize: mpTextEditorFontSize,
-                                  height: mpTextEditorLineHeight,
-                                  color: Colors.transparent,
-                                ),
-                                cursorColor: Theme.of(
-                                  context,
-                                ).colorScheme.primary,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                if (linelessDiagnostics.isNotEmpty)
+                  THTextEditorLinelessDiagnosticsWidget(
+                    diagnostics: linelessDiagnostics,
                   ),
-                ),
+                if (isFindBarVisible)
+                  _buildFindBar(
+                    context,
+                    appLocalizations,
+                    findMatches,
+                    isReadOnly,
+                  ),
+                Expanded(child: mainEditor),
               ],
             ),
           ),
@@ -605,27 +918,136 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     );
   }
 
+  Widget _buildMainTextField(
+    BuildContext context,
+    AppLocalizations appLocalizations,
+    bool isReadOnly,
+  ) {
+    final Widget textField = TextField(
+      key: const ValueKey('THTextEditorWidget|TextField'),
+      controller: _textEditingController,
+      focusNode: _buffer.textFieldFocusNode,
+      undoController: _undoHistoryController,
+      scrollController: _textScrollController,
+      readOnly: isReadOnly,
+      strutStyle: _thTextEditorStrutStyle,
+      maxLines: null,
+      expands: true,
+      textAlignVertical: TextAlignVertical.top,
+      decoration: InputDecoration.collapsed(
+        hintText: appLocalizations.textEditorEmptyHint,
+      ),
+      style: _thTextEditorTextStyle.copyWith(color: Colors.transparent),
+      cursorColor: Theme.of(context).colorScheme.primary,
+    );
+
+    if (!_isTH2) {
+      return textField;
+    }
+
+    /// Standard undo/redo intents dispatched in the main field go through
+    /// the TH2 history handler too.
+    return Actions(
+      actions: <Type, Action<Intent>>{
+        UndoTextIntent: CallbackAction<UndoTextIntent>(
+          onInvoke: (_) {
+            _handleHistory(redo: false);
+
+            return null;
+          },
+        ),
+        RedoTextIntent: CallbackAction<RedoTextIntent>(
+          onInvoke: (_) {
+            _handleHistory(redo: true);
+
+            return null;
+          },
+        ),
+      },
+      child: textField,
+    );
+  }
+
+  /// The TH2 shortcuts of the main editor (gutter and field): Enter and
+  /// undo/redo. Find and replace fields are outside them.
+  Widget _wrapWithTH2Shortcuts(Widget child) {
+    const List<LogicalKeyboardKey> enterKeys = <LogicalKeyboardKey>[
+      LogicalKeyboardKey.enter,
+      LogicalKeyboardKey.numpadEnter,
+    ];
+
+    return Shortcuts(
+      shortcuts: <ShortcutActivator, Intent>{
+        for (final LogicalKeyboardKey key in enterKeys) ...<
+          ShortcutActivator,
+          Intent
+        >{
+          SingleActivator(key): const _THTextEditorEnterIntent(),
+          SingleActivator(key, shift: true): const _THTextEditorEnterIntent(),
+        },
+        const SingleActivator(LogicalKeyboardKey.keyZ, control: true):
+            const _THTextEditorUndoIntent(),
+        const SingleActivator(LogicalKeyboardKey.keyZ, meta: true):
+            const _THTextEditorUndoIntent(),
+        const SingleActivator(
+          LogicalKeyboardKey.keyZ,
+          control: true,
+          shift: true,
+        ): const _THTextEditorRedoIntent(),
+        const SingleActivator(
+          LogicalKeyboardKey.keyZ,
+          meta: true,
+          shift: true,
+        ): const _THTextEditorRedoIntent(),
+      },
+      child: Actions(
+        actions: <Type, Action<Intent>>{
+          _THTextEditorEnterIntent: _THTextEditorEnterAction(
+            isEnabledCallback: () => !_isComposing(),
+            onInvoke: _handleEnter,
+          ),
+          _THTextEditorUndoIntent: CallbackAction<_THTextEditorUndoIntent>(
+            onInvoke: (_) {
+              _handleHistory(redo: false);
+
+              return null;
+            },
+          ),
+          _THTextEditorRedoIntent: CallbackAction<_THTextEditorRedoIntent>(
+            onInvoke: (_) {
+              _handleHistory(redo: true);
+
+              return null;
+            },
+          ),
+        },
+        child: child,
+      ),
+    );
+  }
+
   Widget _buildToolbar(
     BuildContext context,
     AppLocalizations appLocalizations,
   ) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final bool isRevertEnabled = _buffer.isDirty && !_buffer.isReadOnly;
 
     return Row(
       children: <Widget>[
+        ...widget.leadingToolbarActions,
         IconButton(
           key: const ValueKey('THTextEditorWidget|SaveButton'),
           icon: const Icon(Icons.save),
           tooltip: appLocalizations.textEditorSaveTooltip,
-          onPressed: widget.controller.isDirty ? _handleSaveIntent : null,
+          onPressed: _buffer.canSave ? _handleSaveIntent : null,
         ),
         IconButton(
           key: const ValueKey('THTextEditorWidget|RevertButton'),
           icon: const Icon(Icons.undo),
-          tooltip: appLocalizations.textEditorRevertTooltip,
-          onPressed: widget.controller.isDirty
-              ? widget.controller.revert
-              : null,
+          tooltip:
+              _buffer.revertTooltip ?? appLocalizations.textEditorRevertTooltip,
+          onPressed: isRevertEnabled ? _handleRevert : null,
         ),
         IconButton(
           key: const ValueKey('THTextEditorWidget|FindButton'),
@@ -633,7 +1055,7 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
           tooltip: appLocalizations.textEditorFindTooltip,
           onPressed: _handleOpenFindBar,
         ),
-        if (widget.controller.isDirty)
+        if (_buffer.isDirty)
           Container(
             width: mpTextEditorDiagnosticMarkerSize,
             height: mpTextEditorDiagnosticMarkerSize,
@@ -650,8 +1072,9 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     BuildContext context,
     AppLocalizations appLocalizations,
     List<TextRange> findMatches,
+    bool isReadOnly,
   ) {
-    final int? activeMatchIndex = widget.controller.activeMatchIndex;
+    final int? activeMatchIndex = _find.activeMatchIndex;
     final int matchCount = findMatches.length;
     final int matchPosition = (activeMatchIndex ?? -1) + 1;
 
@@ -687,7 +1110,7 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                     border: InputBorder.none,
                     hintText: appLocalizations.textEditorFindHint,
                   ),
-                  onSubmitted: (_) => widget.controller.findNext(),
+                  onSubmitted: (_) => _find.findNext(),
                 ),
               ),
               Text(
@@ -703,34 +1126,32 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                 ),
                 icon: Icon(
                   Icons.text_fields,
-                  color: widget.controller.findCaseSensitive
+                  color: _find.findCaseSensitive
                       ? Theme.of(context).colorScheme.primary
                       : null,
                 ),
                 tooltip: appLocalizations.textEditorFindCaseSensitiveTooltip,
                 onPressed: () {
-                  widget.controller.setFindCaseSensitive(
-                    !widget.controller.findCaseSensitive,
-                  );
+                  _find.setFindCaseSensitive(!_find.findCaseSensitive);
                 },
               ),
               IconButton(
                 key: const ValueKey('THTextEditorWidget|FindPreviousButton'),
                 icon: const Icon(Icons.keyboard_arrow_up),
                 tooltip: appLocalizations.textEditorFindPreviousTooltip,
-                onPressed: widget.controller.findPrevious,
+                onPressed: _find.findPrevious,
               ),
               IconButton(
                 key: const ValueKey('THTextEditorWidget|FindNextButton'),
                 icon: const Icon(Icons.keyboard_arrow_down),
                 tooltip: appLocalizations.textEditorFindNextTooltip,
-                onPressed: widget.controller.findNext,
+                onPressed: _find.findNext,
               ),
               IconButton(
                 key: const ValueKey('THTextEditorWidget|FindCloseButton'),
                 icon: const Icon(Icons.close),
                 tooltip: appLocalizations.textEditorFindCloseTooltip,
-                onPressed: widget.controller.closeFindBar,
+                onPressed: _find.closeFindBar,
               ),
             ],
           ),
@@ -751,12 +1172,12 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                 ),
                 TextButton(
                   key: const ValueKey('THTextEditorWidget|ReplaceButton'),
-                  onPressed: widget.controller.replaceActiveMatch,
+                  onPressed: isReadOnly ? null : _find.replaceActiveMatch,
                   child: Text(appLocalizations.textEditorReplaceButton),
                 ),
                 TextButton(
                   key: const ValueKey('THTextEditorWidget|ReplaceAllButton'),
-                  onPressed: widget.controller.replaceAllMatches,
+                  onPressed: isReadOnly ? null : _find.replaceAllMatches,
                   child: Text(appLocalizations.textEditorReplaceAllButton),
                 ),
               ],
@@ -766,154 +1187,47 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     );
   }
 
-  Widget _buildDiagnosticBackground(List<THProjectParseError> diagnostics) {
-    if (diagnostics.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    final double lineHeight = mpTextEditorFontSize * mpTextEditorLineHeight;
-    final Map<int, THProjectParseError> byLine = <int, THProjectParseError>{};
-
-    for (final THProjectParseError diagnostic in diagnostics) {
-      byLine[diagnostic.lineNumber - 1] = diagnostic;
-    }
-
-    return Positioned.fill(
-      child: Stack(
-        children: byLine.entries
-            .map(
-              (MapEntry<int, THProjectParseError> entry) => Positioned(
-                top: entry.key * lineHeight,
-                left: 0,
-                right: 0,
-                child: THTextEditorDiagnosticMarkerWidget(
-                  diagnostic: entry.value,
-                  height: lineHeight,
-                ),
-              ),
-            )
-            .toList(),
-      ),
-    );
+  /// One marker per diagnostic line, with all of that line's diagnostics.
+  List<Widget> _buildDiagnosticMarkers(
+    List<THTextEditorDiagnostic> diagnostics,
+  ) {
+    return <Widget>[
+      for (final THTextEditorDiagnosticGroup group
+          in thTextEditorDiagnosticGroupsByLine(diagnostics))
+        Positioned(
+          top: group.line! * _lineHeight,
+          left: 0,
+          right: 0,
+          child: THTextEditorDiagnosticMarkerWidget(
+            diagnostics: group.diagnostics,
+            height: _lineHeight,
+          ),
+        ),
+    ];
   }
 
   Widget _buildSyntaxOverlay(
+    String content,
     List<THTextEditorToken> tokens,
     List<TextRange> findMatches,
     int? activeMatchIndex,
   ) {
-    final String content = widget.controller.content;
-    final List<InlineSpan> spans = <InlineSpan>[];
-    int cursor = 0;
-
-    void addRange(int start, int end, Color? foregroundColor) {
-      if (start >= end) {
-        return;
-      }
-
-      spans.addAll(
-        _buildHighlightedSpans(
-          content,
-          start,
-          end,
-          foregroundColor,
-          findMatches,
-          activeMatchIndex,
-        ),
-      );
-    }
-
-    for (final THTextEditorToken token in tokens) {
-      if (token.start > cursor) {
-        addRange(cursor, token.start, null);
-      }
-
-      addRange(token.start, token.end, _thTextEditorTokenColors[token.type]);
-      cursor = token.end;
-    }
-
-    if (cursor < content.length) {
-      addRange(cursor, content.length, null);
-    }
-
     return RichText(
+      strutStyle: _thTextEditorStrutStyle,
+      textScaler: _textScaler,
       text: TextSpan(
-        style: const TextStyle(
-          fontFamily: 'monospace',
-          fontSize: mpTextEditorFontSize,
-          height: mpTextEditorLineHeight,
-          color: Colors.black,
+        style: _thTextEditorTextStyle.copyWith(color: Colors.black),
+        children: buildTHTextEditorOverlaySpans(
+          content: content,
+          tokens: tokens,
+          tokenColors: _thTextEditorTokenColors,
+          findMatches: findMatches,
+          activeMatchIndex: activeMatchIndex,
+          findMatchColor: _thTextEditorFindMatchColor,
+          activeFindMatchColor: _thTextEditorActiveFindMatchColor,
         ),
-        children: spans,
       ),
     );
-  }
-
-  /// Splits `content[start, end)` (already known to have [foregroundColor])
-  /// into further spans wherever a find match overlaps it, adding a
-  /// background highlight without disturbing the foreground/syntax color.
-  List<InlineSpan> _buildHighlightedSpans(
-    String content,
-    int start,
-    int end,
-    Color? foregroundColor,
-    List<TextRange> findMatches,
-    int? activeMatchIndex,
-  ) {
-    if (findMatches.isEmpty) {
-      return <InlineSpan>[
-        TextSpan(
-          text: content.substring(start, end),
-          style: TextStyle(color: foregroundColor),
-        ),
-      ];
-    }
-
-    final List<InlineSpan> result = <InlineSpan>[];
-    int position = start;
-
-    for (int index = 0; index < findMatches.length; index++) {
-      final TextRange match = findMatches[index];
-      final int matchStart = match.start.clamp(start, end);
-      final int matchEnd = match.end.clamp(start, end);
-
-      if (matchStart >= matchEnd) {
-        continue;
-      }
-
-      if (matchStart > position) {
-        result.add(
-          TextSpan(
-            text: content.substring(position, matchStart),
-            style: TextStyle(color: foregroundColor),
-          ),
-        );
-      }
-
-      result.add(
-        TextSpan(
-          text: content.substring(matchStart, matchEnd),
-          style: TextStyle(
-            color: foregroundColor,
-            backgroundColor: index == activeMatchIndex
-                ? _thTextEditorActiveFindMatchColor
-                : _thTextEditorFindMatchColor,
-          ),
-        ),
-      );
-      position = matchEnd;
-    }
-
-    if (position < end) {
-      result.add(
-        TextSpan(
-          text: content.substring(position, end),
-          style: TextStyle(color: foregroundColor),
-        ),
-      );
-    }
-
-    return result;
   }
 
   _LineColumn _lineColumnAt(String text, int offset) {
@@ -945,4 +1259,39 @@ class _THTextEditorSaveIntent extends Intent {
 
 class _THTextEditorFindIntent extends Intent {
   const _THTextEditorFindIntent();
+}
+
+class _THTextEditorEnterIntent extends Intent {
+  const _THTextEditorEnterIntent();
+}
+
+class _THTextEditorUndoIntent extends Intent {
+  const _THTextEditorUndoIntent();
+}
+
+class _THTextEditorRedoIntent extends Intent {
+  const _THTextEditorRedoIntent();
+}
+
+/// Disabled while an IME composition is active, so `Shortcuts` leaves the
+/// key to the input method instead of inserting a line.
+class _THTextEditorEnterAction extends Action<_THTextEditorEnterIntent> {
+  final bool Function() isEnabledCallback;
+
+  final void Function() onInvoke;
+
+  _THTextEditorEnterAction({
+    required this.isEnabledCallback,
+    required this.onInvoke,
+  });
+
+  @override
+  bool isEnabled(_THTextEditorEnterIntent intent) => isEnabledCallback();
+
+  @override
+  Object? invoke(_THTextEditorEnterIntent intent) {
+    onInvoke();
+
+    return null;
+  }
 }

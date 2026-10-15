@@ -133,7 +133,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       } else {
         mpLocator.mpGeneralController
             .getTextEditorControllerIfExists(filename)
-            ?.textEditorFocusNode
+            ?.textFieldFocusNode
             .requestFocus();
       }
     });

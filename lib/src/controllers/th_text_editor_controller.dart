@@ -9,11 +9,14 @@ import 'dart:ui' show TextRange;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart' show FocusNode, visibleForTesting;
 import 'package:mapiah/main.dart';
+import 'package:mapiah/src/auxiliary/th_text_editor_diagnostic.dart';
 import 'package:mapiah/src/auxiliary/th_text_editor_fold_aux.dart';
-import 'package:mapiah/src/auxiliary/th_text_search_aux.dart';
+import 'package:mapiah/src/auxiliary/th_text_editor_syntax_highlighter.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/controllers/th_project_reparse_flush_result.dart';
+import 'package:mapiah/src/controllers/th_text_editor_buffer.dart';
+import 'package:mapiah/src/controllers/th_text_editor_find_controller.dart';
 import 'package:mapiah/src/controllers/th_text_file_revert_result.dart';
 import 'package:mapiah/src/controllers/th_text_file_save_as_result.dart';
 import 'package:mapiah/src/controllers/th_text_file_save_result.dart';
@@ -63,7 +66,7 @@ typedef THSaveAsFilePickerOperation =
 
 abstract class THTextEditorControllerBase
     with Store
-    implements THTextEditorControllerHandle {
+    implements THTextEditorControllerHandle, THTextEditorBuffer {
   final THProjectController _projectController;
 
   final THSaveAsFilePickerOperation _saveAsFilePicker;
@@ -94,15 +97,18 @@ abstract class THTextEditorControllerBase
   @observable
   String canonicalPath = '';
 
+  @override
   @observable
   String content = '';
 
+  @override
   @observable
   bool isDirty = false;
 
   @observable
   bool isLoading = false;
 
+  @override
   @observable
   int cursorLine = 0;
 
@@ -112,29 +118,20 @@ abstract class THTextEditorControllerBase
   @observable
   ObservableSet<int> collapsedFoldStarts = ObservableSet<int>();
 
-  @observable
-  String findQuery = '';
-
-  @observable
-  String replaceQuery = '';
-
-  @observable
-  bool findCaseSensitive = false;
-
-  @observable
-  bool isFindBarVisible = false;
-
-  @observable
-  int? activeMatchIndex;
-
+  @override
   @observable
   int? pendingScrollToLine;
 
   /// A pending exact selection to apply once the widget has synchronized the
   /// controller content into its `TextEditingController`. Set by multi-file
   /// search result navigation; consumed and cleared by [THTextEditorWidget].
+  @override
   @observable
   TextRange? pendingSelectionRange;
+
+  @override
+  @observable
+  bool pendingSelectionRequestsFocus = true;
 
   /// Durable load state; see [THTextEditorLoadState].
   @observable
@@ -177,27 +174,75 @@ abstract class THTextEditorControllerBase
       (_ownedRootPath == rootPath) &&
       (observedRevision == revision);
 
+  @override
   final FocusNode textEditorFocusNode = FocusNode();
 
+  @override
+  final FocusNode textFieldFocusNode = FocusNode();
+
+  @override
+  late final THTextEditorFindController find = THTextEditorFindController(
+    this,
+  );
+
+  @override
+  THTextEditorLanguage get language => THTextEditorLanguage.therion;
+
+  @override
+  String get lineEnding => mpUnixLineBreak;
+
+  @override
+  bool get canSave => isDirty;
+
+  @override
+  bool get isReadOnly => false;
+
+  @override
+  String? get revertTooltip => null;
+
+  @override
+  int get baselineRevision => 0;
+
+  @override
+  bool get hasTextEdits => true;
+
+  /// Project tabs keep their scroll behavior: no offset is remembered.
+  @override
+  double get lastScrollOffset => 0;
+
+  @override
+  set lastScrollOffset(double offset) {}
+
+  /// Project editors keep their native text undo: never called.
+  @override
+  Future<void> requestCanvasHistory({required bool redo}) async {}
+
+  @override
   @computed
-  List<THProjectParseError> get diagnostics => _projectController
+  List<THTextEditorDiagnostic> get diagnostics => _projectController
       .allDiagnostics
       .where((THProjectParseError error) => error.filePath == canonicalPath)
+      .map(THTextEditorDiagnostic.fromProjectParseError)
       .toList();
+
+  @override
+  @computed
+  List<THTextEditorToken> get tokens => tokenizeTherionText(content);
 
   @computed
   List<THTextEditorFoldRegion> get foldRegions => buildFoldRegions(content);
 
-  /// Non-overlapping, left-to-right occurrences of [findQuery] in [content].
-  /// A plain substring scan — no regex support in this increment. Delegates to
-  /// the shared [findPlainTextMatches] helper so single-file and multi-file
-  /// search have identical semantics.
-  @computed
-  List<TextRange> get findMatches => findPlainTextMatches(
-    content: content,
-    query: findQuery,
-    caseSensitive: findCaseSensitive,
-  );
+  String get findQuery => find.findQuery;
+
+  String get replaceQuery => find.replaceQuery;
+
+  bool get findCaseSensitive => find.findCaseSensitive;
+
+  bool get isFindBarVisible => find.isFindBarVisible;
+
+  int? get activeMatchIndex => find.activeMatchIndex;
+
+  List<TextRange> get findMatches => find.findMatches;
 
   Timer? _reparseTimer;
 
@@ -267,23 +312,29 @@ abstract class THTextEditorControllerBase
   /// content. Analogous to [scrollToLine]/[pendingScrollToLine]; used by
   /// multi-file search result navigation so it never mutates [findQuery].
   @action
-  void revealRange(TextRange range) {
+  void revealRange(TextRange range, {bool requestFocus = true}) {
     pendingSelectionRange = range;
+    pendingSelectionRequestsFocus = requestFocus;
   }
 
+  @override
   @action
   void clearPendingSelectionRange() {
     pendingSelectionRange = null;
+    pendingSelectionRequestsFocus = true;
   }
 
+  /// [cursorOffset] is ignored. Returns `false` when the project moved to a
+  /// newer epoch or root.
+  @override
   @action
-  void setContent(String newContent) {
+  bool setContent(String newContent, {int? cursorOffset}) {
     if (!isProjectBound) {
       // Unbound editor: local text buffer only, no project re-parse.
       content = newContent;
       isDirty = true;
 
-      return;
+      return true;
     }
 
     final int revision = _projectController.registerTextContentChange(
@@ -296,7 +347,7 @@ abstract class THTextEditorControllerBase
     if (revision == -1) {
       lastOperationRejectedByProjectChange = true;
 
-      return;
+      return false;
     }
 
     content = newContent;
@@ -321,8 +372,11 @@ abstract class THTextEditorControllerBase
         );
       },
     );
+
+    return true;
   }
 
+  @override
   @action
   void setCursorPosition({required int line, required int column}) {
     cursorLine = line;
@@ -334,6 +388,7 @@ abstract class THTextEditorControllerBase
     pendingScrollToLine = lineNumber - 1; // THProjectNode.lineNumber is 1-based.
   }
 
+  @override
   @action
   void clearPendingScrollToLine() {
     pendingScrollToLine = null;
@@ -346,122 +401,23 @@ abstract class THTextEditorControllerBase
     }
   }
 
-  @action
-  void openFindBar() {
-    isFindBarVisible = true;
-    _clampActiveMatchIndex();
+  void openFindBar() => find.openFindBar();
 
-    if (activeMatchIndex == null && findMatches.isNotEmpty) {
-      activeMatchIndex = 0;
-    }
-  }
+  void closeFindBar() => find.closeFindBar();
 
-  @action
-  void closeFindBar() {
-    isFindBarVisible = false;
-    findQuery = '';
-    replaceQuery = '';
-    activeMatchIndex = null;
-  }
+  void setFindQuery(String query) => find.setFindQuery(query);
 
-  @action
-  void setFindQuery(String query) {
-    findQuery = query;
-    _clampActiveMatchIndex();
+  void setReplaceQuery(String query) => find.setReplaceQuery(query);
 
-    if (activeMatchIndex == null && findMatches.isNotEmpty) {
-      activeMatchIndex = 0;
-    }
-  }
+  void setFindCaseSensitive(bool value) => find.setFindCaseSensitive(value);
 
-  @action
-  void setReplaceQuery(String query) {
-    replaceQuery = query;
-  }
+  void findNext() => find.findNext();
 
-  @action
-  void setFindCaseSensitive(bool value) {
-    findCaseSensitive = value;
-    _clampActiveMatchIndex();
-  }
+  void findPrevious() => find.findPrevious();
 
-  @action
-  void findNext() {
-    final List<TextRange> matches = findMatches;
+  void replaceActiveMatch() => find.replaceActiveMatch();
 
-    if (matches.isEmpty) {
-      activeMatchIndex = null;
-
-      return;
-    }
-
-    final int currentIndex = activeMatchIndex ?? -1;
-
-    activeMatchIndex = (currentIndex + 1) % matches.length;
-  }
-
-  @action
-  void findPrevious() {
-    final List<TextRange> matches = findMatches;
-
-    if (matches.isEmpty) {
-      activeMatchIndex = null;
-
-      return;
-    }
-
-    final int currentIndex = activeMatchIndex ?? 0;
-
-    activeMatchIndex = (currentIndex - 1 + matches.length) % matches.length;
-  }
-
-  @action
-  void replaceActiveMatch() {
-    final List<TextRange> matches = findMatches;
-    final int? index = activeMatchIndex;
-
-    if (index == null || index < 0 || index >= matches.length) {
-      return;
-    }
-
-    final TextRange match = matches[index];
-
-    setContent(content.replaceRange(match.start, match.end, replaceQuery));
-    _clampActiveMatchIndex();
-  }
-
-  @action
-  void replaceAllMatches() {
-    final List<TextRange> matches = findMatches;
-
-    if (matches.isEmpty) {
-      return;
-    }
-
-    final StringBuffer buffer = StringBuffer();
-    int cursor = 0;
-
-    for (final TextRange match in matches) {
-      buffer
-        ..write(content.substring(cursor, match.start))
-        ..write(replaceQuery);
-      cursor = match.end;
-    }
-
-    buffer.write(content.substring(cursor));
-    setContent(buffer.toString());
-    activeMatchIndex = null;
-  }
-
-  void _clampActiveMatchIndex() {
-    final List<TextRange> matches = findMatches;
-
-    if (matches.isEmpty) {
-      activeMatchIndex = null;
-    } else if (activeMatchIndex != null && activeMatchIndex! >= matches.length) {
-      activeMatchIndex = matches.length - 1;
-    }
-  }
+  void replaceAllMatches() => find.replaceAllMatches();
 
   /// Drains the editor-level `_reparseTimer`, then chains into the
   /// project-level flush so a stale parsed node can never reach the writers.
@@ -502,6 +458,7 @@ abstract class THTextEditorControllerBase
     );
   }
 
+  @override
   @action
   Future<THTextFileSaveResult> save() async {
     if (!isProjectBound) {
@@ -784,6 +741,7 @@ abstract class THTextEditorControllerBase
     );
   }
 
+  @override
   @action
   Future<void> revert() async {
     _reparseTimer?.cancel();
@@ -879,5 +837,6 @@ abstract class THTextEditorControllerBase
   void dispose() {
     _reparseTimer?.cancel();
     textEditorFocusNode.dispose();
+    textFieldFocusNode.dispose();
   }
 }
