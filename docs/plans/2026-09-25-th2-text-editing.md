@@ -605,6 +605,8 @@ Detailed plan: [Phase 3: Editor Generalization and TH2 Highlighting](2026-10-13-
 
 ### Phase 4: Mode switching, synchronization and saving
 
+Detailed plan: [Phase 4: Mode Switching, Synchronization and Saving](2026-10-15-th2-text-editing-phase4-mode-switching-synchronization-and-saving.md). Its §3, _Changes to the parent plan_, lists what it changes here.
+
 - `editMode`, `enterTextMode()`, `leaveTextMode()`, `toggleEditMode()`, `discardTextEdits()`, and `TH2TextEditBodyWidget` (§4.1). Atomic replacement-session preparation/installation, the immutable recovery record, `isTextRegenerationRecoveryRequired`, read-only recovery body and gated retry/return-to-canvas actions (§4.17). The _Text_ button on the canvas, the _Canvas_ button in the text view's toolbar, and `F2`, including on the broken-file body (§3.1).
 - `TH2FileEditBodyWidget` choosing its body from `editMode` and `isBroken` in an `Observer`, without the load result's `problems`, and hiding the last-used chips and the status bar in text mode. `activeFocusNode`, used by the three tab-activation sites (§3.1, §4.1).
 - Graphical → text cursor placement (§3.2), and text → graphical selection, including _Line edit_ mode for line points, plus `revealSelection()` (§3.3, §4.4, §4.11).
