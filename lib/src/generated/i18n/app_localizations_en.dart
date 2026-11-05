@@ -3425,4 +3425,42 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get th2TextDiagnosticAddedEnding =>
       'A line break will be added at the end of this line';
+
+  @override
+  String get th2EditModeTextTooltip => 'Text (F2)';
+
+  @override
+  String get th2EditModeCanvasTooltip => 'Canvas (F2)';
+
+  @override
+  String get th2TextCantApplyBanner =>
+      'The text has problems and can\'t be applied. Fix the marked lines, or discard the text changes.';
+
+  @override
+  String get th2TextKeepEditingButton => 'Keep editing';
+
+  @override
+  String get th2TextDiscardChangesButton => 'Discard text changes';
+
+  @override
+  String get th2TextUnsupportedLineEndingMessage =>
+      'This file contains a carriage return without a line feed, which the text editor doesn\'t support.';
+
+  @override
+  String get th2TextEditorReopenFailedMessage =>
+      'The text editor couldn\'t be reopened. Your changes were applied; press F2 to edit the text again.';
+
+  @override
+  String th2SaveAsTargetOpenMessage(String filename) {
+    return '$filename is open in another tab, so it wasn\'t overwritten.';
+  }
+
+  @override
+  String th2SaveAsTargetOpenEmptiedMessage(String filename) {
+    return '$filename is open in another tab, so it wasn\'t overwritten, but the file dialog emptied it and Mapiah couldn\'t restore it.';
+  }
+
+  @override
+  String get th2ActiveScrapCantBeHiddenTooltip =>
+      'The active scrap can\'t be hidden';
 }

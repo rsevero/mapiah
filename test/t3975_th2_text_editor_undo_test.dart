@@ -384,15 +384,18 @@ void main() {
       expect(controller.content, 'scrap s\n');
       expect(fieldController(tester).text, 'scrap s\n');
 
-      /// Recovery read-only after a text edit: native history is not used.
+      /// A closed session after a text edit: nothing reaches the owner and
+      /// the buffer stays closed.
       owner.releaseBufferLock();
       await tester.pump();
       await type(tester, value('scrap sx\n', 8));
-      controller.enterRecoveryReadOnly();
+      controller.endSession();
       await tester.pump();
-      expect(await ctrlZ(tester), isTrue);
-      expect(controller.content, 'scrap sx\n');
-      expect(fieldController(tester).text, 'scrap sx\n');
+      await ctrlZ(tester);
+      await ctrlZ(tester, shift: true);
+      expect(owner.canvasHistoryRequests, <bool>[false, false]);
+      expect(controller.isOpen, isFalse);
+      expect(controller.content, '');
     });
 
     testWidgets('find and replace fields keep their own histories', (

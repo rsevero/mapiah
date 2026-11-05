@@ -6099,6 +6099,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A line break will be added at the end of this line'**
   String get th2TextDiagnosticAddedEnding;
+
+  /// Tooltip of the button that switches a TH2 tab to text mode. Used on: TH2FileEditActionButtonsWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Text (F2)'**
+  String get th2EditModeTextTooltip;
+
+  /// Tooltip of the button that switches a TH2 tab back to the canvas. Used on: TH2TextEditBodyWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Canvas (F2)'**
+  String get th2EditModeCanvasTooltip;
+
+  /// Banner shown when the TH2 text can't be applied. Used on: TH2TextEditBodyWidget
+  ///
+  /// In en, this message translates to:
+  /// **'The text has problems and can\'t be applied. Fix the marked lines, or discard the text changes.'**
+  String get th2TextCantApplyBanner;
+
+  /// Button of the TH2 text can't-apply banner that hides it. Used on: TH2TextEditBodyWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Keep editing'**
+  String get th2TextKeepEditingButton;
+
+  /// Button of the TH2 text can't-apply banner that discards the text edits. Used on: TH2TextEditBodyWidget
+  ///
+  /// In en, this message translates to:
+  /// **'Discard text changes'**
+  String get th2TextDiscardChangesButton;
+
+  /// Message shown when a TH2 file can't be shown as text because of a lone carriage return. Used on: TH2FileEditController
+  ///
+  /// In en, this message translates to:
+  /// **'This file contains a carriage return without a line feed, which the text editor doesn\'t support.'**
+  String get th2TextUnsupportedLineEndingMessage;
+
+  /// Message shown when the TH2 text editor can't be reopened after a save or a canvas undo/redo. Used on: TH2FileEditController
+  ///
+  /// In en, this message translates to:
+  /// **'The text editor couldn\'t be reopened. Your changes were applied; press F2 to edit the text again.'**
+  String get th2TextEditorReopenFailedMessage;
+
+  /// Message shown when Save As targets a file open in another tab. Used on: TH2FileEditController.saveAsTH2File
+  ///
+  /// In en, this message translates to:
+  /// **'{filename} is open in another tab, so it wasn\'t overwritten.'**
+  String th2SaveAsTargetOpenMessage(String filename);
+
+  /// Message shown when Save As targets a file open in another tab that the file dialog emptied and Mapiah couldn't restore. Used on: TH2FileEditController.saveAsTH2File
+  ///
+  /// In en, this message translates to:
+  /// **'{filename} is open in another tab, so it wasn\'t overwritten, but the file dialog emptied it and Mapiah couldn\'t restore it.'**
+  String th2SaveAsTargetOpenEmptiedMessage(String filename);
+
+  /// Tooltip of the disabled visibility button of the active scrap. Used on: TH2ElementTreeRowWidget
+  ///
+  /// In en, this message translates to:
+  /// **'The active scrap can\'t be hidden'**
+  String get th2ActiveScrapCantBeHiddenTooltip;
 }
 
 class _AppLocalizationsDelegate

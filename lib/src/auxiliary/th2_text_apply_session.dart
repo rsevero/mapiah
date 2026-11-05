@@ -56,11 +56,27 @@ class TH2TextApplyUnchanged extends TH2TextApplyResult {
 class TH2TextApplyRejected extends TH2TextApplyResult {
   final List<TH2TextDiagnostic> diagnostics;
 
-  const TH2TextApplyRejected(this.diagnostics);
+  /// The text [diagnostics] describe.
+  final String content;
+
+  const TH2TextApplyRejected(this.diagnostics, {required this.content});
 }
 
 /// The session ended, was replaced or the controller was disposed during
 /// validation: nothing changed.
 class TH2TextApplyCancelled extends TH2TextApplyResult {
   const TH2TextApplyCancelled();
+}
+
+/// A rejected text buffer and the diagnostics that describe it, shown by
+/// the text mode's "can't apply" banner while the buffer still equals it.
+class TH2TextApplyRejection {
+  final String content;
+
+  final List<TH2TextDiagnostic> diagnostics;
+
+  const TH2TextApplyRejection({
+    required this.content,
+    required this.diagnostics,
+  });
 }

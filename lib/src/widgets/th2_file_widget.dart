@@ -64,6 +64,10 @@ class TH2FileWidget extends StatelessWidget {
           th2FileEditController.zoomToFit(zoomFitToType: MPZoomToFitType.file);
         }
 
+        if (th2FileEditController.takePendingRevealSelection()) {
+          th2FileEditController.revealSelection();
+        }
+
         return Observer(
           builder: (_) => MouseRegion(
             cursor: th2FileEditController.canvasCursor,

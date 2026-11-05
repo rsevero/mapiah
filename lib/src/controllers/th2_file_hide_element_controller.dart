@@ -68,25 +68,24 @@ abstract class TH2FileHideElementControllerBase with Store {
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 
-  /// Sets the visibility of several scraps while retaining a visible scrap.
+  /// Sets the visibility of several scraps. The active scrap is never
+  /// hidden.
   @action
   void setScrapsHidden(List<int> scrapMPIDs, bool hidden) {
     if (scrapMPIDs.isEmpty) {
       return;
     }
-    final Set<int> targetIDs = scrapMPIDs.toSet();
+
     final int activeID = _th2FileEditController.activeScrapID;
-    final bool wouldHideAll = hidden && _th2File.scrapMPIDs.every(
-      (int id) => targetIDs.contains(id) || _hiddenScrapMPIDs.contains(id));
+
     for (final int id in scrapMPIDs) {
-      if (hidden && !(wouldHideAll && id == activeID)) {
-        _hiddenScrapMPIDs.add(id);
+      if (hidden) {
+        if (id != activeID) {
+          _hiddenScrapMPIDs.add(id);
+        }
       } else {
         _hiddenScrapMPIDs.remove(id);
       }
-    }
-    if (hidden && _hiddenScrapMPIDs.contains(activeID)) {
-      _setActiveScrapForVisibilityHide(activeID);
     }
     _th2FileEditController.userInteractionController
         .markTherionStationPointNameCoordinateCacheDirty();
@@ -114,65 +113,24 @@ abstract class TH2FileHideElementControllerBase with Store {
     _th2FileEditController.triggerNonSelectedElementsRedraw();
   }
 
+  /// Shows a hidden scrap or hides a visible one. The active scrap is never
+  /// hidden.
   @action
   void toggleScrapVisibility(int scrapMPID) {
     if (_hiddenScrapMPIDs.contains(scrapMPID)) {
       _hiddenScrapMPIDs.remove(scrapMPID);
     } else {
+      if (scrapMPID == _th2FileEditController.activeScrapID) {
+        return;
+      }
+
       _hiddenScrapMPIDs.add(scrapMPID);
-      _setActiveScrapForVisibilityHide(scrapMPID);
     }
 
     _th2FileEditController.userInteractionController
         .markTherionStationPointNameCoordinateCacheDirty();
     _th2FileEditController.snapController.updateSnapTargets();
     _th2FileEditController.triggerNonSelectedElementsRedraw();
-  }
-
-  void _setActiveScrapForVisibilityHide(int hiddenScrapMPID) {
-    if (_th2FileEditController.activeScrapID != hiddenScrapMPID) {
-      return;
-    }
-
-    final List<THScrap> visibleScraps = _th2File
-        .getScraps()
-        .where((s) => !_hiddenScrapMPIDs.contains(s.mpID))
-        .toList();
-
-    if (visibleScraps.isEmpty) {
-      _th2FileEditController.setActiveScrap(0);
-    } else {
-      final List<THScrap> allScraps = _th2File.getScraps().toList();
-      final int currentIndex = allScraps.indexWhere(
-        (s) => s.mpID == hiddenScrapMPID,
-      );
-
-      /// Walk backwards from current position to find the nearest visible scrap.
-      THScrap? newActiveScrap;
-
-      for (int i = currentIndex - 1; i >= 0; i--) {
-        if (!_hiddenScrapMPIDs.contains(allScraps[i].mpID)) {
-          newActiveScrap = allScraps[i];
-          break;
-        }
-      }
-
-      /// If no visible scrap found before current, try after.
-      if (newActiveScrap == null) {
-        for (int i = currentIndex + 1; i < allScraps.length; i++) {
-          if (!_hiddenScrapMPIDs.contains(allScraps[i].mpID)) {
-            newActiveScrap = allScraps[i];
-            break;
-          }
-        }
-      }
-
-      if (newActiveScrap != null) {
-        _th2FileEditController.setActiveScrap(newActiveScrap.mpID);
-      } else {
-        _th2FileEditController.setActiveScrap(0);
-      }
-    }
   }
 
   bool isElementVisible(int mpID) {

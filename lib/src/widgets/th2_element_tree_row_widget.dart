@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/th2_element_tree_aux.dart';
@@ -14,6 +16,8 @@ import 'package:mapiah/src/auxiliary/th_project_tree_visible_row.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/mp_general_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_text_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/th2_edit_mode.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
@@ -130,6 +134,11 @@ TH2FileEditController? _validControllerFor(String th2FilePath) {
   return controller;
 }
 
+/// Whether [controller]'s tab is in text mode, where the tree navigates
+/// and copies text instead of editing.
+bool _isInTextMode(TH2FileEditController controller) =>
+    controller.editMode == TH2EditMode.text;
+
 class _TH2ElementRow extends StatelessWidget {
   final TH2ElementTreeRow row;
   final TH2ElementTreeDragController? dragController;
@@ -181,6 +190,7 @@ class _TH2ElementRow extends StatelessWidget {
           key: ValueKey('THProjectTreeRowContextMenu|${row.rowId}'),
           rowId: row.rowId,
           onBeforeOpen: _onBeforeOpenMenu,
+          onAfterClose: _onAfterCloseMenu,
           menuChildrenBuilder: () => _menuItems(context),
           child: content,
         );
@@ -241,8 +251,8 @@ class _TH2ElementRow extends StatelessWidget {
   TH2ElementTreeDragPayload? _dragPayload() {
     final TH2FileEditController? controller = _validControllerFor(
       row.th2FilePath);
-    if (controller == null || controller.th2File.tryElementByMPID(
-        row.elementMPID) == null) {
+    if (controller == null || _isInTextMode(controller) ||
+        controller.th2File.tryElementByMPID(row.elementMPID) == null) {
       return null;
     }
     final List<int> ids;
@@ -399,15 +409,19 @@ class _TH2ElementRow extends StatelessWidget {
       }
       final bool visible = controller.hideElementController
           .isScrapVisible(row.elementMPID);
-      final bool canToggle = !visible ||
-          controller.hideElementController.visibleScrapCount > 1;
+      // The active scrap is always visible.
+      final bool isActiveAndVisible =
+          visible && (controller.activeScrapID == row.elementMPID);
+      final bool canToggle = !isActiveAndVisible;
       return IconButton(
         key: ValueKey('TH2ElementTreeVisibility|${row.rowId}'),
         iconSize: mpSmallIconSize,
         constraints: const BoxConstraints.tightFor(
           width: mpProjectTreeRowHeight, height: mpProjectTreeRowHeight),
         padding: EdgeInsets.zero,
-        tooltip: l10n.th2FileEditPageToggleScrapVisibilityTooltip,
+        tooltip: isActiveAndVisible
+            ? l10n.th2ActiveScrapCantBeHiddenTooltip
+            : l10n.th2FileEditPageToggleScrapVisibilityTooltip,
         icon: Icon(visible ? Icons.visibility : Icons.visibility_off),
         onPressed: canToggle ? () => controller.hideElementController
             .toggleScrapVisibility(row.elementMPID) : null,
@@ -494,6 +508,12 @@ class _TH2ElementRow extends StatelessWidget {
     final TH2FileEditController? controller = _validControllerFor(
       row.th2FilePath);
     if (controller == null) return;
+    if (_isInTextMode(controller)) {
+      th2ElementTreeTapTracker.reset();
+      _bringOpenTabToFront();
+      controller.moveTextCursorToElement(row.elementMPID);
+      return;
+    }
     final bool ctrl = MPInteractionAux.isCtrlPressed() ||
         MPInteractionAux.isMetaPressed();
     final bool shift = MPInteractionAux.isShiftPressed();
@@ -609,6 +629,11 @@ class _TH2ElementRow extends StatelessWidget {
   void _onBeforeOpenMenu() {
     final TH2FileEditController? controller = _validControllerFor(row.th2FilePath);
     if (controller == null) return;
+    if (_isInTextMode(controller)) {
+      controller.moveTextCursorToElement(row.elementMPID,
+        requestFocus: false);
+      return;
+    }
     if (!row.isScrap) {
       _leaveCreationMode(controller);
       final THElement? element = controller.th2File.tryElementByMPID(
@@ -620,6 +645,21 @@ class _TH2ElementRow extends StatelessWidget {
         controller.selectionController.setSelectedElements(
           <THElement>[element], setState: true);
       }
+    }
+  }
+
+  /// Gives the text field its focus back after a menu opened in text mode.
+  void _onAfterCloseMenu() {
+    final TH2FileEditController? controller = mpLocator.mpGeneralController
+        .getTH2FileEditControllerIfExists(row.th2FilePath);
+    if (controller == null || controller.isDisposed ||
+        !_isInTextMode(controller)) {
+      return;
+    }
+    final TH2TextEditController? textEditController =
+        controller.textEditController;
+    if (textEditController != null && textEditController.isOpen) {
+      textEditController.textFieldFocusNode.requestFocus();
     }
   }
 
@@ -652,6 +692,9 @@ class _TH2ElementRow extends StatelessWidget {
     if (ids.isEmpty) {
       return const <Widget>[];
     }
+    // Built once when the menu opens: in text mode the editing items are
+    // disabled, and their callbacks recheck the mode.
+    final bool isTextMode = _isInTextMode(controller);
     final List<Widget> items = <Widget>[];
     for (final MPDrawingOrderAction action in MPDrawingOrderAction.values) {
       final MPMoveElementsPreview preview = controller.elementEditController
@@ -664,7 +707,7 @@ class _TH2ElementRow extends StatelessWidget {
       };
       items.add(MenuItemButton(
         key: ValueKey('THProjectTreeRowContextMenu${action.name[0].toUpperCase()}${action.name.substring(1)}|${row.rowId}'),
-        onPressed: preview.noOp || preview.rejection != null
+        onPressed: isTextMode || preview.noOp || preview.rejection != null
             ? null : () => _executeOrder(action),
         leadingIcon: Icon(switch (action) {
           MPDrawingOrderAction.bringForward => Icons.arrow_downward,
@@ -694,7 +737,8 @@ class _TH2ElementRow extends StatelessWidget {
               newParentMPID: scrapID);
         targets.add(MenuItemButton(
           key: ValueKey('THProjectTreeRowContextMenuMoveToScrap|${row.rowId}|$scrapID'),
-          onPressed: check.ok ? () => _executeMoveToScrap(scrapID) : null,
+          onPressed: check.ok && !isTextMode
+              ? () => _executeMoveToScrap(scrapID) : null,
           child: check.ok ? Text(TH2ElementTreeAux.buildLabel(target).plainText)
             : Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -708,40 +752,82 @@ class _TH2ElementRow extends StatelessWidget {
         items.add(const Divider());
         items.add(SubmenuButton(
           key: ValueKey('THProjectTreeRowContextMenuMoveToScrap|${row.rowId}'),
-          menuChildren: targets,
+          menuChildren: isTextMode ? const <Widget>[] : targets,
           leadingIcon: const Icon(Icons.drive_file_move_outline),
           child: Text(l10n.th2ElementTreeMoveToScrap)));
+      }
+      if (isTextMode) {
+        items.add(const Divider());
+        items.add(MenuItemButton(
+          key: ValueKey('THProjectTreeRowContextMenuCopy|${row.rowId}'),
+          onPressed: _copyFromTree,
+          child: Text(l10n.th2ElementTreeCopy)));
       }
     }
     if (row.isScrap) {
       items.add(const Divider());
       items.addAll(<Widget>[
-        MenuItemButton(onPressed: () => _executeScrapEdit('copy'),
+        MenuItemButton(onPressed: _copyFromTree,
           child: Semantics(label: l10n.th2FileEditPageCopyScrapButton,
             child: Text(l10n.th2ElementTreeCopy))),
-        MenuItemButton(onPressed: () => _executeScrapEdit('cut'),
+        MenuItemButton(
+          onPressed: isTextMode ? null : () => _executeScrapEdit('cut'),
           child: Semantics(label: l10n.th2FileEditPageCutScrapButton,
             child: Text(l10n.th2ElementTreeCut))),
-        MenuItemButton(onPressed: () => _executeScrapEdit('duplicate'),
+        MenuItemButton(
+          onPressed: isTextMode ? null : () => _executeScrapEdit('duplicate'),
           child: Semantics(label: l10n.th2FileEditPageDuplicateScrapButton,
             child: Text(l10n.th2ElementTreeDuplicate))),
-        MenuItemButton(onPressed: () => _executeScrapEdit('delete'),
+        MenuItemButton(
+          onPressed: isTextMode ? null : () => _executeScrapEdit('delete'),
           child: Semantics(label: l10n.th2FileEditPageRemoveScrapButton,
             child: Text(l10n.th2ElementTreeDelete))),
         const Divider(),
       ]);
-      final bool hide = ids.any(controller.hideElementController.isScrapVisible);
+      // The active scrap can't be hidden: Hide only when another of the
+      // scraps is visible, otherwise Show for the hidden ones.
+      final int activeScrapID = controller.activeScrapID;
+      final bool hide = ids.any((int id) => (id != activeScrapID) &&
+          controller.hideElementController.isScrapVisible(id));
+      final bool show = !hide && ids.any((int id) =>
+          !controller.hideElementController.isScrapVisible(id));
       items.add(MenuItemButton(
-        onPressed: controller.th2File.scrapMPIDs.length > 1
+        onPressed: (controller.th2File.scrapMPIDs.length > 1) && (hide || show)
             ? () => controller.hideElementController.setScrapsHidden(ids, hide)
             : null,
-        child: Text(hide ? l10n.th2ElementTreeHide : l10n.th2ElementTreeShow)));
+        child: Text(show ? l10n.th2ElementTreeShow : l10n.th2ElementTreeHide)));
       items.add(MenuItemButton(
-        onPressed: ids.length == 1 ? () => _showScrapOptions(context, ids.single)
-            : null,
+        onPressed: ids.length == 1 && !isTextMode
+            ? () => _showScrapOptions(context, ids.single) : null,
         child: Text(l10n.th2ElementTreeScrapOptions)));
     }
     return items;
+  }
+
+  /// Copy from the tree: the structured clipboard on the canvas, the rows'
+  /// text in text mode.
+  void _copyFromTree() {
+    final TH2FileEditController? existing = mpLocator.mpGeneralController
+        .getTH2FileEditControllerIfExists(row.th2FilePath);
+    if (existing == null) {
+      return;
+    }
+    if (!_isInTextMode(existing)) {
+      _executeScrapEdit('copy');
+      return;
+    }
+    final TH2FileEditController? controller = mpLocator.mpGeneralController
+        .prepareTH2FileForTreeRead(row.th2FilePath);
+    if (controller == null || controller.isOperationBusy ||
+        !_isInTextMode(controller)) {
+      return;
+    }
+    final TH2TextEditController? textEditController =
+        controller.textEditController;
+    if (textEditController == null || !textEditController.isOpen) {
+      return;
+    }
+    unawaited(controller.copyTextFragment(_menuSelection(controller)));
   }
 
   void _executeScrapEdit(String action) {

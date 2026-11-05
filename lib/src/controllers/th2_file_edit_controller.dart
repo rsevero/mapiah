@@ -1,14 +1,17 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_directory_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_interaction_aux.dart';
 import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/th2_text_apply_session.dart';
+import 'package:mapiah/src/auxiliary/th2_text_element_locator.dart';
 import 'package:mapiah/src/auxiliary/th2_text_identity_matcher.dart';
 import 'package:mapiah/src/auxiliary/th2_text_line_map.dart';
 import 'package:mapiah/src/auxiliary/th2_text_validator.dart';
@@ -32,22 +35,29 @@ import 'package:mapiah/src/controllers/th2_file_edit_split_merge_controller.dart
 import 'package:mapiah/src/controllers/th2_file_edit_state_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_user_interaction_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_hide_element_controller.dart';
+import 'package:mapiah/src/controllers/th2_file_operation_gate.dart';
 import 'package:mapiah/src/controllers/th2_file_properties_controller.dart';
+import 'package:mapiah/src/controllers/th2_text_edit_controller.dart';
+import 'package:mapiah/src/controllers/th2_text_edit_owner.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
+import 'package:mapiah/src/controllers/th_text_file_save_result.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_zoom_to_fit_type.dart';
+import 'package:mapiah/src/controllers/types/th2_edit_mode.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
 import 'package:mapiah/src/elements/parts/types/th_length_unit_type.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/types/mp_end_control_point_type.dart';
+import 'package:mapiah/src/exceptions/th2_unsupported_line_ending_exception.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_parser.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_problem.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_writer.dart';
 import 'package:mapiah/src/mp_file_read_write/th_project_path_resolver.dart';
+import 'package:mapiah/src/selectable/mp_selectable.dart';
 import 'package:mapiah/src/selected/mp_selected_element.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/mp_th2_file_edit_state.dart';
 import 'package:mapiah/src/state_machine/mp_th2_file_edit_state_machine/types/mp_button_type.dart';
@@ -61,14 +71,50 @@ part 'th2_file_edit_controller.g.dart';
 class TH2FileEditController = TH2FileEditControllerBase
     with _$TH2FileEditController;
 
-abstract class TH2FileEditControllerBase with Store {
+abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner {
   bool _disposed = false;
 
   /// Whether this controller was created by [createForDetachedParse].
   bool _isDetachedParse = false;
 
-  /// Whether [dispose] already ran for this controller.
+
+  /// Admits one gated operation at a time (mode switches, Discard, Save,
+  /// Save As, canvas history in text mode and image insertion).
+  late final TH2FileOperationGate _operationGate = TH2FileOperationGate(
+    isOwnerDisposed: () => _disposed,
+  );
+
+  /// Whether a gated operation is running. Observable.
+  bool get isOperationBusy => _operationGate.isBusy;
+
+  @override
   bool get isDisposed => _disposed;
+
+  /// The operation-owned text buffer lock.
+  final Observable<bool> _isBufferLocked = Observable<bool>(
+    false,
+    name: 'TH2FileEditController.isBufferLocked',
+  );
+
+  /// Depth of [runAuthorizedMutation] calls in progress.
+  int _authorizedMutationDepth = 0;
+
+  @readonly
+  TH2EditMode _editMode = TH2EditMode.canvas;
+
+  /// The text editor of text mode: created on the first entry, reused by
+  /// later entries and disposed in [dispose].
+  @readonly
+  TH2TextEditController? _textEditController;
+
+  /// The last rejected text and its diagnostics, for the "can't apply"
+  /// banner. Cleared by _Keep editing_ and by any session end or
+  /// replacement.
+  @readonly
+  TH2TextApplyRejection? _textApplyRejection;
+
+  /// A selection reveal requested before the canvas was laid out.
+  bool _pendingRevealSelection = false;
 
   late final MPDefaultOptionsController defaultOptionsController;
   late final TH2FilePropertiesController propertiesController;
@@ -149,8 +195,10 @@ abstract class TH2FileEditControllerBase with Store {
   @readonly
   late TH2File _th2File;
 
-  @readonly
-  late int _th2FileMPID;
+  late final int _th2FileMPID;
+
+  @override
+  int get th2FileMPID => _th2FileMPID;
 
   @readonly
   bool _hasUndo = false;
@@ -537,6 +585,16 @@ abstract class TH2FileEditControllerBase with Store {
 
   @computed
   bool get enableSaveButton => !_isBroken && _hasUndo && !_th2File.isNewFile;
+
+  /// Whether the model or the text buffer has changes that aren't saved.
+  @computed
+  bool get hasUnsavedChanges =>
+      enableSaveButton || (_textEditController?.isDirty ?? false);
+
+  /// Whether Save can run: unsaved changes in a file that has a name.
+  @override
+  @computed
+  bool get canSave => hasUnsavedChanges && !_th2File.isNewFile;
 
   @readonly
   String _statusBarMessage = '';
@@ -1102,7 +1160,7 @@ abstract class TH2FileEditControllerBase with Store {
 
     _disposers.add(
       reaction(
-        (_) => enableSaveButton,
+        (_) => canSave,
         (bool isDirty) {
           final THProjectController projectController =
               mpLocator.thProjectController;
@@ -1125,6 +1183,52 @@ abstract class TH2FileEditControllerBase with Store {
       disposer();
     }
     _disposers.clear();
+  }
+
+  /// Runs [body] as a gated operation: returns `null` without running it
+  /// while another gated operation runs or after disposal.
+  Future<T?> runGatedOperation<T>(Future<T> Function() body) =>
+      _operationGate.run<T>(body);
+
+  /// Whether the text buffer is locked by a running operation. Observable.
+  @override
+  bool get isBufferLocked => _isBufferLocked.value;
+
+  /// Takes the buffer lock. Taking it while held changes nothing.
+  @override
+  void acquireBufferLock() {
+    if (_isBufferLocked.value) {
+      return;
+    }
+
+    runInAction(() => _isBufferLocked.value = true);
+  }
+
+  /// Releases the buffer lock. Releasing it when not held changes nothing.
+  @override
+  void releaseBufferLock() {
+    if (!_isBufferLocked.value) {
+      return;
+    }
+
+    runInAction(() => _isBufferLocked.value = false);
+  }
+
+  /// Whether a command may change the model or the undo/redo stacks: always
+  /// on the canvas, and in text mode only inside [runAuthorizedMutation].
+  bool get isModelMutationAllowed =>
+      (_editMode == TH2EditMode.canvas) || (_authorizedMutationDepth > 0);
+
+  /// Runs the synchronous [body] with model mutations authorized. Never
+  /// retain the authorization across an await.
+  T runAuthorizedMutation<T>(T Function() body) {
+    _authorizedMutationDepth++;
+
+    try {
+      return body();
+    } finally {
+      _authorizedMutationDepth--;
+    }
   }
 
   @action
@@ -1177,8 +1281,14 @@ abstract class TH2FileEditControllerBase with Store {
     return parentMPID == _activeScrapID;
   }
 
+  /// Makes [scrapMPID] the active scrap and shows it: the active scrap is
+  /// always visible.
   @action
   void setActiveScrap(int scrapMPID) {
+    if (scrapMPID != 0) {
+      hideElementController.ensureScrapVisible(scrapMPID);
+    }
+
     if (scrapMPID == _activeScrapID) {
       return;
     }
@@ -1600,6 +1710,7 @@ abstract class TH2FileEditControllerBase with Store {
     if (_disposed) return;
     _disposed = true;
     _disposeReactions();
+    _textEditController?.dispose();
     isInteractiveLineSimplificationDialogOpen.dispose();
     if (th2FileFocusNode.context == null) {
       th2FileFocusNode.dispose();
@@ -1717,6 +1828,805 @@ abstract class TH2FileEditControllerBase with Store {
     }
   }
 
+  /// The text session, when text mode has an open one.
+  TH2TextEditController? get _openTextSession {
+    final TH2TextEditController? session = _textEditController;
+
+    if ((_editMode != TH2EditMode.text) ||
+        (session == null) ||
+        !session.isOpen) {
+      return null;
+    }
+
+    return session;
+  }
+
+  /// The focus node a tab activation focuses: the text field while text
+  /// mode has an open session, the canvas otherwise.
+  FocusNode get activeFocusNode =>
+      (_openTextSession?.textFieldFocusNode) ?? th2FileFocusNode;
+
+  /// Whether the "can't apply" banner shows: while the buffer still equals
+  /// the rejected text.
+  @computed
+  bool get showTextApplyRejection {
+    final TH2TextApplyRejection? rejection = _textApplyRejection;
+    final TH2TextEditController? session = _textEditController;
+
+    return (rejection != null) &&
+        (session != null) &&
+        session.isOpen &&
+        (session.content == rejection.content);
+  }
+
+  @override
+  String get filename => _th2File.filename;
+
+  @override
+  String get defaultLineEnding => _th2File.lineEnding;
+
+  /// The text controller's Save: logs failures, as the page's Save does.
+  @override
+  Future<void> save() async {
+    try {
+      await saveTH2File();
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        '[TH2FileEditController] save failed for ${_th2File.filename}',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  /// Switches between the canvas and text mode. Broken files are left
+  /// alone.
+  Future<void> toggleEditMode() async {
+    if (_editMode == TH2EditMode.canvas) {
+      await enterTextMode();
+    } else {
+      await leaveTextMode();
+    }
+  }
+
+  /// For UI callbacks: [toggleEditMode], unawaited, logging failures.
+  void requestToggleEditMode() {
+    _runLoggedUIOperation(toggleEditMode, 'toggle the edit mode');
+  }
+
+  /// For UI callbacks: [enterTextMode], unawaited, logging failures.
+  void requestEnterTextMode() {
+    _runLoggedUIOperation(enterTextMode, 'enter text mode');
+  }
+
+  /// For UI callbacks: [discardTextEdits], unawaited, logging failures.
+  void requestDiscardTextEdits() {
+    _runLoggedUIOperation(discardTextEdits, 'discard the text edits');
+  }
+
+  void _runLoggedUIOperation(
+    Future<void> Function() operation,
+    String description,
+  ) {
+    unawaited(
+      operation().catchError((Object error, StackTrace stackTrace) {
+        mpLocator.mpLog.e(
+          'Failed to $description for ${_th2File.filename}',
+          error: error,
+          stackTrace: stackTrace,
+        );
+      }),
+    );
+  }
+
+  /// Enters text mode, as a gated operation.
+  Future<void> enterTextMode() async {
+    await _operationGate.run<void>(_enterTextModeGated);
+  }
+
+  Future<void> _enterTextModeGated() async {
+    /// A new file is never loaded: it has a model from its creation.
+    if (_disposed ||
+        (!_isFileLoaded && !_th2File.isNewFile) ||
+        (_loadError != null) ||
+        !mpLocator.mpGeneralController.hasOpenTab(_th2File.filename) ||
+        (_editMode == TH2EditMode.text) ||
+        _isBroken) {
+      return;
+    }
+
+    assert(
+      !isInteractiveLineSimplificationDialogOpen.value,
+      'Text mode entered while the line simplification dialog is open.',
+    );
+
+    /// The text source check, before any state changes.
+    try {
+      serializeForTextMode();
+    } on TH2UnsupportedLineEndingException catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        'Text mode refused for ${_th2File.filename}',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      _showUserMessage(
+        mpLocator.appLocalizations.th2TextUnsupportedLineEndingMessage,
+      );
+
+      return;
+    }
+
+    /// Leaves the canvas state as the tree does; finishing a line or area
+    /// being drawn may run its normal canvas commands.
+    if (!_isEditLineMode) {
+      stateController.onButtonPressed(MPButtonType.select);
+    }
+    overlayWindowController.clearOverlayWindows();
+
+    final String content;
+    final TH2TextLineMap lineMap;
+
+    try {
+      (content, lineMap) = serializeForTextMode();
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        'Text mode serialization failed for ${_th2File.filename}',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      _showUserMessage(_textSessionFailureMessage(error));
+
+      return;
+    }
+
+    final int? cursorLine = _entryCursorLine(lineMap);
+    final TH2TextEditBaseline baseline;
+
+    if (cursorLine == null) {
+      baseline = TH2TextEditBaseline(content: content, lineMap: lineMap);
+    } else {
+      final _TH2TextPosition position = _TH2TextPosition.atFirstNonBlank(
+        content,
+        cursorLine,
+      );
+
+      baseline = TH2TextEditBaseline(
+        content: content,
+        lineMap: lineMap,
+        cursorLine: position.line,
+        cursorColumn: position.column,
+        selection: TextRange.collapsed(position.offset),
+        selectionRequestsFocus: true,
+      );
+    }
+
+    _installTextSessionOnEntry(baseline);
+    _focusActiveNodeAfterFrame(TH2EditMode.text);
+  }
+
+  @action
+  void _installTextSessionOnEntry(TH2TextEditBaseline baseline) {
+    final TH2TextEditController textEditController =
+        _textEditController ??
+        TH2TextEditController(owner: this as TH2FileEditController);
+
+    _textEditController = textEditController;
+    _textApplyRejection = null;
+    textEditController.installBaseline(baseline);
+    _editMode = TH2EditMode.text;
+  }
+
+  /// The entry cursor line: the selected element nearest the top, or the
+  /// edited line in _Line edit_ mode; `null` with no selection.
+  int? _entryCursorLine(TH2TextLineMap lineMap) {
+    final Map<int, MPSelectedEndControlPoint> selectedEndControlPoints =
+        selectionController.selectedEndControlPoints;
+
+    /// In _Line edit_ mode the selected line points, or the edited line
+    /// when none is selected.
+    final Set<int> mpIDs = _isEditLineMode
+        ? <int>{
+            for (final MPSelectedEndControlPoint endControlPoint
+                in selectedEndControlPoints.values)
+              endControlPoint.originalLineSegmentClone.mpID,
+            if (selectedEndControlPoints.isEmpty &&
+                selectionController.isSingleLineSelected())
+              selectionController.getSelectedLine().mpID,
+          }
+        : <int>{
+            ...selectionController.mpSelectedElementsLogical.keys,
+            for (final MPSelectedEndControlPoint endControlPoint
+                in selectedEndControlPoints.values)
+              endControlPoint.originalLineSegmentClone.mpID,
+            ...selectionController.selectedScrapMPIDs,
+          };
+
+    int? cursorLine;
+
+    for (final int mpID in mpIDs) {
+      final int? line = lineMap.firstOwnLineOf(mpID);
+
+      if ((line != null) && ((cursorLine == null) || (line < cursorLine))) {
+        cursorLine = line;
+      }
+    }
+
+    return cursorLine;
+  }
+
+  /// Leaves text mode, applying the buffer, as a gated operation.
+  Future<void> leaveTextMode() async {
+    await _operationGate.run<void>(_leaveTextModeGated);
+  }
+
+  Future<void> _leaveTextModeGated() async {
+    final TH2TextEditController? session = _openTextSession;
+
+    if (session == null) {
+      return;
+    }
+
+    acquireBufferLock();
+
+    try {
+      final TH2TextApplyResult result = await applyTextContent(
+        session.content,
+        session: session,
+        lockBufferOnAccept: true,
+      );
+
+      if (_disposed || !session.isOpen) {
+        return;
+      }
+
+      final TH2TextLineMap lineMap;
+      final int cursorLine;
+
+      switch (result) {
+        case TH2TextApplyRejected():
+          _publishTextApplyRejection(session, result);
+
+          return;
+        case TH2TextApplyCancelled():
+          return;
+        case TH2TextApplyApplied():
+          lineMap = result.lineMap;
+          cursorLine = result.cursorLine;
+        case TH2TextApplyUnchanged():
+          lineMap = result.lineMap;
+          cursorLine = result.cursorLine;
+      }
+
+      final TH2TextLocation location = TH2TextElementLocator.locate(
+        line: cursorLine,
+        lineMap: lineMap,
+        th2File: _th2File,
+      );
+
+      _returnToCanvas();
+      applyTextLocation(location);
+      _revealSelectionAfterFrame();
+      _focusActiveNodeAfterFrame(TH2EditMode.canvas);
+    } finally {
+      releaseBufferLock();
+    }
+  }
+
+  /// Ends the session without an apply and returns to the canvas, as a
+  /// gated operation. The model is untouched.
+  @override
+  Future<void> discardTextEdits() async {
+    await _operationGate.run<void>(_discardTextEditsGated);
+  }
+
+  Future<void> _discardTextEditsGated() async {
+    final TH2TextEditController? session = _openTextSession;
+
+    if (session == null) {
+      return;
+    }
+
+    acquireBufferLock();
+
+    try {
+      _returnToCanvas();
+      _focusActiveNodeAfterFrame(TH2EditMode.canvas);
+    } finally {
+      releaseBufferLock();
+    }
+  }
+
+  /// Hides the "can't apply" banner and focuses the text field.
+  @action
+  void keepEditingAfterRejection() {
+    _textApplyRejection = null;
+    _openTextSession?.textFieldFocusNode.requestFocus();
+  }
+
+  /// Called for every closing tab: ends the session and returns to the
+  /// canvas at once, even while a gated operation runs. Applies nothing.
+  @action
+  void onTabClosed() {
+    final TH2TextEditController? session = _textEditController;
+
+    if ((session != null) && session.isOpen) {
+      session.endSession();
+    }
+    _textApplyRejection = null;
+    _editMode = TH2EditMode.canvas;
+  }
+
+  @action
+  void _returnToCanvas() {
+    _textEditController?.endSession();
+    _textApplyRejection = null;
+    _editMode = TH2EditMode.canvas;
+  }
+
+  @action
+  void _publishTextApplyRejection(
+    TH2TextEditController session,
+    TH2TextApplyRejected rejected,
+  ) {
+    _textApplyRejection = TH2TextApplyRejection(
+      content: rejected.content,
+      diagnostics: rejected.diagnostics,
+    );
+    session.showDiagnostics(rejected.diagnostics, content: rejected.content);
+  }
+
+  /// Selects on the canvas what the text cursor named when leaving text
+  /// mode. The cursor decides the active scrap, since only the active
+  /// scrap's elements can be selected.
+  @action
+  void applyTextLocation(TH2TextLocation location) {
+    /// Entry keeps _Line edit_ mode; any target but a line point leaves it
+    /// first, as `Esc` does, so no line edit state outlives its line.
+    if (_isEditLineMode && (location is! TH2TextLocationSelectLinePoint)) {
+      stateController.setState(MPTH2FileEditStateType.selectEmptySelection);
+    }
+
+    switch (location) {
+      case TH2TextLocationSelectElement():
+        setActiveScrap(location.scrapMPID);
+        selectionController.setSelectedElements(<THElement>[
+          _th2File.elementByMPID(location.mpID),
+        ], setState: true);
+      case TH2TextLocationSelectLinePoint():
+        setActiveScrap(location.scrapMPID);
+        selectionController.setSelectedElements(<THElement>[
+          _th2File.lineByMPID(location.lineMPID),
+        ], setState: true);
+        stateController.setState(MPTH2FileEditStateType.editSingleLine);
+
+        for (final MPSelectableEndControlPoint endControlPoint
+            in selectionController.getMPSelectableEndControlPoints()) {
+          if ((endControlPoint.lineSegment.mpID == location.lineSegmentMPID) &&
+              ((endControlPoint.type ==
+                      MPEndControlPointType.endPointStraight) ||
+                  (endControlPoint.type ==
+                      MPEndControlPointType.endPointBezierCurve))) {
+            selectionController.setSelectedEndControlPoint(endControlPoint);
+            break;
+          }
+        }
+        selectionController.updateSelectableEndAndControlPoints();
+        triggerEditLineRedraw();
+      case TH2TextLocationActivateScrap():
+        setActiveScrap(location.scrapMPID);
+        selectionController.setSelectedElements(
+          const <THElement>[],
+          setState: true,
+        );
+      case TH2TextLocationFileLevel():
+        selectionController.setSelectedElements(
+          const <THElement>[],
+          setState: true,
+        );
+    }
+  }
+
+  /// Centers the canvas on the selection, at the current scale, when the
+  /// selection isn't fully visible.
+  @action
+  void revealSelection() {
+    if (_screenSize.isEmpty || _canvasScaleTranslationUndefined) {
+      _pendingRevealSelection = true;
+
+      return;
+    }
+
+    final Rect? target = _selectionRevealRect();
+
+    if (target == null) {
+      return;
+    }
+
+    final Rect visible = Rect.fromPoints(
+      offsetScreenToCanvas(Offset.zero),
+      offsetScreenToCanvas(Offset(_screenSize.width, _screenSize.height)),
+    );
+
+    if ((visible.contains(target.topLeft) &&
+        visible.contains(target.bottomRight))) {
+      return;
+    }
+
+    _setCanvasCenter(target.center);
+    _changedCanvasTransform();
+  }
+
+  /// Returns and clears a reveal requested before the first layout.
+  bool takePendingRevealSelection() {
+    final bool isPending = _pendingRevealSelection;
+
+    _pendingRevealSelection = false;
+
+    return isPending;
+  }
+
+  /// The selected line point's position, or the selection's bounding box.
+  Rect? _selectionRevealRect() {
+    final Map<int, MPSelectedEndControlPoint> selectedEndControlPoints =
+        selectionController.selectedEndControlPoints;
+
+    if (_isEditLineMode && selectedEndControlPoints.isNotEmpty) {
+      final THLineSegment lineSegment =
+          selectedEndControlPoints.values.first.originalLineSegmentClone;
+      final Offset position = lineSegment.endPoint.coordinates;
+
+      return Rect.fromCenter(center: position, width: 0, height: 0);
+    }
+
+    if (selectionController.mpSelectedElementsLogical.isEmpty) {
+      return null;
+    }
+
+    return selectionController.getSelectedElementsBoundingBoxOnCanvas();
+  }
+
+  void _revealSelectionAfterFrame() {
+    final TH2EditMode expectedMode = _editMode;
+
+    WidgetsBinding.instance.addPostFrameCallback((Duration _) {
+      if (_disposed || (_editMode != expectedMode)) {
+        return;
+      }
+
+      revealSelection();
+    });
+    WidgetsBinding.instance.scheduleFrame();
+  }
+
+  /// Focuses [activeFocusNode] after the frame, unless the controller was
+  /// disposed or the mode is no longer [expectedMode].
+  void _focusActiveNodeAfterFrame(TH2EditMode expectedMode) {
+    WidgetsBinding.instance.addPostFrameCallback((Duration _) {
+      if (_disposed || (_editMode != expectedMode)) {
+        return;
+      }
+
+      activeFocusNode.requestFocus();
+    });
+    WidgetsBinding.instance.scheduleFrame();
+  }
+
+  /// The message shown when a text session couldn't be prepared.
+  String _textSessionFailureMessage(Object error) {
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+
+    return (error is TH2UnsupportedLineEndingException)
+        ? appLocalizations.th2TextUnsupportedLineEndingMessage
+        : appLocalizations.th2TextEditorReopenFailedMessage;
+  }
+
+  /// Moves the text cursor to [mpID]'s first own line, at its first
+  /// non-blank column, mapped through the buffer's edits. Does nothing while
+  /// a gated operation runs or without an open session.
+  @action
+  void moveTextCursorToElement(int mpID, {bool requestFocus = true}) {
+    final TH2TextEditController? session = _openTextSession;
+
+    if (_operationGate.isBusy || (session == null)) {
+      return;
+    }
+
+    final int? initialLine = session.initialLineMap.firstOwnLineOf(mpID);
+
+    if (initialLine == null) {
+      return;
+    }
+
+    final String content = session.content;
+    int line = initialLine;
+
+    if (content != session.initialContent) {
+      line = session.lineTracker?.currentLineOf(initialLine) ?? 0;
+    }
+
+    final _TH2TextPosition position = _TH2TextPosition.atFirstNonBlank(
+      content,
+      line,
+    );
+
+    session.scrollToLine(position.line);
+    session.revealRange(
+      TextRange.collapsed(position.offset),
+      requestFocus: requestFocus,
+    );
+  }
+
+  /// Copies the text of [mpIDs] from the session's baseline to the system
+  /// clipboard: each element's lines with its descendants, in text order,
+  /// with an area's border lines before it, as the canvas copy adds them.
+  /// Mapiah's own clipboard is not touched; failures are only logged.
+  Future<void> copyTextFragment(List<int> mpIDs) async {
+    final TH2TextEditController? session = _openTextSession;
+
+    if (session == null) {
+      return;
+    }
+
+    final String fragment = _textFragmentOf(
+      mpIDs,
+      content: session.initialContent,
+      lineMap: session.initialLineMap,
+    );
+
+    if (fragment.isEmpty) {
+      return;
+    }
+
+    try {
+      await Clipboard.setData(ClipboardData(text: fragment));
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        'Failed to copy the text of ${mpIDs.length} element(s)',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  String _textFragmentOf(
+    List<int> mpIDs, {
+    required String content,
+    required TH2TextLineMap lineMap,
+  }) {
+    final List<int> requested =
+        mpIDs.where((int mpID) => lineMap.rangeOf(mpID) != null).toList()
+          ..sort(
+            (int a, int b) =>
+                lineMap.rangeOf(a)!.$1.compareTo(lineMap.rangeOf(b)!.$1),
+          );
+
+    bool isInsideAnother(int mpID, Iterable<int> others) {
+      final (int first, int last) = lineMap.rangeOf(mpID)!;
+
+      for (final int other in others) {
+        if (other == mpID) {
+          continue;
+        }
+
+        final (int otherFirst, int otherLast) = lineMap.rangeOf(other)!;
+
+        if ((otherFirst <= first) &&
+            (last <= otherLast) &&
+            ((otherFirst != first) || (otherLast != last))) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    final List<int> topLevel = requested
+        .where((int mpID) => !isInsideAnother(mpID, requested))
+        .toList();
+    final List<int> blocks = <int>[];
+    final Set<int> added = <int>{};
+
+    for (final int mpID in topLevel) {
+      final THElement? element = _th2File.tryElementByMPID(mpID);
+
+      if (element is THArea) {
+        for (final int borderLineMPID
+            in copyPasteController.borderLineMPIDsOfArea(element)) {
+          if ((lineMap.rangeOf(borderLineMPID) == null) ||
+              isInsideAnother(borderLineMPID, topLevel) ||
+              topLevel.contains(borderLineMPID) ||
+              !added.add(borderLineMPID)) {
+            continue;
+          }
+
+          blocks.add(borderLineMPID);
+        }
+      }
+
+      if (added.add(mpID)) {
+        blocks.add(mpID);
+      }
+    }
+
+    final List<int> lineStarts = _TH2TextPosition._lineStarts(content);
+    final StringBuffer fragment = StringBuffer();
+
+    for (int index = 0; index < blocks.length; index++) {
+      final (int first, int last) = lineMap.rangeOf(blocks[index])!;
+      final int start = lineStarts[first.clamp(0, lineStarts.length - 1)];
+      final int end = (last + 1 < lineStarts.length)
+          ? lineStarts[last + 1]
+          : content.length;
+      final String block = content.substring(start, max(start, end));
+
+      fragment.write(block);
+
+      if ((index < blocks.length - 1) && !block.endsWith('\n')) {
+        fragment.write(_th2File.lineEnding);
+      }
+    }
+
+    return fragment.toString();
+  }
+
+  /// Called at the start of [_prepareTextSession].
+  @visibleForTesting
+  static void Function()? beforePrepareTextSessionForTesting;
+
+  /// A baseline from the live model, with the cursor at [cursorLine]
+  /// clamped (or at [anchor]'s own line when it still owns lines), without
+  /// touching the installed session. Throws what serialization throws.
+  TH2TextEditBaseline _prepareTextSession({
+    required int cursorLine,
+    int? cursorColumn,
+    ({int mpID, int ownLineIndex})? anchor,
+  }) {
+    beforePrepareTextSessionForTesting?.call();
+
+    final (String content, TH2TextLineMap lineMap) = serializeForTextMode();
+    int line = cursorLine;
+    int? column = cursorColumn;
+
+    if (anchor != null) {
+      final List<int> ownLines = lineMap.ownLinesOf(anchor.mpID);
+
+      if (ownLines.isNotEmpty) {
+        line = ownLines[min(anchor.ownLineIndex, ownLines.length - 1)];
+      }
+    }
+
+    final _TH2TextPosition position = (column == null)
+        ? _TH2TextPosition.atFirstNonBlank(content, line)
+        : _TH2TextPosition.at(content, line, column);
+    final TH2TextEditController? session = _textEditController;
+    final bool requestsFocus =
+        (session != null) && session.textFieldFocusNode.hasFocus;
+
+    return TH2TextEditBaseline(
+      content: content,
+      lineMap: lineMap,
+      cursorLine: position.line,
+      cursorColumn: position.column,
+      selection: TextRange.collapsed(position.offset),
+      selectionRequestsFocus: requestsFocus,
+    );
+  }
+
+  /// Replaces the open session by one prepared from the live model. When
+  /// preparation fails, returns to the canvas with a message instead.
+  /// Runs inside a gated operation that holds the buffer lock.
+  void _replaceTextSession({
+    required int cursorLine,
+    int? cursorColumn,
+    ({int mpID, int ownLineIndex})? anchor,
+  }) {
+    final TH2TextEditController? session = _textEditController;
+
+    if (session == null) {
+      return;
+    }
+
+    try {
+      final TH2TextEditBaseline baseline = _prepareTextSession(
+        cursorLine: cursorLine,
+        cursorColumn: cursorColumn,
+        anchor: anchor,
+      );
+
+      _installReplacementBaseline(session, baseline);
+    } catch (error, stackTrace) {
+      _exitTextModeAfterRegenerationFailure(error, stackTrace);
+    }
+  }
+
+  @action
+  void _installReplacementBaseline(
+    TH2TextEditController session,
+    TH2TextEditBaseline baseline,
+  ) {
+    _textApplyRejection = null;
+    session.installBaseline(baseline);
+  }
+
+  /// A replacement session couldn't be prepared: back to the canvas. The
+  /// model holds the applied text, so nothing is lost.
+  void _exitTextModeAfterRegenerationFailure(
+    Object error,
+    StackTrace stackTrace,
+  ) {
+    mpLocator.mpLog.e(
+      'The text editor of ${_th2File.filename} could not be reopened',
+      error: error,
+      stackTrace: stackTrace,
+    );
+    _returnToCanvas();
+    _showUserMessage(_textSessionFailureMessage(error));
+    _focusActiveNodeAfterFrame(TH2EditMode.canvas);
+  }
+
+  /// The canvas undo or redo of a session before its first text edit, as
+  /// a gated operation.
+  @override
+  Future<void> requestCanvasHistory({required bool redo}) async {
+    await _operationGate.run<void>(
+      () => _requestCanvasHistoryGated(redo: redo),
+    );
+  }
+
+  Future<void> _requestCanvasHistoryGated({required bool redo}) async {
+    final TH2TextEditController? session = _openTextSession;
+
+    if ((session == null) || session.hasTextEdits || _isBroken) {
+      return;
+    }
+
+    if (redo ? !undoRedoController.hasRedo : !undoRedoController.hasUndo) {
+      return;
+    }
+
+    acquireBufferLock();
+
+    try {
+      final int cursorLine = session.cursorLine;
+      final int cursorColumn = session.cursorColumn;
+      final TH2TextLineMap lineMap = session.initialLineMap;
+      final int? ownerMPID = lineMap.ownerOfLine(cursorLine);
+      ({int mpID, int ownLineIndex})? anchor;
+
+      if ((ownerMPID != null) && (ownerMPID != _th2File.mpID)) {
+        final int ownLineIndex = lineMap.ownLinesOf(ownerMPID).indexOf(
+          cursorLine,
+        );
+
+        anchor = (mpID: ownerMPID, ownLineIndex: max(ownLineIndex, 0));
+      }
+
+      try {
+        runAuthorizedMutation<void>(() {
+          if (redo) {
+            this.redo();
+          } else {
+            undo();
+          }
+        });
+        syncControllersWithModel(initialSetup: false);
+
+        final TH2TextEditBaseline baseline = _prepareTextSession(
+          cursorLine: cursorLine,
+          cursorColumn: cursorColumn,
+          anchor: anchor,
+        );
+
+        _installReplacementBaseline(session, baseline);
+      } catch (error, stackTrace) {
+        _exitTextModeAfterRegenerationFailure(error, stackTrace);
+      }
+    } finally {
+      releaseBufferLock();
+      _focusActiveNodeAfterFrame(_editMode);
+    }
+  }
+
   /// The writer options of Save, shared by text mode so its text is the
   /// saved text.
   static const bool _savedIncludeEmptyLines = true;
@@ -1760,14 +2670,18 @@ abstract class TH2FileEditControllerBase with Store {
     required TH2TextApplySession session,
     bool lockBufferOnAccept = false,
   }) async {
+    assert(
+      _operationGate.isBusy,
+      'applyTextContent outside a gated operation.',
+    );
     assert(!_isBroken, 'applyTextContent on a broken file.');
     if (_isBroken) {
-      return const TH2TextApplyRejected(<TH2TextDiagnostic>[
+      return TH2TextApplyRejected(const <TH2TextDiagnostic>[
         TH2TextDiagnostic.error(
           line: null,
           kind: TH2TextDiagnosticKind.unreadableText,
         ),
-      ]);
+      ], content: content);
     }
 
     final int revision = session.sessionRevision;
@@ -1808,7 +2722,7 @@ abstract class TH2FileEditControllerBase with Store {
     }
 
     if (!result.isValid) {
-      return TH2TextApplyRejected(result.diagnostics);
+      return TH2TextApplyRejected(result.diagnostics, content: content);
     }
 
     /// From here on everything is synchronous.
@@ -1849,7 +2763,11 @@ abstract class TH2FileEditControllerBase with Store {
       'The remapped snapshot does not write the normalized text.',
     );
 
-    execute(MPReplaceTH2FileContentsCommand(before: before, after: after));
+    runAuthorizedMutation<void>(
+      () => execute(
+        MPReplaceTH2FileContentsCommand(before: before, after: after),
+      ),
+    );
 
     final (String liveText, TH2TextLineMap liveMap) = serializeForTextMode();
 
@@ -1861,24 +2779,159 @@ abstract class TH2FileEditControllerBase with Store {
     return TH2TextApplyApplied(liveMap, cursorLine);
   }
 
-  void saveTH2File() {
-    if (_isBroken) {
-      return;
-    }
-    final File file = _localFile();
+  /// Called just before Save As renames the picked file to add `.th2`.
+  @visibleForTesting
+  static void Function()? beforeSaveAsExtensionRenameForTesting;
 
-    _actualSave(file);
+  /// Called just before Save As rebases the image paths.
+  @visibleForTesting
+  static void Function()? beforeSaveAsImageRebaseForTesting;
 
-    _th2File.isNewFile = false;
+  /// Called just before [_writeFile] writes.
+  @visibleForTesting
+  static void Function()? beforeWriteFileForTesting;
 
-    overlayWindowController.closeAutoDismissOverlayWindows();
+  /// Receives every message shown to the user through a `SnackBar`.
+  @visibleForTesting
+  static void Function(String message)? onUserMessageForTesting;
+
+  /// Saves the file, as a gated operation.
+  Future<TH2FileSaveStatus> saveTH2File() async {
+    final TH2FileSaveStatus? status = await _operationGate.run(
+      _saveTH2FileGated,
+    );
+
+    return status ?? TH2FileSaveStatus.cancelled;
   }
 
-  Future<void> saveAsTH2File() async {
-    if (_isBroken) {
-      return;
+  Future<TH2FileSaveStatus> _saveTH2FileGated() async {
+    if (_th2File.isNewFile) {
+      return TH2FileSaveStatus.saveFailed;
     }
-    final String filename = _th2File.isNewFile ? '' : _th2File.filename;
+
+    final TH2TextEditController? session = _openTextSession;
+
+    if (session != null) {
+      acquireBufferLock();
+    }
+
+    try {
+      int? acceptedCursorLine;
+
+      if (session != null) {
+        final TH2TextApplyResult result = await applyTextContent(
+          session.content,
+          session: session,
+          lockBufferOnAccept: true,
+        );
+
+        if (_disposed || !session.isOpen) {
+          return TH2FileSaveStatus.cancelled;
+        }
+
+        switch (result) {
+          case TH2TextApplyRejected():
+            _publishTextApplyRejection(session, result);
+
+            return TH2FileSaveStatus.textHasProblems;
+          case TH2TextApplyCancelled():
+            return TH2FileSaveStatus.cancelled;
+          case TH2TextApplyApplied():
+            acceptedCursorLine = result.cursorLine;
+          case TH2TextApplyUnchanged():
+            acceptedCursorLine = result.cursorLine;
+        }
+      }
+
+      if (_isBroken) {
+        return TH2FileSaveStatus.saveFailed;
+      }
+
+      try {
+        _writeFile(_localFile());
+        _commitSave();
+        _th2File.isNewFile = false;
+        overlayWindowController.closeAutoDismissOverlayWindows();
+      } finally {
+        /// Whether the write succeeded or threw, the session describes the
+        /// live model, which holds the accepted text.
+        if (acceptedCursorLine != null) {
+          _replaceTextSession(cursorLine: acceptedCursorLine);
+        }
+      }
+
+      return TH2FileSaveStatus.saved;
+    } finally {
+      releaseBufferLock();
+    }
+  }
+
+  /// Saves the file under a name chosen in the file dialog, as a gated
+  /// operation for its whole length, the dialog included.
+  Future<TH2FileSaveStatus> saveAsTH2File() async {
+    final TH2FileSaveStatus? status = await _operationGate.run(
+      _saveAsTH2FileGated,
+    );
+
+    return status ?? TH2FileSaveStatus.cancelled;
+  }
+
+  Future<TH2FileSaveStatus> _saveAsTH2FileGated() async {
+    final TH2TextEditController? session = _openTextSession;
+
+    if (session == null) {
+      if (_isBroken) {
+        return TH2FileSaveStatus.saveFailed;
+      }
+
+      return _saveAsTH2FileBody(null);
+    }
+
+    /// The buffer stays read-only from here, the file dialog included, so
+    /// the text applied after the dialog is the text validated before it.
+    acquireBufferLock();
+
+    try {
+      return await _saveAsTH2FileBody(session);
+    } finally {
+      releaseBufferLock();
+    }
+  }
+
+  Future<TH2FileSaveStatus> _saveAsTH2FileBody(
+    TH2TextEditController? session,
+  ) async {
+    if (session != null) {
+      final String content = session.content;
+
+      if (content != session.initialContent) {
+        final TH2TextValidationResult validation = await session
+            .validationCache
+            .validate(
+              content,
+              filename: _th2File.filename,
+              th2FileMPID: _th2File.mpID,
+              lineEnding: _th2File.lineEnding,
+            );
+
+        if (_disposed || !session.isOpen) {
+          return TH2FileSaveStatus.cancelled;
+        }
+
+        if (!validation.isValid) {
+          _publishTextApplyRejection(
+            session,
+            TH2TextApplyRejected(validation.diagnostics, content: content),
+          );
+
+          return TH2FileSaveStatus.textHasProblems;
+        }
+      }
+    }
+
+    /// The controller's registry key: a placeholder for a new file.
+    final String originalFilename = _th2File.filename;
+    final String filename = _th2File.isNewFile ? '' : originalFilename;
     final MPGeneralController mpGeneralController =
         mpLocator.mpGeneralController;
     final String? initialDirectory =
@@ -1897,48 +2950,184 @@ abstract class TH2FileEditControllerBase with Store {
       allowedExtensions: <String>['th2'],
       bytes: Uint8List(0),
     );
-    String? filePath = savedFileUri?.toFilePath();
+    final String? pickedPath = savedFileUri?.toFilePath();
 
-    if (filePath != null) {
-      if (!filePath.toLowerCase().endsWith('.th2')) {
-        final String renamedFilePath = '$filePath.th2';
-        final File selectedFile = File(filePath);
+    if ((pickedPath == null) ||
+        _disposed ||
+        ((session != null) && !session.isOpen)) {
+      return TH2FileSaveStatus.cancelled;
+    }
 
-        if (selectedFile.existsSync()) {
-          selectedFile.renameSync(renamedFilePath);
-        }
+    final bool appendsExtension = !pickedPath.toLowerCase().endsWith('.th2');
+    final String filePath = appendsExtension ? '$pickedPath.th2' : pickedPath;
 
-        filePath = renamedFilePath;
+    if (_handleSaveAsTargetCollision(
+      filePath: filePath,
+      appendsExtension: appendsExtension,
+    )) {
+      return TH2FileSaveStatus.cancelled;
+    }
+
+    int? acceptedCursorLine;
+
+    if (session != null) {
+      final TH2TextApplyResult result = await applyTextContent(
+        session.content,
+        session: session,
+        lockBufferOnAccept: true,
+      );
+
+      if (_disposed || !session.isOpen) {
+        return TH2FileSaveStatus.cancelled;
       }
 
-      final String previousFilename = _th2File.isNewFile
-          ? ''
-          : _th2File.filename;
+      switch (result) {
+        case TH2TextApplyRejected():
+          _publishTextApplyRejection(session, result);
 
-      mpGeneralController.renameFileController(
-        oldFilename: _th2File.filename,
-        newFilename: filePath,
-      );
+          return TH2FileSaveStatus.textHasProblems;
+        case TH2TextApplyCancelled():
+          return TH2FileSaveStatus.cancelled;
+        case TH2TextApplyApplied():
+          acceptedCursorLine = result.cursorLine;
+        case TH2TextApplyUnchanged():
+          acceptedCursorLine = result.cursorLine;
+      }
+    }
+
+    /// From here to the end of the write everything is synchronous.
+    final String previousFilename = _th2File.isNewFile ? '' : originalFilename;
+    final List<THElement> replacedImages = <THElement>[];
+
+    try {
+      if (appendsExtension) {
+        beforeSaveAsExtensionRenameForTesting?.call();
+
+        final File selectedFile = File(pickedPath);
+
+        if (selectedFile.existsSync()) {
+          selectedFile.renameSync(filePath);
+        }
+      }
+
       _th2File.filename = filePath;
-
+      beforeSaveAsImageRebaseForTesting?.call();
       _rebaseImportedImagePathsForSaveAs(
         oldTH2Filename: previousFilename,
         newTH2Filename: filePath,
+        replacedImages: replacedImages,
+      );
+      _writeFile(File(filePath));
+    } catch (_) {
+      _restoreAfterFailedSaveAs(
+        originalFilename: originalFilename,
+        replacedImages: replacedImages,
       );
 
-      final String directoryPath = p.dirname(filePath);
-
-      mpGeneralController.lastAccessedDirectory = directoryPath;
-
-      final File file = File(filePath);
-
-      _actualSave(file);
-
-      _th2File.isNewFile = false;
-      _markLoadedAfterSaveAs();
-
-      overlayWindowController.closeAutoDismissOverlayWindows();
+      if (acceptedCursorLine != null) {
+        _replaceTextSession(cursorLine: acceptedCursorLine);
+      }
+      rethrow;
     }
+
+    mpGeneralController.renameFileController(
+      oldFilename: originalFilename,
+      newFilename: filePath,
+    );
+    _commitSave();
+
+    if (acceptedCursorLine != null) {
+      _replaceTextSession(cursorLine: acceptedCursorLine);
+    }
+    _th2File.isNewFile = false;
+    _markLoadedAfterSaveAs();
+    mpGeneralController.lastAccessedDirectory = p.dirname(filePath);
+    overlayWindowController.closeAutoDismissOverlayWindows();
+
+    return TH2FileSaveStatus.saved;
+  }
+
+  /// Whether [filePath] is the registered file of another open TH2
+  /// controller. Then nothing is applied or renamed here; the file dialog
+  /// already emptied the picked file, so a clean other controller's file is
+  /// rewritten from its model, and the user is told.
+  bool _handleSaveAsTargetCollision({
+    required String filePath,
+    required bool appendsExtension,
+  }) {
+    final TH2FileEditController? other = mpLocator.mpGeneralController
+        .getTH2FileEditControllerIfExists(filePath);
+
+    if ((other == null) || identical(other, this)) {
+      return false;
+    }
+
+    bool restored = false;
+
+    if (other.isFileLoaded &&
+        !other.isBroken &&
+        (other.loadError == null) &&
+        !other.hasUnsavedChanges) {
+      try {
+        other._writeFile(File(other.th2File.filename));
+        restored = true;
+      } catch (error, stackTrace) {
+        mpLocator.mpLog.e(
+          'Failed to restore ${other.th2File.filename} after a Save As '
+          'collision',
+          error: error,
+          stackTrace: stackTrace,
+        );
+      }
+    } else if (other.hasUnsavedChanges) {
+      /// Already marked dirty: saving it from its tab writes it again.
+      restored = true;
+    }
+
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final String displayName = p.basename(filePath);
+
+    _showUserMessage(
+      (restored || appendsExtension)
+          ? appLocalizations.th2SaveAsTargetOpenMessage(displayName)
+          : appLocalizations.th2SaveAsTargetOpenEmptiedMessage(displayName),
+    );
+
+    return true;
+  }
+
+  /// Puts back what a failed Save As changed before or during its write.
+  void _restoreAfterFailedSaveAs({
+    required String originalFilename,
+    required List<THElement> replacedImages,
+  }) {
+    try {
+      for (final THElement image in replacedImages) {
+        _th2File.substituteElement(image);
+      }
+      _th2File.filename = originalFilename;
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        'Failed to restore ${_th2File.filename} after a failed Save As',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  /// Shows [message] in a `SnackBar` through the app's navigator.
+  void _showUserMessage(String message) {
+    onUserMessageForTesting?.call(message);
+
+    final BuildContext? context = mpLocator.mpNavigatorKey.currentContext;
+
+    if (context == null) {
+      return;
+    }
+
+    ScaffoldMessenger.maybeOf(
+      context,
+    )?.showSnackBar(SnackBar(content: Text(message)));
   }
 
   /// Marks a file saved under a new name as loaded, in one transition.
@@ -1948,9 +3137,12 @@ abstract class TH2FileEditControllerBase with Store {
     setFilename(_th2File.filename);
   }
 
+  /// Rebases the image paths for the new file name, adding each replaced
+  /// image object to [replacedImages].
   void _rebaseImportedImagePathsForSaveAs({
     required String oldTH2Filename,
     required String newTH2Filename,
+    required List<THElement> replacedImages,
   }) {
     final List<MPRuntimeImageInsertConfigMixin> images = _th2File
         .getImages()
@@ -1983,17 +3175,23 @@ abstract class TH2FileEditControllerBase with Store {
         th2FileEditController: this as TH2FileEditController,
       );
 
+      replacedImages.add(image as THElement);
       _th2File.substituteElement(updatedImage as THElement);
     }
   }
 
-  void _actualSave(File file) {
+  /// Encodes the model and writes it to [file]. Changes nothing else.
+  void _writeFile(File file) {
     final Uint8List encodedContent = _encodedFileContents();
 
+    beforeWriteFileForTesting?.call();
+    file.writeAsBytesSync(encodedContent, flush: true);
+  }
+
+  /// The bookkeeping of a successful write.
+  void _commitSave() {
     undoRedoController.clearUndoRedoStack();
     updateUndoRedoStatus();
-
-    file.writeAsBytesSync(encodedContent, flush: true);
   }
 
   File _localFile() {
@@ -2042,12 +3240,22 @@ abstract class TH2FileEditControllerBase with Store {
     overlayWindowController.clearOverlayWindows();
   }
 
+  /// Does nothing in text mode, outside an authorized canvas traversal.
   void undo() {
+    if (!isModelMutationAllowed) {
+      return;
+    }
+
     undoRedoController.undo();
     _undoRedoDone();
   }
 
+  /// Does nothing in text mode, outside an authorized canvas traversal.
   void redo() {
+    if (!isModelMutationAllowed) {
+      return;
+    }
+
     undoRedoController.redo();
     _undoRedoDone();
   }
@@ -2212,4 +3420,76 @@ class TH2FileEditControllerCreateResult {
     this.errors, [
     this.problems = const <TH2FileProblem>[],
   ]);
+}
+
+/// A position in a TH2 text: 0-based line and column, and its offset.
+class _TH2TextPosition {
+  final int line;
+
+  final int column;
+
+  final int offset;
+
+  const _TH2TextPosition._(this.line, this.column, this.offset);
+
+  /// The start offset of each line of [text].
+  static List<int> _lineStarts(String text) {
+    final List<int> starts = <int>[0];
+
+    for (int index = 0; index < text.length; index++) {
+      if (text.codeUnitAt(index) == 0x0A) {
+        starts.add(index + 1);
+      }
+    }
+
+    return starts;
+  }
+
+  /// The length of [line]'s content, without its line ending.
+  static int _contentLength(String text, List<int> starts, int line) {
+    final int start = starts[line];
+    int end = (line + 1 < starts.length) ? starts[line + 1] : text.length;
+
+    if ((end > start) && (text.codeUnitAt(end - 1) == 0x0A)) {
+      end--;
+    }
+    if ((end > start) && (text.codeUnitAt(end - 1) == 0x0D)) {
+      end--;
+    }
+
+    return end - start;
+  }
+
+  /// [line], clamped to the text, at [column] clamped to its content.
+  factory _TH2TextPosition.at(String text, int line, int column) {
+    final List<int> starts = _lineStarts(text);
+    final int clampedLine = line.clamp(0, starts.length - 1);
+    final int clampedColumn = column.clamp(
+      0,
+      _contentLength(text, starts, clampedLine),
+    );
+
+    return _TH2TextPosition._(
+      clampedLine,
+      clampedColumn,
+      starts[clampedLine] + clampedColumn,
+    );
+  }
+
+  /// [line], clamped to the text, at its first non-blank column.
+  factory _TH2TextPosition.atFirstNonBlank(String text, int line) {
+    final List<int> starts = _lineStarts(text);
+    final int clampedLine = line.clamp(0, starts.length - 1);
+    final int start = starts[clampedLine];
+    final int length = _contentLength(text, starts, clampedLine);
+    int column = 0;
+
+    while ((column < length) &&
+        ((text.codeUnitAt(start + column) == 0x20) ||
+            (text.codeUnitAt(start + column) == 0x09))) {
+      column++;
+    }
+
+    return _TH2TextPosition._(clampedLine, column, start + column);
+  }
 }

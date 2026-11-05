@@ -252,6 +252,20 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     () => super.enableSaveButton,
     name: 'TH2FileEditControllerBase.enableSaveButton',
   )).value;
+  Computed<bool>? _$hasUnsavedChangesComputed;
+
+  @override
+  bool get hasUnsavedChanges => (_$hasUnsavedChangesComputed ??= Computed<bool>(
+    () => super.hasUnsavedChanges,
+    name: 'TH2FileEditControllerBase.hasUnsavedChanges',
+  )).value;
+  Computed<bool>? _$canSaveComputed;
+
+  @override
+  bool get canSave => (_$canSaveComputed ??= Computed<bool>(
+    () => super.canSave,
+    name: 'TH2FileEditControllerBase.canSave',
+  )).value;
   Computed<bool>? _$scrapHasScaleOptionComputed;
 
   @override
@@ -292,6 +306,74 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         () => super.scrapLengthUnitsPerPointOnScreen,
         name: 'TH2FileEditControllerBase.scrapLengthUnitsPerPointOnScreen',
       )).value;
+  Computed<bool>? _$showTextApplyRejectionComputed;
+
+  @override
+  bool get showTextApplyRejection =>
+      (_$showTextApplyRejectionComputed ??= Computed<bool>(
+        () => super.showTextApplyRejection,
+        name: 'TH2FileEditControllerBase.showTextApplyRejection',
+      )).value;
+
+  late final _$_editModeAtom = Atom(
+    name: 'TH2FileEditControllerBase._editMode',
+    context: context,
+  );
+
+  TH2EditMode get editMode {
+    _$_editModeAtom.reportRead();
+    return super._editMode;
+  }
+
+  @override
+  TH2EditMode get _editMode => editMode;
+
+  @override
+  set _editMode(TH2EditMode value) {
+    _$_editModeAtom.reportWrite(value, super._editMode, () {
+      super._editMode = value;
+    });
+  }
+
+  late final _$_textEditControllerAtom = Atom(
+    name: 'TH2FileEditControllerBase._textEditController',
+    context: context,
+  );
+
+  TH2TextEditController? get textEditController {
+    _$_textEditControllerAtom.reportRead();
+    return super._textEditController;
+  }
+
+  @override
+  TH2TextEditController? get _textEditController => textEditController;
+
+  @override
+  set _textEditController(TH2TextEditController? value) {
+    _$_textEditControllerAtom.reportWrite(value, super._textEditController, () {
+      super._textEditController = value;
+    });
+  }
+
+  late final _$_textApplyRejectionAtom = Atom(
+    name: 'TH2FileEditControllerBase._textApplyRejection',
+    context: context,
+  );
+
+  TH2TextApplyRejection? get textApplyRejection {
+    _$_textApplyRejectionAtom.reportRead();
+    return super._textApplyRejection;
+  }
+
+  @override
+  TH2TextApplyRejection? get _textApplyRejection => textApplyRejection;
+
+  @override
+  set _textApplyRejection(TH2TextApplyRejection? value) {
+    _$_textApplyRejectionAtom.reportWrite(value, super._textApplyRejection, () {
+      super._textApplyRejection = value;
+    });
+  }
 
   late final _$_screenSizeAtom = Atom(
     name: 'TH2FileEditControllerBase._screenSize',
@@ -556,33 +638,6 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
       () {
         super._th2File = value;
         __th2FileIsInitialized = true;
-      },
-    );
-  }
-
-  late final _$_th2FileMPIDAtom = Atom(
-    name: 'TH2FileEditControllerBase._th2FileMPID',
-    context: context,
-  );
-
-  int get th2FileMPID {
-    _$_th2FileMPIDAtom.reportRead();
-    return super._th2FileMPID;
-  }
-
-  @override
-  int get _th2FileMPID => th2FileMPID;
-
-  bool __th2FileMPIDIsInitialized = false;
-
-  @override
-  set _th2FileMPID(int value) {
-    _$_th2FileMPIDAtom.reportWrite(
-      value,
-      __th2FileMPIDIsInitialized ? super._th2FileMPID : null,
-      () {
-        super._th2FileMPID = value;
-        __th2FileMPIDIsInitialized = true;
       },
     );
   }
@@ -2092,6 +2147,119 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void _installTextSessionOnEntry(TH2TextEditBaseline baseline) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase._installTextSessionOnEntry',
+        );
+    try {
+      return super._installTextSessionOnEntry(baseline);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void keepEditingAfterRejection() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase.keepEditingAfterRejection',
+        );
+    try {
+      return super.keepEditingAfterRejection();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void onTabClosed() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.onTabClosed');
+    try {
+      return super.onTabClosed();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _returnToCanvas() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase._returnToCanvas');
+    try {
+      return super._returnToCanvas();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _publishTextApplyRejection(
+    TH2TextEditController session,
+    TH2TextApplyRejected rejected,
+  ) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase._publishTextApplyRejection',
+        );
+    try {
+      return super._publishTextApplyRejection(session, rejected);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void applyTextLocation(TH2TextLocation location) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.applyTextLocation');
+    try {
+      return super.applyTextLocation(location);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void revealSelection() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.revealSelection');
+    try {
+      return super.revealSelection();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void moveTextCursorToElement(int mpID, {bool requestFocus = true}) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase.moveTextCursorToElement');
+    try {
+      return super.moveTextCursorToElement(mpID, requestFocus: requestFocus);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _installReplacementBaseline(
+    TH2TextEditController session,
+    TH2TextEditBaseline baseline,
+  ) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase._installReplacementBaseline',
+        );
+    try {
+      return super._installReplacementBaseline(session, baseline);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _markLoadedAfterSaveAs() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase._markLoadedAfterSaveAs');
@@ -2253,11 +2421,14 @@ canMergeAreas: ${canMergeAreas},
 areAllElementsSelected: ${areAllElementsSelected},
 hasClipboardContent: ${hasClipboardContent},
 enableSaveButton: ${enableSaveButton},
+hasUnsavedChanges: ${hasUnsavedChanges},
+canSave: ${canSave},
 scrapHasScaleOption: ${scrapHasScaleOption},
 scrapLengthUnitType: ${scrapLengthUnitType},
 scrapLengthUnitsPerPoint: ${scrapLengthUnitsPerPoint},
 scrapLengthUnitsOnGraphicalScale: ${scrapLengthUnitsOnGraphicalScale},
-scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen}
+scrapLengthUnitsPerPointOnScreen: ${scrapLengthUnitsPerPointOnScreen},
+showTextApplyRejection: ${showTextApplyRejection}
     ''';
   }
 }

@@ -22,12 +22,16 @@ class THProjectTreeRowContextMenuWidget extends StatefulWidget {
 
   final void Function()? onBeforeOpen;
 
+  /// Called when the menu closes.
+  final VoidCallback? onAfterClose;
+
   const THProjectTreeRowContextMenuWidget({
     super.key,
     required this.rowId,
     required this.child,
     required this.menuChildrenBuilder,
     this.onBeforeOpen,
+    this.onAfterClose,
   });
 
   /// The Reload items for the `.th2` file at [th2FilePath] when it is broken
@@ -103,6 +107,7 @@ class _THProjectTreeRowContextMenuWidgetState
     return MenuAnchor(
       controller: _menuController,
       menuChildren: _menuChildren,
+      onClose: widget.onAfterClose,
       child: GestureDetector(
         onSecondaryTapUp: _onSecondaryTapUp,
         child: widget.child,

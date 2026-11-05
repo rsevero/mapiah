@@ -5,6 +5,7 @@ library;
 import 'dart:collection';
 import 'dart:convert';
 import 'package:collection/collection.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/commands/factories/mp_command_factory.dart';
 import 'package:mapiah/src/commands/mp_undo_redo_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -101,6 +102,17 @@ abstract class MPCommand {
   }
 
   void execute(TH2FileEditController th2FileEditController) {
+    if (!th2FileEditController.isModelMutationAllowed) {
+      final String message =
+          'MPCommand.execute: ${type.name} rejected: model '
+          'mutations are not allowed in text mode.';
+
+      mpLocator.mpLog.e(message);
+      assert(false, message);
+
+      return;
+    }
+
     _execPrePrepareUndoRedoInfo(th2FileEditController);
     _prepareUndoRedoInfo(th2FileEditController);
     _actualExecute(th2FileEditController);

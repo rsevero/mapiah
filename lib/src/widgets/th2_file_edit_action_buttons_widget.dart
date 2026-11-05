@@ -26,6 +26,7 @@ class TH2FileEditActionButtonsWidget extends StatelessWidget {
       builder: (BuildContext context) {
         final List<Widget> generalActionButtons = [];
 
+        generalActionButtons.addAll(_textModeButton(context));
         generalActionButtons.addAll(_changeImageButton(context));
         generalActionButtons.addAll(_editElementButtons(context));
         generalActionButtons.addAll(_addElementButtons(context));
@@ -158,6 +159,22 @@ class TH2FileEditActionButtonsWidget extends StatelessWidget {
             );
           },
         ),
+      ),
+    ];
+  }
+
+  List<Widget> _textModeButton(BuildContext context) {
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+
+    return <Widget>[
+      FloatingActionButton(
+        key: ValueKey<String>(
+          'TH2FileEditActionButtonsWidget|TextMode|$heroPrefix',
+        ),
+        heroTag: '${heroPrefix}_text_mode',
+        onPressed: th2FileEditController.requestEnterTextMode,
+        tooltip: appLocalizations.th2EditModeTextTooltip,
+        child: const Icon(Icons.notes),
       ),
     ];
   }

@@ -11,11 +11,15 @@ class MPFileTabWidget extends StatelessWidget {
   final VoidCallback onClose;
   final VoidCallback? onProperties;
 
+  /// When false, the Properties button stays visible but disabled.
+  final bool propertiesEnabled;
+
   const MPFileTabWidget({
     required this.filename,
     required this.isActive,
     required this.onClose,
     this.onProperties,
+    this.propertiesEnabled = true,
     super.key,
   });
 
@@ -83,7 +87,7 @@ class MPFileTabWidget extends StatelessWidget {
                 ),
                 constraints: const BoxConstraints(),
                 padding: const EdgeInsets.all(2.0),
-                onPressed: onProperties,
+                onPressed: propertiesEnabled ? onProperties : null,
                 tooltip: mpLocator
                     .appLocalizations
                     .th2FileTabsPagePropertiesTabTooltip,

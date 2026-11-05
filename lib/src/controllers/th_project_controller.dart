@@ -1571,7 +1571,7 @@ abstract class THProjectControllerBase with Store {
       );
     }
 
-    if (!th2Controller.enableSaveButton) {
+    if (!th2Controller.canSave) {
       dirtyFilePaths.remove(path);
 
       return THProjectTH2FileSaveResult(
@@ -1582,8 +1582,10 @@ abstract class THProjectControllerBase with Store {
       );
     }
 
+    final TH2FileSaveStatus saveStatus;
+
     try {
-      th2Controller.saveTH2File();
+      saveStatus = await th2Controller.saveTH2File();
     } catch (error, stackTrace) {
       mpLocator.mpLog.e(
         '[THProjectController] saveTH2File failed for $path',
@@ -1599,9 +1601,28 @@ abstract class THProjectControllerBase with Store {
       );
     }
 
-    if (_isCurrent(epoch, root)) {
-      dirtyFilePaths.remove(path);
+    /// A rejected text, a dropped request or a failure keeps the dirty
+    /// path.
+    if (saveStatus != TH2FileSaveStatus.saved) {
+      return THProjectTH2FileSaveResult(
+        canonicalPath: path,
+        projectEpoch: epoch,
+        rootPath: root,
+        status: saveStatus,
+      );
     }
+
+    /// The project may have changed while the save awaited.
+    if (!_isCurrent(epoch, root)) {
+      return THProjectTH2FileSaveResult(
+        canonicalPath: path,
+        projectEpoch: epoch,
+        rootPath: root,
+        status: TH2FileSaveStatus.projectChanged,
+      );
+    }
+
+    dirtyFilePaths.remove(path);
 
     return THProjectTH2FileSaveResult(
       canonicalPath: path,

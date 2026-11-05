@@ -3,6 +3,7 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
+import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_text_to_user.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/commands/types/mp_command_description_type.dart';
@@ -43,7 +44,28 @@ abstract class MPUndoRedoControllerBase with Store {
   List<MPUndoRedoCommand> get redosForTesting =>
       UnmodifiableListView<MPUndoRedoCommand>(_redos);
 
+  /// Whether the stacks may change now; logs and fails an assertion when
+  /// not (text mode outside an authorized mutation).
+  bool _isStackChangeAllowed(String operation) {
+    if (_th2FileEditController.isModelMutationAllowed) {
+      return true;
+    }
+
+    final String message =
+        'MPUndoRedoController.$operation rejected: model mutations are not '
+        'allowed in text mode.';
+
+    mpLocator.mpLog.e(message);
+    assert(false, message);
+
+    return false;
+  }
+
   void add(MPCommand command) {
+    if (!_isStackChangeAllowed('add')) {
+      return;
+    }
+
     final MPUndoRedoCommand undo = command.getUndoRedoCommand(
       _th2FileEditController,
     );
@@ -100,11 +122,19 @@ abstract class MPUndoRedoControllerBase with Store {
   }
 
   void execute(MPCommand command) {
+    if (!_isStackChangeAllowed('execute')) {
+      return;
+    }
+
     command.execute(_th2FileEditController);
     add(command);
   }
 
   void executeSubstitutingLastUndo(MPCommand command) {
+    if (!_isStackChangeAllowed('executeSubstitutingLastUndo')) {
+      return;
+    }
+
     if (_undos.isEmpty) {
       return;
     }
@@ -124,6 +154,10 @@ abstract class MPUndoRedoControllerBase with Store {
   }
 
   void undo() {
+    if (!_isStackChangeAllowed('undo')) {
+      return;
+    }
+
     if (_undos.isEmpty) {
       return;
     }
@@ -146,6 +180,10 @@ abstract class MPUndoRedoControllerBase with Store {
   }
 
   void revertLastUndoWithoutRedo() {
+    if (!_isStackChangeAllowed('revertLastUndoWithoutRedo')) {
+      return;
+    }
+
     if (_undos.isEmpty) {
       return;
     }
@@ -159,6 +197,10 @@ abstract class MPUndoRedoControllerBase with Store {
   }
 
   void redo() {
+    if (!_isStackChangeAllowed('redo')) {
+      return;
+    }
+
     if (_redos.isEmpty) {
       return;
     }

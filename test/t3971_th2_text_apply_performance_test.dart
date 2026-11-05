@@ -103,7 +103,7 @@ void main() {
     session.content = edited;
     stopwatch.reset();
 
-    final TH2TextApplyResult applyResult = await controller.applyTextContent(
+    final TH2TextApplyResult applyResult = await controller.applyTextContentGated(
       edited,
       session: session,
     );
@@ -288,7 +288,7 @@ void main() {
       );
 
       session.content = edited;
-      await controller.applyTextContent(edited, session: session);
+      await controller.applyTextContentGated(edited, session: session);
 
       expect(controller.undoRedoController.undoCount, undoCount + 1);
 

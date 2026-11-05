@@ -16,6 +16,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th_project_tree_ui_controller.dart';
 import 'package:mapiah/src/controllers/th_text_editor_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/controllers/types/th2_edit_mode.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/pages/mp_settings_page.dart';
 import 'package:mapiah/src/pages/th2_file_properties_page.dart';
@@ -128,7 +129,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       if (isTH2Tab(filename)) {
         mpLocator.mpGeneralController
             .getTH2FileEditControllerIfExists(filename)
-            ?.th2FileFocusNode
+            ?.activeFocusNode
             .requestFocus();
       } else {
         mpLocator.mpGeneralController
@@ -363,12 +364,14 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                   IconButton(
                     icon: Icon(
                       Icons.save_outlined,
-                      color: (controller?.enableSaveButton ?? false)
+                      color: (controller?.canSave ?? false)
                           ? colorScheme.onSecondaryContainer
                           : colorScheme.onSecondaryContainer.withAlpha(100),
                     ),
-                    onPressed: (controller?.enableSaveButton ?? false)
-                        ? () => controller?.saveTH2File()
+                    onPressed: (controller?.canSave ?? false)
+                        ? () => unawaited(
+                            _saveActiveTab(mpLocator.mpGeneralController),
+                          )
                         : null,
                     tooltip: appLocalizations.th2FileEditPageSave,
                   ),
@@ -380,7 +383,11 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                     onPressed: isTH2
                         ? ((controller?.isBroken ?? false)
                               ? null
-                              : () => controller?.saveAsTH2File())
+                              : () => unawaited(
+                                  _saveActiveTabAs(
+                                    mpLocator.mpGeneralController,
+                                  ),
+                                ))
                         : () => unawaited(textController?.saveAs()),
                     tooltip: isTH2
                         ? appLocalizations.th2FileEditPageSaveAs
@@ -678,7 +685,7 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
       _overflowMenuItem(
         action: _TH2FileTabsAction.save,
         label: appLocalizations.th2FileEditPageSave,
-        enabled: controller?.enableSaveButton ?? false,
+        enabled: controller?.canSave ?? false,
       ),
       _overflowMenuItem(
         action: _TH2FileTabsAction.saveAs,
@@ -792,10 +799,10 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
 
     switch (action) {
       case _TH2FileTabsAction.save:
-        controller?.saveTH2File();
+        unawaited(_saveActiveTab(mpLocator.mpGeneralController));
       case _TH2FileTabsAction.saveAs:
         if (controller != null) {
-          controller.saveAsTH2File();
+          unawaited(_saveActiveTabAs(mpLocator.mpGeneralController));
         } else {
           unawaited(textController?.saveAs());
         }
@@ -993,41 +1000,49 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                 onTap: () {
                   mpLocator.mpGeneralController.setActiveTab(tabIndex);
                 },
-                child: MPFileTabWidget(
-                  filename: filename,
-                  isActive:
-                      (activeTabIndex < openFileOrder.length) &&
-                      (openFileOrder[activeTabIndex] == filename),
-                  onClose: () {
-                    if (isTH2Tab(filename)) {
-                      mpLocator.mpGeneralController
-                          .getTH2FileEditControllerIfExists(filename)
-                          ?.close();
-                    } else {
-                      mpLocator.mpGeneralController
-                          .getTextEditorControllerIfExists(filename)
-                          ?.close();
-                    }
-                  },
-                  onProperties: isTH2Tab(filename)
-                      ? () {
-                          final TH2FileEditController? controller = mpLocator
-                              .mpGeneralController
-                              .getTH2FileEditControllerIfExists(filename);
-
-                          if (controller == null) {
-                            return;
-                          }
-
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => TH2FilePropertiesPage(
-                                th2FileEditController: controller,
-                              ),
-                            ),
-                          );
+                child: Observer(
+                  builder: (_) => MPFileTabWidget(
+                      filename: filename,
+                      propertiesEnabled:
+                          !isTH2Tab(filename) ||
+                          (mpLocator.mpGeneralController
+                                  .getTH2FileEditControllerIfExists(filename)
+                                  ?.editMode !=
+                              TH2EditMode.text),
+                      isActive:
+                          (activeTabIndex < openFileOrder.length) &&
+                          (openFileOrder[activeTabIndex] == filename),
+                      onClose: () {
+                        if (isTH2Tab(filename)) {
+                          mpLocator.mpGeneralController
+                              .getTH2FileEditControllerIfExists(filename)
+                              ?.close();
+                        } else {
+                          mpLocator.mpGeneralController
+                              .getTextEditorControllerIfExists(filename)
+                              ?.close();
                         }
-                      : null,
+                      },
+                      onProperties: isTH2Tab(filename)
+                          ? () {
+                              final TH2FileEditController? controller = mpLocator
+                                  .mpGeneralController
+                                  .getTH2FileEditControllerIfExists(filename);
+
+                              if (controller == null) {
+                                return;
+                              }
+
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => TH2FilePropertiesPage(
+                                    th2FileEditController: controller,
+                                  ),
+                                ),
+                              );
+                            }
+                          : null,
+                    ),
                 ),
               ),
             ],
@@ -1075,13 +1090,16 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
             LogicalKeyboardKey.keyS,
             control: true,
             shift: true,
-          ): () => _saveActiveTabAs(generalController),
+          ): () => unawaited(_saveActiveTabAs(generalController)),
           const SingleActivator(
             LogicalKeyboardKey.keyS,
             meta: true,
             shift: true,
-          ): () => _saveActiveTabAs(generalController),
+          ): () => unawaited(_saveActiveTabAs(generalController)),
           // Help
+          // Canvas/text mode of the active TH2 tab
+          const SingleActivator(LogicalKeyboardKey.f2): () =>
+              _toggleActiveTH2TabEditMode(generalController),
           const SingleActivator(LogicalKeyboardKey.f1): () =>
               MPDialogAux.showHelpDialog(
                 context,
@@ -1181,7 +1199,10 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
 
   /// Save As for the active tab's `Ctrl/Cmd+Shift+S` binding, routing to
   /// whichever controller type backs it.
-  void _saveActiveTabAs(MPGeneralController generalController) {
+  ///
+  /// A TH2 result of `textHasProblems` is already shown by the text
+  /// editor's banner, and `cancelled` reports nothing.
+  Future<void> _saveActiveTabAs(MPGeneralController generalController) async {
     final List<String> openFileOrder = generalController.openFileOrder;
     final int activeTabIndex = generalController.activeTabIndex;
 
@@ -1193,17 +1214,46 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
 
     final String activeFilename = openFileOrder[activeTabIndex];
 
-    if (isTH2Tab(activeFilename)) {
-      generalController
-          .getTH2FileEditControllerIfExists(activeFilename)
-          ?.saveAsTH2File();
-    } else {
-      unawaited(
-        generalController
+    try {
+      if (isTH2Tab(activeFilename)) {
+        await generalController
+            .getTH2FileEditControllerIfExists(activeFilename)
+            ?.saveAsTH2File();
+      } else {
+        await generalController
             .getTextEditorControllerIfExists(activeFilename)
-            ?.saveAs(),
+            ?.saveAs();
+      }
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        '[TH2FileTabsPage] _saveActiveTabAs failed for $activeFilename',
+        error: error,
+        stackTrace: stackTrace,
       );
     }
+  }
+
+  /// Switches the active TH2 tab between the canvas and text mode. Does
+  /// nothing on other tabs.
+  void _toggleActiveTH2TabEditMode(MPGeneralController generalController) {
+    final List<String> openFileOrder = generalController.openFileOrder;
+    final int activeTabIndex = generalController.activeTabIndex;
+
+    if (openFileOrder.isEmpty ||
+        (activeTabIndex < 0) ||
+        (activeTabIndex >= openFileOrder.length)) {
+      return;
+    }
+
+    final String activeFilename = openFileOrder[activeTabIndex];
+
+    if (!isTH2Tab(activeFilename)) {
+      return;
+    }
+
+    generalController
+        .getTH2FileEditControllerIfExists(activeFilename)
+        ?.requestToggleEditMode();
   }
 
   /// Saves whichever controller type backs the active tab.
@@ -1224,8 +1274,8 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
         final TH2FileEditController? controller = generalController
             .getTH2FileEditControllerIfExists(activeFilename);
 
-        if ((controller != null) && controller.enableSaveButton) {
-          controller.saveTH2File();
+        if ((controller != null) && controller.canSave) {
+          await controller.saveTH2File();
         }
       } else {
         await generalController

@@ -16,6 +16,7 @@ import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_selection_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_global_key_widget_type.dart';
+import 'package:mapiah/src/controllers/types/th2_edit_mode.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/mixins/mp_bounding_box_mixin.dart';
 import 'package:mapiah/src/elements/mixins/th_is_parent_mixin.dart';
@@ -1326,8 +1327,21 @@ abstract class TH2FileEditElementEditControllerBase with Store {
     );
   }
 
+  /// Picks and inserts an image, as a gated operation: dropped while another
+  /// operation of this file runs.
   Future<void> addImage() async {
-    final BuildContext? currentContext = _th2FileEditController
+    await _th2FileEditController.runGatedOperation<void>(_addImageGated);
+  }
+
+  Future<void> _addImageGated() async {
+    final TH2FileEditController controller = _th2FileEditController;
+
+    if (controller.isDisposed ||
+        (controller.editMode != TH2EditMode.canvas)) {
+      return;
+    }
+
+    final BuildContext? currentContext = controller
         .overlayWindowController
         .globalKeyWidgetKeyByType[MPGlobalKeyWidgetType.changeImageButton]!
         .currentContext;
@@ -1340,21 +1354,26 @@ abstract class TH2FileEditElementEditControllerBase with Store {
       currentContext,
     );
 
-    if (imageResult.type == PickImageFileReturnType.empty) {
+    if (controller.isDisposed ||
+        (imageResult.type == PickImageFileReturnType.empty)) {
       return;
     }
 
     final MPAddImageInsertConfigCommand addImageCommand =
         MPCommandFactory.addImageInsertConfig(
           imageFilename: imageResult.filename!,
-          th2FileEditController: _th2FileEditController,
+          th2FileEditController: controller,
           svgIntrinsicSizeInfo: imageResult.svgIntrinsicSizeInfo,
         );
 
     await _warmAddedImageBounds(addImageCommand.newImageInsertConfig);
 
-    _th2FileEditController.execute(addImageCommand);
-    _th2FileEditController.triggerImagesRedraw();
+    if (controller.isDisposed) {
+      return;
+    }
+
+    controller.execute(addImageCommand);
+    controller.triggerImagesRedraw();
   }
 
   Future<void> _warmAddedImageBounds(THElement newImageInsertConfig) async {

@@ -331,21 +331,39 @@ void main() {
     );
 
     testWidgets(
-      'hiding the active scrap switches to the nearest visible scrap',
+      'the active scrap stays visible and active when asked to hide it',
       (WidgetTester tester) async {
         await loadFile(tester);
 
         final int firstScrapMPID = th2Controller.th2File.getScraps().first.mpID;
-        final int secondScrapMPID = th2Controller.th2File.getScraps().last.mpID;
+        final THPoint point = th2Controller.th2File
+            .scrapByMPID(firstScrapMPID)
+            .getChildren(th2Controller.th2File)
+            .whereType<THPoint>()
+            .first;
 
         // first scrap is the active one.
         expect(th2Controller.activeScrapID, firstScrapMPID);
 
+        th2Controller.selectionController.setSelectedElements(<THElement>[
+          point,
+        ]);
+
+        final Set<int> selectedBefore = th2Controller
+            .selectionController
+            .mpSelectedElementsLogical
+            .keys
+            .toSet();
+
         hideController.toggleScrapVisibility(firstScrapMPID);
 
-        expect(hideController.isScrapVisible(firstScrapMPID), isFalse);
-        expect(th2Controller.activeScrapID, isNot(firstScrapMPID));
-        expect(th2Controller.activeScrapID, secondScrapMPID);
+        expect(hideController.isScrapVisible(firstScrapMPID), isTrue);
+        expect(th2Controller.activeScrapID, firstScrapMPID);
+        expect(
+          th2Controller.selectionController.mpSelectedElementsLogical.keys
+              .toSet(),
+          selectedBefore,
+        );
       },
     );
 

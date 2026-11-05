@@ -3,6 +3,7 @@
 
 import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/th2_edit_mode.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
 import 'package:mobx/mobx.dart';
@@ -20,7 +21,12 @@ abstract class TH2FilePropertiesControllerBase with Store {
   @computed
   String get encoding => _th2FileEditController.th2File.encoding;
 
+  /// Does nothing in text mode, where Properties is disabled.
   void prepareSetEncoding(String newEncoding) {
+    if (_th2FileEditController.editMode == TH2EditMode.text) {
+      return;
+    }
+
     final String normalized = newEncoding.trim().toUpperCase();
 
     if (normalized.isEmpty || (normalized == encoding)) {

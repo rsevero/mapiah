@@ -124,19 +124,21 @@ void main() {
           contains(canonicalPath),
         );
 
-        // The same steps saveAsTH2File runs after its file picker.
+        // The registry and filename steps saveAsTH2File runs after its
+        // successful write, followed below by the save's commit (here
+        // through Save, which writes to the new filename).
+        controller.th2File.filename = newPath;
         mpLocator.mpGeneralController.renameFileController(
           oldFilename: path,
           newFilename: newPath,
         );
-        controller.th2File.filename = newPath;
 
         expect(
           mpLocator.thProjectController.dirtyFilePaths,
           equals(<String>{newCanonicalPath}),
         );
 
-        controller.saveTH2File();
+        await controller.saveTH2File();
 
         expect(controller.enableSaveButton, isFalse);
         expect(mpLocator.thProjectController.dirtyFilePaths, isEmpty);

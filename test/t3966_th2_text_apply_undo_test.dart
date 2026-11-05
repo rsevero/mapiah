@@ -77,7 +77,7 @@ void main() {
   }) {
     session.content = text;
 
-    return controller.applyTextContent(
+    return controller.applyTextContentGated(
       text,
       session: session,
       lockBufferOnAccept: lockBufferOnAccept,

@@ -77,10 +77,26 @@ class THTextFileSaveResult {
       status == THTextFileSaveStatus.alreadySaved;
 }
 
-/// Outcome of the `.th2` adapter branch of generic `saveProjectFile`. `.th2`
-/// serialization/write stay owned by `TH2FileEditController.saveTH2File`,
-/// which does not separate serialization from I/O, hence one `saveFailed`.
-enum TH2FileSaveStatus { saved, alreadySaved, projectChanged, noOpenEditor, saveFailed }
+/// Outcome of `TH2FileEditController.saveTH2File`/`saveAsTH2File` and of
+/// the `.th2` adapter branch of generic `saveProjectFile`. `.th2`
+/// serialization/write stay owned by the controller, which does not
+/// separate serialization from I/O, hence one `saveFailed`.
+///
+/// - [textHasProblems]: in text mode, the buffer is invalid; nothing was
+///   applied or written.
+/// - [cancelled]: the request was dropped because another operation of the
+///   file was running, the Save As dialog was dismissed, the Save As target
+///   is open in another tab, or the controller or text session went away
+///   meanwhile; nothing was written.
+enum TH2FileSaveStatus {
+  saved,
+  alreadySaved,
+  projectChanged,
+  noOpenEditor,
+  saveFailed,
+  textHasProblems,
+  cancelled,
+}
 
 /// Sealed result of the generic `THProjectController.saveProjectFile(path)`.
 sealed class THProjectFileSaveResult {

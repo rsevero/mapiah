@@ -59,7 +59,7 @@ void main() {
 
     session.content = text;
 
-    final TH2TextApplyResult result = await controller.applyTextContent(
+    final TH2TextApplyResult result = await controller.applyTextContentGated(
       text,
       session: session,
     );

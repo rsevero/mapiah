@@ -111,7 +111,17 @@ mixin MPTH2FileEditStateKeyDownMixin on MPTH2FileEditState {
                 MPWindowType.changeImage,
               );
             } else {
-              th2FileEditController.elementEditController.addImage();
+              unawaited(
+                th2FileEditController.elementEditController.addImage().catchError(
+                  (Object error, StackTrace stackTrace) {
+                    mpLocator.mpLog.e(
+                      'Failed to add an image',
+                      error: error,
+                      stackTrace: stackTrace,
+                    );
+                  },
+                ),
+              );
             }
             keyProcessed = true;
           }
@@ -174,17 +184,6 @@ mixin MPTH2FileEditStateKeyDownMixin on MPTH2FileEditState {
           );
           mpLocator.mpGeneralController.triggerAllOpenTH2FilesRedraw();
           keyProcessed = true;
-        }
-      case LogicalKeyboardKey.keyS:
-        if ((isCtrlPressed || isMetaPressed) && !isAltPressed) {
-          if (th2FileEditController.enableSaveButton) {
-            if (isShiftPressed) {
-              th2FileEditController.saveAsTH2File();
-            } else {
-              th2FileEditController.saveTH2File();
-            }
-            keyProcessed = true;
-          }
         }
       case LogicalKeyboardKey.keyT:
         if (!isAltPressed &&

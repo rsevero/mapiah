@@ -3,7 +3,9 @@
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/mp_error_dialog.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/th2_edit_mode.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_action_buttons_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_edit_bottom_status_bar_widget.dart';
@@ -12,6 +14,7 @@ import 'package:mapiah/src/widgets/th2_file_edit_state_action_buttons_widget.dar
 import 'package:mapiah/src/widgets/th2_file_edit_state_context_fabs_widget.dart';
 import 'package:mapiah/src/widgets/th2_file_widget.dart';
 import 'package:mapiah/src/widgets/th2_broken_file_body_widget.dart';
+import 'package:mapiah/src/widgets/th2_text_edit_body_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 class TH2FileEditBodyWidget extends StatefulWidget {
@@ -80,15 +83,25 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
 
                     return Container();
                   } else if (snapshot.hasData) {
-                    if (snapshot.data!.problems.isNotEmpty ||
-                        th2FileEditController.isBroken) {
-                      return TH2BrokenFileBodyWidget(
-                        controller: th2FileEditController,
-                        onReload: widget.onReload,
-                      );
-                    }
+                    return Observer(
+                      builder: (_) {
+                        if (th2FileEditController.editMode ==
+                            TH2EditMode.text) {
+                          return TH2TextEditBodyWidget(
+                            th2FileEditController: th2FileEditController,
+                          );
+                        }
 
-                    return _buildEditor(heroPrefix);
+                        if (th2FileEditController.isBroken) {
+                          return TH2BrokenFileBodyWidget(
+                            controller: th2FileEditController,
+                            onReload: widget.onReload,
+                          );
+                        }
+
+                        return _buildEditor(heroPrefix);
+                      },
+                    );
                   } else {
                     throw Exception(
                       'Unexpected snapshot state: ${snapshot.connectionState}',
@@ -97,14 +110,26 @@ class _TH2FileEditBodyWidgetState extends State<TH2FileEditBodyWidget> {
                 },
           ),
         ),
-        if (!th2FileEditController.isBroken)
-          TH2FileEditLastUsedPLAButtonsWidget(
-            th2FileEditController: th2FileEditController,
-          ),
-        if (!th2FileEditController.isBroken)
-          TH2FileEditBottomStatusBarWidget(
-            th2FileEditController: th2FileEditController,
-          ),
+        Observer(
+          builder: (_) {
+            if (th2FileEditController.isBroken ||
+                (th2FileEditController.editMode != TH2EditMode.canvas)) {
+              return const SizedBox.shrink();
+            }
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TH2FileEditLastUsedPLAButtonsWidget(
+                  th2FileEditController: th2FileEditController,
+                ),
+                TH2FileEditBottomStatusBarWidget(
+                  th2FileEditController: th2FileEditController,
+                ),
+              ],
+            );
+          },
+        ),
       ],
     );
   }

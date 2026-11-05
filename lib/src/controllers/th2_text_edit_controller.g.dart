@@ -155,24 +155,6 @@ mixin _$TH2TextEditController on TH2TextEditControllerBase, Store {
     });
   }
 
-  late final _$_isRecoveryReadOnlyAtom = Atom(
-    name: 'TH2TextEditControllerBase._isRecoveryReadOnly',
-    context: context,
-  );
-
-  @override
-  bool get _isRecoveryReadOnly {
-    _$_isRecoveryReadOnlyAtom.reportRead();
-    return super._isRecoveryReadOnly;
-  }
-
-  @override
-  set _isRecoveryReadOnly(bool value) {
-    _$_isRecoveryReadOnlyAtom.reportWrite(value, super._isRecoveryReadOnly, () {
-      super._isRecoveryReadOnly = value;
-    });
-  }
-
   late final _$_cursorLineAtom = Atom(
     name: 'TH2TextEditControllerBase._cursorLine',
     context: context,
@@ -315,17 +297,6 @@ mixin _$TH2TextEditController on TH2TextEditControllerBase, Store {
         .startAction(name: 'TH2TextEditControllerBase.endSession');
     try {
       return super.endSession();
-    } finally {
-      _$TH2TextEditControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void enterRecoveryReadOnly() {
-    final _$actionInfo = _$TH2TextEditControllerBaseActionController
-        .startAction(name: 'TH2TextEditControllerBase.enterRecoveryReadOnly');
-    try {
-      return super.enterRecoveryReadOnly();
     } finally {
       _$TH2TextEditControllerBaseActionController.endAction(_$actionInfo);
     }

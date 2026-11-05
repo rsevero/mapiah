@@ -11,6 +11,7 @@ import 'package:mapiah/src/commands/mp_command.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/auxiliary/th_project_tree_visible_row.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/th2_edit_mode.dart';
 import 'package:material_ui/material_ui.dart';
 
 class TH2ElementTreeDragController extends ChangeNotifier {
@@ -366,6 +367,15 @@ class _TH2ElementTreeDropTargetState extends State<TH2ElementTreeDropTarget> {
     super.dispose();
   }
 
+  /// Payloads whose source or target controller is in text mode are
+  /// rejected: the tree doesn't edit a file in text mode.
+  bool _acceptsInCurrentMode(TH2ElementTreeDragPayload payload) {
+    final TH2FileEditController? target = mpLocator.mpGeneralController
+        .getTH2FileEditControllerIfExists(widget.th2FilePath);
+    return (payload.controller.editMode != TH2EditMode.text) &&
+        (target?.editMode != TH2EditMode.text);
+  }
+
   bool _hitTestAt(Offset globalPosition) {
     final TH2ElementTreeDragPayload? payload =
         widget.controller.activePayload;
@@ -386,14 +396,20 @@ class _TH2ElementTreeDropTargetState extends State<TH2ElementTreeDropTarget> {
   @override
   Widget build(BuildContext context) {
     return DragTarget<TH2ElementTreeDragPayload>(
-      onWillAcceptWithDetails: (details) => true,
+      onWillAcceptWithDetails: (details) => _acceptsInCurrentMode(details.data),
       onMove: (details) {
         _hitTestAt(details.offset);
       },
       onLeave: (_) => widget.controller.leave(widget.rowId),
-      onAcceptWithDetails: (details) => widget.controller.drop(
-        payload: details.data, th2FilePath: widget.th2FilePath,
-        targetMPID: widget.targetMPID, upper: _upper),
+      onAcceptWithDetails: (details) {
+        if (!_acceptsInCurrentMode(details.data)) {
+          widget.controller.leave(widget.rowId);
+          return;
+        }
+        widget.controller.drop(
+          payload: details.data, th2FilePath: widget.th2FilePath,
+          targetMPID: widget.targetMPID, upper: _upper);
+      },
       builder: (BuildContext targetContext, candidates, rejected) {
         _targetContext = targetContext;
         return AnimatedBuilder(animation: widget.controller,

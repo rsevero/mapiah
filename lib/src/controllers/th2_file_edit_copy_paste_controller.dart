@@ -82,6 +82,26 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
     mpLocator.mpGeneralController.setClipboard(result);
   }
 
+  /// The MPIDs of the existing border lines of [area], in its border order:
+  /// the lines a copy of the area adds before it.
+  List<int> borderLineMPIDsOfArea(THArea area) {
+    final List<int> borderLineMPIDs = <int>[];
+
+    for (final int childMPID in area.childrenMPIDs) {
+      final THElement child = _th2File.elementByMPID(childMPID);
+
+      if (child is THAreaBorderTHID) {
+        final String borderTHID = child.thID;
+
+        if (_th2File.hasElementByTHID(borderTHID)) {
+          borderLineMPIDs.add(_th2File.elementByTHID(borderTHID).mpID);
+        }
+      }
+    }
+
+    return borderLineMPIDs;
+  }
+
   /// Build copy result recursively for one element with its children.
   ///
   /// Returns a `List<MPCopyElementWithChildren>` which may include pre-sibling
@@ -95,26 +115,17 @@ abstract class TH2FileEditCopyPasteControllerBase with Store {
 
     /// Handle THArea special case: extract border lines first.
     if (element is THArea) {
-      final THIsParentMixin parent = element as THIsParentMixin;
+      for (final int borderLineMPID in borderLineMPIDsOfArea(element)) {
+        if (!trackedMPIDs.contains(borderLineMPID)) {
+          /// Call _buildCopyResult recursively with SAME position as area.
+          final List<MPCopyElementWithChildren> borderLineEntries =
+              _buildCopyResult(
+                _th2File.elementByMPID(borderLineMPID),
+                positionAtParent,
+                trackedMPIDs,
+              );
 
-      for (final int childMPID in parent.childrenMPIDs) {
-        final THElement child = _th2File.elementByMPID(childMPID);
-
-        if (child is THAreaBorderTHID) {
-          /// Extract referenced border line's MPID from thID.
-          final String borderTHID = child.thID;
-
-          if (_th2File.hasElementByTHID(borderTHID)) {
-            final THElement borderLine = _th2File.elementByTHID(borderTHID);
-
-            if (!trackedMPIDs.contains(borderLine.mpID)) {
-              /// Call _buildCopyResult recursively with SAME position as area.
-              final List<MPCopyElementWithChildren> borderLineEntries =
-                  _buildCopyResult(borderLine, positionAtParent, trackedMPIDs);
-
-              result.addAll(borderLineEntries);
-            }
-          }
+          result.addAll(borderLineEntries);
         }
       }
     }

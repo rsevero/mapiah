@@ -3,7 +3,8 @@
 import 'dart:async';
 import 'dart:ui' show TextRange;
 
-import 'package:flutter/widgets.dart' show FocusNode, visibleForTesting;
+import 'package:flutter/widgets.dart'
+    show FocusNode, WidgetsBinding, visibleForTesting;
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th2_file_problem_text_aux.dart';
 import 'package:mapiah/src/auxiliary/th2_text_apply_session.dart';
@@ -92,11 +93,6 @@ abstract class TH2TextEditControllerBase
   @observable
   bool _hasTextEdits = false;
 
-  /// Read-only after a failed session regeneration, independently of the
-  /// operation-owned buffer lock.
-  @observable
-  bool _isRecoveryReadOnly = false;
-
   @observable
   int _cursorLine = 0;
 
@@ -160,8 +156,6 @@ abstract class TH2TextEditControllerBase
   @override
   bool get hasTextEdits => _hasTextEdits;
 
-  bool get isRecoveryReadOnly => _isRecoveryReadOnly;
-
   @override
   int get cursorLine => _cursorLine;
 
@@ -215,11 +209,11 @@ abstract class TH2TextEditControllerBase
 
   @override
   @computed
-  bool get isReadOnly => _owner.isBufferLocked || _isRecoveryReadOnly;
+  bool get isReadOnly => _owner.isBufferLocked;
 
   @override
   @computed
-  bool get canSave => !_isRecoveryReadOnly && _owner.canSave;
+  bool get canSave => _owner.canSave;
 
   @override
   @computed
@@ -249,7 +243,6 @@ abstract class TH2TextEditControllerBase
     _validationCache = baseline._validationCache;
     _diagnostics = const <THTextEditorDiagnostic>[];
     _hasTextEdits = false;
-    _isRecoveryReadOnly = false;
     _cursorLine = baseline.cursorLine;
     _cursorColumn = baseline.cursorColumn;
     _pendingScrollToLine = null;
@@ -287,12 +280,19 @@ abstract class TH2TextEditControllerBase
     find.reset();
   }
 
-  /// Makes the buffer read-only until a new baseline is installed.
-  @action
-  void enterRecoveryReadOnly() {
+  /// Publishes [diagnostics], as idle validation does, while the session is
+  /// open and its buffer still equals [content], the text they describe.
+  void showDiagnostics(
+    List<TH2TextDiagnostic> diagnostics, {
+    required String content,
+  }) {
+    if (_isDisposed || !_isOpen || (_content != content)) {
+      return;
+    }
+
     _idleTimer?.cancel();
     _idleTimer = null;
-    _isRecoveryReadOnly = true;
+    _publishDiagnostics(diagnostics);
   }
 
   @override
@@ -379,10 +379,6 @@ abstract class TH2TextEditControllerBase
   /// Discards the text edits through the owner's gated operation.
   @override
   Future<void> revert() async {
-    if (_isRecoveryReadOnly) {
-      return;
-    }
-
     await _owner.discardTextEdits();
   }
 
@@ -484,8 +480,22 @@ abstract class TH2TextEditControllerBase
     _idleTimer?.cancel();
     _idleTimer = null;
     _validationCache.clear();
-    textEditorFocusNode.dispose();
-    textFieldFocusNode.dispose();
+    _disposeFocusNode(textEditorFocusNode);
+    _disposeFocusNode(textFieldFocusNode);
+  }
+
+  /// Disposes [node] now, or after the frame while it is still attached.
+  static void _disposeFocusNode(FocusNode node) {
+    if (node.context == null) {
+      node.dispose();
+
+      return;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((Duration _) {
+      node.dispose();
+    });
+    WidgetsBinding.instance.scheduleFrame();
   }
 
   @visibleForTesting

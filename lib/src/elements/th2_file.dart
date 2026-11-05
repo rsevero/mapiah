@@ -18,6 +18,7 @@ import 'package:mapiah/src/elements/th_has_id.dart';
 import 'package:mapiah/src/exceptions/th_custom_exception.dart';
 import 'package:mapiah/src/exceptions/th_no_element_by_mapiah_id_exception.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:mobx/mobx.dart';
 
 /// TH2File represents the complete contents of a .th or .th2 file.
 ///
@@ -38,7 +39,18 @@ class TH2File
       LinkedHashMap<int, THElement>();
   String filename = '';
   Uint8List? fileBytes;
-  bool isNewFile = false;
+
+  /// Observable, so that the save state follows it.
+  final Observable<bool> _isNewFile = Observable<bool>(
+    false,
+    name: 'TH2File.isNewFile',
+  );
+
+  bool get isNewFile => _isNewFile.value;
+
+  set isNewFile(bool value) {
+    runInAction(() => _isNewFile.value = value);
+  }
 
   String encoding = mpDefaultEncoding;
   String lineEnding = MPDirectoryAux.getDefaultLineEnding();

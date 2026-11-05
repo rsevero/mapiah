@@ -3,7 +3,17 @@
 # TH2 Text Editing — Phase 4: Mode Switching, Synchronization and Saving
 
 **Date:** 2026-10-15
-**Status:** Proposed, not implemented. Grounded in `feat_38_th2_text_editing` at `ff083b22`, with Phases 1–3 implemented. `lib/` and `test/` are unchanged from `ff083b22` to `6d498737`, so the line numbers in §2 are current at both.
+**Status:** **Implemented** on the feature branch on 2026-11-05, in one commit instead of the seven of §6. Grounded in `feat_38_th2_text_editing` at `ff083b22`, with Phases 1–3 implemented. `lib/` and `test/` are unchanged from `ff083b22` to `6d498737`, so the line numbers in §2 are current at both.
+
+**Implementation notes.** Where the code differs from this plan:
+
+- A new file, which is never "loaded" until its first Save As, can enter text mode: entry refuses `!isFileLoaded` only for a file that isn't new (§4.3 step 1).
+- In _Line edit_ mode the entry cursor uses only the selected line points, or the edited line when none is selected. Counting the selected line too, as §4.3 step 6 reads, always put the cursor on the line's own first line.
+- `applyTextLocation` first sets `selectEmptySelection` when entry kept _Line edit_ mode and the target isn't a line point. `setSelectedElements([], setState: true)` alone (§4.4) updates the status bar while still in the line edit state, which fails without a selected element.
+- `revealSelection` before the canvas's first layout sets a pending flag that `TH2FileWidget` consumes after its zoom, like `requestZoomToFit`.
+- Static test hooks are declared on `TH2FileEditControllerBase` (Dart doesn't inherit statics through the MobX class alias): `beforeSaveAsExtensionRenameForTesting`, `beforeSaveAsImageRebaseForTesting`, `beforeWriteFileForTesting`, `beforePrepareTextSessionForTesting` and `onUserMessageForTesting`.
+- `_th2FileMPID` is a plain `late final` field with an `@override` getter, so it implements `TH2TextEditOwner.th2FileMPID`.
+- Tests not written from §7's table: entry finalizing a line or area being drawn and a forced failure of entry's second serialization (`t3976`); a hidden-scrap snap check (`t3977`); closing the tab keeping a tab-less controller (`t3978`); a forced command failure during a traversal (`t3988`). `t3981`'s tree tests cover a click, the context menu and focus return, not Ctrl/Shift/double clicks or tab switches.
 
 **Validation record:** Validated against the code at `adf2c190` (2026-10-15), `7f8353a0` (2026-10-26), `fc28795a` (2026-11-03) and `cf90cbb8` (2026-11-03). A simplification pass at `6d498737` (2026-11-05) rechecked the design against the code and removed safeguards for failures that can't realistically happen or that the canvas doesn't guard against today: regeneration recovery, the traversal checkpoint and rollback, Save As's transactional failure boundary, the zone-scoped gate tokens, the tab-lifecycle generation and registration rechecks, deferred text controller disposal and the guard on clearing the undo stack (§3 changes 1, 2, 3, 6, 7, 9 and 11). With `rollbackFailed` gone, the tab-close retention rule that `onTabClosed()` defeated by clearing the record first is gone too, and §4.10 now states what retention does with unsaved text. A review on 2026-11-05, with `lib/` and `test/` unchanged, found that a Save As target collision silently left the other open file emptied by the picker, so the collision now restores a clean controller's file and reports it (§4.6), and that a canvas traversal can restore a lone `\r`, which now shows the line-ending message (§3 change 1, §4.5). These contracts supersede conflicting parent-plan details until §6 step 7 updates the parent.
 

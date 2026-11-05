@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 library;
 
+import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
 import 'package:flutter/gestures.dart';
@@ -304,7 +305,17 @@ abstract class MPTH2FileEditState {
         );
         return true;
       case MPButtonType.addImage:
-        th2FileEditController.elementEditController.addImage();
+        unawaited(
+          th2FileEditController.elementEditController.addImage().catchError(
+            (Object error, StackTrace stackTrace) {
+              mpLocator.mpLog.e(
+                'Failed to add an image',
+                error: error,
+                stackTrace: stackTrace,
+              );
+            },
+          ),
+        );
         return true;
       case MPButtonType.addLine:
         th2FileEditController.stateController.setState(

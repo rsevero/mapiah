@@ -85,7 +85,7 @@ void main() {
 
     session.content = text;
 
-    final TH2TextApplyResult applyResult = await controller.applyTextContent(
+    final TH2TextApplyResult applyResult = await controller.applyTextContentGated(
       text,
       session: session,
     );
@@ -436,7 +436,7 @@ void main() {
 
     session.content = text;
 
-    final TH2TextApplyResult result = await controller.applyTextContent(
+    final TH2TextApplyResult result = await controller.applyTextContentGated(
       text,
       session: session,
     );
@@ -450,7 +450,7 @@ void main() {
 
     session.content = backToInitial;
 
-    final TH2TextApplyResult second = await controller.applyTextContent(
+    final TH2TextApplyResult second = await controller.applyTextContentGated(
       backToInitial,
       session: session,
     );
@@ -469,7 +469,7 @@ void main() {
         'endscrap\n';
 
     session.content = duplicatePoint;
-    await controller.applyTextContent(duplicatePoint, session: session);
+    await controller.applyTextContentGated(duplicatePoint, session: session);
     session.restartFrom(controller);
 
     final int stepsBefore = controller.undoRedoController.undoCount;
@@ -480,7 +480,7 @@ void main() {
 
     session.content = withDuplicate;
 
-    final TH2TextApplyResult unchanged = await controller.applyTextContent(
+    final TH2TextApplyResult unchanged = await controller.applyTextContentGated(
       withDuplicate,
       session: session,
     );

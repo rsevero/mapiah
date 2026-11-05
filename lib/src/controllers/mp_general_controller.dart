@@ -15,6 +15,7 @@ import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th_project_controller.dart';
 import 'package:mapiah/src/controllers/th_text_editor_controller.dart';
 import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
+import 'package:mapiah/src/controllers/types/th2_edit_mode.dart';
 import 'package:mapiah/src/elements/command_options/th_command_option.dart';
 import 'package:mapiah/src/elements/th_element.dart';
 import 'package:mapiah/src/elements/th2_file.dart';
@@ -109,6 +110,10 @@ abstract class MPGeneralControllerBase with Store {
     _th2ControllersRevision++;
   }
 
+  /// Whether [filename] has an open tab.
+  bool hasOpenTab(String filename) =>
+      _openFileOrder.contains(_normalizeFilename(filename));
+
   TH2FileEditController? prepareTH2FileForTreeEdit(String th2FilePath) {
     final TH2FileEditController? controller =
         prepareTH2FileForTreeOptions(th2FilePath);
@@ -116,7 +121,23 @@ abstract class MPGeneralControllerBase with Store {
     return controller;
   }
 
+  /// The file's controller with its tab active, for a tree action that
+  /// edits it; `null` when it can't be edited, as in text mode.
   TH2FileEditController? prepareTH2FileForTreeOptions(String th2FilePath) {
+    final TH2FileEditController? controller =
+        getTH2FileEditControllerIfExists(th2FilePath);
+    if (controller == null || !controller.isFileLoaded ||
+        controller.isBroken || controller.loadError != null ||
+        (controller.editMode == TH2EditMode.text)) {
+      return null;
+    }
+    addFileTab(th2FilePath);
+    return controller;
+  }
+
+  /// The file's controller with its tab active, for a tree action that only
+  /// reads it, such as Copy in text mode; `null` when it isn't loaded.
+  TH2FileEditController? prepareTH2FileForTreeRead(String th2FilePath) {
     final TH2FileEditController? controller =
         getTH2FileEditControllerIfExists(th2FilePath);
     if (controller == null || !controller.isFileLoaded ||
@@ -149,7 +170,7 @@ abstract class MPGeneralControllerBase with Store {
     /// opened in a session (index stays `0`), leaving no keyboard focus
     /// request behind and every shortcut dead until a tab switch occurs.
     if (isTH2Tab(normalizedFilename)) {
-      _t2hFileEditControllers[normalizedFilename]?.th2FileFocusNode
+      _t2hFileEditControllers[normalizedFilename]?.activeFocusNode
           .requestFocus();
     } else {
       _textEditorControllers[normalizedFilename]?.textFieldFocusNode
@@ -165,6 +186,12 @@ abstract class MPGeneralControllerBase with Store {
     if (indexToRemove != -1) {
       _openFileOrder.removeAt(indexToRemove);
       MPLocator().mpTelemetryController.recordTH2Closed(normalizedFilename);
+
+      /// Ends a text session before the retention decision, so a reopened
+      /// tab shows the canvas.
+      if (isTH2Tab(normalizedFilename)) {
+        _t2hFileEditControllers[normalizedFilename]?.onTabClosed();
+      }
 
       if (!shouldKeepTablessTH2Controller(normalizedFilename)) {
         removeFileController(filename: normalizedFilename);
@@ -201,7 +228,7 @@ abstract class MPGeneralControllerBase with Store {
     final TH2FileEditController? controller =
         _t2hFileEditControllers[normalizedFilename];
 
-    if ((controller == null) || controller.enableSaveButton) {
+    if ((controller == null) || controller.hasUnsavedChanges) {
       return false;
     }
 
@@ -254,7 +281,7 @@ abstract class MPGeneralControllerBase with Store {
       final String incomingFilename = _openFileOrder[index];
 
       if (isTH2Tab(incomingFilename)) {
-        _t2hFileEditControllers[incomingFilename]?.th2FileFocusNode
+        _t2hFileEditControllers[incomingFilename]?.activeFocusNode
             .requestFocus();
       } else {
         _textEditorControllers[incomingFilename]?.textFieldFocusNode
@@ -620,7 +647,7 @@ abstract class MPGeneralControllerBase with Store {
       _t2hFileEditControllers[normalizedNewFilename] = controller;
       _bumpTH2ControllersRevision();
 
-      // The dirty-mirroring reaction only fires when `enableSaveButton`
+      // The dirty-mirroring reaction only fires when `canSave`
       // changes, and then uses the current filename, so it would never
       // remove the old path. Move the mark with the controller.
       if (project.dirtyFilePaths.remove(normalizedOldFilename)) {

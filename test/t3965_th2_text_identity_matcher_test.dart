@@ -90,7 +90,7 @@ void main() {
 
     session.content = text;
 
-    return controller.applyTextContent(text, session: session);
+    return controller.applyTextContentGated(text, session: session);
   }
 
   group('matcher', () {

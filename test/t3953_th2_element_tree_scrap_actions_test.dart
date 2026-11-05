@@ -95,7 +95,10 @@ void main() {
     controller.elementEditController.removeScraps(<int>[second]);
     expect(controller.hideElementController.allScrapsVisible, isTrue);
     controller.undo();
-    expect(controller.hideElementController.isScrapVisible(second), isFalse);
+    // Undoing the removal re-adds s2 through afterAddScrap, which makes it
+    // active, and the active scrap is always visible.
+    expect(controller.activeScrapID, second);
+    expect(controller.hideElementController.isScrapVisible(second), isTrue);
   });
 
   test('multi-scrap copy and duplicate preserve scrap selection', () {

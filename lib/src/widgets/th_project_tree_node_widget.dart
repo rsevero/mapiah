@@ -5,6 +5,7 @@ import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th2_file_problem_text_aux.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/th2_edit_mode.dart';
 import 'package:mapiah/src/controllers/th_project_tree_ui_controller.dart';
 import 'package:mapiah/src/controllers/th_text_editor_controller.dart';
 import 'package:mapiah/src/elements/th_project/th2_file_node.dart';
@@ -124,9 +125,10 @@ class THProjectTreeNodeWidget extends StatelessWidget {
       return const <Widget>[];
     }
     final bool allVisible = controller.hideElementController.allScrapsVisible;
+    final bool isTextMode = controller.editMode == TH2EditMode.text;
     return <Widget>[
       MenuItemButton(
-        onPressed: () {
+        onPressed: isTextMode ? null : () {
           final TH2FileEditController? edit = mpLocator.mpGeneralController
               .prepareTH2FileForTreeEdit(fileNode.absolutePath);
           if (edit == null) {

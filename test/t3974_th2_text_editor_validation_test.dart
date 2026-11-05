@@ -292,7 +292,7 @@ void main() {
       await tester.pump();
       expect(scratches, hasLength(1));
 
-      final TH2TextApplyResult cached = await file.applyTextContent(
+      final TH2TextApplyResult cached = await file.applyTextContentGated(
         edited,
         session: controller,
       );
@@ -310,7 +310,7 @@ void main() {
       await tester.pump();
       second.setContent(stale);
 
-      final TH2TextApplyResult revalidated = await file.applyTextContent(
+      final TH2TextApplyResult revalidated = await file.applyTextContentGated(
         stale,
         session: second,
       );
@@ -342,7 +342,7 @@ void main() {
         AppLocalizationsEn().th2TextDiagnosticUnreadableText,
       );
 
-      final TH2TextApplyResult rejected = await file.applyTextContent(
+      final TH2TextApplyResult rejected = await file.applyTextContentGated(
         _duplicateIDText,
         session: controller,
       );
@@ -438,17 +438,39 @@ void main() {
       controller.dispose();
     });
 
-    test('recovery read-only is separate from the lock', () {
+    test('a closed session refuses edits without the lock', () {
       final TH2TextEditFakeOwner owner = TH2TextEditFakeOwner();
       final TH2TextEditController controller =
           th2TextEditControllerWithSession(owner, 'scrap s\nendscrap\n');
 
-      controller.enterRecoveryReadOnly();
-      expect(controller.isReadOnly, isTrue);
-      expect(controller.canSave, isFalse);
-      owner.releaseBufferLock();
-      expect(controller.isReadOnly, isTrue);
+      controller.endSession();
+      expect(controller.isReadOnly, isFalse);
+      expect(controller.isOpen, isFalse);
       expect(controller.setContent('x'), isFalse);
+      expect(controller.content, '');
+      controller.dispose();
+    });
+
+    test('showDiagnostics publishes only for the current buffer', () {
+      final TH2TextEditFakeOwner owner = TH2TextEditFakeOwner();
+      final TH2TextEditController controller =
+          th2TextEditControllerWithSession(owner, 'scrap s\nendscrap\n');
+      const List<TH2TextDiagnostic> diagnostics = <TH2TextDiagnostic>[
+        TH2TextDiagnostic.error(
+          line: 0,
+          kind: TH2TextDiagnosticKind.unreadableText,
+        ),
+      ];
+
+      controller.setContent('scrap t\nendscrap\n');
+      controller.showDiagnostics(diagnostics, content: 'other');
+      expect(controller.diagnostics, isEmpty);
+      controller.showDiagnostics(
+        diagnostics,
+        content: 'scrap t\nendscrap\n',
+      );
+      expect(controller.diagnostics, hasLength(1));
+      expect(controller.hasPendingIdleValidation, isFalse);
       controller.dispose();
     });
   });

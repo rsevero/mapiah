@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
+import 'package:mapiah/src/auxiliary/th2_text_apply_session.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_snap_controller.dart';
 import 'package:mapiah/src/elements/parts/th_position_part.dart';
@@ -100,5 +101,29 @@ class TH2TextApplyTestAux {
         controller.elementEditController.lastUsedPointTypes,
       ),
     };
+  }
+}
+
+/// Runs `applyTextContent` inside the controller's operation gate, as every
+/// production caller does.
+extension TH2TextApplyGatedTestAux on TH2FileEditController {
+  Future<TH2TextApplyResult> applyTextContentGated(
+    String content, {
+    required TH2TextApplySession session,
+    bool lockBufferOnAccept = false,
+  }) async {
+    final TH2TextApplyResult? result = await runGatedOperation(
+      () => applyTextContent(
+        content,
+        session: session,
+        lockBufferOnAccept: lockBufferOnAccept,
+      ),
+    );
+
+    if (result == null) {
+      throw StateError('The operation gate did not admit the apply.');
+    }
+
+    return result;
   }
 }

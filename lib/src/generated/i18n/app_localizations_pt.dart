@@ -3463,4 +3463,42 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get th2TextDiagnosticAddedEnding =>
       'Uma quebra de linha será adicionada ao final desta linha';
+
+  @override
+  String get th2EditModeTextTooltip => 'Texto (F2)';
+
+  @override
+  String get th2EditModeCanvasTooltip => 'Canvas (F2)';
+
+  @override
+  String get th2TextCantApplyBanner =>
+      'O texto tem problemas e não pode ser aplicado. Corrija as linhas marcadas ou descarte as alterações do texto.';
+
+  @override
+  String get th2TextKeepEditingButton => 'Continuar editando';
+
+  @override
+  String get th2TextDiscardChangesButton => 'Descartar alterações do texto';
+
+  @override
+  String get th2TextUnsupportedLineEndingMessage =>
+      'Este arquivo contém um retorno de carro sem avanço de linha, que o editor de texto não suporta.';
+
+  @override
+  String get th2TextEditorReopenFailedMessage =>
+      'Não foi possível reabrir o editor de texto. Suas alterações foram aplicadas; pressione F2 para editar o texto novamente.';
+
+  @override
+  String th2SaveAsTargetOpenMessage(String filename) {
+    return '$filename está aberto em outra aba, por isso não foi sobrescrito.';
+  }
+
+  @override
+  String th2SaveAsTargetOpenEmptiedMessage(String filename) {
+    return '$filename está aberto em outra aba, por isso não foi sobrescrito, mas a janela de arquivos o esvaziou e o Mapiah não conseguiu restaurá-lo.';
+  }
+
+  @override
+  String get th2ActiveScrapCantBeHiddenTooltip =>
+      'O scrap ativo não pode ser ocultado';
 }

@@ -50,7 +50,7 @@ void main() {
 
     session.content = text;
 
-    final TH2TextApplyResult result = await controller.applyTextContent(
+    final TH2TextApplyResult result = await controller.applyTextContentGated(
       text,
       session: session,
     );
@@ -175,7 +175,7 @@ void main() {
 
       session.content = valid;
 
-      final TH2TextApplyResult result = await controller.applyTextContent(
+      final TH2TextApplyResult result = await controller.applyTextContentGated(
         valid,
         session: session,
       );
@@ -209,7 +209,7 @@ void main() {
 
       session.content = moved;
 
-      final TH2TextApplyResult result = await controller.applyTextContent(
+      final TH2TextApplyResult result = await controller.applyTextContentGated(
         moved,
         session: session,
       );
