@@ -11,6 +11,8 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
   - [Buttons](#buttons)
 - [Main section](#main-section)
   - [Language](#language)
+- [Text editor section](#text-editor-section)
+  - [Font size](#font-size)
 - [TH2 edit section](#th2-edit-section)
   - [Enable element transforms](#enable-element-transforms)
   - [Enable special border for ID set](#enable-special-border-for-id-set)
@@ -47,6 +49,11 @@ Each setting has a reset button (↺) on its right side. Clicking it reverts tha
 
 ### Language
 Selects the language used throughout the app interface. The default option follows the system locale. Changing this setting takes effect after applying and reopening any currently open pages.
+
+## Text editor section
+
+### Font size
+Controls the font size (in pixels) of the text editors used for `.th`, `thconfig` and `.th2` files, and of their line numbers. The default is `13`. Values are limited to the range from `6` to `48`. The change takes effect in open editors as soon as it is applied.
 
 ## TH2 edit section
 

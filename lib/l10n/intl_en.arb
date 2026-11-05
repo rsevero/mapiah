@@ -1572,6 +1572,16 @@
     "description": "Section title for TH2 edit settings. Used on: lib/src/pages/mp_settings_page.dart",
     "type": "text"
   },
+  "mpSettingsSectionTextEditor": "Text editor",
+  "@mpSettingsSectionTextEditor": {
+    "description": "Section title for text editor settings. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
+  "mpSettingsSettingTextEditorFontSize": "Font size",
+  "@mpSettingsSettingTextEditorFontSize": {
+    "description": "Label for the text editor font size setting. Used on: lib/src/pages/mp_settings_page.dart",
+    "type": "text"
+  },
   "mpSettingsSectionTherion": "Therion",
   "@mpSettingsSectionTherion": {
     "description": "Section title for Therion settings. Used on: lib/src/pages/mp_settings_page.dart",

@@ -671,6 +671,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSectionTherion;
       case mpSettingsTH2EditSection:
         return appLocalizations.mpSettingsSectionTH2Edit;
+      case mpSettingsTextEditorSection:
+        return appLocalizations.mpSettingsSectionTextEditor;
       default:
         return _camelCaseToLabel(section);
     }
@@ -737,6 +739,8 @@ class _MPSettingsPageState extends State<MPSettingsPage> {
         return appLocalizations.mpSettingsSettingTH2EditSymbolUnit;
       case MPSettingID.TH2Edit_VisualizationMethod:
         return appLocalizations.mpSettingsSettingTH2EditVisualizationMethod;
+      case MPSettingID.TextEditor_FontSize:
+        return appLocalizations.mpSettingsSettingTextEditorFontSize;
       default:
         throw UnimplementedError(
           'At MPSettingsPage._localizedSettingName(): no localized name defined for setting type "$type"',

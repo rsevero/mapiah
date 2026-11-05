@@ -363,6 +363,7 @@ const String mpTherionVersionArgument = '--version';
 const String mpSettingsMainSection = 'Main';
 const String mpSettingsTherionSection = 'Therion';
 const String mpSettingsTH2EditSection = 'TH2Edit';
+const String mpSettingsTextEditorSection = 'TextEditor';
 const String mpSettingsInternalSection = 'Internal';
 const String mpSettingsStringListSeparator = ', ';
 
@@ -903,7 +904,10 @@ const int mpProjectTreeUIPersistDebounceMilliseconds = 250;
 // Therion text editor (thconfig/.th) sizing, debounce, and interaction
 // constants.
 const int mpTextEditorReparseDebounceMilliseconds = 300;
+/// Default of the `TextEditor_FontSize` setting.
 const double mpTextEditorFontSize = 13.0;
+const double mpTextEditorMinFontSize = 6.0;
+const double mpTextEditorMaxFontSize = 48.0;
 
 // Monospaced font bundled in assets/fonts (see pubspec.yaml) so text editors
 // render with fixed-width glyphs on every platform. The generic 'monospace'

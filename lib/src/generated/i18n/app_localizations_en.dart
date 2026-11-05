@@ -1034,6 +1034,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mpSettingsSectionTH2Edit => 'TH2 edit';
 
   @override
+  String get mpSettingsSectionTextEditor => 'Text editor';
+
+  @override
+  String get mpSettingsSettingTextEditorFontSize => 'Font size';
+
+  @override
   String get mpSettingsSectionTherion => 'Therion';
 
   @override

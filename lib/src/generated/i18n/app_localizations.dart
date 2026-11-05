@@ -1990,6 +1990,18 @@ abstract class AppLocalizations {
   /// **'TH2 edit'**
   String get mpSettingsSectionTH2Edit;
 
+  /// Section title for text editor settings. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Text editor'**
+  String get mpSettingsSectionTextEditor;
+
+  /// Label for the text editor font size setting. Used on: lib/src/pages/mp_settings_page.dart
+  ///
+  /// In en, this message translates to:
+  /// **'Font size'**
+  String get mpSettingsSettingTextEditorFontSize;
+
   /// Section title for Therion settings. Used on: lib/src/pages/mp_settings_page.dart
   ///
   /// In en, this message translates to:

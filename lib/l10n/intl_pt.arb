@@ -333,6 +333,8 @@
   "mpSettingsPageTitle": "Configurações",
   "mpSettingsSectionMain": "Principal",
   "mpSettingsSectionTH2Edit": "Edição TH2",
+  "mpSettingsSectionTextEditor": "Editor de texto",
+  "mpSettingsSettingTextEditorFontSize": "Tamanho da fonte",
   "mpSettingsSectionTherion": "Therion",
   "mpSettingsSettingMainLocaleID": "Idioma",
   "mpSettingsSettingMainTherionExecutablePath": "Caminho do executável do Therion",

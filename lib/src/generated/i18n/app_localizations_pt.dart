@@ -1047,6 +1047,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mpSettingsSectionTH2Edit => 'Edição TH2';
 
   @override
+  String get mpSettingsSectionTextEditor => 'Editor de texto';
+
+  @override
+  String get mpSettingsSettingTextEditorFontSize => 'Tamanho da fonte';
+
+  @override
   String get mpSettingsSectionTherion => 'Therion';
 
   @override

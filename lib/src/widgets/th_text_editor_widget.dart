@@ -11,6 +11,7 @@ import 'package:mapiah/src/auxiliary/th_text_editor_syntax_highlighter.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th_text_editor_buffer.dart';
 import 'package:mapiah/src/controllers/th_text_editor_find_controller.dart';
+import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/widgets/th_text_editor_diagnostic_marker_widget.dart';
 import 'package:mapiah/src/widgets/th_text_editor_line_number_gutter_widget.dart';
@@ -36,22 +37,26 @@ const Map<THTextEditorTokenType, Color> _thTextEditorTokenColors =
       THTextEditorTokenType.plain: Color(0xFF000000),
     };
 
-const TextStyle _thTextEditorTextStyle = TextStyle(
-  fontFamily: mpMonospaceFontFamily,
-  fontFamilyFallback: mpMonospaceFontFamilyFallback,
-  fontSize: mpTextEditorFontSize,
-  height: mpTextEditorLineHeight,
-);
+TextStyle _thTextEditorTextStyleFor(double fontSize) {
+  return TextStyle(
+    fontFamily: mpMonospaceFontFamily,
+    fontFamilyFallback: mpMonospaceFontFamilyFallback,
+    fontSize: fontSize,
+    height: mpTextEditorLineHeight,
+  );
+}
 
 /// Forces every row of the main field and of the syntax overlay to one
 /// height, which the gutter, the markers and navigation measure.
-const StrutStyle _thTextEditorStrutStyle = StrutStyle(
-  fontFamily: mpMonospaceFontFamily,
-  fontFamilyFallback: mpMonospaceFontFamilyFallback,
-  fontSize: mpTextEditorFontSize,
-  height: mpTextEditorLineHeight,
-  forceStrutHeight: true,
-);
+StrutStyle _thTextEditorStrutStyleFor(double fontSize) {
+  return StrutStyle(
+    fontFamily: mpMonospaceFontFamily,
+    fontFamilyFallback: mpMonospaceFontFamilyFallback,
+    fontSize: fontSize,
+    height: mpTextEditorLineHeight,
+    forceStrutHeight: true,
+  );
+}
 
 const Color _thTextEditorFindMatchColor = Color(0x554DB6AC);
 const Color _thTextEditorActiveFindMatchColor = Color(0x99FFB300);
@@ -105,6 +110,19 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
   double _lineHeight = mpTextEditorFontSize * mpTextEditorLineHeight;
 
   TextScaler? _measuredTextScaler;
+
+  /// The font size from the `TextEditor_FontSize` setting.
+  double _fontSize = mpTextEditorFontSize;
+
+  double? _measuredFontSize;
+
+  TextStyle _thTextEditorTextStyle = _thTextEditorTextStyleFor(
+    mpTextEditorFontSize,
+  );
+
+  StrutStyle _thTextEditorStrutStyle = _thTextEditorStrutStyleFor(
+    mpTextEditorFontSize,
+  );
 
   THTextEditorBuffer get _buffer => widget.controller;
 
@@ -692,14 +710,20 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     });
   }
 
-  /// Measures one row of the main field with [textScaler], once per scaler.
-  void _updateLineHeight(TextScaler textScaler) {
-    if (textScaler == _measuredTextScaler) {
+  /// Measures one row of the main field with [textScaler] and [fontSize],
+  /// once per scaler and font size.
+  void _updateLineHeight(TextScaler textScaler, double fontSize) {
+    if ((textScaler == _measuredTextScaler) &&
+        (fontSize == _measuredFontSize)) {
       return;
     }
 
+    _fontSize = fontSize;
+    _thTextEditorTextStyle = _thTextEditorTextStyleFor(fontSize);
+    _thTextEditorStrutStyle = _thTextEditorStrutStyleFor(fontSize);
+
     final TextPainter painter = TextPainter(
-      text: const TextSpan(text: ' ', style: _thTextEditorTextStyle),
+      text: TextSpan(text: ' ', style: _thTextEditorTextStyle),
       strutStyle: _thTextEditorStrutStyle,
       textDirection: TextDirection.ltr,
       textScaler: textScaler,
@@ -708,6 +732,7 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     _lineHeight = painter.preferredLineHeight;
     _textScaler = textScaler;
     _measuredTextScaler = textScaler;
+    _measuredFontSize = fontSize;
     painter.dispose();
   }
 
@@ -715,10 +740,18 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context);
 
-    _updateLineHeight(MediaQuery.textScalerOf(context));
+    final TextScaler textScaler = MediaQuery.textScalerOf(context);
 
     return Observer(
       builder: (_) {
+        mpLocator.mpSettingsController.getTrigger(
+          MPSettingID.TextEditor_FontSize,
+        );
+        _updateLineHeight(
+          textScaler,
+          mpLocator.mpSettingsController.textEditorFontSize,
+        );
+
         final String content = _buffer.content;
         final int baselineRevision = _buffer.baselineRevision;
         final bool isBaselineChanged = baselineRevision != _lastBaselineRevision;
@@ -803,6 +836,7 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                 diagnosticLines: thTextEditorDiagnosticLines(diagnostics),
                 scrollController: _gutterScrollController,
                 lineHeight: _lineHeight,
+                fontSize: _fontSize,
               ),
               Expanded(
                 child: Stack(

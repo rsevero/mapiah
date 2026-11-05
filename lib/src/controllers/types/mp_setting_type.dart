@@ -40,6 +40,7 @@ enum MPSettingID {
   TH2Edit_SnapAngle,
   TH2Edit_SymbolUnit,
   TH2Edit_VisualizationMethod,
+  TextEditor_FontSize,
   Therion_DebugLog1,
   Therion_ExecutablePath,
   Therion_RunParameters;
@@ -82,6 +83,7 @@ enum MPSettingID {
     MPSettingID.TH2Edit_SnapAngle: MPSettingType.double,
     MPSettingID.TH2Edit_SymbolUnit: MPSettingType.double,
     MPSettingID.TH2Edit_VisualizationMethod: MPSettingType.enumeration,
+    MPSettingID.TextEditor_FontSize: MPSettingType.double,
     MPSettingID.Therion_DebugLog1: MPSettingType.bool,
     MPSettingID.Therion_ExecutablePath: MPSettingType.filePickerExec,
     MPSettingID.Therion_RunParameters: MPSettingType.string,

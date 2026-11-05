@@ -11,6 +11,8 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
   - [Botões](#botões)
 - [Seção Principal](#seção-principal)
   - [Idioma](#idioma)
+- [Seção Editor de texto](#seção-editor-de-texto)
+  - [Tamanho da fonte](#tamanho-da-fonte)
 - [Seção Edição TH2](#seção-edição-th2)
   - [Ângulo preferencial](#ângulo-preferencial)
   - [Ativar borda especial para ID definido](#ativar-borda-especial-para-id-definido)
@@ -47,6 +49,11 @@ Cada configuração possui um botão de redefinição (↺) à sua direita. Clic
 
 ### Idioma
 Seleciona o idioma usado em toda a interface do aplicativo. A opção padrão segue o idioma do sistema. A alteração desta configuração tem efeito após aplicar e reabrir as páginas atualmente abertas.
+
+## Seção Editor de texto
+
+### Tamanho da fonte
+Controla o tamanho da fonte (em pixels) dos editores de texto usados para arquivos `.th`, `thconfig` e `.th2`, e de seus números de linha. O padrão é `13`. Os valores ficam limitados ao intervalo de `6` a `48`. A alteração tem efeito nos editores abertos assim que é aplicada.
 
 ## Seção Edição TH2
 

@@ -95,6 +95,15 @@ abstract class MPSettingsControllerBase with Store {
     );
   }
 
+  /// The font size of the text editors, clamped to
+  /// [mpTextEditorMinFontSize]..[mpTextEditorMaxFontSize] so a stored value
+  /// that is too small or too large can't make the editor unusable.
+  double get textEditorFontSize {
+    return getDoubleWithDefault(
+      MPSettingID.TextEditor_FontSize,
+    ).clamp(mpTextEditorMinFontSize, mpTextEditorMaxFontSize);
+  }
+
   /// The default default value for doubles is mpDefaultDefaultDoubleSetting.
   /// Only settings that differ from that should be included here.
   static const Map<MPSettingID, double> _doubleDefaultSettings = {
@@ -105,6 +114,7 @@ abstract class MPSettingsControllerBase with Store {
     MPSettingID.TH2Edit_SelectionTolerance: mpDefaultSelectionTolerance,
     MPSettingID.TH2Edit_SnapAngle: mpDefaultSnapAngle,
     MPSettingID.TH2Edit_SymbolUnit: mpDefaultSymbolUnitOnScreen,
+    MPSettingID.TextEditor_FontSize: mpTextEditorFontSize,
   };
 
   static final Map<MPSettingID, Enum> _enumDefaultSettings =

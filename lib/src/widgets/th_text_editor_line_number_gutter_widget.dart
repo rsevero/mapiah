@@ -25,6 +25,9 @@ class THTextEditorLineNumberGutterWidget extends StatelessWidget {
   /// The height of one editor row.
   final double lineHeight;
 
+  /// The font size of the editor text, which the line numbers share.
+  final double fontSize;
+
   const THTextEditorLineNumberGutterWidget({
     super.key,
     required this.lineCount,
@@ -32,12 +35,17 @@ class THTextEditorLineNumberGutterWidget extends StatelessWidget {
     required this.diagnosticLines,
     required this.scrollController,
     this.lineHeight = mpTextEditorFontSize * mpTextEditorLineHeight,
+    this.fontSize = mpTextEditorFontSize,
   });
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final double digitWidth = (lineCount.toString().length * 8.0).clamp(
+    final double digitWidth =
+        (lineCount.toString().length *
+                8.0 *
+                (fontSize / mpTextEditorFontSize))
+            .clamp(
       mpTextEditorLineNumberGutterMinWidth,
       double.infinity,
     );
@@ -81,7 +89,7 @@ class THTextEditorLineNumberGutterWidget extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: mpMonospaceFontFamily,
                       fontFamilyFallback: mpMonospaceFontFamilyFallback,
-                      fontSize: mpTextEditorFontSize,
+                      fontSize: fontSize,
                       color: isCurrentLine
                           ? colorScheme.onSurface
                           : colorScheme.onSurfaceVariant,
