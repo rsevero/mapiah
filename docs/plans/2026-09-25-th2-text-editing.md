@@ -672,6 +672,8 @@ Beyond the plan, a new file (never loaded) can enter text mode, and entry from _
 
 ### Phase 5: Broken files
 
+Detailed plan: [Phase 5: Broken Files](2026-11-05-th2-text-editing-phase5-broken-files.md). Its §3, _Changes to the parent plan_, lists what it changes here.
+
 - _Edit as text_ on `TH2BrokenFileBodyWidget`, and `F2` there, with the raw disk text source (§3.7, §4.2).
 - Moved from Phase 4 by its plan (§3 change 8): `F2` on the broken-file body, Save As enabled for a broken file in text mode (`t3980`), broken-file text in `t3984`, Copy in a broken-file raw session (`t3984`, `t3987`), a broken raw session never traversing canvas history (`t3988`) and a broken-file fix after a regeneration failure (`t3990`).
 - The broken-file baseline: the first apply without a command, clearing the broken state and the undo stack, a call to `syncControllersWithModel(initialSetup: true)`, and `_hasUnsavedBaseline` in `enableSaveButton` and in `loadedBrokenProjectTH2FilePaths()` (§4.7).
