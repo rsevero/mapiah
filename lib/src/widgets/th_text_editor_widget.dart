@@ -581,7 +581,8 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                                   hintText: appLocalizations.textEditorEmptyHint,
                                 ),
                                 style: TextStyle(
-                                  fontFamily: 'monospace',
+                                  fontFamily: mpMonospaceFontFamily,
+                                  fontFamilyFallback: mpMonospaceFontFamilyFallback,
                                   fontSize: mpTextEditorFontSize,
                                   height: mpTextEditorLineHeight,
                                   color: Colors.transparent,
@@ -839,7 +840,8 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
     return RichText(
       text: TextSpan(
         style: const TextStyle(
-          fontFamily: 'monospace',
+          fontFamily: mpMonospaceFontFamily,
+          fontFamilyFallback: mpMonospaceFontFamilyFallback,
           fontSize: mpTextEditorFontSize,
           height: mpTextEditorLineHeight,
           color: Colors.black,

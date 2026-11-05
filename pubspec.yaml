@@ -125,6 +125,12 @@ flutter:
     - assets/icons/zoom_selection_window.png
     - assets/icons/zoom_selection.png
     - assets/images/image_not_found.png
+  fonts:
+    - family: NotoSansMono
+      fonts:
+        - asset: assets/fonts/NotoSansMono-Regular.ttf
+        - asset: assets/fonts/NotoSansMono-Bold.ttf
+          weight: 700
 
 flutter_launcher_icons:
   image_path: assets/icons/io.github.rsevero.mapiah.png

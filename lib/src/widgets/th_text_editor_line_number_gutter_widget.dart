@@ -68,7 +68,8 @@ class THTextEditorLineNumberGutterWidget extends StatelessWidget {
                     '${index + 1}',
                     textAlign: TextAlign.right,
                     style: TextStyle(
-                      fontFamily: 'monospace',
+                      fontFamily: mpMonospaceFontFamily,
+                      fontFamilyFallback: mpMonospaceFontFamilyFallback,
                       fontSize: mpTextEditorFontSize,
                       color: isCurrentLine
                           ? colorScheme.onSurface

@@ -901,6 +901,12 @@ const int mpProjectTreeUIPersistDebounceMilliseconds = 250;
 const int mpTextEditorReparseDebounceMilliseconds = 300;
 const double mpTextEditorFontSize = 13.0;
 
+// Monospaced font bundled in assets/fonts (see pubspec.yaml) so text editors
+// render with fixed-width glyphs on every platform. The generic 'monospace'
+// family is only resolved on Linux, so it is kept as a last-resort fallback.
+const String mpMonospaceFontFamily = 'NotoSansMono';
+const List<String> mpMonospaceFontFamilyFallback = ['monospace'];
+
 // Multi-file project search (Ctrl/Cmd+Shift+F) sizing and debounce constants.
 const int mpProjectSearchQueryDebounceMilliseconds = 300;
 const int mpProjectSearchPreviewMaxLength = 200;

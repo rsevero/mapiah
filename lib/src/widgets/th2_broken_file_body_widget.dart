@@ -3,6 +3,7 @@
 import 'package:flutter/services.dart';
 import 'package:mapiah/main.dart';
 import 'package:mapiah/src/auxiliary/th2_file_problem_text_aux.dart';
+import 'package:mapiah/src/constants/mp_constants.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_problem.dart';
@@ -96,7 +97,10 @@ class TH2BrokenFileBodyWidget extends StatelessWidget {
           ),
           SelectableText(
             sourceLine,
-            style: const TextStyle(fontFamily: 'monospace'),
+            style: const TextStyle(
+              fontFamily: mpMonospaceFontFamily,
+              fontFamilyFallback: mpMonospaceFontFamilyFallback,
+            ),
           ),
           _TH2BrokenFileProblemDetailsWidget(
             label: appLocalizations.th2BrokenFileDetails,
