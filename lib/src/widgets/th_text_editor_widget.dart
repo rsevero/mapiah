@@ -58,6 +58,14 @@ StrutStyle _thTextEditorStrutStyleFor(double fontSize) {
   );
 }
 
+/// Keeps the focus in an editor field when the user clicks outside it, for
+/// example on a toolbar button such as Save. Flutter's default unfocuses the
+/// field on desktop, which moves the focus to the route's scope, above the
+/// page shortcuts, so F2, Ctrl+S and F1 stopped working until the user
+/// clicked back into the text. Clicking another focusable widget, such as a
+/// tree row or another text field, still moves the focus there.
+void _keepFocusOnTapOutside(PointerDownEvent event) {}
+
 const Color _thTextEditorFindMatchColor = Color(0x554DB6AC);
 const Color _thTextEditorActiveFindMatchColor = Color(0x99FFB300);
 
@@ -966,6 +974,7 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
       undoController: _undoHistoryController,
       scrollController: _textScrollController,
       readOnly: isReadOnly,
+      onTapOutside: _keepFocusOnTapOutside,
       strutStyle: _thTextEditorStrutStyle,
       maxLines: null,
       expands: true,
@@ -1141,6 +1150,7 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                   key: const ValueKey('THTextEditorWidget|FindField'),
                   controller: _findEditingController,
                   focusNode: _findFieldFocusNode,
+                  onTapOutside: _keepFocusOnTapOutside,
                   decoration: InputDecoration(
                     isDense: true,
                     border: InputBorder.none,
@@ -1199,6 +1209,7 @@ class _THTextEditorWidgetState extends State<THTextEditorWidget> {
                   child: TextField(
                     key: const ValueKey('THTextEditorWidget|ReplaceField'),
                     controller: _replaceEditingController,
+                    onTapOutside: _keepFocusOnTapOutside,
                     decoration: InputDecoration(
                       isDense: true,
                       border: InputBorder.none,

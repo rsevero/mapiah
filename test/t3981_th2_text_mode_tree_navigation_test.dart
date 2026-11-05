@@ -243,6 +243,48 @@ void main() {
       expect(controller.editMode, TH2EditMode.canvas);
     });
 
+    for (final IconData saveIcon in <IconData>[
+      Icons.save,
+      Icons.save_outlined,
+    ]) {
+      testWidgets(
+        'F2 leaves text mode after editing and clicking a Save button '
+        '($saveIcon)',
+        (WidgetTester tester) async {
+          final TH2FileEditController controller = await pumpWorkspace(tester);
+
+          controller.th2FileFocusNode.requestFocus();
+          await tester.pump();
+          await pressF2(tester);
+
+          final TH2TextEditController session = controller.textEditController!;
+
+          await tester.enterText(
+            find.byKey(const ValueKey<String>('THTextEditorWidget|TextField')),
+            session.content.replaceFirst('point 3 3', 'point 3 4'),
+          );
+          await tester.pump();
+
+          /// A mouse click outside the text field, which on desktop used to
+          /// unfocus it and leave the page shortcuts unreachable.
+          await tester.tap(
+            find.byIcon(saveIcon).first,
+            kind: PointerDeviceKind.mouse,
+          );
+          await tester.runAsync(
+            () => Future<void>.delayed(const Duration(milliseconds: 50)),
+          );
+          await tester.pumpAndSettle();
+          expect(controller.editMode, TH2EditMode.text);
+          expect(session.textFieldFocusNode.hasFocus, isTrue);
+
+          await pressF2(tester);
+          expect(controller.editMode, TH2EditMode.canvas);
+        },
+        variant: TargetPlatformVariant.only(TargetPlatform.linux),
+      );
+    }
+
     testWidgets('a tree click moves the cursor and focuses the field; the '
         'context menu moves it without focus and gives it back on close', (
       WidgetTester tester,
