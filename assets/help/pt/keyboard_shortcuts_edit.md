@@ -11,6 +11,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Alterar imagens                                                                               | Alt+I                                    |
 | Alternar opção de borda da linha                                                              | B                                        |
 | Alternar direção da linha                                                                     | R                                        |
+| Alternar entre canvas e modo texto (`.th2`)                                                   | F2                                       |
 | Alternar marcas de direção em linhas não selecionadas                                         | Ctrl+Alt+R                               |
 | Alternar opção de visibilidade                                                                | V                                        |
 | Árvore do projeto: alternar elemento ou croqui                                                | Ctrl+clique                              |
@@ -87,7 +88,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Restringir um novo nó ao ângulo de snap ao desenhar                                           | Shift+clique                             |
 | Rodar o Therion                                                                               | T                                        |
 | Salvar arquivo                                                                                | Ctrl+S                                   |
-| Salvar arquivo como (aba de desenho `.th2` ou aba de texto `thconfig`/`.th`)                  | Ctrl+Shift+S                             |
+| Salvar arquivo como                                                                           | Ctrl+Shift+S                             |
 | Separar a definição do próximo ponto de controle do xTherion cúbico suave ao desenhar         | Alt+arrastar após iniciar o arrasto      |
 | Selecionar nada                                                                               | Esc                                      |
 | Selecionar tudo                                                                               | Ctrl+A                                   |
@@ -105,12 +106,14 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 | Zoom mais próximo                                                                             | +                                        |
 | Zoom seleção                                                                                  | 2                                        |
 
+_No modo texto de uma aba `.th2`, Ctrl+Z e Ctrl+Shift+Z desfazem e refazem edições do canvas até a primeira edição do texto; a partir daí, atuam só no texto (veja a ajuda da edição de arquivos TH2, "Modo texto")._
+
 ## Pesquisa em arquivos de texto
 
-- **Ctrl+F** pesquisa no arquivo de texto aberto na aba de editor ativa.
+- **Ctrl+F** pesquisa no arquivo de texto aberto na aba de editor ativa, inclusive uma aba `.th2` no modo texto.
 - **Ctrl+Shift+F** abre a pesquisa em vários arquivos na barra lateral do projeto.
   - O escopo **Abas de texto abertas** pesquisa em todas as abas de texto `thconfig`/`.th` abertas; o escopo **Arquivos do projeto** pesquisa em todos os arquivos `thconfig`/`.th` graváveis do projeto carregado, inclusive nos que não estão abertos.
-  - Desenhos `.th2` nunca são pesquisados; eles pertencem ao canvas.
+  - Desenhos `.th2` nunca são pesquisados, nem no modo texto.
   - Uma aba de texto aberta que não faz parte do projeto carregado pode ser pesquisada e navegada, mas é marcada como *Somente pesquisa* e a substituição em massa nunca a modifica nem a salva.
   - Ativar um resultado abre ou foca a aba do arquivo, revela o arquivo na árvore do projeto e seleciona a ocorrência exata. Se o arquivo mudou desde a pesquisa, a pesquisa é atualizada e a ocorrência atual mais próxima é selecionada.
   - A substituição em massa pede confirmação, informa quantas ocorrências e arquivos são afetados (e quantos são excluídos), e então substitui e salva os arquivos do projeto afetados. Não há desfazer em uma única etapa entre arquivos.

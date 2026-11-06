@@ -3244,7 +3244,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2ElementTreeBrokenFile =>
-      'Arquivo com problemas: corrija-o fora do Mapiah e recarregue';
+      'Arquivo com problemas: corrija-o com Editar como texto, ou fora do Mapiah e recarregue';
 
   @override
   String th2ElementTreeBrokenBadgeTooltip(int count) {
@@ -3492,7 +3492,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2TextEditorReopenFailedMessage =>
-      'Não foi possível reabrir o editor de texto. Suas alterações foram aplicadas; pressione F2 para editar o texto novamente.';
+      'Não foi possível reabrir o editor de texto, então o Mapiah voltou ao canvas. Nada foi perdido; pressione F2 para editar o texto novamente.';
 
   @override
   String th2SaveAsTargetOpenMessage(String filename) {
@@ -3506,7 +3506,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2ActiveScrapCantBeHiddenTooltip =>
-      'O scrap ativo não pode ser ocultado';
+      'O croqui ativo não pode ser ocultado';
 
   @override
   String get th2BrokenFileEditAsText => 'Editar como texto';

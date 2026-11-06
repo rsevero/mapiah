@@ -11,6 +11,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 - [Project text editor](#project-text-editor)
 - [Drawing order and element tree](#drawing-order-and-element-tree)
 - [Broken files](#broken-files)
+- [Text mode](#text-mode)
 - [Edit window](#edit-window)
   - [Top right corner](#top-right-corner)
   - [Bottom right corner](#bottom-right-corner)
@@ -101,13 +102,13 @@ Each `.th2` file row in the project tree has an arrow. Expanding it loads the fi
 * **Refused moves**: a mixed selection of scraps and drawing elements and a move between files are refused. Moving an area to another scrap carries its border lines along; a move that would leave a border line in a different scrap from any area that uses it is refused. The drag preview shows why a drop is refused, and unavailable Move to scrap targets show why below their names.
 * **Order menu**: right-click an element row for Bring forward, Send backward, Bring to front or Send to back. Points, lines and areas also have Move to scrap. A right-click selects an unselected drawing element; a selected row keeps the selection. These actions move whole elements among their siblings, including the internal content of a line or area.
 * **Order shortcuts**: Ctrl+] brings the selection forward, Ctrl+[ sends it backward, Ctrl+Shift+] brings it to the front and Ctrl+Shift+[ sends it to the back (Cmd instead of Ctrl on macOS). They act in the active canvas tab on the selected drawing elements, or on the scraps selected in the tree, and need keyboard focus in that tab. They are ignored while Alt is pressed.
-* **Undo**: every tree edit opens the file's tab if needed and can be undone with Ctrl+Z.
+* **Undo**: every tree edit opens the file's tab if needed and can be undone with Ctrl+Z. Tree edits are disabled in text mode (see [Text mode](#text-mode)).
 * **Search**: the project tree search field also matches the full labels of the scraps and elements of files that are already loaded and valid, including station names and label or remark text. Matching rows are shown together with their scrap and file.
 * **Closing a tab**: closing the tab of a file whose tree row is expanded keeps its elements in the tree, unless the file had unsaved changes, which are discarded as usual.
 
 ## Broken files
 
-When a `.th2` file has any parsing or structural problem, Mapiah marks it as broken. Its element rows and canvas editor are unavailable and Mapiah cannot save it. Mapiah does not repair the file: fix it in a text editor outside Mapiah.
+When a `.th2` file has any parsing or structural problem, Mapiah marks it as broken. Its element rows and canvas editor are unavailable. Fix it with _Edit as text_ (or F2) on its page, or in another text editor and reload it.
 
 Examples of problems:
 * A point, line or area outside a scrap.
@@ -118,14 +119,32 @@ Examples of problems:
 
 Unknown point, line or area types alone are still accepted; unknown options are errors.
 
-* **In the project tree**: the file row shows a badge with its number of problems. Hover over it to see the line number and category of the first problems. Expanding the row shows a single row explaining that the file must be fixed outside Mapiah.
+* **In the project tree**: the file row shows a badge with its number of problems. Hover over it to see the line number and category of the first problems. Expanding the row shows a single row explaining that the file must be fixed with _Edit as text_, or outside Mapiah and reloaded.
 * **In a tab**: opening a broken file, from the project or on its own, shows a page instead of the canvas. It explains the situation, shows the file path with a _Copy path_ button, and lists every problem with its line number, its category and the source line. _Details_ reveals the original parser message, which is useful when reporting a problem.
-* **Reload**: after fixing the file, use the _Reload_ button on that page, or right-click the file row or its explanation row in the tree and choose _Reload_. The same tree option applies to a file whose loading failed unexpectedly.
-* **Running Therion**: when you run the loaded project, the _Run Therion_ dialog warns about the project's broken files that are already loaded, because Therion may fail on them. The run still starts.
+* **Edit as text**: shows the file's text as it is on disk, with the problems marked on their lines and the cursor on the first one. A file that can't be read as text, or isn't valid in its encoding, can't be opened this way; the message says what to fix. See [Text mode](#text-mode) for how text editing works.
+* **Applying the fix**: once the text has no problems, applying it (by leaving text mode or saving) makes the canvas available. This first apply is not an undo step: undo can't bring back the broken file. The fix stays unsaved until you save; closing or reloading the tab discards it without asking, as for canvas edits.
+* **Leaving text mode**: with text that fixes the file, leaving shows the canvas; with edited text that still has problems, it shows the "can't apply" banner; with the broken text untouched, it returns to the broken-file page. While the file is broken, the text view's button says _Leave text mode_.
+* **Reload**: after fixing the file outside Mapiah, use the _Reload_ button on that page, or right-click the file row or its explanation row in the tree and choose _Reload_. Reload brings back the file as it is on disk. The same tree option applies to a file whose loading failed unexpectedly.
+* **Running Therion**: when you run the loaded project, the _Run Therion_ dialog warns about the project's loaded files that are broken on disk, because Therion may fail on them. The run still starts. A fix applied in text mode but not saved yet still counts as broken, because Therion reads the file on disk; the warning marks it "(fix not saved)". The warning only covers loaded files: after saving a fix with _Save As_ under a new name, the original file, still broken on disk, can break the run without a warning.
+
+## Text mode
+
+A `.th2` tab can show its file as Therion source and be edited as text.
+
+* **Switching**: the _Text_ button in the top right corner, or F2, shows the file as text; the text view's _Canvas_ button, or F2, goes back to the canvas. The canvas buttons, the last-used chips and the status bar are hidden in text mode. Switching to a tab that is in text mode puts the focus in the text. If an image is being inserted, the switch waits for it to finish. A file with a carriage return that isn't followed by a line feed can't be opened in text mode: normalize its line endings in another editor and reload it.
+* **Selection**: entering text mode puts the cursor on the first selected element, in file order. Leaving it selects the element on the cursor's line: a point, line or area is selected; a line point opens line edit with that point selected; a scrap line makes that scrap active; a file-level line clears the selection. The canvas is centered on the selection without zooming.
+* **Applying**: leaving text mode or saving with changed text checks the text and, if it has no problems, applies it to the drawing as a single undo step. If it has problems, nothing is applied, the problem lines are marked and a banner offers _Keep editing_ and _Discard text changes_. Characters that the file's encoding can't hold, text Mapiah can't read and duplicate IDs are problems too. _Discard text changes_, on the banner or the text toolbar, drops the text edits and returns to the canvas with the file unchanged.
+* **Markers**: while you edit, information markers show the lines that saving will rewrite or remove (duplicate line points, lines with fewer than two points, areas without a border), the settings that will move up into the settings section (the marker says to which line), and the lines or line endings that will be added. They don't prevent applying the text.
+* **Undo**: before your first text edit, Ctrl+Z and Ctrl+Shift+Z undo and redo canvas edits, and the text follows. From the first text edit on, they act on the text only, and canvas edits can't be reached until you leave text mode. Typing never deletes canvas history. Each apply is one canvas undo step.
+* **Saving**: _Save_ checks and applies the text first; text with problems is never written. After saving, the text shows exactly what was written and its undo history starts again. _Save As_ checks the text before the file dialog opens and applies it after a name is chosen; cancelling changes nothing, and the text can't be edited while the dialog is open. If the text editor can't be reopened after a save, or after an undo or redo of canvas edits, Mapiah returns to the canvas with a message; nothing is lost and F2 opens the text again.
+* **Settings section**: comments and empty lines between the settings at the top of the file are kept. Settings found later in the file move up into the settings section, before its trailing empty lines. Ordinary saving from the canvas follows the same rule (see [Original file format](#original-file-format)).
+* **The project tree**: a click or right-click on a row moves the text cursor to that element or scrap, following it through your edits, and doesn't change the canvas selection or the active scrap. Drag and drop, drawing order, _Move to scrap_, _Cut_, _Duplicate_, _Delete_, _Add scrap_, _Options…_ and the tab's _Properties_ are disabled; go back to the canvas to use them. The encoding is changed on the `encoding` line. _Copy_ is also offered on point, line and area rows, and copies TH2 source that can be pasted into the text. IDs are copied as they are, so pasting into the same file gives duplicate IDs that must be fixed. Scrap visibility works as on the canvas. While Mapiah is applying or saving the text, tree clicks are ignored.
+* **Find**: Ctrl+F finds and replaces in the text, as in `thconfig` and `.th` tabs. Multi-file search doesn't include `.th2` files.
 
 ## Edit window
 
 ### Top right corner
+* _Text_: shows the file as text (see [Text mode](#text-mode)). (F2)
 * _Search_: opens the search and select dialog. (See [Search and select](#search-and-select))
 * ![Snap button](assets/help/images/buttonSnap.png "Snap")  _Snap_: toggles the snap window where are presented the snap options. (Ctrl+L)
 * _Default options_: opens the default options overlay window where default option values can be set for new points, lines, and areas. (O with no elements selected)
@@ -268,6 +287,7 @@ Mapiah preserves the original file formatting as much as possible when saving. H
 * Areas with no border references are removed.
 * Line options defined in [LINE DATA] area are moved to the line definition. Not to be confunded with line point options that are defined in [LINE DATA] area and are preserved there.
 * Subtype options defined before the first line point or on the first one are transformed to line subtype.
+* The settings section runs from the `encoding` line to the first element that isn't a setting, a comment or an empty line. Comments and empty lines between settings are kept. Settings found later in the file are moved up into the settings section, before its trailing empty lines; nothing else moves.
 
 ## Images
 The images overlay window is opened with the ![Images button](assets/help/images/buttonImages.png "Images") button (Alt+I) in the bottom right corner. It lists all images (XVI survey backgrounds, raster images, and Mapiah-only SVG images) inserted in the current file.
@@ -395,7 +415,7 @@ The project sidebar lists each `.th2` file's scraps in file order: the top row i
 Click a scrap row to make it active. You can also _Alt+click_ an inactive scrap on the canvas, or press _Alt+K_ to cycle through scraps. Right-click a scrap row for **Copy**, **Cut**, **Duplicate**, **Delete**, **Hide/Show**, **Options…**, and drawing-order actions. A selected scrap row's menu applies to all selected scraps; use _Ctrl+click_ to select several. Copy places the scraps on the clipboard for _Ctrl+V_; Cut removes them as one undoable action; Duplicate copies them in the file as one undoable action. Delete is also undoable.
 
 ### Scrap visibility
-Click the eye icon on a scrap row to show or hide it without opening its tab. A hidden scrap's label is dimmed, but its elements stay in the tree. The eye icon is absent when there is only one scrap. The last visible scrap cannot be hidden. Hiding the active scrap activates the nearest visible one.
+Click the eye icon on a scrap row to show or hide it without opening its tab. A hidden scrap's label is dimmed, but its elements stay in the tree. The eye icon is absent when there is only one scrap. The last visible scrap cannot be hidden. The active scrap can't be hidden either: its eye icon is disabled until another scrap is made active. Activating a hidden scrap shows it. In text mode, clicking a scrap row only moves the text cursor; it doesn't activate the scrap.
 
 Right-click a file row for **Hide all but active** or **Show all scraps**, and for **Add scrap**. The file visibility action does not open a tab.
 

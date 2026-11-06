@@ -5779,7 +5779,7 @@ abstract class AppLocalizations {
   /// Status row shown below a broken .th2 file in the project tree. Used on: TH2ElementTreeRowWidget._statusText
   ///
   /// In en, this message translates to:
-  /// **'Broken file: fix it outside Mapiah and reload'**
+  /// **'Broken file: fix it with Edit as text, or outside Mapiah and reload'**
   String get th2ElementTreeBrokenFile;
 
   /// First line of the tooltip of the broken badge on a .th2 file row. Used on: THProjectTreeNodeWidget._brokenBadgeTooltip
@@ -6151,7 +6151,7 @@ abstract class AppLocalizations {
   /// Message shown when the TH2 text editor can't be reopened after a save or a canvas undo/redo. Used on: TH2FileEditController
   ///
   /// In en, this message translates to:
-  /// **'The text editor couldn\'t be reopened. Your changes were applied; press F2 to edit the text again.'**
+  /// **'The text editor couldn\'t be reopened, so Mapiah returned to the canvas. Nothing was lost; press F2 to edit the text again.'**
   String get th2TextEditorReopenFailedMessage;
 
   /// Message shown when Save As targets a file open in another tab. Used on: TH2FileEditController.saveAsTH2File

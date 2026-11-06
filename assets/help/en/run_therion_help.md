@@ -20,11 +20,12 @@ Optional extra command-line options passed to Therion on every run (e.g. `-d` fo
 
 ## Broken files warning
 
-When you run the loaded project and some of its `.th2` files that Mapiah has already loaded are broken, a warning above the output lists their paths. Therion may fail because of them, but the run starts anyway. The paths are selectable text, and a long list scrolls.
+When you run the loaded project and some of its `.th2` files that Mapiah has already loaded are broken on disk, which is what Therion reads, a warning above the output lists their paths. Therion may fail because of them, but the run starts anyway. The paths are selectable text, and a long list scrolls.
 
 * Only files of the loaded project that is being run are listed, and only those already loaded, by expanding them in the project tree or opening them in a tab. Mapiah does not read other files to look for problems.
 * No warning appears when you run a configuration file that is not the loaded project, or right after choosing a project to run, before it has loaded.
-* The list is taken when the dialog opens. After fixing and reloading a file, the next run no longer lists it.
+* A file fixed in text mode but not saved yet is still listed, marked "(fix not saved)".
+* The list is taken when the dialog opens. After a fix is saved, or after fixing a file elsewhere and reloading it, the next run no longer lists it.
 
 ## Output
 

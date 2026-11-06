@@ -11,6 +11,7 @@ _Observação: no Mapiah as teclas Ctrl e Meta (Command no macOS) são intercamb
 - [Editor de texto do projeto](#editor-de-texto-do-projeto)
 - [Ordem de desenho e árvore de elementos](#ordem-de-desenho-e-árvore-de-elementos)
 - [Arquivos com problemas](#arquivos-com-problemas)
+- [Modo texto](#modo-texto)
 - [Imagens](#imagens)
   - [Modo de transformação da imagem](#modo-de-transformação-da-imagem)
   - [Movimento da imagem](#movimento-da-imagem)
@@ -101,13 +102,13 @@ Cada linha de arquivo `.th2` na árvore do projeto tem uma seta. Expandi-la carr
 * **Movimentos recusados**: uma seleção mista de croquis e elementos de desenho e uma mudança entre arquivos são recusadas. Mover uma área para outro croqui leva junto suas linhas de borda; um movimento que deixaria uma linha de borda em um croqui diferente de alguma área que a usa é recusado. A prévia do arraste mostra por que uma soltura é recusada, e destinos indisponíveis de Mover para o scrap mostram o motivo abaixo do nome.
 * **Menu de ordem**: clique com o botão direito na linha de um elemento para Avançar, Recuar, Trazer para a frente ou Enviar para trás. Pontos, linhas e áreas também oferecem Mover para o scrap. O clique direito seleciona um elemento de desenho ainda não selecionado; em uma linha selecionada, mantém a seleção. Essas ações movem elementos inteiros entre seus irmãos, incluindo o conteúdo interno de uma linha ou área.
 * **Atalhos de ordem**: Ctrl+] avança a seleção, Ctrl+[ a recua, Ctrl+Shift+] a traz para a frente e Ctrl+Shift+[ a envia para trás (Cmd em vez de Ctrl no macOS). Eles agem na aba de desenho ativa sobre os elementos de desenho selecionados, ou sobre os croquis selecionados na árvore, e precisam que o foco do teclado esteja nessa aba. São ignorados enquanto Alt está pressionado.
-* **Desfazer**: cada edição pela árvore abre a aba do arquivo se necessário e pode ser desfeita com Ctrl+Z.
+* **Desfazer**: cada edição pela árvore abre a aba do arquivo se necessário e pode ser desfeita com Ctrl+Z. As edições pela árvore ficam desabilitadas no modo texto (veja [Modo texto](#modo-texto)).
 * **Pesquisa**: o campo de pesquisa da árvore do projeto também encontra os rótulos completos dos croquis e elementos de arquivos já carregados e válidos, incluindo nomes de estações e textos de `label` e `remark`. As linhas encontradas aparecem junto com seu croqui e arquivo.
 * **Fechar uma aba**: fechar a aba de um arquivo cuja linha na árvore está expandida mantém seus elementos na árvore, a menos que o arquivo tivesse alterações não salvas, que são descartadas como de costume.
 
 ## Arquivos com problemas
 
-Quando um arquivo `.th2` tem qualquer problema de leitura ou de estrutura, o Mapiah o marca como um arquivo com problemas. Suas linhas de elementos e o editor de desenho ficam indisponíveis e o Mapiah não pode salvá-lo. O Mapiah não conserta o arquivo: corrija-o em um editor de texto fora do Mapiah.
+Quando um arquivo `.th2` tem qualquer problema de leitura ou de estrutura, o Mapiah o marca como um arquivo com problemas. Suas linhas de elementos e o editor de desenho ficam indisponíveis. Corrija-o com _Editar como texto_ (ou F2) na sua página, ou em outro editor de texto e recarregue-o.
 
 Exemplos de problemas:
 * Um ponto, linha ou área fora de um croqui.
@@ -118,10 +119,27 @@ Exemplos de problemas:
 
 Tipos desconhecidos de ponto, linha ou área, sozinhos, continuam aceitos; opções desconhecidas são erros.
 
-* **Na árvore do projeto**: a linha do arquivo mostra um indicador com o número de problemas. Passe o mouse sobre ele para ver o número da linha e a categoria dos primeiros problemas. Expandir a linha mostra uma única linha explicando que o arquivo deve ser corrigido fora do Mapiah.
+* **Na árvore do projeto**: a linha do arquivo mostra um indicador com o número de problemas. Passe o mouse sobre ele para ver o número da linha e a categoria dos primeiros problemas. Expandir a linha mostra uma única linha explicando que o arquivo deve ser corrigido com _Editar como texto_, ou fora do Mapiah e recarregado.
 * **Em uma aba**: abrir um arquivo com problemas, pelo projeto ou avulso, mostra uma página no lugar do desenho. Ela explica a situação, mostra o caminho do arquivo com um botão _Copiar caminho_ e lista cada problema com o número da linha, sua categoria e a linha do arquivo. _Detalhes_ revela a mensagem original do interpretador, útil ao relatar um problema.
-* **Recarregar**: depois de corrigir o arquivo, use o botão _Recarregar_ dessa página, ou clique com o botão direito na linha do arquivo ou na sua linha de explicação na árvore e escolha _Recarregar_. A mesma opção da árvore vale para um arquivo cujo carregamento falhou inesperadamente.
-* **Executar o Therion**: ao executar o projeto carregado, a caixa de diálogo _Executar Therion_ avisa sobre os arquivos com problemas do projeto que já estão carregados, pois o Therion pode falhar por causa deles. A execução começa mesmo assim.
+* **Editar como texto**: mostra o texto do arquivo como ele está no disco, com os problemas marcados nas suas linhas e o cursor no primeiro deles. Um arquivo que não pode ser lido como texto, ou que não é válido na sua codificação, não pode ser aberto assim; a mensagem diz o que corrigir. Veja [Modo texto](#modo-texto) para saber como funciona a edição do texto.
+* **Aplicar a correção**: quando o texto não tem mais problemas, aplicá-lo (saindo do modo texto ou salvando) torna o canvas disponível. Essa primeira aplicação não é um passo de desfazer: desfazer não traz de volta o arquivo com problemas. A correção fica não salva até você salvar; fechar ou recarregar a aba a descarta sem perguntar, como acontece com as edições no canvas.
+* **Sair do modo texto**: com um texto que corrige o arquivo, sair mostra o canvas; com um texto editado que ainda tem problemas, mostra o aviso de que o texto não pode ser aplicado; com o texto com problemas sem alterações, volta à página do arquivo com problemas. Enquanto o arquivo tem problemas, o botão da visão de texto diz _Sair do modo texto_.
+* **Recarregar**: depois de corrigir o arquivo fora do Mapiah, use o botão _Recarregar_ dessa página, ou clique com o botão direito na linha do arquivo ou na sua linha de explicação na árvore e escolha _Recarregar_. Recarregar traz de volta o arquivo como ele está no disco. A mesma opção da árvore vale para um arquivo cujo carregamento falhou inesperadamente.
+* **Executar o Therion**: ao executar o projeto carregado, a caixa de diálogo _Executar Therion_ avisa sobre os arquivos carregados do projeto que estão com problemas no disco, pois o Therion pode falhar por causa deles. A execução começa mesmo assim. Uma correção aplicada no modo texto mas ainda não salva continua contando como problema, pois o Therion lê o arquivo do disco; o aviso a marca com "(correção não salva)". O aviso só cobre arquivos carregados: depois de salvar uma correção com _Salvar como_ com um novo nome, o arquivo original, ainda com problemas no disco, pode fazer a execução falhar sem aviso.
+
+## Modo texto
+
+Uma aba `.th2` pode mostrar seu arquivo como código-fonte do Therion e ser editada como texto.
+
+* **Alternar**: o botão _Texto_ no canto superior direito, ou F2, mostra o arquivo como texto; o botão _Canvas_ da visão de texto, ou F2, volta ao canvas. Os botões do canvas, os chips de últimos usados e a barra de status ficam ocultos no modo texto. Ao mudar para uma aba que está no modo texto, o foco vai para o texto. Se uma imagem estiver sendo inserida, a troca espera ela terminar. Um arquivo com um retorno de carro sem avanço de linha não pode ser aberto no modo texto: normalize seus fins de linha em outro editor e recarregue-o.
+* **Seleção**: entrar no modo texto coloca o cursor no primeiro elemento selecionado, na ordem do arquivo. Sair dele seleciona o elemento da linha do cursor: um ponto, linha ou área é selecionado; um ponto de linha abre a edição de linha com esse ponto selecionado; uma linha de croqui torna esse croqui ativo; uma linha do nível do arquivo limpa a seleção. O canvas é centralizado na seleção sem mudar o zoom.
+* **Aplicar**: sair do modo texto ou salvar com o texto alterado verifica o texto e, se ele não tiver problemas, o aplica ao desenho como um único passo de desfazer. Se tiver problemas, nada é aplicado, as linhas com problema são marcadas e um aviso oferece _Continuar editando_ e _Descartar alterações do texto_. Caracteres que a codificação do arquivo não comporta, texto que o Mapiah não consegue ler e IDs duplicados também são problemas. _Descartar alterações do texto_, no aviso ou na barra de ferramentas do texto, descarta as edições do texto e volta ao canvas com o arquivo inalterado.
+* **Marcadores**: durante a edição, marcadores informativos mostram as linhas que o salvamento vai reescrever ou remover (pontos de linha duplicados, linhas com menos de dois pontos, áreas sem borda), as configurações que vão subir para a seção de configurações (o marcador diz para qual linha) e as linhas ou fins de linha que serão adicionados. Eles não impedem a aplicação do texto.
+* **Desfazer**: antes da sua primeira edição do texto, Ctrl+Z e Ctrl+Shift+Z desfazem e refazem edições do canvas, e o texto acompanha. A partir da primeira edição do texto, eles atuam só no texto, e as edições do canvas ficam inacessíveis até você sair do modo texto. Digitar nunca apaga o histórico do canvas. Cada aplicação é um passo de desfazer do canvas.
+* **Salvar**: _Salvar_ verifica e aplica o texto antes; um texto com problemas nunca é gravado. Depois de salvar, o texto mostra exatamente o que foi gravado e seu histórico de desfazer recomeça. _Salvar como_ verifica o texto antes de a janela de arquivos abrir e o aplica depois que um nome é escolhido; cancelar não muda nada, e o texto não pode ser editado enquanto a janela está aberta. Se o editor de texto não puder ser reaberto depois de salvar, ou depois de desfazer ou refazer edições do canvas, o Mapiah volta ao canvas com uma mensagem; nada é perdido e F2 abre o texto novamente.
+* **Seção de configurações**: comentários e linhas vazias entre as configurações no início do arquivo são mantidos. Configurações encontradas mais adiante no arquivo sobem para a seção de configurações, antes das suas linhas vazias finais. Salvar normalmente a partir do canvas segue a mesma regra (veja [Formato original do arquivo](#formato-original-do-arquivo)).
+* **A árvore do projeto**: um clique ou clique com o botão direito em uma linha move o cursor do texto para aquele elemento ou croqui, acompanhando-o nas suas edições, e não muda a seleção do canvas nem o croqui ativo. Arrastar e soltar, ordem de desenho, _Mover para o scrap_, _Recortar_, _Duplicar_, _Excluir_, _Adicionar croqui_, _Opções…_ e as _Propriedades_ da aba ficam desabilitados; volte ao canvas para usá-los. A codificação é alterada na linha `encoding`. _Copiar_ também é oferecido nas linhas de pontos, linhas e áreas, e copia código TH2 que pode ser colado no texto. Os IDs são copiados como estão, então colar no mesmo arquivo gera IDs duplicados que precisam ser corrigidos. A visibilidade dos croquis funciona como no canvas. Enquanto o Mapiah aplica ou salva o texto, cliques na árvore são ignorados.
+* **Localizar**: Ctrl+F localiza e substitui no texto, como nas abas `thconfig` e `.th`. A pesquisa em vários arquivos não inclui arquivos `.th2`.
 
 ## Imagens
 A janela de imagens é aberta com o botão ![Botão imagens](assets/help/images/buttonImages.png "Imagens") (Alt+I) no canto inferior direito. Ela lista todas as imagens (fundos de levantamento XVI, imagens raster e imagens SVG exclusivas do Mapiah) inseridas no arquivo atual.
@@ -249,7 +267,7 @@ A barra lateral do projeto lista os croquis de cada arquivo `.th2` na ordem do a
 Clique na linha de um croqui para ativá-lo. Você também pode usar _Alt+clique_ em um croqui inativo no canvas ou pressionar _Alt+K_ para alternar entre croquis. Clique com o botão direito na linha do croqui para **Copiar**, **Recortar**, **Duplicar**, **Excluir**, **Ocultar/Mostrar**, **Opções…** e ações de ordem de desenho. Quando a linha pertence à seleção de croquis, o menu atua em todos os croquis selecionados; use _Ctrl+clique_ para selecionar vários. Copiar coloca os croquis na área de transferência para _Ctrl+V_; Recortar, Duplicar e Excluir são operações que podem ser desfeitas.
 
 ### Visibilidade do croqui
-Clique no ícone de olho na linha de um croqui para mostrá-lo ou ocultá-lo sem abrir sua aba. O texto de um croqui oculto fica esmaecido, mas seus elementos continuam na árvore. O ícone não aparece quando há apenas um croqui. O último croqui visível não pode ser ocultado. Ao ocultar o croqui ativo, o mais próximo entre os visíveis passa a ser o ativo.
+Clique no ícone de olho na linha de um croqui para mostrá-lo ou ocultá-lo sem abrir sua aba. O texto de um croqui oculto fica esmaecido, mas seus elementos continuam na árvore. O ícone não aparece quando há apenas um croqui. O último croqui visível não pode ser ocultado. O croqui ativo também não pode ser ocultado: seu ícone de olho fica desabilitado até outro croqui se tornar ativo. Ativar um croqui oculto o mostra. No modo texto, clicar na linha de um croqui só move o cursor do texto; não ativa o croqui.
 
 Clique com o botão direito na linha de um arquivo para **Ocultar todos exceto o ativo** ou **Mostrar todos os croquis**, e também para **Adicionar croqui**. A ação de visibilidade não abre uma aba.
 
@@ -287,6 +305,7 @@ Para os pontos do tipo Corte selectionados, ao pressionar Ctrl+X, o Mapiah procu
 ## Janela de edição
 
 ### Canto superior direito
+* _Texto_: mostra o arquivo como texto (veja [Modo texto](#modo-texto)). (F2)
 * _Pesquisar_: abre a caixa de diálogo de pesquisa e seleção. (Ver [Pesquisar e selecionar](#pesquisar-e-selecionar))
 * ![Botão Snap](assets/help/images/buttonSnap.png "Snap")  _Snap_: alterna a janela de snap, onde são apresentadas as opções de snap. (Ctrl+L)
 * _Opções padrão_: abre a janela de opções padrão, onde é possível configurar valores padrão de opções para novos pontos, linhas e áreas. (O sem elementos selecionados)
@@ -349,6 +368,7 @@ O Mapiah preserva o máximo possível a formatação original do arquivo ao salv
 * Áreas sem referências de borda são removidas.
 * Opções de linha definidas na área [LINE DATA] são movidas para a definição da linha. Não confundir com opções de ponto de linha, que são definidas na área [LINE DATA] e são preservadas lá.
 * Opções de subtipo definidas antes do primeiro ponto de linha ou no primeiro ponto são transformadas em subtipo da linha.
+* A seção de configurações vai da linha `encoding` até o primeiro elemento que não é uma configuração, um comentário ou uma linha vazia. Comentários e linhas vazias entre as configurações são mantidos. Configurações encontradas mais adiante no arquivo sobem para a seção de configurações, antes das suas linhas vazias finais; nada mais é movido.
 
 ## Selecionando elementos
 Para selecionar um elemento, clique nele com a ferramenta _Selecionar elemento_ ativa. Para selecionar vários elementos, mantenha a tecla _Shift_ pressionada enquanto clica neles. Para deselecionar um elemento, mantenha a tecla _Shift_ pressionada enquanto clica nele. Para selecionar todos os elementos, use a opção _Selecionar tudo_ na ferramenta _Selecionar elemento_ ou use o atalho de teclado _Ctrl+A_.

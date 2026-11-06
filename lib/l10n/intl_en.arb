@@ -4867,7 +4867,7 @@
     "description": "Status row shown below a .th2 file in the project tree when loading it failed unexpectedly. Used on: TH2ElementTreeRowWidget._statusText",
     "type": "text"
   },
-  "th2ElementTreeBrokenFile": "Broken file: fix it outside Mapiah and reload",
+  "th2ElementTreeBrokenFile": "Broken file: fix it with Edit as text, or outside Mapiah and reload",
   "@th2ElementTreeBrokenFile": {
     "description": "Status row shown below a broken .th2 file in the project tree. Used on: TH2ElementTreeRowWidget._statusText",
     "type": "text"
@@ -5030,7 +5030,7 @@
   "@th2TextDiscardChangesButton": {"description": "Button of the TH2 text can't-apply banner that discards the text edits. Used on: TH2TextEditBodyWidget"},
   "th2TextUnsupportedLineEndingMessage": "This file contains a carriage return without a line feed, which the text editor doesn't support.",
   "@th2TextUnsupportedLineEndingMessage": {"description": "Message shown when a TH2 file can't be shown as text because of a lone carriage return. Used on: TH2FileEditController"},
-  "th2TextEditorReopenFailedMessage": "The text editor couldn't be reopened. Your changes were applied; press F2 to edit the text again.",
+  "th2TextEditorReopenFailedMessage": "The text editor couldn't be reopened, so Mapiah returned to the canvas. Nothing was lost; press F2 to edit the text again.",
   "@th2TextEditorReopenFailedMessage": {"description": "Message shown when the TH2 text editor can't be reopened after a save or a canvas undo/redo. Used on: TH2FileEditController"},
   "th2SaveAsTargetOpenMessage": "{filename} is open in another tab, so it wasn't overwritten.",
   "@th2SaveAsTargetOpenMessage": {"description": "Message shown when Save As targets a file open in another tab. Used on: TH2FileEditController.saveAsTH2File", "placeholders": {"filename": {"type": "String"}}},

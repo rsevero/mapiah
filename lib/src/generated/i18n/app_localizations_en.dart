@@ -3208,7 +3208,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2ElementTreeBrokenFile =>
-      'Broken file: fix it outside Mapiah and reload';
+      'Broken file: fix it with Edit as text, or outside Mapiah and reload';
 
   @override
   String th2ElementTreeBrokenBadgeTooltip(int count) {
@@ -3455,7 +3455,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2TextEditorReopenFailedMessage =>
-      'The text editor couldn\'t be reopened. Your changes were applied; press F2 to edit the text again.';
+      'The text editor couldn\'t be reopened, so Mapiah returned to the canvas. Nothing was lost; press F2 to edit the text again.';
 
   @override
   String th2SaveAsTargetOpenMessage(String filename) {

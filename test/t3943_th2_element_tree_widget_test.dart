@@ -1562,7 +1562,10 @@ void main() {
       await settleTH2Load(tester, project.pathOf('a.th2'));
 
       expect(
-        find.text('Arquivo com problemas: corrija-o fora do Mapiah e recarregue'),
+        find.text(
+          'Arquivo com problemas: corrija-o com Editar como texto, ou fora do '
+          'Mapiah e recarregue',
+        ),
         findsOneWidget,
       );
       expect(

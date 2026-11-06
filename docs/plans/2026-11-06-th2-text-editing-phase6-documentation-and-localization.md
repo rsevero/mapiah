@@ -3,7 +3,17 @@
 # TH2 Text Editing — Phase 6: Documentation and Localization
 
 **Date:** 2026-11-06
-**Status:** Proposed. Based on `feat_38_th2_text_editing` at `17921051`, with Phases 1–5 implemented. Line numbers in §2 are from that commit. Validated against the code at `44c0adea` on 2026-11-06 (§8).
+**Status:** Implemented on 2026-11-06, on `feat_38_th2_text_editing`. Based on `feat_38_th2_text_editing` at `17921051`, with Phases 1–5 implemented. Line numbers in §2 are from that commit. Validated against the code at `44c0adea` on 2026-11-06 (§8).
+
+**Implementation notes:**
+
+- The revalidation diff against `17921051` changed only `CHANGELOG.md` (two plan entries), so no §2 item was rechecked.
+- The string review found no wording to change beyond §4.1's three keys.
+- The help's _Text_ item in _Top right corner_ has no image: the button shows `Icons.notes`, which has no help image.
+- The PT help names the tree action by its current label, _Mover para o scrap_; that string is out of scope (§1). The scrap options action is named _Options…_ / _Opções…_, as in the scrap menu.
+- The shortcut pages' multi-file bullet reads "`.th2` drawings are never searched, not even in text mode" / "Desenhos `.th2` nunca são pesquisados, nem no modo texto", and the `Ctrl+F` bullet names a `.th2` tab in text mode. The text-mode undo sentence sits in italics right under the table.
+- `t4000` also checks `th2ElementTreeBrokenFile` among the §2.1 keys, and compares the `F2` row's neighbors with `String.compareTo` on lowercased names.
+- `t3943`'s PT presentation test compared `th2ElementTreeBrokenFile`'s literal PT text, so it now expects the new text.
 
 **Revalidation rule:** Before starting a step of §5, run `git diff 17921051 -- lib/l10n assets/help CHANGELOG.md lib/src/widgets lib/src/pages`. If it changes files that step's §2 items name, recheck only those items. Whether the implementation is correct is decided by §6's tests and `flutter analyze`.
 

@@ -76,7 +76,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Set a new control point constrained to the snap angle while drawing              | Shift+drag                                 |
 | Run Therion                                                                      | T                                          |
 | Save file                                                                        | Ctrl+S                                     |
-| Save file as (`.th2` canvas or `thconfig`/`.th` text tab)                        | Ctrl+Shift+S                               |
+| Save file as                                                                     | Ctrl+Shift+S                               |
 | Set next xTherion cubic smooth control point separately while drawing            | Alt+drag after starting drag               |
 | Select all                                                                       | Ctrl+A                                     |
 | Select none                                                                      | Esc                                        |
@@ -90,6 +90,7 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Smooth line point                                                                | S                                          |
 | Split line at selected line points                                               | Ctrl+P                                     |
 | Split selected lines at crossings                                                | Ctrl+Shift+X                               |
+| Switch between canvas and text mode (`.th2`)                                     | F2                                         |
 | Toggle all grids visibility                                                      | Ctrl+G                                     |
 | Toggle all images visibility                                                     | Ctrl+I                                     |
 | Toggle border line option                                                        | B                                          |
@@ -105,12 +106,14 @@ _Note: Mapiah treats the Ctrl and Meta (Command on macOS) keys as interchangeabl
 | Zoom selection                                                                   | 2                                          |
 | Zoom selection window                                                            | 5                                          |
 
+_In a `.th2` tab's text mode, Ctrl+Z and Ctrl+Shift+Z undo and redo canvas edits until the first text edit; from then on, they act on the text only (see the TH2 file edit help, "Text mode")._
+
 ## Text file search
 
-- **Ctrl+F** searches the text file open in the active editor tab.
+- **Ctrl+F** searches the text file open in the active editor tab, including a `.th2` tab in text mode.
 - **Ctrl+Shift+F** opens multi-file search in the project sidebar.
   - **Open text tabs** scope searches every open `thconfig`/`.th` text tab; **Project files** scope searches every writable `thconfig`/`.th` file in the loaded project, including files that are not open.
-  - `.th2` drawings are never searched; they stay canvas-owned.
+  - `.th2` drawings are never searched, not even in text mode.
   - A text tab that is open but is not part of the loaded project is searchable and you can navigate to its matches, but it is marked *Search only* and Replace All never modifies or saves it.
   - Activating a result opens or focuses the file tab, reveals the file in the project tree, and selects the exact match. If the file changed since the search ran, the search is refreshed and the nearest current match is selected.
   - Replace All asks for confirmation, reports how many matches and files are affected (and how many are excluded), then replaces and saves the affected project files. There is no single-step undo across files.
