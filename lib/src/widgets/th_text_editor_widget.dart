@@ -37,12 +37,21 @@ const Map<THTextEditorTokenType, Color> _thTextEditorTokenColors =
       THTextEditorTokenType.plain: Color(0xFF000000),
     };
 
+/// The text style of the main field and of the syntax overlay drawn over
+/// it. The field merges it with the theme's, the overlay doesn't, so every
+/// property that changes where a character goes is set here: otherwise the
+/// field's caret, drawn on its transparent text, drifts away from the
+/// visible overlay text (the Material 3 theme spaces letters by 0.5).
 TextStyle _thTextEditorTextStyleFor(double fontSize) {
   return TextStyle(
     fontFamily: mpMonospaceFontFamily,
     fontFamilyFallback: mpMonospaceFontFamilyFallback,
     fontSize: fontSize,
     height: mpTextEditorLineHeight,
+    fontWeight: FontWeight.normal,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+    wordSpacing: 0,
   );
 }
 
