@@ -390,6 +390,46 @@ void main() {
       expect(warningFinder, findsNothing);
     });
 
+    testWidgets('marks a file whose fix is not saved', (
+      WidgetTester tester,
+    ) async {
+      final String config = writeProject('a', <String, String?>{
+        'bad.th2': _brokenTH2Contents,
+        'fixed.th2': _brokenTH2Contents,
+      });
+      final String brokenPath = projectTH2Path('a', 'bad.th2');
+      final String fixedPath = projectTH2Path('a', 'fixed.th2');
+
+      await openProject(tester, config);
+      await loadTH2(tester, brokenPath);
+
+      final TH2FileEditController fixed = await loadTH2(tester, fixedPath);
+
+      mpLocator.mpGeneralController.addFileTab(fixedPath);
+      await tester.runAsync(fixed.enterTextMode);
+      fixed.textEditController!.setContent(_validTH2Contents);
+      await tester.runAsync(fixed.leaveTextMode);
+      expect(fixed.isBroken, isFalse);
+      expect(fixed.hasUnsavedBaseline, isTrue);
+
+      await pumpDialog(tester, config);
+
+      expect(
+        find.descendant(
+          of: warningFinder,
+          matching: find.text(
+            'These 2 loaded files of the project are broken on disk. Therion '
+            'may fail:',
+          ),
+        ),
+        findsOneWidget,
+      );
+      expect(warningPaths(tester), <String>[
+        brokenPath,
+        '$fixedPath (fix not saved)',
+      ]);
+    });
+
     testWidgets('lists a tab-less broken file while the run starts and ends', (
       WidgetTester tester,
     ) async {
@@ -411,7 +451,7 @@ void main() {
         find.descendant(
           of: warningFinder,
           matching: find.text(
-            'This loaded file of the project is broken. Therion may fail:',
+            'This loaded file of the project is broken on disk. Therion may fail:',
           ),
         ),
         findsOneWidget,
@@ -480,7 +520,7 @@ void main() {
           find.descendant(
             of: warningFinder,
             matching: find.text(
-              'These 2 loaded files of the project are broken. Therion may '
+              'These 2 loaded files of the project are broken on disk. Therion may '
               'fail:',
             ),
           ),

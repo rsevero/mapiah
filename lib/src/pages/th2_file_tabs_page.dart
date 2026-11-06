@@ -381,7 +381,8 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
                       color: colorScheme.onSecondaryContainer,
                     ),
                     onPressed: isTH2
-                        ? ((controller?.isBroken ?? false)
+                        ? (((controller?.isBroken ?? false) &&
+                                  (controller?.editMode != TH2EditMode.text))
                               ? null
                               : () => unawaited(
                                   _saveActiveTabAs(
@@ -693,7 +694,9 @@ class _TH2FileTabsPageState extends State<TH2FileTabsPage> {
             ? appLocalizations.th2FileEditPageSaveAs
             : appLocalizations.textEditorTabSaveAs,
         enabled:
-            ((controller != null) && !controller.isBroken) ||
+            ((controller != null) &&
+                (!controller.isBroken ||
+                    (controller.editMode == TH2EditMode.text))) ||
             (textController != null),
       ),
     ];

@@ -462,9 +462,10 @@ abstract class MPGeneralControllerBase with Store {
   }
 
   /// A sorted snapshot of the canonical paths of the registered `.th2`
-  /// controllers whose file is a loaded project file that parsed as broken.
-  /// Controllers with a load error, valid files and files outside the
-  /// loaded project are left out. Loads nothing.
+  /// controllers whose file is a loaded project file that parsed as broken,
+  /// or whose fix of a broken file wasn't saved yet: the file on disk, which
+  /// Therion reads, is still broken. Controllers with a load error, valid
+  /// files and files outside the loaded project are left out. Loads nothing.
   List<String> loadedBrokenProjectTH2FilePaths() {
     final THProjectController projectController =
         MPLocator().thProjectController;
@@ -472,7 +473,7 @@ abstract class MPGeneralControllerBase with Store {
       for (final MapEntry<String, TH2FileEditController> entry
           in _t2hFileEditControllers.entries)
         if (entry.value.isFileLoaded &&
-            entry.value.isBroken &&
+            (entry.value.isBroken || entry.value.hasUnsavedBaseline) &&
             (entry.value.loadError == null) &&
             projectController.isProjectFile(entry.key))
           entry.key,

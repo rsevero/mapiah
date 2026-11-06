@@ -48,9 +48,11 @@ class TH2TextLineMap {
   /// Line endings added after unterminated chunks (writer maps only).
   final List<TH2TextAddedEnding> addedEndings;
 
+  /// [th2File] is only read to extend the ranges of owned lines, so it may be
+  /// `null` when no line has an owner.
   TH2TextLineMap._({
     required List<int?> ownerByLine,
-    required TH2File th2File,
+    required TH2File? th2File,
     required Map<int, int> removedLines,
     required List<TH2TextRelocation> relocations,
     required List<TH2TextAddedEnding> addedEndings,
@@ -69,8 +71,9 @@ class TH2TextLineMap {
         continue;
       }
 
+      assert(th2File != null, 'An owned line needs the file of its owner.');
       _ownLinesByMPID.putIfAbsent(owner, () => <int>[]).add(line);
-      _extendRanges(owner, line, th2File);
+      _extendRanges(owner, line, th2File!);
     }
   }
 
@@ -87,6 +90,18 @@ class TH2TextLineMap {
       removedLines: const <int, int>{},
       relocations: relocations,
       addedEndings: addedEndings,
+    );
+  }
+
+  /// A map of [lineCount] lines with no owners: the map of a raw session's
+  /// text, which no element of the broken model reliably owns.
+  factory TH2TextLineMap.unowned({required int lineCount}) {
+    return TH2TextLineMap._(
+      ownerByLine: List<int?>.filled(lineCount, null),
+      th2File: null,
+      removedLines: const <int, int>{},
+      relocations: const <TH2TextRelocation>[],
+      addedEndings: const <TH2TextAddedEnding>[],
     );
   }
 

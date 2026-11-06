@@ -196,4 +196,36 @@ void main() {
     ]);
     expect(controller.th2File.hasElementByMPID(comment.mpID), isTrue);
   });
+
+
+  test('a raw session never traverses canvas history', () async {
+    const String rawBroken =
+        'encoding utf-8\n'
+        'scrap s1\n'
+        '  point 1 1 station -id p1\n'
+        '  poin 2 2 station\n'
+        'endscrap\n';
+    final TH2FileEditController controller = await TH2TextModeTestAux.open(
+      rawBroken,
+    );
+
+    expect(controller.isBroken, isTrue);
+    controller.propertiesController.prepareSetEncoding('ISO8859-1');
+    expect(controller.undoRedoController.undoCount, 1);
+
+    final Map<String, dynamic> before = controller.th2File.toMap();
+    final TH2TextEditController session = await TH2TextModeTestAux.enter(
+      controller,
+    );
+
+    await session.requestCanvasHistory(redo: false);
+    await session.requestCanvasHistory(redo: true);
+
+    expect(controller.th2File.toMap(), before);
+    expect(controller.undoRedoController.undoCount, 1);
+    expect(controller.undoRedoController.hasRedo, isFalse);
+    expect(session.content, rawBroken);
+    expect(session.hasTextEdits, isFalse);
+    expect(controller.editMode, TH2EditMode.text);
+  });
 }

@@ -13,10 +13,12 @@ abstract interface class TH2TextApplySession {
   /// The current buffer.
   String get content;
 
-  /// The live model's text when the session started.
+  /// The live model's text when the session started, or in a raw session
+  /// (a broken file's) the decoded disk text of the file.
   String get initialContent;
 
-  /// The writer map of [initialContent].
+  /// The writer map of [initialContent], or in a raw session an unowned map
+  /// ([TH2TextLineMap.unowned]).
   TH2TextLineMap get initialLineMap;
 
   /// The raw cursor line, 0-based.

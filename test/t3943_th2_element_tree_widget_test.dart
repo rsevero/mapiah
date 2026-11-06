@@ -510,6 +510,76 @@ void main() {
       expect(mpLocator.mpGeneralController.openFileOrder, isEmpty);
     });
 
+    testWidgets('after an unsaved fix the menu shows the file entries, then '
+        'Reload; after the fix is saved it has no Reload', (
+      WidgetTester tester,
+    ) async {
+      final TH2TreeTestProject project = await openAndExpandA(
+        tester,
+        aContents: th2TreeBrokenContents,
+      );
+      final String path = project.pathOf('a.th2');
+      final TH2FileNode aNode = th2NodeOf(project, 'a.th2');
+      final TH2FileEditController controller = controllerOf(path)!;
+      final Finder node = find.byKey(
+        ValueKey('THProjectTreeNodeWidget|${aNode.id}'),
+      );
+      final Finder reload = find.byKey(
+        ValueKey('THProjectTreeRowContextMenuReload|${aNode.id}'),
+      );
+
+      mpLocator.mpGeneralController.addFileTab(path);
+      await tester.runAsync(controller.enterTextMode);
+      controller.textEditController!.setContent(th2TreeValidContents);
+      await tester.runAsync(controller.leaveTextMode);
+      await tester.pump();
+      expect(controller.isBroken, isFalse);
+      expect(controller.hasUnsavedBaseline, isTrue);
+
+      Future<void> openMenu() async {
+        await tester.tap(node, buttons: kSecondaryButton);
+        await tester.pump();
+        await tester.pump();
+      }
+
+      await openMenu();
+
+      final Finder addScrap = find.text(
+        mpLocator.appLocalizations.th2ElementTreeAddScrap,
+      );
+
+      expect(addScrap, findsOneWidget);
+      expect(reload, findsOneWidget);
+      expect(
+        tester.getTopLeft(addScrap).dy,
+        lessThan(tester.getTopLeft(reload).dy),
+      );
+
+      await tester.tap(reload);
+      await tester.pump();
+
+      final TH2FileEditController? reloaded = await settleTH2Load(
+        tester,
+        path,
+      );
+
+      expect(controller.isDisposed, isTrue);
+      expect(reloaded!.isBroken, isTrue);
+
+      /// A saved fix.
+      await tester.runAsync(reloaded.enterTextMode);
+      reloaded.textEditController!.setContent(th2TreeValidContents);
+      await tester.runAsync(reloaded.saveTH2File);
+      await tester.runAsync(reloaded.leaveTextMode);
+      await tester.pump();
+      expect(reloaded.isBroken, isFalse);
+      expect(reloaded.hasUnsavedBaseline, isFalse);
+
+      await openMenu();
+      expect(addScrap, findsOneWidget);
+      expect(reload, findsNothing);
+    });
+
     testWidgets('the broken status row also offers Reload', (
       WidgetTester tester,
     ) async {

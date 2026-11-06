@@ -162,4 +162,68 @@ void main() {
     expect(controller.canSave, isTrue);
     expect(controller.undoRedoController.undoCount, 1);
   });
+
+
+  group('a fixed broken file', () {
+    const String rawBroken =
+        'encoding utf-8\n'
+        'scrap s1\n'
+        '  point 1 1 station -id p1\n'
+        '  poin 2 2 station\n'
+        'endscrap\n';
+    final String rawFixed = rawBroken.replaceFirst('poin 2', 'point 2');
+
+    test('a preparation failure after the Save shows the canvas, saved and '
+        'clean', () async {
+      final List<String> messages = TH2TextModeTestAux.captureUserMessages();
+      final TH2FileEditController controller = await TH2TextModeTestAux.open(
+        rawBroken,
+      );
+      final TH2TextEditController session = await TH2TextModeTestAux.enter(
+        controller,
+      );
+
+      TH2TextModeTestAux.edit(controller, rawFixed);
+      failPreparation();
+
+      expect(await controller.saveTH2File(), TH2FileSaveStatus.saved);
+
+      expectBackOnCanvas(controller, session, messages);
+      expect(controller.isBroken, isFalse);
+      expect(controller.hasUnsavedBaseline, isFalse);
+      expect(controller.canSave, isFalse);
+      expect(TH2TextModeTestAux.readFile(controller), rawFixed);
+      expect(
+        locator.mpGeneralController.loadedBrokenProjectTH2FilePaths(),
+        isEmpty,
+      );
+    });
+
+    test('a failed write rethrows, stays dirty and the canvas shows after '
+        'a preparation failure', () async {
+      final List<String> messages = TH2TextModeTestAux.captureUserMessages();
+      final TH2FileEditController controller = await TH2TextModeTestAux.open(
+        rawBroken,
+      );
+      final TH2TextEditController session = await TH2TextModeTestAux.enter(
+        controller,
+      );
+
+      TH2TextModeTestAux.edit(controller, rawFixed);
+      failPreparation();
+      TH2FileEditControllerBase.beforeWriteFileForTesting = () =>
+          throw const FileSystemException('forced');
+
+      await expectLater(
+        controller.saveTH2File(),
+        throwsA(isA<FileSystemException>()),
+      );
+
+      expectBackOnCanvas(controller, session, messages);
+      expect(controller.isBroken, isFalse);
+      expect(controller.hasUnsavedBaseline, isTrue);
+      expect(controller.canSave, isTrue);
+      expect(TH2TextModeTestAux.readFile(controller), rawBroken);
+    });
+  });
 }

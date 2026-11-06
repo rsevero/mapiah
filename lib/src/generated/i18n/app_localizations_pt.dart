@@ -122,9 +122,9 @@ class AppLocalizationsPt extends AppLocalizations {
       count,
       locale: localeName,
       other:
-          'Estes $count arquivos carregados do projeto estão com problemas. O Therion pode falhar:',
+          'Estes $count arquivos carregados do projeto estão com problemas no disco. O Therion pode falhar:',
       one:
-          'Este arquivo carregado do projeto está com problemas. O Therion pode falhar:',
+          'Este arquivo carregado do projeto está com problemas no disco. O Therion pode falhar:',
     );
     return '$_temp0';
   }
@@ -3379,7 +3379,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get th2BrokenFileExplanation =>
-      'Este arquivo tem erros de estrutura ou de leitura. O Mapiah não pode exibi-lo, editá-lo nem salvá-lo. Corrija-o em um editor de texto e recarregue.';
+      'Este arquivo tem erros de estrutura ou de leitura, então o Mapiah não pode exibi-lo no canvas. Corrija-o com Editar como texto, ou em outro editor de texto e recarregue.';
 
   @override
   String get th2BrokenFileCopyPath => 'Copiar caminho';
@@ -3507,4 +3507,39 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get th2ActiveScrapCantBeHiddenTooltip =>
       'O scrap ativo não pode ser ocultado';
+
+  @override
+  String get th2BrokenFileEditAsText => 'Editar como texto';
+
+  @override
+  String get th2BrokenFileEditAsTextTooltip => 'Editar como texto (F2)';
+
+  @override
+  String th2BrokenFileTextUnreadableMessage(String filename) {
+    return 'O Mapiah não consegue ler $filename como texto.';
+  }
+
+  @override
+  String th2BrokenFileTextInvalidEncodingMessage(
+    String filename,
+    String encoding,
+  ) {
+    return '$filename não é um texto $encoding válido, então não pode ser editado aqui. Converta-o para $encoding, ou adicione ou corrija a linha encoding para indicar a codificação que ele usa, em outro editor de texto e recarregue.';
+  }
+
+  @override
+  String th2BrokenFileTextUnknownEncodingMessage(
+    String filename,
+    String encoding,
+  ) {
+    return 'O Mapiah não conhece a codificação $encoding de $filename, e o arquivo não é um texto UTF-8 válido, então não pode ser editado aqui. Ajuste a linha encoding para a codificação que ele usa, em outro editor de texto e recarregue.';
+  }
+
+  @override
+  String get th2TextLeaveBrokenFileTooltip => 'Sair do modo texto (F2)';
+
+  @override
+  String mapiahTherionRunBrokenFileUnsavedFix(String path) {
+    return '$path (correção não salva)';
+  }
 }

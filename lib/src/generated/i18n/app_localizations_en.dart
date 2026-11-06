@@ -121,8 +121,9 @@ class AppLocalizationsEn extends AppLocalizations {
       count,
       locale: localeName,
       other:
-          'These $count loaded files of the project are broken. Therion may fail:',
-      one: 'This loaded file of the project is broken. Therion may fail:',
+          'These $count loaded files of the project are broken on disk. Therion may fail:',
+      one:
+          'This loaded file of the project is broken on disk. Therion may fail:',
     );
     return '$_temp0';
   }
@@ -3342,7 +3343,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get th2BrokenFileExplanation =>
-      'This file has structural or parsing errors. Mapiah cannot display, edit or save it. Fix it in a text editor and reload.';
+      'This file has structural or parsing errors, so Mapiah can\'t show it on the canvas. Fix it with Edit as text, or in another text editor and reload.';
 
   @override
   String get th2BrokenFileCopyPath => 'Copy path';
@@ -3469,4 +3470,39 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get th2ActiveScrapCantBeHiddenTooltip =>
       'The active scrap can\'t be hidden';
+
+  @override
+  String get th2BrokenFileEditAsText => 'Edit as text';
+
+  @override
+  String get th2BrokenFileEditAsTextTooltip => 'Edit as text (F2)';
+
+  @override
+  String th2BrokenFileTextUnreadableMessage(String filename) {
+    return 'Mapiah can\'t read $filename as text.';
+  }
+
+  @override
+  String th2BrokenFileTextInvalidEncodingMessage(
+    String filename,
+    String encoding,
+  ) {
+    return '$filename isn\'t valid $encoding text, so it can\'t be edited here. Convert it to $encoding, or add or fix its encoding line so it names the encoding the file uses, in another editor, then reload.';
+  }
+
+  @override
+  String th2BrokenFileTextUnknownEncodingMessage(
+    String filename,
+    String encoding,
+  ) {
+    return 'Mapiah doesn\'t know the encoding $encoding of $filename, and the file isn\'t valid UTF-8 text, so it can\'t be edited here. Set its encoding line to the encoding it uses, in another editor, then reload.';
+  }
+
+  @override
+  String get th2TextLeaveBrokenFileTooltip => 'Leave text mode (F2)';
+
+  @override
+  String mapiahTherionRunBrokenFileUnsavedFix(String path) {
+    return '$path (fix not saved)';
+  }
 }

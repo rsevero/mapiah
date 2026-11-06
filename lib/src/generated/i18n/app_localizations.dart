@@ -272,10 +272,10 @@ abstract class AppLocalizations {
   /// **'No Therion output found'**
   String get mapiahTherionRunNoTherionOutputFound;
 
-  /// Warning above the output of the Run Therion dialog, followed by the paths of the loaded broken .th2 files of the project being run. Used on: MPRunTherionDialogWidget
+  /// Warning above the output of the Run Therion dialog, followed by the paths of the loaded .th2 files of the project being run that are broken on disk. A listed file may hold a fix applied in Mapiah but not saved. Used on: MPRunTherionDialogWidget
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, one {This loaded file of the project is broken. Therion may fail:} other {These {count} loaded files of the project are broken. Therion may fail:}}'**
+  /// **'{count, plural, one {This loaded file of the project is broken on disk. Therion may fail:} other {These {count} loaded files of the project are broken on disk. Therion may fail:}}'**
   String mapiahTherionRunBrokenFilesWarning(int count);
 
   /// Label for Therion output area. Used on: _MPRunTherionDialogWidgetState.build
@@ -5800,7 +5800,7 @@ abstract class AppLocalizations {
   /// **'{count, plural, one {…and 1 more} other {…and {count} more}}'**
   String th2ElementTreeMoreProblems(int count);
 
-  /// Context menu entry and broken-file body button that reload a broken or failed .th2 file from disk. Used on: THProjectTreeRowContextMenuWidget.reloadMenuItem, TH2BrokenFileBodyWidget.build
+  /// Context menu entry and broken-file body button that reload a broken or failed .th2 file from disk, also offered on the project tree after a broken file's fix was applied but not saved. Used on: THProjectTreeRowContextMenuWidget.reloadMenuItem, THProjectTreeNodeWidget._menuChildren, TH2BrokenFileBodyWidget.build
   ///
   /// In en, this message translates to:
   /// **'Reload'**
@@ -5965,7 +5965,7 @@ abstract class AppLocalizations {
   /// Explanation at the top of the body shown for a broken .th2 file. Used on: TH2BrokenFileBodyWidget.build
   ///
   /// In en, this message translates to:
-  /// **'This file has structural or parsing errors. Mapiah cannot display, edit or save it. Fix it in a text editor and reload.'**
+  /// **'This file has structural or parsing errors, so Mapiah can\'t show it on the canvas. Fix it with Edit as text, or in another text editor and reload.'**
   String get th2BrokenFileExplanation;
 
   /// Button and tooltip that copy the broken .th2 file path to the clipboard. Used on: TH2BrokenFileBodyWidget._buildPath
@@ -6171,6 +6171,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The active scrap can\'t be hidden'**
   String get th2ActiveScrapCantBeHiddenTooltip;
+
+  /// Button of the broken-file body that opens the file's disk text in text mode. Used on: TH2BrokenFileBodyWidget._buildEditAsTextButton
+  ///
+  /// In en, this message translates to:
+  /// **'Edit as text'**
+  String get th2BrokenFileEditAsText;
+
+  /// Tooltip of the broken-file body's Edit as text button. Used on: TH2BrokenFileBodyWidget._buildEditAsTextButton
+  ///
+  /// In en, this message translates to:
+  /// **'Edit as text (F2)'**
+  String get th2BrokenFileEditAsTextTooltip;
+
+  /// Message shown when Edit as text can't read a broken .th2 file anymore. Used on: TH2FileEditController._brokenFileSourceFailureMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Mapiah can\'t read {filename} as text.'**
+  String th2BrokenFileTextUnreadableMessage(String filename);
+
+  /// Message shown when Edit as text can't decode a broken .th2 file in the known encoding it declares (or UTF-8, with no encoding line). Used on: TH2FileEditController._brokenFileSourceFailureMessage
+  ///
+  /// In en, this message translates to:
+  /// **'{filename} isn\'t valid {encoding} text, so it can\'t be edited here. Convert it to {encoding}, or add or fix its encoding line so it names the encoding the file uses, in another editor, then reload.'**
+  String th2BrokenFileTextInvalidEncodingMessage(
+    String filename,
+    String encoding,
+  );
+
+  /// Message shown when Edit as text can't decode a broken .th2 file whose encoding line names an encoding Mapiah doesn't know, so it was read as UTF-8. Used on: TH2FileEditController._brokenFileSourceFailureMessage
+  ///
+  /// In en, this message translates to:
+  /// **'Mapiah doesn\'t know the encoding {encoding} of {filename}, and the file isn\'t valid UTF-8 text, so it can\'t be edited here. Set its encoding line to the encoding it uses, in another editor, then reload.'**
+  String th2BrokenFileTextUnknownEncodingMessage(
+    String filename,
+    String encoding,
+  );
+
+  /// Tooltip of the text view's leave button while the file is broken. Used on: TH2TextEditBodyWidget.build
+  ///
+  /// In en, this message translates to:
+  /// **'Leave text mode (F2)'**
+  String get th2TextLeaveBrokenFileTooltip;
+
+  /// Entry of the Run Therion dialog's broken files warning for a file whose fix was applied in Mapiah but not saved, so the file on disk is still broken. Used on: MPRunTherionDialogWidget._buildBrokenFilesWarning
+  ///
+  /// In en, this message translates to:
+  /// **'{path} (fix not saved)'**
+  String mapiahTherionRunBrokenFileUnsavedFix(String path);
 }
 
 class _AppLocalizationsDelegate

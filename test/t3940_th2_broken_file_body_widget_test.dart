@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/auxiliary/mp_locator.dart';
 import 'package:mapiah/src/controllers/th2_file_edit_controller.dart';
+import 'package:mapiah/src/controllers/types/th2_edit_mode.dart';
 import 'package:mapiah/src/generated/i18n/app_localizations_en.dart';
 import 'package:mapiah/src/mp_file_read_write/th2_file_problem.dart';
 import 'package:mapiah/src/widgets/th2_broken_file_body_widget.dart';
@@ -115,9 +116,64 @@ void main() {
     expect(find.textContaining('Line 5:'), findsOneWidget);
     expect(find.text(mpLocator.appLocalizations.parsingWarnings), findsNothing);
     expect(find.byType(AlertDialog), findsNothing);
+    expect(
+      find.text(mpLocator.appLocalizations.th2BrokenFileExplanation),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('TH2BrokenFileBodyEditAsTextButton')),
+      findsOneWidget,
+    );
+    expect(
+      find.text(mpLocator.appLocalizations.th2BrokenFileEditAsText),
+      findsOneWidget,
+    );
   });
 
-  testWidgets('a broken file is never dirty and Save As is disabled', (
+  testWidgets('the body shows Edit as text first, then Reload when given', (
+    WidgetTester tester,
+  ) async {
+    final TH2FileEditController controller = mpLocator.mpGeneralController
+        .getTH2FileEditController(filename: filename);
+
+    await tester.runAsync(() => controller.load());
+
+    Future<void> pumpBody({VoidCallback? onReload}) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: TH2BrokenFileBodyWidget(
+              controller: controller,
+              onReload: onReload,
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+    }
+
+    final Finder editAsText = find.byKey(
+      const ValueKey('TH2BrokenFileBodyEditAsTextButton'),
+    );
+    final Finder reload = find.text(
+      mpLocator.appLocalizations.th2ElementTreeReload,
+    );
+
+    await pumpBody(onReload: () {});
+    expect(editAsText, findsOneWidget);
+    expect(reload, findsOneWidget);
+    expect(
+      tester.getTopLeft(editAsText).dx,
+      lessThan(tester.getTopLeft(reload).dx),
+    );
+
+    await pumpBody();
+    expect(editAsText, findsOneWidget);
+    expect(reload, findsNothing);
+  });
+
+  testWidgets('a broken file on its body is not dirty and Save As is '
+      'disabled', (
     WidgetTester tester,
   ) async {
     final TH2FileEditController controller = await pumpBrokenTab(tester);
@@ -133,6 +189,13 @@ void main() {
     );
     expect(saveAsButton, findsOneWidget);
     expect(tester.widget<IconButton>(saveAsButton).onPressed, isNull);
+
+    /// A raw session enables Save As.
+    await tester.runAsync(() => controller.enterTextMode());
+    await tester.pump();
+    await tester.pump();
+    expect(controller.editMode, TH2EditMode.text);
+    expect(tester.widget<IconButton>(saveAsButton).onPressed, isNotNull);
   });
 
   testWidgets('closing a broken tab does not prompt', (

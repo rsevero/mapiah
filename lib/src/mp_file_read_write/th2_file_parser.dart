@@ -3000,14 +3000,36 @@ class TH2FileParser {
     );
   }
 
+  /// Decodes [fileContentRaw] with [encoding] and strips its NULs, as a
+  /// load does.
+  ///
+  /// Throws [TH2SourceDecodingException] when the bytes aren't valid in
+  /// [encoding].
   @useResult
-  String _decodeFile(Uint8List fileContentRaw, String encoding) {
-    final String fileContentDecoded = MPEncodingAux.decode(
-      fileContentRaw,
-      encoding,
-    );
+  static String _decodeFile(Uint8List fileContentRaw, String encoding) {
+    final String fileContentDecoded;
+
+    try {
+      fileContentDecoded = MPEncodingAux.decode(fileContentRaw, encoding);
+    } on FormatException catch (error) {
+      throw TH2SourceDecodingException(
+        encoding: encoding,
+        isKnownEncoding: MPEncodingAux.encodingByTherionName(encoding) != null,
+        cause: error,
+      );
+    }
 
     return _stripNul(fileContentDecoded);
+  }
+
+  /// The text a load of [bytes] parses: decoded with the encoding its
+  /// `encoding` line names, NULs stripped.
+  ///
+  /// Throws [TH2SourceDecodingException] when the bytes aren't valid in that
+  /// encoding.
+  @useResult
+  static String decodeSourceBytes(Uint8List bytes) {
+    return _decodeFile(bytes, detectEncodingFromBytes(bytes).encoding);
   }
 
   /// Strips NUL characters. They have no legitimate use in a .th2 file and
@@ -3591,6 +3613,31 @@ class TH2FileParser {
       lineNumber += '\n'.allMatches(original).length;
     }
   }
+}
+
+/// The bytes of a TH2 file aren't valid in the encoding it declares.
+class TH2SourceDecodingException implements Exception {
+  /// The detected Therion encoding name.
+  final String encoding;
+
+  /// Whether Mapiah knows [encoding]. When it doesn't, the bytes were decoded
+  /// as UTF-8.
+  final bool isKnownEncoding;
+
+  /// The decoder's exception.
+  final FormatException cause;
+
+  const TH2SourceDecodingException({
+    required this.encoding,
+    required this.isKnownEncoding,
+    required this.cause,
+  });
+
+  @override
+  String toString() =>
+      'TH2SourceDecodingException: not valid $encoding text'
+      '${isKnownEncoding ? '' : ' (unknown encoding, decoded as UTF-8)'}: '
+      '$cause';
 }
 
 class MPParseableLine {

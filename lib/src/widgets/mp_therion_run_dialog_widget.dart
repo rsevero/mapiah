@@ -57,6 +57,10 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
   /// the dialog opens. Empty when the run is not the loaded project's.
   late final List<String> _brokenTH2FilePaths;
 
+  /// The paths of [_brokenTH2FilePaths] whose fix was applied in Mapiah but
+  /// not saved, taken with it.
+  late final Set<String> _unsavedFixTH2FilePaths;
+
   @override
   void initState() {
     super.initState();
@@ -71,6 +75,14 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
     _brokenTH2FilePaths = _isRunTargetingLoadedProject()
         ? mpLocator.mpGeneralController.loadedBrokenProjectTH2FilePaths()
         : const <String>[];
+    _unsavedFixTH2FilePaths = <String>{
+      for (final String path in _brokenTH2FilePaths)
+        if (mpLocator.mpGeneralController
+                .getTH2FileEditControllerIfExists(path)
+                ?.hasUnsavedBaseline ??
+            false)
+          path,
+    };
 
     final MPTherionRunner? injectedRunner = widget.therionRunner;
 
@@ -797,7 +809,13 @@ class _MPRunTherionDialogWidgetState extends State<MPRunTherionDialogWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     for (final String path in _brokenTH2FilePaths)
-                      Text(path, style: theme.textTheme.bodySmall),
+                      Text(
+                        _unsavedFixTH2FilePaths.contains(path)
+                            ? appLocalizations
+                                  .mapiahTherionRunBrokenFileUnsavedFix(path)
+                            : path,
+                        style: theme.textTheme.bodySmall,
+                      ),
                   ],
                 ),
               ),

@@ -855,6 +855,13 @@ const double mpProjectTreeStatusDotSize = 8.0;
 /// before summarizing the rest.
 const int mpTH2ElementTreeBadgeTooltipMaxProblems = 5;
 
+/// Spacing between the broken-file body's buttons, also between their rows.
+const double mpTH2BrokenFileBodyButtonSpacing = 8;
+
+/// Size of the progress indicator of the broken-file body's _Edit as text_
+/// button while the file is being opened as text.
+const double mpTH2BrokenFileBodyEditAsTextProgressSize = 16;
+
 // Element-type previews of TH2 element tree rows. Lengths are logical
 // pixels; preview content is drawn on a Y-up canvas centered on the icon.
 const double mpTH2ElementTypeIconSize = mpSmallIconSize;

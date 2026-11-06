@@ -266,4 +266,67 @@ void main() {
       );
     });
   });
+
+
+  group('raw session (broken file)', () {
+    const String rawBroken =
+        'encoding utf-8\n'
+        'scrap s1\n'
+        '  point 1 1 station -id p1\n'
+        '  poin 2 2 station\n'
+        'endscrap\n';
+
+    for (final String buffer in <String>['unchanged', 'valid', 'invalid']) {
+      test('with $buffer text, Properties and the tree change nothing',
+          () async {
+        final TH2FileEditController controller = await TH2TextModeTestAux.open(
+          rawBroken,
+        );
+        final String path = controller.th2File.filename;
+
+        expect(controller.isBroken, isTrue);
+        await TH2TextModeTestAux.enter(controller);
+
+        if (buffer == 'valid') {
+          TH2TextModeTestAux.edit(
+            controller,
+            rawBroken.replaceFirst('poin 2', 'point 2'),
+          );
+        } else if (buffer == 'invalid') {
+          TH2TextModeTestAux.edit(
+            controller,
+            rawBroken.replaceFirst('poin 2 2', 'poin 3 3'),
+          );
+        }
+
+        final Map<String, dynamic> before = controller.th2File.toMap();
+
+        controller.propertiesController.prepareSetEncoding('ISO8859-1');
+        expect(
+          locator.mpGeneralController.prepareTH2FileForTreeEdit(path),
+          isNull,
+        );
+        expect(
+          locator.mpGeneralController.prepareTH2FileForTreeOptions(path),
+          isNull,
+        );
+        expect(controller.th2File.toMap(), before);
+        expect(controller.undoRedoController.hasUndo, isFalse);
+        expect(controller.isBroken, isTrue);
+      });
+    }
+
+    test('copyTextFragment copies nothing', () async {
+      final TH2FileEditController controller = await TH2TextModeTestAux.open(
+        rawBroken,
+      );
+
+      await TH2TextModeTestAux.enter(controller);
+      await controller.copyTextFragment(<int>[
+        for (final int mpID in controller.th2File.elements.keys) mpID,
+      ]);
+
+      expect(clipboard, isEmpty);
+    });
+  });
 }

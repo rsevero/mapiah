@@ -25,11 +25,17 @@ part 'th2_text_edit_controller.g.dart';
 
 /// A complete text session baseline, prepared before it is installed so that
 /// preparing never touches the live session.
+///
+/// A raw session's baseline (a broken file's) doesn't describe the model, so
+/// no code may compare it with `serializeForTextMode()` while the file is
+/// broken.
 class TH2TextEditBaseline {
-  /// The live model's text, as Save writes it.
+  /// The session's initial text: the live model's text, as Save writes it,
+  /// or in a raw session the decoded disk text of the broken file.
   final String content;
 
-  /// The writer map of [content].
+  /// The writer map of [content], or in a raw session an unowned map
+  /// ([TH2TextLineMap.unowned]).
   final TH2TextLineMap lineMap;
 
   final int cursorLine;
@@ -52,8 +58,12 @@ class TH2TextEditBaseline {
     this.cursorColumn = 0,
     this.selection,
     this.selectionRequestsFocus = true,
+
+    /// A cache that already holds a validation of [content]; a new cache
+    /// when `null`.
+    TH2TextValidationCache? validationCache,
   }) : _lineTracker = TH2TextLineTracker(content),
-       _validationCache = TH2TextValidationCache();
+       _validationCache = validationCache ?? TH2TextValidationCache();
 }
 
 class TH2TextEditController = TH2TextEditControllerBase
@@ -183,6 +193,8 @@ abstract class TH2TextEditControllerBase
   String? get revertTooltip =>
       mpLocator.appLocalizations.th2TextEditorDiscardTooltip;
 
+  /// The writer map of the session's initial text, or in a raw session (a
+  /// broken file's) an unowned map ([TH2TextLineMap.unowned]).
   @override
   TH2TextLineMap get initialLineMap {
     final TH2TextLineMap? lineMap = _initialLineMap;

@@ -266,4 +266,103 @@ void main() {
       same(reloaded),
     );
   });
+
+
+  group('raw session (broken file)', () {
+    const String rawBroken =
+        'encoding utf-8\n'
+        'scrap s1\n'
+        '  point 1 1 station -id p1\n'
+        '  poin 2 2 station\n'
+        'endscrap\n';
+    final String rawFixed = rawBroken.replaceFirst('poin 2', 'point 2');
+
+    test('requests made while another operation runs are dropped', () async {
+      final TH2TextModeFakeFilePicker picker =
+          TH2TextModeTestAux.installPicker();
+      final TH2FileEditController controller = await TH2TextModeTestAux.open(
+        rawBroken,
+      );
+      final TH2TextEditController session = await TH2TextModeTestAux.enter(
+        controller,
+      );
+
+      TH2TextModeTestAux.edit(controller, rawFixed);
+
+      final Completer<void> busy = Completer<void>();
+      final Future<void> pending = controller.runGatedOperation<void>(
+        () => busy.future,
+      );
+
+      expect(await controller.saveTH2File(), TH2FileSaveStatus.cancelled);
+      expect(await controller.saveAsTH2File(), TH2FileSaveStatus.cancelled);
+      await controller.toggleEditMode();
+      await controller.discardTextEdits();
+
+      /// Copy and tree navigation do nothing in a raw session.
+      controller.moveTextCursorToElement(controller.th2File.scrapMPIDs.first);
+
+      busy.complete();
+      await pending;
+
+      expect(picker.saveFileCalls, 0);
+      expect(controller.editMode, TH2EditMode.text);
+      expect(session.isOpen, isTrue);
+      expect(session.content, rawFixed);
+      expect(controller.isBroken, isTrue);
+      expect(TH2TextModeTestAux.readFile(controller), rawBroken);
+    });
+
+    test('the buffer refuses typing while a raw apply validates', () async {
+      final TH2FileEditController controller = await TH2TextModeTestAux.open(
+        rawBroken,
+      );
+      final TH2TextEditController session = await TH2TextModeTestAux.enter(
+        controller,
+      );
+
+      TH2TextModeTestAux.edit(controller, rawFixed);
+
+      final Future<void> leaving = controller.leaveTextMode();
+
+      expect(session.isReadOnly, isTrue);
+      expect(session.setContent(rawBroken), isFalse);
+      await leaving;
+
+      expect(controller.editMode, TH2EditMode.canvas);
+      expect(controller.isBroken, isFalse);
+    });
+
+    test('a reload while a raw entry reads the file leaves the new '
+        'controller alone', () async {
+      final TH2FileEditController controller = await TH2TextModeTestAux.open(
+        rawBroken,
+      );
+      final String path = controller.th2File.filename;
+      final Completer<void> hold = Completer<void>();
+
+      TH2FileEditControllerBase.beforeBrokenTextEntryValidationForTesting =
+          () => hold.future;
+      addTearDown(
+        () => TH2FileEditControllerBase
+                .beforeBrokenTextEntryValidationForTesting =
+            null,
+      );
+
+      final Future<void> entering = controller.enterTextMode();
+
+      await pumpEventQueue();
+
+      final TH2FileEditController reloaded = await locator.mpGeneralController
+          .reloadTH2File(path);
+
+      hold.complete();
+      await entering;
+
+      expect(controller.isDisposed, isTrue);
+      expect(reloaded.editMode, TH2EditMode.canvas);
+      expect(reloaded.isBroken, isTrue);
+      expect(reloaded.textEditController, isNull);
+    });
+  });
 }

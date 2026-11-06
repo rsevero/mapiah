@@ -3,7 +3,14 @@
 # TH2 Text Editing — Phase 5: Broken Files
 
 **Date:** 2026-11-05
-**Status:** Proposed. Based on `feat_38_th2_text_editing` at `40ad86db`, with Phases 1–4 implemented. Line numbers in §2 are from that commit.
+**Status:** Implemented on 2026-11-06, on `feat_38_th2_text_editing`. Based on `feat_38_th2_text_editing` at `40ad86db`, with Phases 1–4 implemented. Line numbers in §2 are from that commit.
+
+**Implementation notes:**
+
+- The four steps of §5 were implemented together, so step 1's interim changes (the `unreadableText` early return in `applyTextContent` and the refusal of Save As for any broken file) were never written.
+- `_loadOnce` now passes `targetController: this` to the parser. Reading the bytes before the parse (§4.1) adds an await before the parser looks up its controller by filename, so an overlapping Reload made it parse into the newer controller and a project closed during a Reload made it register a new one (`t3944`).
+- The project tree menu's Reload after an unsaved fix comes after a `Divider`, like the menu's other groups.
+- The overflow menu's Save As enablement for a broken file in text mode has no test of its own; the app bar's is checked by `t3940`.
 
 **Revalidation rule:** Before starting a step of §5, run `git diff 40ad86db -- lib test`. If it changes files that step's §2 items name, recheck only those items. Whether the implementation is correct is decided by §6's tests and `flutter analyze`.
 

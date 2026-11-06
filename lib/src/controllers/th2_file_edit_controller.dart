@@ -13,6 +13,7 @@ import 'package:mapiah/src/auxiliary/mp_numeric_aux.dart';
 import 'package:mapiah/src/auxiliary/th2_text_apply_session.dart';
 import 'package:mapiah/src/auxiliary/th2_text_element_locator.dart';
 import 'package:mapiah/src/auxiliary/th2_text_identity_matcher.dart';
+import 'package:mapiah/src/auxiliary/th2_text_line_endings_aux.dart';
 import 'package:mapiah/src/auxiliary/th2_text_line_map.dart';
 import 'package:mapiah/src/auxiliary/th2_text_validator.dart';
 import 'package:mapiah/src/commands/mp_command.dart';
@@ -184,6 +185,15 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
   /// Always replaced by a new unmodifiable list, never mutated in place.
   @readonly
   List<TH2FileProblem> _problems = const <TH2FileProblem>[];
+
+  /// Whether a raw session's fix was installed as a new baseline (a broken
+  /// file's first valid apply) and not saved yet.
+  @readonly
+  bool _hasUnsavedBaseline = false;
+
+  /// The bytes a broken load parsed, for a Save As collision to restore the
+  /// file with; `null` for a valid file.
+  Uint8List? _brokenSourceBytes;
 
   /// The unexpected exception thrown by the last [load], if any. A failed
   /// load is only retried by replacing this controller (Reload).
@@ -584,7 +594,8 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
       mpLocator.mpGeneralController.hasClipboardContent;
 
   @computed
-  bool get enableSaveButton => !_isBroken && _hasUndo && !_th2File.isNewFile;
+  bool get enableSaveButton =>
+      !_isBroken && (_hasUndo || _hasUnsavedBaseline) && !_th2File.isNewFile;
 
   /// Whether the model or the text buffer has changes that aren't saved.
   @computed
@@ -851,11 +862,26 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
   Future<TH2FileEditControllerCreateResult> _loadOnce() async {
     _preParseInitialize();
 
+    Uint8List? fileBytes = _th2File.fileBytes;
+
+    /// A read failure is met again by the parser, which records it as a
+    /// broken load.
+    if (fileBytes == null) {
+      try {
+        fileBytes = await File(_th2File.filename).readAsBytes();
+      } catch (_) {
+        fileBytes = null;
+      }
+    }
+
+    /// The read awaited, so the registry may hold another controller for
+    /// the filename by now (an overlapping Reload) or none (a closed
+    /// project): the parse goes into this one.
     final TH2FileParser parser = TH2FileParser();
     final (_, isSuccessful, errors) = await parser.parse(
       _th2File.filename,
-      fileBytes: _th2File.fileBytes,
-      forceNewController: false,
+      fileBytes: fileBytes,
+      targetController: this as TH2FileEditController,
     );
 
     return _commitLoadResult(
@@ -863,6 +889,7 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
       isSuccessful: isSuccessful,
       errors: errors,
       parsedProblems: parser.problems,
+      sourceBytes: fileBytes,
     );
   }
 
@@ -874,6 +901,7 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
     required bool isSuccessful,
     required List<String> errors,
     required List<TH2FileProblem> parsedProblems,
+    Uint8List? sourceBytes,
   }) {
     final List<TH2FileProblem> loadedProblems =
         List<TH2FileProblem>.unmodifiable(parsedProblems);
@@ -891,6 +919,7 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
 
     _problems = loadedProblems;
     _isBroken = loadedIsBroken;
+    _brokenSourceBytes = loadedIsBroken ? sourceBytes : null;
     _finalFilePreparations(parsedFile);
     _isFileLoaded = true;
 
@@ -1879,8 +1908,8 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
     }
   }
 
-  /// Switches between the canvas and text mode. Broken files are left
-  /// alone.
+  /// Switches between the canvas and text mode. A broken file opens a raw
+  /// session on its disk text.
   Future<void> toggleEditMode() async {
     if (_editMode == TH2EditMode.canvas) {
       await enterTextMode();
@@ -1930,8 +1959,7 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
         (!_isFileLoaded && !_th2File.isNewFile) ||
         (_loadError != null) ||
         !mpLocator.mpGeneralController.hasOpenTab(_th2File.filename) ||
-        (_editMode == TH2EditMode.text) ||
-        _isBroken) {
+        (_editMode == TH2EditMode.text)) {
       return;
     }
 
@@ -1939,6 +1967,12 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
       !isInteractiveLineSimplificationDialogOpen.value,
       'Text mode entered while the line simplification dialog is open.',
     );
+
+    if (_isBroken) {
+      await _enterBrokenTextModeGated();
+
+      return;
+    }
 
     /// The text source check, before any state changes.
     try {
@@ -2002,6 +2036,129 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
 
     _installTextSessionOnEntry(baseline);
     _focusActiveNodeAfterFrame(TH2EditMode.text);
+  }
+
+  /// Opens a raw session: the broken file's text as it is on disk, with the
+  /// problems of its validation marked.
+  Future<void> _enterBrokenTextModeGated() async {
+    final String source;
+
+    try {
+      source = await _readBrokenFileSource();
+    } catch (error, stackTrace) {
+      mpLocator.mpLog.e(
+        'Text mode refused for the broken file ${_th2File.filename}',
+        error: error,
+        stackTrace: stackTrace,
+      );
+
+      if (!_isBrokenTextEntryStale()) {
+        _showUserMessage(_brokenFileSourceFailureMessage(error));
+      }
+
+      return;
+    }
+
+    if (_isBrokenTextEntryStale()) {
+      return;
+    }
+
+    if (TH2TextLineEndingsAux.loneCarriageReturnOffset(source) != null) {
+      _showUserMessage(
+        mpLocator.appLocalizations.th2TextUnsupportedLineEndingMessage,
+      );
+
+      return;
+    }
+
+    await beforeBrokenTextEntryValidationForTesting?.call();
+
+    final TH2TextValidationCache cache = TH2TextValidationCache();
+    final TH2TextValidationResult result = await cache.validate(
+      source,
+      filename: _th2File.filename,
+      th2FileMPID: _th2File.mpID,
+      lineEnding: _th2File.lineEnding,
+    );
+
+    if (_isBrokenTextEntryStale()) {
+      return;
+    }
+
+    int cursorLine = 0;
+
+    for (final TH2TextDiagnostic diagnostic in result.diagnostics) {
+      final int? line = diagnostic.line;
+
+      if (diagnostic.isError && (line != null)) {
+        cursorLine = line;
+        break;
+      }
+    }
+
+    final _TH2TextPosition position = _TH2TextPosition.atFirstNonBlank(
+      source,
+      cursorLine,
+    );
+
+    _installTextSessionOnEntry(
+      TH2TextEditBaseline(
+        content: source,
+        lineMap: TH2TextLineMap.unowned(
+          lineCount: TH2TextLineEndingsAux.lineStartOffsets(source).length,
+        ),
+        validationCache: cache,
+        cursorLine: position.line,
+        cursorColumn: position.column,
+        selection: TextRange.collapsed(position.offset),
+        selectionRequestsFocus: true,
+      ),
+    );
+    _textEditController?.showDiagnostics(result.diagnostics, content: source);
+    _focusActiveNodeAfterFrame(TH2EditMode.text);
+  }
+
+  /// Whether a broken-file entry that awaited must stop: the controller was
+  /// disposed, the tab closed, text mode already entered or the file is no
+  /// longer broken.
+  bool _isBrokenTextEntryStale() {
+    return _disposed ||
+        !mpLocator.mpGeneralController.hasOpenTab(_th2File.filename) ||
+        (_editMode == TH2EditMode.text) ||
+        !_isBroken;
+  }
+
+  /// The broken file's text as the load parsed it: its bytes, from
+  /// [TH2File.fileBytes] or read from disk again, decoded as a load decodes
+  /// them.
+  ///
+  /// Throws [TH2SourceDecodingException] when the bytes aren't valid in the
+  /// file's encoding, and the read's exception when the file can't be read.
+  Future<String> _readBrokenFileSource() async {
+    final Uint8List bytes =
+        _th2File.fileBytes ?? await File(_th2File.filename).readAsBytes();
+
+    return TH2FileParser.decodeSourceBytes(bytes);
+  }
+
+  /// The message shown when a broken file's text can't be read.
+  String _brokenFileSourceFailureMessage(Object error) {
+    final AppLocalizations appLocalizations = mpLocator.appLocalizations;
+    final String basename = p.basename(_th2File.filename);
+
+    if (error is TH2SourceDecodingException) {
+      return error.isKnownEncoding
+          ? appLocalizations.th2BrokenFileTextInvalidEncodingMessage(
+              basename,
+              error.encoding,
+            )
+          : appLocalizations.th2BrokenFileTextUnknownEncodingMessage(
+              basename,
+              error.encoding,
+            );
+    }
+
+    return appLocalizations.th2BrokenFileTextUnreadableMessage(basename);
   }
 
   @action
@@ -2069,6 +2226,33 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
     acquireBufferLock();
 
     try {
+      /// An unchanged raw buffer of broken text returns to the broken-file
+      /// body, with no apply and no banner.
+      if (_isBroken && (session.content == session.initialContent)) {
+        final int revision = session.sessionRevision;
+        final TH2TextValidationResult validation = await session
+            .validationCache
+            .validate(
+              session.initialContent,
+              filename: _th2File.filename,
+              th2FileMPID: _th2File.mpID,
+              lineEnding: _th2File.lineEnding,
+            );
+
+        if (_disposed ||
+            !session.isOpen ||
+            (session.sessionRevision != revision)) {
+          return;
+        }
+
+        if (!validation.isValid) {
+          _returnToCanvas();
+          _focusActiveNodeAfterFrame(TH2EditMode.canvas);
+
+          return;
+        }
+      }
+
       final TH2TextApplyResult result = await applyTextContent(
         session.content,
         session: session,
@@ -2674,22 +2858,17 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
       _operationGate.isBusy,
       'applyTextContent outside a gated operation.',
     );
-    assert(!_isBroken, 'applyTextContent on a broken file.');
-    if (_isBroken) {
-      return TH2TextApplyRejected(const <TH2TextDiagnostic>[
-        TH2TextDiagnostic.error(
-          line: null,
-          kind: TH2TextDiagnosticKind.unreadableText,
-        ),
-      ], content: content);
-    }
 
+    /// A raw session's initial text is broken text that the model doesn't
+    /// describe: it is always validated, and a valid text installs a new
+    /// baseline.
+    final bool isRawSession = _isBroken;
     final int revision = session.sessionRevision;
     late TH2TextValidationResult result;
 
     while (true) {
       /// Unchanged text.
-      if (content == session.initialContent) {
+      if (!isRawSession && (content == session.initialContent)) {
         if (lockBufferOnAccept) {
           session.lockBuffer();
         }
@@ -2731,6 +2910,19 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
     }
 
     final int cursorLine = result.cursorMapper.mapRawLine(session.cursorLine);
+
+    if (isRawSession) {
+      _installBrokenFileBaseline(result.detachedFile);
+
+      final (String liveText, TH2TextLineMap liveMap) = serializeForTextMode();
+
+      assert(
+        liveText == result.normalizedText,
+        'The broken-file baseline does not write the normalized text.',
+      );
+
+      return TH2TextApplyApplied(liveMap, cursorLine);
+    }
 
     /// The text normalizes back to the live text: the line numbers carry
     /// over.
@@ -2777,6 +2969,34 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
     );
 
     return TH2TextApplyApplied(liveMap, cursorLine);
+  }
+
+  /// Awaited by a broken file's text mode entry just before it validates
+  /// the file's text, inside the operation gate.
+  @visibleForTesting
+  static Future<void> Function()? beforeBrokenTextEntryValidationForTesting;
+
+  /// Installs [detachedFile], a valid parse of a raw session's text, as the
+  /// broken file's new baseline: not an undo step. Clears the broken state
+  /// and the undo stack and sets up the controllers as a valid load does.
+  /// The file then has unsaved changes until it is saved.
+  @action
+  void _installBrokenFileBaseline(TH2File detachedFile) {
+    /// The detached model's MPIDs are new, so no image runtime cache names a
+    /// live image: images load as on a valid load.
+    _th2File.replaceContentsFrom(TH2File.fromMap(detachedFile.toMap()));
+    _isBroken = false;
+    _problems = const <TH2FileProblem>[];
+    errorMessages.clear();
+
+    /// Drops a Properties change made on the broken-file body: the model's
+    /// encoding comes from the text's `encoding` line.
+    undoRedoController.clearUndoRedoStack();
+    updateUndoRedoStatus();
+    syncControllersWithModel(initialSetup: true);
+    userInteractionController.markStationPointNameCoordinateCacheDirty();
+    _hasUnsavedBaseline = true;
+    _brokenSourceBytes = null;
   }
 
   /// Called just before Save As renames the picked file to add `.th2`.
@@ -2904,7 +3124,10 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
     if (session != null) {
       final String content = session.content;
 
-      if (content != session.initialContent) {
+      /// A raw session's initial text is broken text: it is validated too,
+      /// so the file dialog never opens, and empties the picked file, for
+      /// text that can't be applied.
+      if (_isBroken || (content != session.initialContent)) {
         final TH2TextValidationResult validation = await session
             .validationCache
             .validate(
@@ -3050,7 +3273,8 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
   /// Whether [filePath] is the registered file of another open TH2
   /// controller. Then nothing is applied or renamed here; the file dialog
   /// already emptied the picked file, so a clean other controller's file is
-  /// rewritten from its model, and the user is told.
+  /// rewritten from its model, a broken one's from the bytes its load
+  /// parsed, and the user is told.
   bool _handleSaveAsTargetCollision({
     required String filePath,
     required bool appendsExtension,
@@ -3063,9 +3287,27 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
     }
 
     bool restored = false;
+    final Uint8List? otherBrokenSourceBytes = other._brokenSourceBytes;
 
-    if (other.isFileLoaded &&
-        !other.isBroken &&
+    if (other.isBroken) {
+      /// The file dialog emptied it: its loaded bytes are written back. Its
+      /// raw session, if any, is left as it is.
+      if (!appendsExtension && (otherBrokenSourceBytes != null)) {
+        try {
+          File(
+            other.th2File.filename,
+          ).writeAsBytesSync(otherBrokenSourceBytes, flush: true);
+          restored = true;
+        } catch (error, stackTrace) {
+          mpLocator.mpLog.e(
+            'Failed to restore the broken file ${other.th2File.filename} '
+            'after a Save As collision',
+            error: error,
+            stackTrace: stackTrace,
+          );
+        }
+      }
+    } else if (other.isFileLoaded &&
         (other.loadError == null) &&
         !other.hasUnsavedChanges) {
       try {
@@ -3189,8 +3431,10 @@ abstract class TH2FileEditControllerBase with Store implements TH2TextEditOwner 
   }
 
   /// The bookkeeping of a successful write.
+  @action
   void _commitSave() {
     undoRedoController.clearUndoRedoStack();
+    _hasUnsavedBaseline = false;
     updateUndoRedoStatus();
   }
 

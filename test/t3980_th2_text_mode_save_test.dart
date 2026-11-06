@@ -505,8 +505,8 @@ void main() {
       });
     }
 
-    test('a dirty other file is left for its own Save; a broken one gets '
-        'the could-not-restore message', () async {
+    test('a dirty other file is left for its own Save; a broken one is '
+        'restored from its loaded bytes', () async {
       final List<String> messages = TH2TextModeTestAux.captureUserMessages();
       final TH2TextModeFakeFilePicker picker =
           TH2TextModeTestAux.installPicker();
@@ -520,8 +520,10 @@ void main() {
         directory: directory,
         name: 'dirty.th2',
       );
+      const String brokenText =
+          'encoding utf-8\nscrap s1\n  poin 1 1 station\nendscrap\n';
       final TH2FileEditController broken = await TH2TextModeTestAux.open(
-        'encoding utf-8\nscrap s1\n  poin 1 1 station\nendscrap\n',
+        brokenText,
         directory: directory,
         name: 'broken.th2',
       );
@@ -539,10 +541,9 @@ void main() {
       expect(await controller.saveAsTH2File(), TH2FileSaveStatus.cancelled);
       expect(messages, <String>[
         locator.appLocalizations.th2SaveAsTargetOpenMessage('dirty.th2'),
-        locator.appLocalizations.th2SaveAsTargetOpenEmptiedMessage(
-          'broken.th2',
-        ),
+        locator.appLocalizations.th2SaveAsTargetOpenMessage('broken.th2'),
       ]);
+      expect(File(broken.th2File.filename).readAsStringSync(), brokenText);
     });
 
     for (final bool textMode in <bool>[false, true]) {
@@ -645,6 +646,208 @@ void main() {
       await tester.runAsync(() => Future<void>.delayed(Duration.zero));
       await tester.pumpAndSettle();
       expect(picker.saveFileCalls, 1);
+    });
+  });
+
+  group('broken files', () {
+    const String brokenText =
+        'encoding utf-8\n'
+        'scrap s1\n'
+        '  point 1 1 station -id p1\n'
+        '  poin 2 2 station\n'
+        'endscrap\n';
+    final String fixedText = brokenText.replaceFirst('poin 2', 'point 2');
+
+    Future<TH2FileEditController> openBroken(
+      Directory directory, {
+      String name = 'broken.th2',
+    }) async {
+      final TH2FileEditController controller = await TH2TextModeTestAux.open(
+        brokenText,
+        directory: directory,
+        name: name,
+      );
+
+      expect(controller.isBroken, isTrue);
+
+      return controller;
+    }
+
+    test('a confirmed Save As of a fixed raw buffer writes the target and '
+        'leaves neither path dirty', () async {
+      final TH2TextModeFakeFilePicker picker =
+          TH2TextModeTestAux.installPicker();
+      final Directory directory = TH2TextModeTestAux.tempDirectory();
+      final TH2FileEditController controller = await openBroken(directory);
+      final String originalPath = controller.th2File.filename;
+      final String target = p.join(directory.path, 'fixed.th2');
+
+      await TH2TextModeTestAux.enter(controller);
+      TH2TextModeTestAux.edit(controller, fixedText);
+      picker.result = Uri.file(target);
+
+      expect(await controller.saveAsTH2File(), TH2FileSaveStatus.saved);
+
+      expect(File(target).readAsStringSync(), fixedText);
+      expect(File(originalPath).readAsStringSync(), brokenText);
+      expect(controller.th2File.filename, canonical(target));
+      expect(controller.isBroken, isFalse);
+      expect(controller.hasUnsavedBaseline, isFalse);
+      expect(controller.canSave, isFalse);
+      expect(locator.thProjectController.dirtyFilePaths, isEmpty);
+      expect(controller.textEditController!.initialContent, fixedText);
+    });
+
+    test('a failed write restores the filename and keeps the fixed model',
+        () async {
+      final TH2TextModeFakeFilePicker picker =
+          TH2TextModeTestAux.installPicker();
+      final Directory directory = TH2TextModeTestAux.tempDirectory();
+      final TH2FileEditController controller = await openBroken(directory);
+      final String originalPath = controller.th2File.filename;
+
+      await TH2TextModeTestAux.enter(controller);
+      TH2TextModeTestAux.edit(controller, fixedText);
+      picker.result = Uri.file(p.join(directory.path, 'fixed.th2'));
+      TH2FileEditControllerBase.beforeWriteFileForTesting = () =>
+          throw const FileSystemException('forced');
+
+      await expectLater(
+        controller.saveAsTH2File(),
+        throwsA(isA<FileSystemException>()),
+      );
+
+      expect(controller.th2File.filename, originalPath);
+      expect(controller.isBroken, isFalse);
+      expect(controller.serializeForTextMode().$1, fixedText);
+      expect(controller.hasUnsavedBaseline, isTrue);
+      expect(controller.canSave, isTrue);
+      expect(controller.textEditController!.initialContent, fixedText);
+    });
+
+    for (final bool withSession in <bool>[false, true]) {
+      test('a Save As onto a broken file ${withSession ? 'with an edited raw '
+          'session ' : ''}writes its loaded bytes back', () async {
+        final List<String> messages = TH2TextModeTestAux.captureUserMessages();
+        final TH2TextModeFakeFilePicker picker =
+            TH2TextModeTestAux.installPicker();
+        final Directory directory = TH2TextModeTestAux.tempDirectory();
+        final TH2FileEditController controller = await TH2TextModeTestAux.open(
+          _text,
+          directory: directory,
+        );
+        final TH2FileEditController broken = await openBroken(directory);
+        final List<int> bytes = File(broken.th2File.filename).readAsBytesSync();
+        final String edited = brokenText.replaceFirst('poin 2 2', 'poin 3 3');
+
+        if (withSession) {
+          await TH2TextModeTestAux.enter(broken);
+          TH2TextModeTestAux.edit(broken, edited);
+        }
+
+        picker.emptiesTarget = true;
+        picker.result = Uri.file(broken.th2File.filename);
+
+        expect(await controller.saveAsTH2File(), TH2FileSaveStatus.cancelled);
+
+        expect(File(broken.th2File.filename).readAsBytesSync(), bytes);
+        expect(messages, <String>[
+          locator.appLocalizations.th2SaveAsTargetOpenMessage('broken.th2'),
+        ]);
+        expect(broken.isBroken, isTrue);
+
+        if (withSession) {
+          expect(broken.editMode, TH2EditMode.text);
+          expect(broken.textEditController!.content, edited);
+          expect(broken.textEditController!.initialContent, brokenText);
+        } else {
+          final TH2TextEditController session = await TH2TextModeTestAux.enter(
+            broken,
+          );
+
+          expect(session.content, brokenText);
+          expect(session.diagnostics, isNotEmpty);
+        }
+      });
+    }
+
+    test('a failed restore of a broken file gets the emptied message',
+        () async {
+      final List<String> messages = TH2TextModeTestAux.captureUserMessages();
+      final TH2TextModeFakeFilePicker picker =
+          TH2TextModeTestAux.installPicker();
+      final Directory directory = TH2TextModeTestAux.tempDirectory();
+      final TH2FileEditController controller = await TH2TextModeTestAux.open(
+        _text,
+        directory: directory,
+      );
+      final TH2FileEditController broken = await openBroken(directory);
+      final File brokenFile = File(broken.th2File.filename);
+
+      /// The restore's write fails on a read-only file.
+      Process.runSync('chmod', <String>['a-w', brokenFile.path]);
+      addTearDown(
+        () => Process.runSync('chmod', <String>['u+w', brokenFile.path]),
+      );
+      picker.result = Uri.file(brokenFile.path);
+
+      expect(await controller.saveAsTH2File(), TH2FileSaveStatus.cancelled);
+      expect(messages, <String>[
+        locator.appLocalizations.th2SaveAsTargetOpenEmptiedMessage(
+          'broken.th2',
+        ),
+      ]);
+    }, skip: Platform.isWindows);
+
+    test('a picked path that gains .th2 leaves the broken file untouched',
+        () async {
+      final List<String> messages = TH2TextModeTestAux.captureUserMessages();
+      final TH2TextModeFakeFilePicker picker =
+          TH2TextModeTestAux.installPicker();
+      final Directory directory = TH2TextModeTestAux.tempDirectory();
+      final TH2FileEditController controller = await TH2TextModeTestAux.open(
+        _text,
+        directory: directory,
+      );
+      final TH2FileEditController broken = await openBroken(directory);
+      final String picked = p.join(directory.path, 'broken');
+
+      picker.emptiesTarget = true;
+      picker.result = Uri.file(picked);
+
+      expect(await controller.saveAsTH2File(), TH2FileSaveStatus.cancelled);
+      expect(File(broken.th2File.filename).readAsStringSync(), brokenText);
+      expect(messages, <String>[
+        locator.appLocalizations.th2SaveAsTargetOpenMessage('broken.th2'),
+      ]);
+    });
+
+    test('a Save As onto an unsaved fix leaves it for its own Save', () async {
+      final List<String> messages = TH2TextModeTestAux.captureUserMessages();
+      final TH2TextModeFakeFilePicker picker =
+          TH2TextModeTestAux.installPicker();
+      final Directory directory = TH2TextModeTestAux.tempDirectory();
+      final TH2FileEditController controller = await TH2TextModeTestAux.open(
+        _text,
+        directory: directory,
+      );
+      final TH2FileEditController fixed = await openBroken(directory);
+
+      await TH2TextModeTestAux.enter(fixed);
+      TH2TextModeTestAux.edit(fixed, fixedText);
+      await fixed.leaveTextMode();
+      expect(fixed.isBroken, isFalse);
+
+      picker.emptiesTarget = true;
+      picker.result = Uri.file(fixed.th2File.filename);
+
+      expect(await controller.saveAsTH2File(), TH2FileSaveStatus.cancelled);
+      expect(messages, <String>[
+        locator.appLocalizations.th2SaveAsTargetOpenMessage('broken.th2'),
+      ]);
+      expect(fixed.canSave, isTrue);
+      expect(await fixed.saveTH2File(), TH2FileSaveStatus.saved);
+      expect(File(fixed.th2File.filename).readAsStringSync(), fixedText);
     });
   });
 }

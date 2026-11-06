@@ -595,6 +595,26 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     });
   }
 
+  late final _$_hasUnsavedBaselineAtom = Atom(
+    name: 'TH2FileEditControllerBase._hasUnsavedBaseline',
+    context: context,
+  );
+
+  bool get hasUnsavedBaseline {
+    _$_hasUnsavedBaselineAtom.reportRead();
+    return super._hasUnsavedBaseline;
+  }
+
+  @override
+  bool get _hasUnsavedBaseline => hasUnsavedBaseline;
+
+  @override
+  set _hasUnsavedBaseline(bool value) {
+    _$_hasUnsavedBaselineAtom.reportWrite(value, super._hasUnsavedBaseline, () {
+      super._hasUnsavedBaseline = value;
+    });
+  }
+
   late final _$_loadErrorAtom = Atom(
     name: 'TH2FileEditControllerBase._loadError',
     context: context,
@@ -1755,6 +1775,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
     required bool isSuccessful,
     required List<String> errors,
     required List<TH2FileProblem> parsedProblems,
+    Uint8List? sourceBytes,
   }) {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase._commitLoadResult');
@@ -1764,6 +1785,7 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
         isSuccessful: isSuccessful,
         errors: errors,
         parsedProblems: parsedProblems,
+        sourceBytes: sourceBytes,
       );
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
@@ -2260,11 +2282,35 @@ mixin _$TH2FileEditController on TH2FileEditControllerBase, Store {
   }
 
   @override
+  void _installBrokenFileBaseline(TH2File detachedFile) {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(
+          name: 'TH2FileEditControllerBase._installBrokenFileBaseline',
+        );
+    try {
+      return super._installBrokenFileBaseline(detachedFile);
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void _markLoadedAfterSaveAs() {
     final _$actionInfo = _$TH2FileEditControllerBaseActionController
         .startAction(name: 'TH2FileEditControllerBase._markLoadedAfterSaveAs');
     try {
       return super._markLoadedAfterSaveAs();
+    } finally {
+      _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void _commitSave() {
+    final _$actionInfo = _$TH2FileEditControllerBaseActionController
+        .startAction(name: 'TH2FileEditControllerBase._commitSave');
+    try {
+      return super._commitSave();
     } finally {
       _$TH2FileEditControllerBaseActionController.endAction(_$actionInfo);
     }

@@ -146,6 +146,13 @@ class THProjectTreeNodeWidget extends StatelessWidget {
         child: Text(allVisible
             ? l10n.th2FileEditPageToggleAllScrapsVisibilityHideOthersTooltip
             : l10n.th2FileEditPageToggleAllScrapsVisibilityShowAllTooltip)),
+      /// The way back to the broken file on disk, until its fix is saved.
+      if (controller.hasUnsavedBaseline) ...<Widget>[
+        const Divider(),
+        THProjectTreeRowContextMenuWidget.reloadMenuItem(
+          rowId: node.id, th2FilePath: fileNode.absolutePath,
+          appLocalizations: l10n),
+      ],
     ];
   }
 

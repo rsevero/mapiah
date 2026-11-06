@@ -65,7 +65,9 @@ class TH2TextEditBodyWidget extends StatelessWidget {
                       'TH2TextEditBodyWidget|CanvasButton',
                     ),
                     icon: const Icon(Icons.draw_outlined),
-                    tooltip: appLocalizations.th2EditModeCanvasTooltip,
+                    tooltip: th2FileEditController.isBroken
+                        ? appLocalizations.th2TextLeaveBrokenFileTooltip
+                        : appLocalizations.th2EditModeCanvasTooltip,
                     onPressed: th2FileEditController.requestToggleEditMode,
                   ),
                 ],
