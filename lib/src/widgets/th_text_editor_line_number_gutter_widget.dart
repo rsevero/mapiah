@@ -41,17 +41,28 @@ class THTextEditorLineNumberGutterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final double digitWidth =
-        (lineCount.toString().length *
-                8.0 *
-                (fontSize / mpTextEditorFontSize))
-            .clamp(
-      mpTextEditorLineNumberGutterMinWidth,
-      double.infinity,
+    final TextStyle numberStyle = TextStyle(
+      fontFamily: mpMonospaceFontFamily,
+      fontFamilyFallback: mpMonospaceFontFamilyFallback,
+      fontSize: fontSize,
     );
 
+    /// Measured as the numbers are drawn: on the inherited style, whose
+    /// letter spacing counts too.
+    final double numberWidth = _maxNumberWidth(
+      context,
+      DefaultTextStyle.of(
+        context,
+      ).style.merge(numberStyle.copyWith(fontWeight: FontWeight.bold)),
+    );
+    final double contentWidth =
+        (mpTextEditorDiagnosticMarkerSize + numberWidth).clamp(
+          mpTextEditorLineNumberGutterMinWidth,
+          double.infinity,
+        );
+
     return SizedBox(
-      width: digitWidth + mpTextEditorLineNumberGutterPadding * 2,
+      width: contentWidth + mpTextEditorLineNumberGutterPadding * 2,
       child: ListView.builder(
         controller: scrollController,
         physics: const NeverScrollableScrollPhysics(),
@@ -86,10 +97,9 @@ class THTextEditorLineNumberGutterWidget extends StatelessWidget {
                   child: Text(
                     '${index + 1}',
                     textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontFamily: mpMonospaceFontFamily,
-                      fontFamilyFallback: mpMonospaceFontFamilyFallback,
-                      fontSize: fontSize,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: numberStyle.copyWith(
                       color: isCurrentLine
                           ? colorScheme.onSurface
                           : colorScheme.onSurfaceVariant,
@@ -105,6 +115,31 @@ class THTextEditorLineNumberGutterWidget extends StatelessWidget {
         },
       ),
     );
+  }
+
+  /// The width of the widest line number in [style], the current line's
+  /// bold one: every digit is measured, so it also holds in a font whose
+  /// digits differ in width.
+  double _maxNumberWidth(BuildContext context, TextStyle style) {
+    final int digitCount = lineCount.toString().length;
+    final TextScaler textScaler = MediaQuery.textScalerOf(context);
+    double widest = 0;
+
+    for (int digit = 0; digit <= 9; digit++) {
+      final TextPainter painter = TextPainter(
+        text: TextSpan(text: '$digit' * digitCount, style: style),
+        textDirection: TextDirection.ltr,
+        textScaler: textScaler,
+        maxLines: 1,
+      )..layout();
+
+      if (painter.width > widest) {
+        widest = painter.width;
+      }
+      painter.dispose();
+    }
+
+    return widest.ceilToDouble();
   }
 }
 
