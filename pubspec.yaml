@@ -23,7 +23,6 @@ dependencies:
   flutter_svg: ^2.2.0
   http: ^1.2.2
   intl: any
-  intl_utils: ^2.8.7
   logger: ^2.5.0
   markdown: ^7.3.1
   markdown_widget: ^2.3.2+8
@@ -36,11 +35,11 @@ dependencies:
   path_drawing: ^1.0.1
   path_provider: ^2.0.0
   petitparser: ^7.0.1
-  screen_retriever: ^0.2.1
+  screen_retriever: ^0.3.1
   shared_preferences: ^2.5.4
   shared_preferences_platform_interface: ^2.4.1
   url_launcher: ^6.3.1
-  window_manager: ^0.5.1
+  window_manager: ^0.6.0
   window_size: ^0.2.0
   xml: ^7.0.1
 

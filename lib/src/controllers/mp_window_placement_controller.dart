@@ -2,6 +2,7 @@
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:async';
 import 'dart:math' as math;
+import 'dart:ui' show AppExitType;
 
 import 'package:flutter/services.dart';
 import 'package:mapiah/src/constants/mp_constants.dart';
@@ -40,45 +41,92 @@ abstract interface class MPPlatformWindow {
   void setCloseHandler(Future<void> Function() closeHandler);
 }
 
-/// Adapts the window_manager plugin to Mapiah's window lifecycle.
-class MPWindowManagerPlatform with WindowListener implements MPPlatformWindow {
+/// Adapts the window_manager and screen_retriever native API to Mapiah's
+/// window lifecycle.
+class MPWindowManagerPlatform implements MPPlatformWindow {
+  final Window? Function() _currentWindowProvider;
+  final Future<void> Function() _exitApplication;
+
+  Window? _window;
   Future<void> Function()? _closeHandler;
+  bool _isPreventClose = false;
+  bool _isClosingApplication = false;
+
+  /// [currentWindowProvider] and [exitApplication] replace the native window
+  /// lookup and the application exit in tests.
+  MPWindowManagerPlatform({
+    Window? Function()? currentWindowProvider,
+    Future<void> Function()? exitApplication,
+  }) : _currentWindowProvider =
+           currentWindowProvider ?? WindowManager.instance.getCurrent,
+       _exitApplication = exitApplication ?? _exitApplicationNow;
+
+  static Future<void> _exitApplicationNow() async {
+    await ServicesBinding.instance.exitApplication(AppExitType.required);
+  }
+
+  /// The application's window, resolved by [ensureInitialized].
+  Window get _currentWindow {
+    final Window? window = _window;
+
+    if (window == null) {
+      throw StateError('The desktop window is not initialized');
+    }
+
+    return window;
+  }
 
   @override
-  Future<void> ensureInitialized() => windowManager.ensureInitialized();
+  Future<void> ensureInitialized() async {
+    if (_window != null) {
+      return;
+    }
+
+    final Window? window = _currentWindowProvider();
+
+    if (window == null) {
+      throw StateError('No native desktop window is available');
+    }
+
+    _window = window;
+    window.addListener(_onWindowEvent);
+  }
 
   @override
-  Future<void> maximize() => windowManager.maximize();
+  Future<void> maximize() async => _currentWindow.maximize();
 
   @override
-  Future<void> unmaximize() => windowManager.unmaximize();
+  Future<void> unmaximize() async => _currentWindow.unmaximize();
 
   @override
-  Future<bool> isMaximized() => windowManager.isMaximized();
+  Future<bool> isMaximized() async => _currentWindow.isMaximized;
 
   @override
-  Future<bool> isFullScreen() => windowManager.isFullScreen();
+  Future<bool> isFullScreen() async => _currentWindow.isFullScreen;
 
   @override
-  Future<Rect> getBounds() => windowManager.getBounds();
+  Future<Rect> getBounds() async => _currentWindow.bounds.toRect();
 
   @override
   Future<List<Rect>> getDisplayBounds() async {
-    final List<Display> displays = await screenRetriever.getAllDisplays();
+    final List<Display> displays = DisplayManager.instance.getAll();
     final int displayCount = math.min(
       displays.length,
       mpMaximumRestoredWindowDisplayCount,
     );
     final List<Rect> displayBounds = <Rect>[];
 
-    for (int index = 0; index < displayCount; index++) {
-      final Display display = displays[index];
-      final Offset position = display.visiblePosition ?? Offset.zero;
-      final Size size = display.visibleSize ?? display.size;
-      final Rect bounds = position & size;
+    try {
+      for (int index = 0; index < displayCount; index++) {
+        final Rect bounds = displays[index].workArea.toRect();
 
-      if (bounds.isFinite && !bounds.isEmpty) {
-        displayBounds.add(bounds);
+        if (bounds.isFinite && !bounds.isEmpty) {
+          displayBounds.add(bounds);
+        }
+      }
+    } finally {
+      for (final Display display in displays) {
+        display.dispose();
       }
     }
 
@@ -86,26 +134,54 @@ class MPWindowManagerPlatform with WindowListener implements MPPlatformWindow {
   }
 
   @override
-  Future<void> setBounds(Rect bounds) => windowManager.setBounds(bounds);
+  Future<void> setBounds(Rect bounds) async {
+    _currentWindow.bounds = bounds.toNative();
+  }
 
   @override
-  Future<void> setPreventClose(bool preventClose) =>
-      windowManager.setPreventClose(preventClose);
+  Future<void> setPreventClose(bool preventClose) async {
+    _isPreventClose = preventClose;
+  }
 
   @override
-  Future<void> hide() => windowManager.hide();
+  Future<void> hide() async => _currentWindow.hide();
 
+  /// Closes the window past [setPreventClose], which ends the application.
+  ///
+  /// Exits the application directly when there is no window or the platform
+  /// can't close it.
   @override
-  Future<void> closeApplication() => windowManager.destroy();
+  Future<void> closeApplication() async {
+    _isClosingApplication = true;
+
+    final bool isClosing = _window?.close() ?? false;
+
+    if (!isClosing) {
+      _isClosingApplication = false;
+      await _exitApplication();
+    }
+  }
 
   @override
   void setCloseHandler(Future<void> Function() closeHandler) {
     _closeHandler = closeHandler;
-    windowManager.addListener(this);
   }
 
-  @override
-  void onWindowClose() {
+  void _onWindowEvent(WindowEvent event) {
+    if (event is! WindowCloseRequestedEvent) {
+      return;
+    }
+
+    if (_isClosingApplication) {
+      _isClosingApplication = false;
+
+      return;
+    }
+
+    if (_isPreventClose) {
+      event.request.cancel();
+    }
+
     final Future<void> Function()? closeHandler = _closeHandler;
 
     if (closeHandler != null) {

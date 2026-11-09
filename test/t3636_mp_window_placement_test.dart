@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapiah/src/controllers/mp_settings_controller.dart';
@@ -8,6 +10,7 @@ import 'package:mapiah/src/controllers/types/mp_setting_type.dart';
 import 'package:mapiah/src/controllers/types/mp_window_placement.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
+import 'package:window_manager/window_manager.dart';
 
 class _FakePlatformWindow implements MPPlatformWindow {
   final List<String> calls = <String>[];
@@ -327,26 +330,122 @@ void main() {
   });
 
   test('desktop shutdown force closes the native window', () async {
-    MethodCall? receivedCall;
-    const MethodChannel windowManagerChannel = MethodChannel('window_manager');
-    final TestDefaultBinaryMessenger messenger =
-        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    final _FakeNativeWindow window = _FakeNativeWindow();
+    bool exited = false;
+    final MPWindowManagerPlatform platformWindow = MPWindowManagerPlatform(
+      currentWindowProvider: () => window,
+      exitApplication: () async {
+        exited = true;
+      },
+    );
 
-    messenger.setMockMethodCallHandler(windowManagerChannel, (
-      MethodCall call,
-    ) async {
-      receivedCall = call;
-
-      return null;
-    });
-    addTearDown(() {
-      messenger.setMockMethodCallHandler(windowManagerChannel, null);
-    });
-
-    final MPWindowManagerPlatform platformWindow = MPWindowManagerPlatform();
-
+    await platformWindow.ensureInitialized();
+    await platformWindow.setPreventClose(true);
     await platformWindow.closeApplication();
 
-    expect(receivedCall?.method, 'destroy');
+    expect(window.closeCount, 1);
+    expect(exited, isFalse);
+
+    // The close request that closeApplication starts is not cancelled.
+    final _FakeEventRequest request = _FakeEventRequest();
+
+    window.emit(WindowCloseRequestedEvent(windowId: 1, request: request));
+
+    expect(request.isCancelled, isFalse);
   });
+
+  test('desktop shutdown exits when the window cannot close', () async {
+    final _FakeNativeWindow window = _FakeNativeWindow()..closes = false;
+    bool exited = false;
+    final MPWindowManagerPlatform platformWindow = MPWindowManagerPlatform(
+      currentWindowProvider: () => window,
+      exitApplication: () async {
+        exited = true;
+      },
+    );
+
+    await platformWindow.ensureInitialized();
+    await platformWindow.closeApplication();
+
+    expect(window.closeCount, 1);
+    expect(exited, isTrue);
+  });
+
+  test('a user close request is cancelled and handled', () async {
+    final _FakeNativeWindow window = _FakeNativeWindow();
+    int closeHandlerCount = 0;
+    final MPWindowManagerPlatform platformWindow = MPWindowManagerPlatform(
+      currentWindowProvider: () => window,
+      exitApplication: () async {},
+    );
+
+    await platformWindow.ensureInitialized();
+    platformWindow.setCloseHandler(() async {
+      closeHandlerCount++;
+    });
+    await platformWindow.setPreventClose(true);
+
+    final _FakeEventRequest request = _FakeEventRequest();
+
+    window.emit(WindowCloseRequestedEvent(windowId: 1, request: request));
+
+    expect(request.isCancelled, isTrue);
+    expect(closeHandlerCount, 1);
+  });
+
+  test('initialization fails without a native window', () async {
+    final MPWindowManagerPlatform platformWindow = MPWindowManagerPlatform(
+      currentWindowProvider: () => null,
+      exitApplication: () async {},
+    );
+
+    await expectLater(platformWindow.ensureInitialized(), throwsStateError);
+  });
+}
+
+class _FakeNativeWindow implements Window {
+  final List<FutureOr<void> Function(WindowEvent)> _listeners =
+      <FutureOr<void> Function(WindowEvent)>[];
+  bool closes = true;
+  int closeCount = 0;
+
+  void emit(WindowEvent event) {
+    for (final FutureOr<void> Function(WindowEvent) listener in _listeners) {
+      listener(event);
+    }
+  }
+
+  @override
+  ListenerId addListener(FutureOr<void> Function(WindowEvent) callback) {
+    _listeners.add(callback);
+
+    return _listeners.length;
+  }
+
+  @override
+  bool close() {
+    closeCount++;
+
+    return closes;
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class _FakeEventRequest implements EventRequest {
+  bool _isCancelled = false;
+
+  @override
+  bool get isCancelled => _isCancelled;
+
+  @override
+  bool cancel() {
+    _isCancelled = true;
+
+    return true;
+  }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
