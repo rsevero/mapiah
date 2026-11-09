@@ -2,6 +2,10 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
+## 1.0.3 - not yet released
+* Infrastructure maintenance:
+  * Put Phase 7 of the TH2 text editing plan (#38), which would let undo return to a text mode session's starting text after a quick first edit, on hold until it's clear that users actually need it.
+
 ## 1.0.2 - 2026-11-09 - The [Ledena Jama](https://sl.wikipedia.org/wiki/Velika_ledena_jama_v_Paradani) release
 * Highlights:
   * A `.th2` file can now be edited as Therion source in text mode, with the _Text_ button or `F2` (#38). The text editor has syntax highlighting, folding, find and replace, and problem markers, keeps the selection in step with the canvas, applies the text as one undo step and never applies or saves text with problems. Broken files can be fixed there with _Edit as text_.
