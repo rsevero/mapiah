@@ -2,7 +2,13 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 1.0.2 - not yet released
+## 1.0.2 - 2026-11-09 - The [Ledena Jama](https://sl.wikipedia.org/wiki/Velika_ledena_jama_v_Paradani) release
+* Highlights:
+  * A `.th2` file can now be edited as Therion source in text mode, with the _Text_ button or `F2` (#38). The text editor has syntax highlighting, folding, find and replace, and problem markers, keeps the selection in step with the canvas, applies the text as one undo step and never applies or saves text with problems. Broken files can be fixed there with _Edit as text_.
+  * The scrap button and dialog are gone: scraps are now managed from the project tree, which also shows a small preview of each point, line and area type, lists open files outside the project and expands `.th2` files to their scraps only (#32).
+  * The scrap _Sketch_ dialog lists every sketch at once, each with its own fields, so adding a second loaded image no longer replaces the first one (#44).
+  * Many more `.th2` files open and save correctly: files in ISO-8859 encodings other than ISO-8859-1, files with leading blank lines, area options on their own line, long quoted values, and quotes or brackets in comments, which are now split into lines as Therion does. Save also keeps the comments and empty lines of a file's settings section.
+  * The `.th`, `thconfig` and `.th2` text editors have a new _Font size_ setting, keep the cursor on the text, and no longer cut off line numbers of 100 and above. The `.th` and `thconfig` editors now use a monospaced font on every platform.
 * New features:
   * Point, line and area rows of the project tree now show a small preview of their type and subtype instead of generic icons (#32). The previews follow the visualization method and theme and stay the same at every zoom. The Run Therion dialog also warns about the loaded project's broken `.th2` files that are already loaded, without preventing the run. Added `t3952_th2_element_type_icon_test.dart` and `t3957_th_line_painter_golden_test.dart`.
   * Removed the scrap button and dialog (#32). The project sidebar now provides scrap visibility, copy, cut, duplicate, delete and options from scrap rows, plus add scrap and show/hide all from file rows. Open `.th2` tabs outside the project, including unsaved files, appear in their own sidebar section. Added `t3953_th2_element_tree_scrap_actions_test.dart`.

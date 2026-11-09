@@ -10,9 +10,9 @@ import 'package:material_ui/material_ui.dart';
 
 // Optional release information constants. If empty, they are not shown
 // in the About dialog.
-const String mpReleaseName = 'Frankfurt Connection Delay';
+const String mpReleaseName = 'Ledena Jama';
 const String mpReleaseURL =
-    'https://www.euronews.com/2026/08/12/europes-new-border-system-is-causing-huge-airport-queues-as-ees-wait-times-double';
+    'https://sl.wikipedia.org/wiki/Velika_ledena_jama_v_Paradani';
 
 const String thDebugPath =
     '/home/rodrigo/devel/mapiah/test/auxiliary/unused/th2parser';
