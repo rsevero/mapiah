@@ -2,13 +2,6 @@
 <!-- Copyright (C) 2023- Mapiah Ltda -->
 # Changelog
 
-## 1.0.3 - not yet released
-* Changes:
-  * Mapiah now requires macOS 12 (Monterey) or later. Its window handling, built on `nativeapi` since 1.0.2, needs at least macOS 10.15, and Flutter's own macOS apps now start at macOS 12. The build used to claim macOS 10.14. The README and the installation guides now state the requirement.
-* Infrastructure maintenance:
-  * The Linux AppImage workflow installs its build packages before generating the user guides, and also installs the X11 and Xi development packages. Since `nativeapi`, every `dart run` and `flutter build` compiles its C++ library against GTK 3, X11 and Xi, so the workflow failed.
-  * Put Phase 7 of the TH2 text editing plan (#38), which would let undo return to a text mode session's starting text after a quick first edit, on hold until it's clear that users actually need it.
-
 ## 1.0.2 - 2026-11-09 - The [Ledena Jama](https://sl.wikipedia.org/wiki/Velika_ledena_jama_v_Paradani) release
 * Highlights:
   * A `.th2` file can now be edited as Therion source in text mode, with the _Text_ button or `F2` (#38). The text editor has syntax highlighting, folding, find and replace, and problem markers, keeps the selection in step with the canvas, applies the text as one undo step and never applies or saves text with problems. Broken files can be fixed there with _Edit as text_.
@@ -16,6 +9,7 @@
   * The scrap _Sketch_ dialog lists every sketch at once, each with its own fields, so adding a second loaded image no longer replaces the first one (#44).
   * Many more `.th2` files open and save correctly: files in ISO-8859 encodings other than ISO-8859-1, files with leading blank lines, area options on their own line, long quoted values, and quotes or brackets in comments, which are now split into lines as Therion does. Save also keeps the comments and empty lines of a file's settings section.
   * The `.th`, `thconfig` and `.th2` text editors have a new _Font size_ setting, keep the cursor on the text, and no longer cut off line numbers of 100 and above. The `.th` and `thconfig` editors now use a monospaced font on every platform.
+  * Mapiah now requires macOS 12 (Monterey) or later.
 * New features:
   * Point, line and area rows of the project tree now show a small preview of their type and subtype instead of generic icons (#32). The previews follow the visualization method and theme and stay the same at every zoom. The Run Therion dialog also warns about the loaded project's broken `.th2` files that are already loaded, without preventing the run. Added `t3952_th2_element_type_icon_test.dart` and `t3957_th_line_painter_golden_test.dart`.
   * Removed the scrap button and dialog (#32). The project sidebar now provides scrap visibility, copy, cut, duplicate, delete and options from scrap rows, plus add scrap and show/hide all from file rows. Open `.th2` tabs outside the project, including unsaved files, appear in their own sidebar section. Added `t3953_th2_element_tree_scrap_actions_test.dart`.
@@ -26,6 +20,7 @@
   * Save now keeps the comments and empty lines between the settings at the top of a `.th2` file instead of moving all settings to the first one, and moves settings found later in the file, such as a newly added image, up into that settings section, before its trailing empty lines (#38). When new content is written after a last line that has no line ending, Save now ends that line instead of joining the two. Added `t3960_th2_writer_line_ledger_test.dart`, `t3961_th2_text_line_map_test.dart`, `t3962_th2_parser_line_map_test.dart`, `t3963_th2_text_element_locator_test.dart` and `t3989_th2_writer_settings_section_test.dart`, which also cover the line maps and locator that TH2 text editing will use.
   * The scrap _Sketch_ option dialog now lists every sketch at once, each with its own filename, X and Y fields and a _Remove sketch_ button (#44). _Add loaded image_ appends a sketch taken from a raster image already loaded in the file, so adding a second loaded image no longer replaces the first one, and _Add from file…_ appends a sketch from an image file whose lower left corner coordinates you type in. The filename fields are wider, so long filenames are easier to tell apart.
   * The active scrap can no longer be hidden: its eye button in the project tree is disabled, and the scrap menu's _Hide_ leaves it visible (#38). Activating a hidden scrap now shows it.
+  * Mapiah now requires macOS 12 (Monterey) or later. Its window handling, now built on `nativeapi`, needs at least macOS 10.15, and Flutter's own macOS apps now start at macOS 12. The build used to claim macOS 10.14. The README and the installation guides now state the requirement.
 * Fixes:
   * After _Save As_ on a `.th2` file with unsaved changes, the project tree no longer keeps showing the file's old name as unsaved.
   * Saving a `.th2`, `.th` or `thconfig` file whose encoding is ISO-8859 other than ISO-8859-1 (for example `encoding ISO8859-2`) now writes it in that encoding. Before, accented characters were written as UTF-8, so the file no longer matched its own encoding line; a `.th2` file saved this way could no longer be opened.
@@ -44,6 +39,8 @@
   * Clicking a button outside a text editor, such as _Save_, no longer takes the keyboard focus away from the editor (#38). Before, keyboard shortcuts such as F2 (back to the canvas in a `.th2` file's text mode), Ctrl+S and F1 stopped working until the user clicked back into the text. This also applies to the `thconfig` and `.th` editors and to the editors' find and replace fields. Added two cases to `t3981_th2_text_mode_tree_navigation_test.dart`.
   * Help pages with links or images, such as the main page help, open again. Before, they failed with "No Material widget found".
 * Infrastructure maintenance:
+  * The Linux AppImage workflow installs its build packages before generating the user guides, and also installs the X11 and Xi development packages. Since `nativeapi`, every `dart run` and `flutter build` compiles its C++ library against GTK 3, X11 and Xi, so the workflow failed.
+  * Put Phase 7 of the TH2 text editing plan (#38), which would let undo return to a text mode session's starting text after a quick first edit, on hold until it's clear that users actually need it.
   * Upgraded `window_manager` to 0.6 and `screen_retriever` to 0.3, which are built on `nativeapi`, and moved the desktop window placement from their deprecated 0.5/0.2 API to the native one. The Linux build now copies the native libraries that packages build, such as `nativeapi`'s, into the app bundle, as Flutter's current template and the Windows build already do. Removed the discontinued `intl_utils` dependency and the unused Flutter Intl files in `lib/generated/`; localizations still come from `flutter gen-l10n`. `t3636_mp_window_placement_test.dart` now covers the native close request handling.
   * Added `scripts/task_start.sh`, `scripts/task_finish.sh` and `scripts/task_run.sh` to start, finish and try out parallel tasks in their own branches and worktrees, and documented in `AGENTS.md` how to resolve rebase conflicts in generated files and when a task may be done directly in the main checkout.
   * Doc-only changes (Markdown files outside `assets/`) no longer run `flutter analyze` and `flutter test`, as documented in `AGENTS.md`; `scripts/task_finish.sh` skips them for such branches.
