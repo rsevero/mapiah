@@ -3,6 +3,8 @@
 # Changelog
 
 ## 1.0.3 - not yet released
+* Changes:
+  * Mapiah now requires macOS 12 (Monterey) or later. Its window handling, built on `nativeapi` since 1.0.2, needs at least macOS 10.15, and Flutter's own macOS apps now start at macOS 12. The build used to claim macOS 10.14. The README and the installation guides now state the requirement.
 * Infrastructure maintenance:
   * The Linux AppImage workflow installs its build packages before generating the user guides, and also installs the X11 and Xi development packages. Since `nativeapi`, every `dart run` and `flutter build` compiles its C++ library against GTK 3, X11 and Xi, so the workflow failed.
   * Put Phase 7 of the TH2 text editing plan (#38), which would let undo return to a text mode session's starting text after a quick first edit, on hold until it's clear that users actually need it.

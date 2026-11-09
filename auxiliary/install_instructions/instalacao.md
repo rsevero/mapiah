@@ -97,6 +97,8 @@ Após a instalação bem-sucedida, você deve ser capaz de:
     iniciar o visualizador Loch a partir do Launchpad
 
 ### Instalação do Mapiah no MacOS
+O Mapiah requer o macOS 12 (Monterey) ou posterior.
+
 1. Identifique a versão mais recente disponível do Mapiah na página de [lançamentos do Mapiah](https://github.com/rsevero/mapiah/releases).
 2. Baixe o arquivo `.dmg` correspondente.
 3. Abra o arquivo `.dmg` baixado e arraste o ícone do Mapiah para a pasta "Applications".

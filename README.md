@@ -88,7 +88,7 @@ flatpak install --user mapiah org.mapiah.mapiah
 If someone is interested in creating Linux packages in other formats like arch, deb, rpm, snap or other package and is interested in my help, please contact me at rsev AT pm.me.
 
 ### MacOS
-Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases).
+Available at [Mapiah releases](https://github.com/rsevero/mapiah/releases). Requires macOS 12 (Monterey) or later.
 
 As Mapiah has no Apple compatible signing yet its necessary to allow special permission to run Mapiah in MacOS: [Open Any Way](https://support.apple.com/en-us/102445#openanyway)
 
