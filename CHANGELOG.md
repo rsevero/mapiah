@@ -4,6 +4,7 @@
 
 ## 1.0.3 - not yet released
 * Infrastructure maintenance:
+  * The Linux AppImage workflow installs its build packages before generating the user guides, and also installs the X11 and Xi development packages. Since `nativeapi`, every `dart run` and `flutter build` compiles its C++ library against GTK 3, X11 and Xi, so the workflow failed.
   * Put Phase 7 of the TH2 text editing plan (#38), which would let undo return to a text mode session's starting text after a quick first edit, on hold until it's clear that users actually need it.
 
 ## 1.0.2 - 2026-11-09 - The [Ledena Jama](https://sl.wikipedia.org/wiki/Velika_ledena_jama_v_Paradani) release

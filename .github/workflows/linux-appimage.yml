@@ -45,18 +45,20 @@ jobs:
       id: setup-chrome
       uses: browser-actions/setup-chrome@v2
 
+    # Before any `dart run` or `flutter build`: the build hook of nativeapi's
+    # cnativeapi compiles C++ against GTK 3, X11 and Xi.
+    - name: Install dependencies
+      uses: awalsh128/cache-apt-pkgs-action@latest
+      with:
+        packages: appstream appstream-util appstream-compose libappstream-glib8 clang cmake ninja-build pkg-config libgtk-3-dev libx11-dev libxi-dev libglu1-mesa
+        version: 1.0
+
     - name: Generate user guide PDFs
       env:
         CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
       run: |
         flutter pub get
         dart run scripts/generate_user_guides.dart
-
-    - name: Install dependencies
-      uses: awalsh128/cache-apt-pkgs-action@latest
-      with:
-        packages: appstream appstream-util appstream-compose libappstream-glib8 clang cmake ninja-build pkg-config libgtk-3-dev libglu1-mesa
-        version: 1.0
 
     - name: Build Flutter Linux app
       run: |
