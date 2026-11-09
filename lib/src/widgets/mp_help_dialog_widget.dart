@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2023- Mapiah Ltda
 import 'dart:math' as math;
+import 'package:flutter/material.dart' as legacy
+    show Material, MaterialType;
 import 'package:flutter/services.dart' show LogicalKeyboardKey, rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:mapiah/main.dart';
@@ -257,21 +259,28 @@ class _MPHelpDialogBodyState extends State<_MPHelpDialogBody> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: MarkdownWidget(
-                          data: loadResult.markdown,
-                          selectable: false,
-                          tocController: _tocController,
-                          config: MarkdownConfig(
-                            configs: <WidgetConfig>[
-                              LinkConfig(
-                                onTap: (String url) {
-                                  _handleLinkTap(
-                                    url,
-                                    loadResult.headingAnchorToIndex,
-                                  );
-                                },
-                              ),
-                            ],
+                        // markdown_widget builds links with the legacy
+                        // package:flutter/material.dart InkWell, which needs a
+                        // legacy Material ancestor; the material_ui Material
+                        // of the dialog does not satisfy it.
+                        child: legacy.Material(
+                          type: legacy.MaterialType.transparency,
+                          child: MarkdownWidget(
+                            data: loadResult.markdown,
+                            selectable: false,
+                            tocController: _tocController,
+                            config: MarkdownConfig(
+                              configs: <WidgetConfig>[
+                                LinkConfig(
+                                  onTap: (String url) {
+                                    _handleLinkTap(
+                                      url,
+                                      loadResult.headingAnchorToIndex,
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
